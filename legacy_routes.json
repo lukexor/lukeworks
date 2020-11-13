@@ -1,0 +1,168 @@
+{
+  "routes": [
+    {
+        "from": "/articles/2014/11/first-post",
+        "to": "/first-post"
+    },
+    {
+        "from": "/articles/2014/11/lost-and-found-series",
+        "to": "/lost-and-found-series"
+    },
+    {
+        "from": "/articles/2014/11/lost-and-found-part-1",
+        "to": "/lost-and-found-part-1"
+    },
+    {
+        "from": "/articles/2014/12/lost-and-found-part-2",
+        "to": "/lost-and-found-part-2"
+    },
+    {
+        "from": "/articles/2014/12/lost-and-found-part-3",
+        "to": "/lost-and-found-part-3"
+    },
+    {
+        "from": "/articles/2015/01/lost-and-found-part-4",
+        "to": "/lost-and-found-part-4"
+    },
+    {
+        "from": "/articles/2015/03/lost-and-found-part-5",
+        "to": "/lost-and-found-part-5"
+    },
+    {
+        "from": "/articles/2017/03/software_malaise",
+        "to": "/software-malaise"
+    },
+    {
+        "from": "/articles/2019/09/rustynes_part_1",
+        "to": "/tetanes-part-1"
+    },
+    {
+        "from": "/articles/2020/01/rustynes_part_2",
+        "to": "/tetanes-part-2"
+    },
+    {
+        "from": "/articles/category/career",
+        "to": "/blog/category/career"
+    },
+    {
+        "from": "/articles/category/programming",
+        "to": "/blog/category/programming"
+    },
+    {
+        "from": "/projects/tag/task-management",
+        "to": "/projects/tag/task-management"
+    },
+    {
+        "from": "/projects/tag/productivity",
+        "to": "/projects/tag/productivity"
+    },
+    {
+        "from": "/projects/tag/bullet-journal",
+        "to": "/projects/tag/bullet-journal"
+    },
+    {
+        "from": "/projects/tag/game",
+        "to": "/projects/tag/game"
+    },
+    {
+        "from": "/projects/tag/website",
+        "to": "/projects/tag/website"
+    },
+    {
+        "from": "/projects/tag/p5js",
+        "to": "/projects/tag/p5js"
+    },
+    {
+        "from": "/articles",
+        "to": "/blog"
+    },
+    {
+        "from": "/feed",
+        "to": ""
+    },
+    {
+        "from": "/articles/tag/series",
+        "to": "/blog/tag/series"
+    },
+    {
+        "from": "/articles/tag/unit-testing",
+        "to": "/blog/tag/unit-testing"
+    },
+    {
+        "from": "/articles/tag/productivity",
+        "to": "/blog/tag/productivity"
+    },
+    {
+        "from": "/articles/tag/software-development",
+        "to": "/blog/tag/software-development"
+    },
+    {
+        "from": "/articles/tag/game",
+        "to": "/blog/tag/game"
+    },
+    {
+        "from": "/articles/tag/nes",
+        "to": "/blog/tag/nes"
+    },
+    {
+        "from": "/projects/2019/08/personal_portfolio_blog",
+        "to": "/personal-portfolio-blog"
+    },
+    {
+        "from": "/projects/2007/11/umflint_env_sci_club_website",
+        "to": "/umflint-env-sci-club-website"
+    },
+    {
+        "from": "/projects/2019/08/rustynes",
+        "to": "/tetanes"
+    },
+    {
+        "from": "/projects/2019/06/haskelltaire",
+        "to": "/haskelltaire"
+    },
+    {
+        "from": "/projects/2019/04/bell_demodulator",
+        "to": "/bell-demodulator"
+    },
+    {
+        "from": "/projects/2017/06/chatdot",
+        "to": "/chatdot"
+    },
+    {
+        "from": "/projects/2020/02/maze-astar",
+        "to": "/maze-astar"
+    },
+    {
+        "from": "/projects/2020/02/matrix",
+        "to": "/matrix"
+    },
+    {
+        "from": "/projects/2020/02/fireworks",
+        "to": "/fireworks"
+    },
+    {
+        "from": "/projects/2020/02/raycasting-2d",
+        "to": "/raycasting-2d"
+    },
+    {
+        "from": "/projects/2020/02/lorenz-attractor",
+        "to": "/lorenz-attractor"
+    },
+    {
+        "from": "/projects/2020/02/pong",
+        "to": "/pong"
+    },
+    {
+        "from": "/projects/2020/02/asteroids",
+        "to": "/asteroids"
+    },
+    {
+        "from": "/projects/2020/02/fourier",
+        "to": "/fourier"
+    },
+    {
+        "from": "/projects/2020/02/fluid-simulation",
+        "to": "/fluid-simulation"
+    }
+  ]
+}
