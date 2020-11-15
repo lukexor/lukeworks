@@ -6,12 +6,11 @@ const theme = {
     mobile: "360px", // x640px
   },
   colors: {
-    background: "#212525",
-    light: "#ffcb9a",
-    dark: "#d9b98c",
-    primary: "#d1e8e2",
-    secondary: "#519496",
-    tertiary: "#116466",
+    accentDark: "#DF740C",
+    accentLight: "#FFE64D",
+    background: "#0C141F",
+    primary: "#6FC3DF",
+    secondary: "#E6FFFF",
   },
   fontTitle: "Abril Fatface, serif",
   fontBody: "Rubik, sans-serif",

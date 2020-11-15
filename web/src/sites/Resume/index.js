@@ -1,5 +1,3 @@
-import React from "react";
-
-const Resume = () => <></>;
+import Resume from "./Resume";
 
 export default Resume;

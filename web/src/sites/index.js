@@ -1,5 +1,4 @@
-import Lukeworks from "./Lukeworks";
+import Portfolio from "./Portfolio";
 import Resume from "./Resume";
-import TetanesWeb from "./TetanesWeb";
 
-export { Lukeworks, Resume, TetanesWeb };
+export { Portfolio, Resume };

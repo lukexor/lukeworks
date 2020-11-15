@@ -1,7 +1,7 @@
 {
   "env": {
     "browser": true,
-    "es2021": true
+    "es6": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parserOptions": {
@@ -11,15 +11,24 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "simple-import-sort", "import"],
   "rules": {
-    "indent": ["error", 2],
+    "indent": [
+      "error",
+      2,
+      { "SwitchCase": 1, "ignoredNodes": ["TemplateLiteral > *"] }
+    ],
     "linebreak-style": ["error", "unix"],
+    "no-unused-vars": ["warn"],
     "quotes": ["error", "double"],
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "semi": ["error", "always"],
-    "sort-imports": ["error"]
+    "simple-import-sort/sort": "error",
+    "sort-imports": "off",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-duplicates": "error"
   },
   "settings": {
     "react": {
