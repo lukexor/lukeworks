@@ -1,15 +1,23 @@
 import theme from "sites/Portfolio/theme";
 
+// TODO: Redraw upon resize
+
 const splashSketch = (p5) => {
   p5.disableFriendlyErrors = true;
 
+  const headerHeight = document.querySelector("a#home").offsetTop;
+
   const electrons = [];
   const maxElectrons = 10;
-  const spawnRate = 0.02;
+  const spawnRate = 0.01;
 
   p5.setup = () => {
-    p5.createCanvas(p5.windowWidth, p5.windowHeight);
+    p5.createCanvas(p5.windowWidth, p5.windowHeight - headerHeight);
     p5.angleMode(p5.DEGREES);
+  };
+
+  p5.windowResized = () => {
+    p5.resizeCanvas(p5.windowWidth, p5.windowHeight - headerHeight);
   };
 
   p5.draw = () => {
@@ -40,7 +48,7 @@ const splashSketch = (p5) => {
       this.turned = false;
       this.turnRate = 0.1;
 
-      this.color = theme.colors.accentLight;
+      this.color = theme.colors.primary;
       this.trailColor =
         p5.random(1) < 0.5 ? theme.colors.accentDark : theme.colors.secondary;
       this.radius = 2;
@@ -82,10 +90,10 @@ const splashSketch = (p5) => {
       const w = p5.windowWidth;
       const h = p5.windowHeight;
       return (
-        this.xCor[this.xCor.length - 1] < 0 ||
-        this.xCor[this.xCor.length - 1] > w ||
-        this.yCor[this.yCor.length - 1] < 0 ||
-        this.yCor[this.yCor.length - 1] > h
+        this.xCor[0] < 0 ||
+        this.xCor[0] > w ||
+        this.yCor[0] < 0 ||
+        this.yCor[0] > h
       );
     }
 

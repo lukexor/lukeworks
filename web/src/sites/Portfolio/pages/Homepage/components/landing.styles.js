@@ -1,19 +1,20 @@
-import { HashLink } from "react-router-hash-link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
-const Splash = styled.main`
+const StyledSection = styled.section`
+  min-height: 93vh;
+`;
+
+const Splash = styled(StyledSection)`
   display: flex;
   flex-direction: column;
   flex: 1;
   align-content: center;
   width: 100%;
-  min-height: 93vh;
 
   canvas {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: -999;
+    z-index: -1000;
   }
 `;
 
@@ -21,32 +22,25 @@ const Intro = styled.div`
   flex: 1;
   padding: 50px 0;
 
+  ::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(
+      rgba(18, 16, 16, 0) 50%,
+      rgba(0, 0, 0, 0.25) 50%
+    );
+    z-index: -2;
+    background-size: 100% 3px, 4px 100%;
+    pointer-events: none;
+  }
+
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
     padding: 100px 0;
-  }
-`;
-
-const Title = styled.h1`
-  color: ${(props) => props.theme.colors.primary};
-  font-family: ${(props) => props.theme.fontTitle};
-  font-size: ${(props) => props.theme.sizes.xlarge};
-  font-weight: normal;
-  text-align: center;
-
-  @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-    font-size: ${(props) => props.theme.sizes.xxlarge};
-  }
-`;
-
-const SubTitle = styled.h2`
-  font-family: ${(props) => props.theme.fontTitle};
-  font-size: ${(props) => props.theme.sizes.large};
-  font-weight: normal;
-  line-height: 1.6em;
-  text-align: center;
-
-  @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-    font-size: ${(props) => props.theme.sizes.xlarge};
   }
 `;
 
@@ -61,7 +55,6 @@ const Explore = styled.div`
 `;
 
 const ExploreText = styled.h3`
-  font-family: ${(props) => props.theme.fontBody};
   font-size: ${(props) => props.theme.sizes.med};
   font-weight: normal;
 
@@ -70,22 +63,23 @@ const ExploreText = styled.h3`
   }
 `;
 
-const ExploreLink = styled(HashLink)`
-  border-radius: ${(props) => props.theme.sizes.large};
-  border: 1px solid ${(props) => props.theme.colors.accentLight};
+const ExploreIcon = styled(FontAwesomeIcon)`
   color: ${(props) => props.theme.colors.accentLight};
-
   font-size: 36px;
   text-decoration: none;
+  transition: color 0.5s;
+
+  :hover {
+    color: ${(props) => props.theme.colors.accentDark};
+  }
 `;
 
 export {
-  ExploreLink,
+  Explore,
+  ExploreIcon,
   ExploreText,
   Intro,
   Name,
-  Explore,
   Splash,
-  SubTitle,
-  Title,
+  StyledSection,
 };

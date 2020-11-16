@@ -1,4 +1,5 @@
 import React from "react";
+import Footer from "sites/Portfolio/components/Footer";
 import Header from "sites/Portfolio/components/Header";
 
 import About from "./components/About";
@@ -10,11 +11,14 @@ import Projects from "./components/Projects";
 const Homepage = () => (
   <>
     <Header />
-    <Landing />
-    <Blog />
-    <Projects />
-    <About />
-    <Contact />
+    <main>
+      <Landing />
+      <Blog />
+      <Projects />
+      <About />
+      <Contact />
+    </main>
+    <Footer />
   </>
 );
 

@@ -6,14 +6,15 @@ const theme = {
     mobile: "360px", // x640px
   },
   colors: {
-    accentDark: "#DF740C",
-    accentLight: "#FFE64D",
-    background: "#0C141F",
-    primary: "#6FC3DF",
-    secondary: "#E6FFFF",
+    accentDark: "#df740c",
+    accentLight: "#ffe64d",
+    background: "#0c141f",
+    backgroundLight: "#121924",
+    primary: "#6fc3df",
+    secondary: "#e6ffff",
   },
-  fontTitle: "Abril Fatface, serif",
-  fontBody: "Rubik, sans-serif",
+  fontSerif: "Abril Fatface, serif",
+  fontSans: "Rubik, sans-serif",
   rootFontSize: "1.2rem",
   boxShadows: {
     small:

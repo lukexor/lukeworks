@@ -1,13 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+import SitePaths from "sitePaths";
 
-const StyledBlog = styled.section`
-  height: 93vh;
-`;
+import { StyledBlog } from "./blog.styles";
 
 const Blog = () => (
-  <StyledBlog id="blog">
-    <h2>Hello</h2>
+  <StyledBlog>
+    <a id={SitePaths.blog.replace("#", "")} className="anchor"></a>
+    <h1>Blog</h1>
   </StyledBlog>
 );
 

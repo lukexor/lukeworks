@@ -3,7 +3,7 @@ const SitePaths = {
   blog: "#blog",
   contact: "#contact",
   projects: "#projects",
-  home: "/",
+  home: "/#",
   post: "/:title",
   resume: "/resume",
   // tetanes: "/tetanes",

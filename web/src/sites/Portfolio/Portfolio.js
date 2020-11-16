@@ -9,34 +9,45 @@ import { GlobalStyles } from "./portfolio.styles";
 import theme from "./theme";
 
 const Portfolio = () => {
-  const [glitch, setGlitch] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const glitchTimer = setInterval(() => {
-      const chance = Math.random();
-      if (chance < 0.3) {
-        setGlitch(true);
-        setTimeout(() => {
-          setGlitch(false);
-        }, 300);
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 200);
+
+    // Required because of HashLink using ids without a hash
+    const scrollIntoView = () => {
+      const hash = window.location.hash.substring(1);
+      if (!hash) {
+        return;
       }
-    }, 2000);
+      const el = document.getElementById(hash);
+      if (el) {
+        const yCoordinate = el.offsetTop;
+        window.scrollTo({ top: yCoordinate });
+      }
+    };
+
+    window.addEventListener("load", scrollIntoView);
     return () => {
-      clearInterval(glitchTimer);
+      window.removeEventListener("load", scrollIntoView);
     };
   }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <GlobalStyles glitch={glitch} />
-      <Switch>
-        <Route exact path={SitePaths.post}>
-          <Post />
-        </Route>
-        <Route>
-          <Homepage />
-        </Route>
-      </Switch>
+      <GlobalStyles />
+      <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
+        <Switch>
+          <Route exact path={SitePaths.post}>
+            <Post />
+          </Route>
+          <Route>
+            <Homepage />
+          </Route>
+        </Switch>
+      </div>
     </ThemeProvider>
   );
 };
