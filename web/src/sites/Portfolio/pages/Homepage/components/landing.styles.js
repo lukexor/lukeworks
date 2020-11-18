@@ -22,7 +22,7 @@ const Intro = styled.div`
   flex: 1;
   padding: 50px 0;
 
-  ::before {
+  &::before {
     content: "";
     display: block;
     position: absolute;
@@ -70,7 +70,7 @@ const ExploreIcon = styled(FontAwesomeIcon)`
   text-decoration: none;
   transition: color 0.5s;
 
-  :hover {
+  &:hover {
     color: ${(props) => props.theme.colors.accentDark};
   }
 `;

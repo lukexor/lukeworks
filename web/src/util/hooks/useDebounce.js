@@ -17,6 +17,7 @@ const useDebounce = (value, delay) => {
 
 const useDebounceCallback = (func, delay) => {
   const [timer, setTimer] = useState(null);
+
   return () => {
     clearTimeout(timer);
     setTimer(

@@ -8,7 +8,7 @@ const StyledSplashBg = styled.div.attrs((props) => ({
       : props.theme.colors.secondary,
   randomTranslate: Math.floor(Math.random() * 60 - 30),
 }))`
-  ::before {
+  &::before {
     content: "";
     opacity: 20%;
     background-color: ${(props) => props.theme.colors.primary};
@@ -24,7 +24,7 @@ const StyledSplashBg = styled.div.attrs((props) => ({
     z-index: -2000;
   }
 
-  ::after {
+  &::after {
     content: "";
     opacity: ${(props) => (props.glitch ? "50%" : "0")};
     background-color: ${(props) => props.randomBgColor};

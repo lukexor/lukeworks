@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const StyledSearchIcon = styled(FontAwesomeIcon)`
   position: relative;
@@ -13,8 +13,18 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
   &:hover {
     color: ${(props) => props.theme.colors.accentDark};
   }
+`;
 
-  &.visible {
+const StyledClearIcon = styled(FontAwesomeIcon)`
+  cursor: pointer;
+  display: ${(props) => (props.visible ? "block" : "none")};
+  visibility: ${(props) => (props.displayed ? "visible" : "hidden")};
+  color: ${(props) => props.theme.colors.secondary};
+  font-size: ${(props) => props.theme.sizes.medLarge};
+  transition: color 0.5s ease;
+
+  &:hover {
+    color: ${(props) => props.theme.colors.accentDark};
   }
 `;
 
@@ -28,32 +38,39 @@ const SearchBox = styled.div`
   display: flex;
   align-items: center;
   height: ${(props) => props.theme.sizes.xlarge};
-
-  &.visible {
-    border-radius: ${(props) => props.theme.sizes.large};
-    border: 1px solid ${(props) => props.theme.colors.accentDark};
-    background: ${(props) => props.theme.colors.backgroundLight};
-    padding-right: 10px;
-  }
+  ${(props) =>
+    props.visible
+      ? css`
+          margin: 0 10px;
+          border-radius: ${(props) => props.theme.sizes.large};
+          border: 1px solid ${(props) => props.theme.colors.accentDark};
+          background: ${(props) => props.theme.colors.backgroundLight};
+          padding-right: 10px;
+        `
+      : null}
 
   input {
-    -webkit-text-fill-color: ${(props) => props.theme.colors.primary};
-    -webkit-box-shadow: 0 0 0px 1000px
-      ${(props) => props.theme.colors.backgroundLight} inset;
-    width: 0;
+    width: ${(props) => (props.visible ? "200px" : 0)};
     height: ${(props) => props.theme.sizes.large};
     padding: 0;
     border: none;
     color: ${(props) => props.theme.colors.primary};
     caret-color: ${(props) => props.theme.colors.primary};
-    background: ${(props) => props.theme.colors.background};
+    background: ${(props) => props.theme.colors.backgroundLight};
     outline: none;
     transition: width 0.3s ease-out;
-  }
 
-  input.visible {
-    width: 200px;
+    &:-webkit-autofill {
+      -webkit-text-fill-color: ${(props) => props.theme.colors.primary};
+      -webkit-box-shadow: 0 0 0px 1000px
+        ${(props) => props.theme.colors.backgroundLight} inset;
+    }
+
+    &::placeholder {
+      color: ${(props) => props.theme.colors.accentDark};
+      opacity: 1;
+    }
   }
 `;
 
-export { SearchBox, StyledSearch, StyledSearchIcon };
+export { SearchBox, StyledClearIcon, StyledSearch, StyledSearchIcon };

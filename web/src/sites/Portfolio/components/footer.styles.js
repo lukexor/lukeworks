@@ -36,7 +36,7 @@ const BackToTopIcon = styled(FontAwesomeIcon)`
   text-decoration: none;
   transition: color 0.5s;
 
-  :hover {
+  &:hover {
     color: ${(props) => props.theme.colors.accentLight};
   }
 `;
@@ -53,7 +53,7 @@ const SocialIcon = styled(FontAwesomeIcon)`
   text-decoration: none;
   transition: color 0.5s;
 
-  :hover {
+  &:hover {
     color: ${(props) => props.theme.colors.primary};
   }
 `;

@@ -6,6 +6,7 @@ import {
   faEnvelope,
   faRssSquare,
   faSearch,
+  faTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import SitePaths from "sitePaths";
 
@@ -15,8 +16,10 @@ const copy = {
     text: "LP",
   },
   Search: {
-    alt: "Search",
+    alt: "Search...",
     icon: faSearch,
+    clearAlt: "Clear Search",
+    clearIcon: faTimes,
   },
   Menu: {
     alt: "Navigation Menu",

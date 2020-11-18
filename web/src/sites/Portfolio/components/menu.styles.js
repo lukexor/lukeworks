@@ -9,26 +9,23 @@ const StyledMenuIcon = styled(FontAwesomeIcon)`
   margin: auto 10px;
   transition: color 0.5s ease;
 
-  :hover {
+  &:hover {
     color: ${(props) => props.theme.colors.accentDark};
   }
 `;
 
 const StyledMenu = styled.nav`
   background-color: ${(props) => props.theme.colors.background};
+  box-shadow: 0 2px 0 ${(props) => props.theme.colors.accentDark};
   position: absolute;
   width: 100%;
-  height: 0;
+  height: ${(props) => (props.visible ? "13ch" : 0)};
   left: 0;
   overflow: hidden;
   text-align: center;
   font-family: ${(props) => props.theme.fontSerif};
   line-height: ${(props) => props.theme.sizes.xlarge};
   transition: height 0.3s ease-out;
-
-  &.visible {
-    height: 13ch;
-  }
 
   @media (min-width: ${(props) => props.theme.breakpoints.desktopSmall}) {
     width: 15ch;
@@ -39,16 +36,13 @@ const StyledMenu = styled.nav`
 
 const MenuLink = styled(HashLink)`
   display: block;
-  color: ${(props) => props.theme.colors.secondary};
+  color: ${(props) =>
+    props.active ? props.theme.colors.primary : props.theme.colors.secondary};
   text-decoration: none;
   text-transform: uppercase;
   transition: color 0.5s;
 
-  &.active {
-    color: ${(props) => props.theme.colors.primary};
-  }
-
-  :hover {
+  &:hover {
     color: ${(props) => props.theme.colors.accentDark};
   }
 `;

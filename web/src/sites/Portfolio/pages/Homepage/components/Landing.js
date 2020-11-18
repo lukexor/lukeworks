@@ -16,6 +16,7 @@ import SplashBg from "./SplashBg";
 
 const Landing = () => {
   const [loadSubtitle, setLoadSubtitle] = useState(0);
+  const [sketch, setSketch] = useState(null);
   const subtitleRef = useRef(null);
 
   // Incrementally fades in subtitle elements
@@ -24,7 +25,12 @@ const Landing = () => {
     setTimeout(() => setLoadSubtitle(2), 1200);
     setTimeout(() => setLoadSubtitle(3), 1800);
 
-    new window.p5(splashSketch, "splash");
+    setSketch(new window.p5(splashSketch, "splash"));
+    return () => {
+      if (sketch) {
+        sketch.remove();
+      }
+    };
   }, []);
 
   return (

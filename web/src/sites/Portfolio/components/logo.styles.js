@@ -7,7 +7,7 @@ const StyledLogo = styled(HashLink)`
   font-size: ${(props) => props.theme.sizes.large};
   text-shadow: 0 0px 4px ${(props) => props.theme.colors.accentDark};
 
-  :hover {
+  &:hover {
     text-shadow: 0 0px 4px ${(props) => props.theme.colors.accentLight};
   }
 

@@ -39,12 +39,12 @@ const Menu = ({ visible, close }) => {
   });
 
   return (
-    <StyledMenu className={visible ? "visible" : null}>
+    <StyledMenu visible={visible}>
       {copy.Menu.links.map(([link, text], i) => (
         <MenuLink
           key={link}
           to={link}
-          className={active === i && "active"}
+          active={active === i}
           onClick={close}
           smooth
         >
