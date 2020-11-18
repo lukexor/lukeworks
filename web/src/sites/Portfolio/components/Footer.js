@@ -1,6 +1,5 @@
 import React from "react";
 import SitePaths from "sitePaths";
-import { scrollWithHeaderOffset } from "util/scroll";
 
 import { copy } from "../util/constants";
 import {
@@ -17,12 +16,7 @@ import {
 const Footer = () => (
   <StyledFooter>
     <FooterBar>
-      <BackToTop
-        smooth
-        to={SitePaths.home}
-        alt={copy.Footer.backToTop.alt}
-        scroll={scrollWithHeaderOffset}
-      >
+      <BackToTop smooth to={SitePaths.home} alt={copy.Footer.backToTop.alt}>
         <BackToTopIcon icon={copy.Footer.backToTop.icon} />
       </BackToTop>
       <SocialIcons>

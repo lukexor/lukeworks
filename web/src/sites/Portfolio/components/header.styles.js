@@ -14,4 +14,10 @@ const HeaderBar = styled.div`
   padding: 10px;
 `;
 
-export { HeaderBar, StyledHeader };
+const HeaderIcons = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: middle;
+`;
+
+export { HeaderBar, HeaderIcons, StyledHeader };

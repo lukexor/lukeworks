@@ -1,7 +1,5 @@
 import theme from "sites/Portfolio/theme";
 
-// TODO: Redraw upon resize
-
 const splashSketch = (p5) => {
   p5.disableFriendlyErrors = true;
 

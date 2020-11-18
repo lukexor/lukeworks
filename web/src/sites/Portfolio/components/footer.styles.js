@@ -31,7 +31,7 @@ const BackToTop = styled(HashLink)`
 
 const BackToTopIcon = styled(FontAwesomeIcon)`
   color: ${(props) => props.theme.colors.accentDark};
-  font-size: 36px;
+  font-size: ${(props) => props.theme.sizes.xlarge};
   padding: 15px;
   text-decoration: none;
   transition: color 0.5s;
@@ -48,7 +48,7 @@ const SocialIcons = styled.div`
 
 const SocialIcon = styled(FontAwesomeIcon)`
   color: ${(props) => props.theme.colors.accentDark};
-  font-size: 36px;
+  font-size: ${(props) => props.theme.sizes.xlarge};
   padding: 15px;
   text-decoration: none;
   transition: color 0.5s;

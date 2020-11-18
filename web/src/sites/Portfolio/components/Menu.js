@@ -4,19 +4,9 @@ import React, { useEffect, useState } from "react";
 import { copy } from "../util/constants";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
 
-const MenuIcon = ({ toggleVisible }) => (
-  <StyledMenuIcon
-    alt={copy.Menu.alt}
-    onClick={toggleVisible}
-    icon={copy.Menu.icon}
-  />
+const MenuIcon = (props) => (
+  <StyledMenuIcon alt={copy.Menu.alt} icon={copy.Menu.icon} {...props} />
 );
-
-MenuIcon.propTypes = {
-  toggleVisible: PropTypes.func.isRequired,
-};
-
-const menuHeight = 2.1 * copy.Menu.links.length;
 
 const Menu = ({ visible, close }) => {
   const [active, setActive] = useState(0);
@@ -49,7 +39,7 @@ const Menu = ({ visible, close }) => {
   });
 
   return (
-    <StyledMenu style={visible ? { height: `${menuHeight}rem` } : null}>
+    <StyledMenu className={visible ? "visible" : null}>
       {copy.Menu.links.map(([link, text], i) => (
         <MenuLink
           key={link}

@@ -5,6 +5,7 @@ import {
   faChevronCircleDown,
   faEnvelope,
   faRssSquare,
+  faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 import SitePaths from "sitePaths";
 
@@ -12,6 +13,10 @@ const copy = {
   Logo: {
     alt: "Homepage",
     text: "LP",
+  },
+  Search: {
+    alt: "Search",
+    icon: faSearch,
   },
   Menu: {
     alt: "Navigation Menu",

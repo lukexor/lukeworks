@@ -6,8 +6,8 @@ const StyledMenuIcon = styled(FontAwesomeIcon)`
   color: ${(props) => props.theme.colors.accentLight};
   cursor: pointer;
   font-size: ${(props) => props.theme.sizes.xlarge};
-  margin: auto 0;
-  transition: color 0.5s;
+  margin: auto 10px;
+  transition: color 0.5s ease;
 
   :hover {
     color: ${(props) => props.theme.colors.accentDark};
@@ -25,6 +25,10 @@ const StyledMenu = styled.nav`
   font-family: ${(props) => props.theme.fontSerif};
   line-height: ${(props) => props.theme.sizes.xlarge};
   transition: height 0.3s ease-out;
+
+  &.visible {
+    height: 13ch;
+  }
 
   @media (min-width: ${(props) => props.theme.breakpoints.desktopSmall}) {
     width: 15ch;

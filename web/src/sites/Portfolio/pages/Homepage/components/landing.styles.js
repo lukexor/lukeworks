@@ -52,6 +52,7 @@ const Explore = styled.div`
   text-align: center;
   width: 100%;
   padding: ${(props) => props.theme.sizes.medLarge} 0;
+  margin-bottom: 20px;
 `;
 
 const ExploreText = styled.h3`
@@ -65,7 +66,7 @@ const ExploreText = styled.h3`
 
 const ExploreIcon = styled(FontAwesomeIcon)`
   color: ${(props) => props.theme.colors.accentLight};
-  font-size: 36px;
+  font-size: ${(props) => props.theme.sizes.xxlarge};
   text-decoration: none;
   transition: color 0.5s;
 
