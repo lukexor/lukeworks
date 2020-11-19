@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import { HashLink } from "react-router-hash-link";
 import styled from "styled-components";
 
@@ -18,7 +19,6 @@ const StyledMenu = styled.nav`
   background-color: ${(props) => props.theme.colors.background};
   box-shadow: 0 2px 0 ${(props) => props.theme.colors.accentDark};
   position: absolute;
-  width: 100%;
   height: ${(props) => (props.visible ? "13ch" : 0)};
   left: 0;
   overflow: hidden;
@@ -34,7 +34,9 @@ const StyledMenu = styled.nav`
   }
 `;
 
-const MenuLink = styled(HashLink)`
+// Neeed to filter out invalid HTML props
+// eslint-disable-next-line no-unused-vars
+const MenuLink = styled(({ active, ...props }) => <HashLink {...props} />)`
   display: block;
   color: ${(props) =>
     props.active ? props.theme.colors.primary : props.theme.colors.secondary};

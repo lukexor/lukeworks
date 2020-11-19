@@ -1,11 +1,13 @@
 import React from "react";
 import SitePaths from "sitePaths";
+import HashAnchor from "sites/Portfolio/components/HashAnchor";
 
 import { StyledBlog } from "./blog.styles";
 
+// TODO: Blog
 const Blog = () => (
   <StyledBlog>
-    <a id={SitePaths.blog.replace("#", "")} className="anchor"></a>
+    <HashAnchor id={SitePaths.blog} />
     <h1>Blog</h1>
   </StyledBlog>
 );

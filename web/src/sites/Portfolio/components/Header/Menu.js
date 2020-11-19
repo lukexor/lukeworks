@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 
-import { copy } from "../util/constants";
+import { copy } from "../../util/constants";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
 
 const MenuIcon = (props) => (

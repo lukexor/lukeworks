@@ -1,13 +1,7 @@
 import bgImg from "code-bg.jpg";
 import styled from "styled-components";
 
-const StyledSplashBg = styled.div.attrs((props) => ({
-  randomBgColor:
-    Math.random() < 0.5
-      ? props.theme.colors.accentDark
-      : props.theme.colors.secondary,
-  randomTranslate: Math.floor(Math.random() * 60 - 30),
-}))`
+const StyledSplashBg = styled.div`
   &::before {
     content: "";
     opacity: 20%;
@@ -27,7 +21,7 @@ const StyledSplashBg = styled.div.attrs((props) => ({
   &::after {
     content: "";
     opacity: ${(props) => (props.glitch ? "50%" : "0")};
-    background-color: ${(props) => props.randomBgColor};
+    background-color: ${(props) => props.bgColor};
     background-image: url(${bgImg});
     background-repeat: repeat;
     background-size: cover;
@@ -37,7 +31,7 @@ const StyledSplashBg = styled.div.attrs((props) => ({
     right: 0;
     bottom: 0;
     left: 0;
-    transform: translateX(${(props) => `${props.randomTranslate}px`});
+    transform: translateX(${(props) => `${props.direction * 30}px`});
     z-index: -2000;
   }
 `;

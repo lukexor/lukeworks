@@ -3,18 +3,18 @@ import { HashLink } from "react-router-hash-link";
 import SitePaths from "sitePaths";
 import { copy } from "sites/Portfolio/util/constants";
 
-import splashSketch from "../lib/splashSketch";
 import {
   Explore,
   ExploreIcon,
   ExploreText,
-  Intro,
+  Heading,
   Name,
   Splash,
-} from "./landing.styles";
+} from "./intro.styles";
 import SplashBg from "./SplashBg";
+import splashSketch from "./splashSketch";
 
-const Landing = () => {
+const Intro = () => {
   const [loadSubtitle, setLoadSubtitle] = useState(0);
   const [sketch, setSketch] = useState(null);
   const subtitleRef = useRef(null);
@@ -38,7 +38,7 @@ const Landing = () => {
       <a id="home"></a>
       <SplashBg />
       <Splash id="splash">
-        <Intro>
+        <Heading>
           <h1>
             {copy.Intro.title} <Name>{copy.Contact.firstName}</Name>.
           </h1>
@@ -55,11 +55,11 @@ const Landing = () => {
               </span>
             ))}
           </h2>
-        </Intro>
+        </Heading>
         <Explore>
-          <ExploreText>{copy.Explore.text}</ExploreText>
-          <HashLink smooth to={SitePaths.blog} alt={copy.Explore.alt}>
-            <ExploreIcon icon={copy.Explore.icon} swapOpacity />
+          <ExploreText>{copy.Intro.Explore.text}</ExploreText>
+          <HashLink smooth to={SitePaths.blog} alt={copy.Intro.Explore.alt}>
+            <ExploreIcon icon={copy.Intro.Explore.icon} swapOpacity />
           </HashLink>
         </Explore>
       </Splash>
@@ -67,4 +67,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default Intro;

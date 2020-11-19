@@ -1,18 +1,18 @@
 import React from "react";
-import Footer from "sites/Portfolio/components/Footer";
-import Header from "sites/Portfolio/components/Header";
 
-import About from "./components/About";
-import Blog from "./components/Blog";
-import Contact from "./components/Contact";
-import Landing from "./components/Landing";
-import Projects from "./components/Projects";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import About from "./sections/About";
+import Blog from "./sections/Blog";
+import Contact from "./sections/Contact";
+import Intro from "./sections/Intro";
+import Projects from "./sections/Projects";
 
 const Homepage = () => (
   <>
     <Header />
     <main>
-      <Landing />
+      <Intro />
       <Blog />
       <Projects />
       <About />

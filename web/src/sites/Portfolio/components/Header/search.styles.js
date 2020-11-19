@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
 import styled, { css } from "styled-components";
 
 const StyledSearchIcon = styled(FontAwesomeIcon)`
@@ -15,7 +16,11 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const StyledClearIcon = styled(FontAwesomeIcon)`
+// Neeed to filter out invalid HTML props
+// eslint-disable-next-line no-unused-vars
+const StyledClearIcon = styled(({ visible, displayed, ...props }) => (
+  <FontAwesomeIcon {...props} />
+))`
   cursor: pointer;
   display: ${(props) => (props.visible ? "block" : "none")};
   visibility: ${(props) => (props.displayed ? "visible" : "hidden")};
@@ -34,7 +39,9 @@ const StyledSearch = styled.div`
   height: 100%;
 `;
 
-const SearchBox = styled.div`
+// Neeed to filter out invalid HTML props
+// eslint-disable-next-line no-unused-vars
+const SearchBox = styled(({ visible, ...props }) => <div {...props} />)`
   display: flex;
   align-items: center;
   height: ${(props) => props.theme.sizes.xlarge};

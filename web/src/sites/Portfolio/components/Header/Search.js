@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useDebounce } from "util/hooks/useDebounce";
 
-import { copy } from "../util/constants";
+import { copy } from "../../util/constants";
 import {
   SearchBox,
   StyledClearIcon,
@@ -10,9 +10,8 @@ import {
   StyledSearchIcon,
 } from "./search.styles";
 
-const SearchIcon = ({ visible, onClick }) => (
+const SearchIcon = ({ onClick }) => (
   <StyledSearchIcon
-    visible={visible}
     alt={copy.Search.alt}
     icon={copy.Search.icon}
     onClick={onClick}
@@ -20,7 +19,6 @@ const SearchIcon = ({ visible, onClick }) => (
 );
 
 SearchIcon.propTypes = {
-  visible: PropTypes.bool,
   onClick: PropTypes.func.isRequired,
 };
 
@@ -70,7 +68,6 @@ const Search = () => {
       <SearchBox visible={visible}>
         <SearchIcon visible={visible} onClick={clickIcon} />
         <input
-          visible={visible}
           type="text"
           name="search"
           id="search"
@@ -80,7 +77,7 @@ const Search = () => {
         />
         <ClearIcon
           visible={visible}
-          displayed={value}
+          displayed={value.length > 0}
           onClick={() => setValue("")}
         />
       </SearchBox>

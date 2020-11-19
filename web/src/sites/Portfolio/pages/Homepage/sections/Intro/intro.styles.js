@@ -10,7 +10,6 @@ const Splash = styled(StyledSection)`
   flex-direction: column;
   flex: 1;
   align-content: center;
-  width: 100%;
 
   canvas {
     position: absolute;
@@ -18,7 +17,7 @@ const Splash = styled(StyledSection)`
   }
 `;
 
-const Intro = styled.div`
+const Heading = styled.div`
   flex: 1;
   padding: 50px 0;
 
@@ -50,7 +49,6 @@ const Name = styled.span`
 
 const Explore = styled.div`
   text-align: center;
-  width: 100%;
   padding: ${(props) => props.theme.sizes.medLarge} 0;
   margin-bottom: 20px;
 `;
@@ -79,7 +77,7 @@ export {
   Explore,
   ExploreIcon,
   ExploreText,
-  Intro,
+  Heading,
   Name,
   Splash,
   StyledSection,

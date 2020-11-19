@@ -50,20 +50,20 @@ const copy = {
       [faEnvelope, "mailto: me@lukeworks.tech", "Email"],
     ],
   },
+  Intro: {
+    title: "Hi, I'm",
+    subtitle: ["Software Engineer.", "Designer.", "Thinker."],
+    Explore: {
+      text: "Please, take a look around!",
+      alt: "expand more",
+      icon: faChevronCircleDown,
+    },
+  },
   Contact: {
     firstName: "Lucas",
     lastName: "Petherbridge",
     phone: "5036168265",
     email: "me@lukeworks.tech",
-  },
-  Intro: {
-    title: "Hi, I'm",
-    subtitle: ["Software Engineer.", "Designer.", "Thinker."],
-  },
-  Explore: {
-    text: "Please, take a look around!",
-    alt: "expand more",
-    icon: faChevronCircleDown,
   },
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import SitePaths from "sitePaths";
 
-import { copy } from "../util/constants";
+import { copy } from "../../util/constants";
 import { StyledLogo } from "./logo.styles";
 
 const Logo = () => (

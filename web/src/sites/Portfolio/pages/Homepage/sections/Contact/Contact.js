@@ -1,11 +1,13 @@
 import React from "react";
 import SitePaths from "sitePaths";
+import HashAnchor from "sites/Portfolio/components/HashAnchor";
 
 import { StyledContact } from "./contact.styles";
 
+// TODO: Contact
 const Contact = () => (
   <StyledContact>
-    <a id={SitePaths.contact.replace("#", "")} className="anchor"></a>
+    <HashAnchor id={SitePaths.contact} />
     <h1>Contact</h1>
   </StyledContact>
 );
