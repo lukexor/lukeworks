@@ -4,7 +4,7 @@ const StyledHeader = styled.header`
   background: ${(props) => props.theme.colors.background};
   position: sticky;
   top: 0;
-  height: ${(props) => props.theme.sizes.xLarge};
+  width: 100%;
 `;
 
 const HeaderBar = styled.div`

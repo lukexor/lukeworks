@@ -6,10 +6,12 @@ import { StyledBlog } from "./blog.styles";
 
 // TODO: Blog
 const Blog = () => (
-  <StyledBlog>
+  <>
     <HashAnchor id={SitePaths.blog} />
-    <h1>Blog</h1>
-  </StyledBlog>
+    <StyledBlog>
+      <h1>Blog</h1>
+    </StyledBlog>
+  </>
 );
 
 export default Blog;

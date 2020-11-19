@@ -7,7 +7,6 @@ const GlobalStyles = createGlobalStyle`
   }
   body {
     background: #000;
-    overflow: hidden auto;
   }
   a {
     user-select: none;

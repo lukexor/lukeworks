@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import theme from "sites/Portfolio/theme";
 
-import { StyledSplashBg } from "./splashBg.styles";
+import { Bg, BgGlitch,StyledSplashBg } from "./splashBg.styles";
 
 const SplashBg = () => {
   const [glitch, setGlitch] = useState(false);
@@ -29,7 +29,10 @@ const SplashBg = () => {
   }, []);
 
   return (
-    <StyledSplashBg glitch={glitch} bgColor={color} direction={direction} />
+    <StyledSplashBg>
+      <Bg />
+      <BgGlitch glitch={glitch} bgColor={color} direction={direction} />
+    </StyledSplashBg>
   );
 };
 
