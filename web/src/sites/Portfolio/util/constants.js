@@ -11,6 +11,11 @@ import {
 import SitePaths from "sitePaths";
 
 const copy = {
+  Head: {
+    title: "Lucas Petherbridge | Software Engineer",
+    description:
+      "A blog and project portfolio by Lucas Petherbridge on programming, technology, and video game topics.",
+  },
   Logo: {
     alt: "Homepage",
     text: "LP",

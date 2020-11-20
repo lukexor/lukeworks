@@ -1,7 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components";
 
-const StyledSection = styled.section``;
+const StyledSection = styled.section`
+  min-height: calc(100vh - ${(props) => props.theme.sizes.xxlarge});
+`;
 
 const Splash = styled(StyledSection)`
   display: flex;

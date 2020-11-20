@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Route, Switch } from "react-router-dom";
 import SitePaths from "sitePaths";
+import { copy } from "sites/Portfolio/util/constants";
 import { ThemeProvider } from "styled-components";
 
 import Homepage from "./pages/Homepage/Homepage";
@@ -36,19 +38,26 @@ const Portfolio = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
-        <Switch>
-          <Route exact path={SitePaths.post}>
-            <Post />
-          </Route>
-          <Route>
-            <Homepage />
-          </Route>
-        </Switch>
-      </div>
-    </ThemeProvider>
+    <>
+      <Helmet>
+        <title>{copy.Head.title}</title>
+        <meta name="description" content={copy.Head.description} />
+      </Helmet>
+
+      <ThemeProvider theme={theme}>
+        <GlobalStyles />
+        <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
+          <Switch>
+            <Route exact path={SitePaths.post}>
+              <Post />
+            </Route>
+            <Route>
+              <Homepage />
+            </Route>
+          </Switch>
+        </div>
+      </ThemeProvider>
+    </>
   );
 };
 

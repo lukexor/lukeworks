@@ -31,10 +31,6 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  section {
-    height: calc(100vh - ${(props) => props.theme.sizes.xxlarge});
-  }
-
   main a.anchor {
     top: -${(props) => props.theme.sizes.xxlarge};
     position: relative;
@@ -47,6 +43,7 @@ const GlobalStyles = createGlobalStyle`
       scrollbar-width: thin;
       scrollbar-color: ${(props) =>
         `${props.theme.colors.accentDark} ${props.theme.colors.backgroundLight}`}
+      scroll-behavior: smooth;
       overflow: hidden auto;
     }
     body::-webkit-scrollbar {

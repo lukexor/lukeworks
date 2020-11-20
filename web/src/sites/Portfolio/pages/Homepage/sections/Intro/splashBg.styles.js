@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StyledSplashBg = styled.div`
   position: absolute;
   width: 100%;
-  height: calc(100vh - ${(props) => props.theme.sizes.xxlarge});
+  min-height: calc(100vh - ${(props) => props.theme.sizes.xxlarge});
   z-index: -2000;
   overflow-x: hidden;
 `;
