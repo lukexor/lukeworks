@@ -6,10 +6,12 @@ import { StyledAbout } from "./about.styles";
 
 // TODO: About
 const About = () => (
-  <StyledAbout>
+  <>
     <HashAnchor id={SitePaths.about} />
-    <h1>About</h1>
-  </StyledAbout>
+    <StyledAbout>
+      <h1>About</h1>
+    </StyledAbout>
+  </>
 );
 
 export default About;

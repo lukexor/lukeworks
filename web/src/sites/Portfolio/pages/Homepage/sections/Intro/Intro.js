@@ -35,7 +35,6 @@ const Intro = () => {
 
   return (
     <>
-      <a id="home"></a>
       <SplashBg />
       <Splash id="splash">
         <Heading>

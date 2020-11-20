@@ -6,10 +6,12 @@ import { StyledProjects } from "./projects.styles";
 
 // TODO: Projects
 const Projects = () => (
-  <StyledProjects>
+  <>
     <HashAnchor id={SitePaths.projects} />
-    <h1>Projects</h1>
-  </StyledProjects>
+    <StyledProjects>
+      <h1>Projects</h1>
+    </StyledProjects>
+  </>
 );
 
 export default Projects;

@@ -2,14 +2,14 @@ import styled from "styled-components";
 
 const StyledBlog = styled.section``;
 
-const BlogPosts = styled.div`
+const BlogPosts = styled.section`
   margin: ${(props) => props.theme.sizes.medSmall};
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;
 `;
 
-const StyledBlogPostCard = styled.div`
+const StyledBlogPostCard = styled.article`
   width: 300px;
   height: 250px;
   background-color: ${(props) => props.theme.colors.backgroundLight};

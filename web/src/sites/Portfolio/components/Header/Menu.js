@@ -13,8 +13,8 @@ const Menu = ({ visible, close }) => {
   const [active, setActive] = useState(0);
 
   const updateActive = useCallback(() => {
-    const offsets = Array.from(document.querySelectorAll("a.anchor"))
-      .concat(document.querySelector("a#home"))
+    const offsets = Array.from(document.querySelectorAll("span.anchor"))
+      .concat(document.querySelector("section#splash"))
       .map((el) => el.offsetTop)
       .sort((a, b) => a - b);
 

@@ -3,7 +3,7 @@ import theme from "sites/Portfolio/theme";
 const splashSketch = (p5) => {
   p5.disableFriendlyErrors = true;
 
-  const headerHeight = document.querySelector("a#home").offsetTop;
+  const headerHeight = document.querySelector("section#splash").offsetTop;
 
   const electrons = [];
   const maxElectrons = 10;

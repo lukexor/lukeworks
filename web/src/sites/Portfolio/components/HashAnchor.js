@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 const HashAnchor = ({ id }) => (
-  <a id={id.replace("#", "")} className="anchor"></a>
+  <span id={id.replace("#", "")} className="anchor"></span>
 );
 
 HashAnchor.propTypes = {

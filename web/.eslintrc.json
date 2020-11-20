@@ -3,7 +3,11 @@
     "browser": true,
     "es6": true
   },
-  "extends": ["eslint:recommended", "plugin:react/recommended"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -11,7 +15,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "simple-import-sort", "import"],
+  "plugins": ["react", "simple-import-sort", "import", "jsx-a11y"],
   "rules": {
     "indent": [
       "error",
