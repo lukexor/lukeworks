@@ -16,8 +16,8 @@ import splashSketch from "./splashSketch";
 
 const Intro = () => {
   const [loadSubtitle, setLoadSubtitle] = useState(0);
-  const [sketch, setSketch] = useState(null);
-  const subtitleRef = useRef(null);
+  const [sketch, setSketch] = useState();
+  const subtitleRef = useRef();
 
   // Incrementally fades in subtitle elements
   useEffect(() => {

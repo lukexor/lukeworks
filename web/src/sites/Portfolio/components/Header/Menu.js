@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
+import useEventListener from "util/hooks/useEventListener";
 
 import { copy } from "../../util/constants";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
@@ -11,7 +12,7 @@ const MenuIcon = (props) => (
 const Menu = ({ visible, close }) => {
   const [active, setActive] = useState(0);
 
-  const updateActive = () => {
+  const updateActive = useCallback(() => {
     const offsets = Array.from(document.querySelectorAll("a.anchor"))
       .concat(document.querySelector("a#home"))
       .map((el) => el.offsetTop)
@@ -26,17 +27,10 @@ const Menu = ({ visible, close }) => {
         closest = i;
       }
     });
-    if (closest !== active) {
-      setActive(closest);
-    }
-  };
+    setActive(closest);
+  }, []);
 
-  useEffect(() => {
-    window.addEventListener("scroll", updateActive);
-    return () => {
-      window.removeEventListener("scroll", updateActive);
-    };
-  });
+  useEventListener("scroll", updateActive);
 
   return (
     <StyledMenu visible={visible}>

@@ -5,6 +5,7 @@ import { Redirect, Route } from "react-router-dom";
 import SitePaths from "../sitePaths";
 
 // TODO: PrivateRoute
+// Set up useAuth hook with AuthProvider
 const PrivateRoute = ({ children, ...props }) => {
   const loggedInUser = null;
 

@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import useEventListener from "util/hooks/useEventListener";
 
 import { HeaderBar, HeaderIcons, StyledHeader } from "./header.styles";
 import Logo from "./Logo";
@@ -11,20 +12,17 @@ const Header = () => {
 
   const toggleMenu = () => setMenuVisible(!menuVisible);
 
-  useEffect(() => {
-    const clickOutside = (ref, cond, action, evt) => {
-      const curr = ref.current;
-      if (cond && curr && !curr.contains(evt.target)) {
-        action(false);
+  const clickOutsideMenu = useCallback(
+    (event) => {
+      const menu = menuRef.current;
+      if (menuVisible && menu && !menu.contains(event.target)) {
+        setMenuVisible(false);
       }
-    };
-    const clickOutsideMenu = (evt) =>
-      clickOutside(menuRef, menuVisible, setMenuVisible, evt);
-    document.addEventListener("click", clickOutsideMenu);
-    return () => {
-      document.removeEventListener("click", clickOutsideMenu);
-    };
-  });
+    },
+    [menuVisible, menuRef]
+  );
+
+  useEventListener("click", clickOutsideMenu);
 
   return (
     <StyledHeader>

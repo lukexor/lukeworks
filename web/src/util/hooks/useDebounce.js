@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 // Credit: https://usehooks.com/useDebounce/
 const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(null);
+  const [debouncedValue, setDebouncedValue] = useState();
 
   useEffect(() => {
     const timer = setTimeout(() => {
