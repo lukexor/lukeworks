@@ -51,6 +51,7 @@ const Portfolio = () => {
             <Route exact path={SitePaths.post}>
               <Post />
             </Route>
+            {/* TODO handle 404 responses */}
             <Route>
               <Homepage />
             </Route>

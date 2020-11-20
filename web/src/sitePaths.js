@@ -6,7 +6,9 @@ const SitePaths = {
   home: "#",
   post: "/:title",
   resume: "/resume",
-  // tetanes: "/tetanes",
+  admin: "/admin",
+  login: "/login",
+  tetanes: "/tetanes",
 };
 
 const LegacyPaths = {
