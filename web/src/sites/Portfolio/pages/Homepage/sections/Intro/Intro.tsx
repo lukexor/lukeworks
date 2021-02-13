@@ -27,7 +27,7 @@ const Intro: React.FC = () => {
     setTimeout(() => setLoadSubtitle(3), 1800);
 
     const splash = document.querySelector("#splash") as HTMLElement;
-    splash && setSketch(new p5(splashSketch, splash));
+    splash && setSketch(new window.p5(splashSketch, splash));
     return () => {
       if (sketch) {
         sketch.remove();

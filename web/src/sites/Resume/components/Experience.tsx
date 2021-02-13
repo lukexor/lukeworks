@@ -1,7 +1,7 @@
 import React from "react";
 
 type ExperienceBullet = {
-  start: string;
+  start: Maybe<string>;
   end: Maybe<string>;
   title: string;
   desc: string;

@@ -12,3 +12,40 @@ declare global {
 
   type Maybe<T> = null | undefined | T;
 }
+
+declare module "styled-components" {
+  export interface DefaultTheme {
+    breakpoints: {
+      desktopLarge: string;
+      desktopSmall: string;
+      tablet: string;
+      mobile: string;
+    };
+    colors: {
+      accentDark: string;
+      accentLight: string;
+      background: string;
+      backgroundLight: string;
+      primary: string;
+      secondary: string;
+    };
+    fontSerif: string;
+    fontSans: string;
+    rootFontSize: string;
+    boxShadows: {
+      small: string;
+      med: string;
+      large: string;
+    };
+    sizes: {
+      xsmall: string;
+      small: string;
+      medSmall: string;
+      med: string;
+      medLarge: string;
+      large: string;
+      xlarge: string;
+      xxlarge: string;
+    };
+  }
+}

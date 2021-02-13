@@ -72,7 +72,7 @@ const Search: React.FC = () => {
           type="text"
           name="search"
           id="search"
-          placeholder={copy.Search.alt}
+          placeholder={copy.Search.placeholder}
           value={value}
           onChange={handleChange}
         />

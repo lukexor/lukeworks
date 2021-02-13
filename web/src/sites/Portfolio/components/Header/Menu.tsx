@@ -4,12 +4,16 @@ import useEventListener from "util/hooks/useEventListener";
 import { copy } from "../../util/constants";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
 
+type MenuIconProps = {
+  onClick: () => void;
+};
+
 type MenuProps = {
   visible: boolean;
   close: () => void;
 };
 
-const MenuIcon: React.FC = (props) => (
+const MenuIcon: React.FC<MenuIconProps> = (props) => (
   <StyledMenuIcon icon={copy.Menu.icon} {...props} />
 );
 

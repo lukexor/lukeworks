@@ -58,7 +58,7 @@ const ExploreText = styled.h3`
   font-weight: normal;
 
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-    font-size: ${(props) => props.theme.sizes.medlarge};
+    font-size: ${(props) => props.theme.sizes.medLarge};
   }
 `;
 

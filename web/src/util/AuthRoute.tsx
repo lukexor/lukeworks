@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { Redirect, Route } from "react-router-dom";
+import { Redirect, Route, RouteProps } from "react-router-dom";
 
 import SitePaths from "../sitePaths";
 
 // TODO: AuthRoute
 // Set up useAuth hook with AuthProvider
-const AuthRoute: React.FC = ({ children, ...props }) => {
+const AuthRoute: React.FC<RouteProps> = ({ children, ...props }) => {
   const loggedInUser = null;
 
   return (

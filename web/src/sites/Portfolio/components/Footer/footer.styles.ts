@@ -5,7 +5,7 @@ import styled from "styled-components";
 const StyledFooter = styled.footer`
   position: relative;
   background: ${(props) => props.theme.colors.backgroundLight};
-  height: ${(props) => props.theme.sizes.xLarge};
+  height: ${(props) => props.theme.sizes.xlarge};
 `;
 
 const FooterBar = styled.div`

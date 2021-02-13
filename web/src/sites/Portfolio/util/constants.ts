@@ -20,6 +20,7 @@ const copy = {
     text: "LP",
   },
   Search: {
+    placeholder: "Search...",
     icon: faSearch,
     clearIcon: faTimes,
   },

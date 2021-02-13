@@ -97,6 +97,8 @@
           "website": "https://lukeworks.tech/"
         },
         {
+          "start": null,
+          "end": null,
           "title": "Miscellaneous",
           "desc": "Various side projects & other coding exercises including a suite of visual programs showcasing algorithms, animations, & game physics using the p5.js JavaScript library & HTML5 canvas.",
           "website": "https://lukeworks.tech/#projects"

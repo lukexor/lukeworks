@@ -1,3 +1,3 @@
-import { useDebounce, useDebounceCallback } from "./useDebounce";
+import { useDebounce, useDebounceFn } from "./useDebounce";
 
-export { useDebounce, useDebounceCallback };
+export { useDebounce, useDebounceFn };
