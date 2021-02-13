@@ -12,13 +12,17 @@ import {
 type BlogPost = {
   id: number;
   url: string;
-  thumb: string;
   title: string;
+  thumbnail: Maybe<string>;
+  image: Maybe<string>;
+  imageAlt: Maybe<string>;
   content: string;
   minutesToRead: number;
-  publishedAt: string;
+  category: string;
   likes: number;
-  categoryId: number;
+  publishedOn: string;
+  createdOn: string;
+  updatedOn: string;
 };
 
 type BlogPostCardProps = {
@@ -28,7 +32,7 @@ type BlogPostCardProps = {
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
   return (
     <StyledBlogPostCard>
-      <BlogThumbnail src={post.thumb} />
+      {post.thumbnail && <BlogThumbnail src={post.thumbnail} />}
       <h2>{post.title}</h2>
     </StyledBlogPostCard>
   );
