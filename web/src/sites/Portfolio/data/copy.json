@@ -1,0 +1,73 @@
+{
+  "Head": {
+    "title": "Lucas Petherbridge | Software Engineer",
+    "description": "A blog and project portfolio by Lucas Petherbridge on programming, technology, and video game topics."
+  },
+  "Menu": {
+    "links": {
+        "about": {
+          "path": "#about",
+          "title": "Home"
+        },
+        "blog": {
+          "path": "#blog",
+          "title": "Blog"
+        },
+        "contact": {
+          "path": "#contact",
+          "title": "Contact"
+        },
+        "projects": {
+          "path": "#projects",
+          "title": "Projects"
+        },
+        "home": {
+          "path": "#",
+          "title": "Home"
+        }
+      }
+    },
+  "Logo": {
+    "text": "LP"
+  },
+  "Search": {
+    "placeholder": "Search..."
+  },
+  "Footer": {
+    "copyright": "©",
+    "rightsReserved": "All Rights Reserved",
+    "socialIcons": [
+      {
+        "icon": "github",
+        "link": "http://github.com/lukexor/",
+        "title": "GitHub"
+      },
+      {
+        "icon": "linkedIn",
+        "link": "https://linkedin.com/in/lucaspetherbridge",
+        "title": "LinkedIn"
+      },
+      {
+        "icon": "rss",
+        "link": "https://feeds.feedburner.com/LucasPetherbridge",
+        "title": "RSS Feed"
+      },
+      {
+        "icon": "email",
+        "link": "mailto: me@lukeworks.tech",
+        "title": "Email"
+      }
+    ]
+  },
+  "Intro": {
+    "title": "Hi, I'm Luke",
+    "subtitle": ["Software Engineer.", "Designer.", "Thinker."],
+    "explore": "Please, take a look around!"
+  },
+  "Contact": {
+    "firstName": "Lucas",
+    "lastName": "Petherbridge",
+    "phone": "5036168265",
+    "email": "me@lukeworks.tech"
+  }
+}

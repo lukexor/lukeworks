@@ -1,7 +1,7 @@
 import React from "react";
-import SitePaths from "sitePaths";
-
-import { copy } from "../../util/constants";
+import copy from "../../data/copy.json";
+import Icons from "../../Icons";
+import routes from "../../routes";
 import {
   BackToTop,
   BackToTopIcon,
@@ -16,13 +16,13 @@ import {
 const Footer: React.FC = () => (
   <StyledFooter>
     <FooterBar>
-      <BackToTop smooth to={SitePaths.home}>
-        <BackToTopIcon icon={copy.Footer.backToTop.icon} />
+      <BackToTop smooth to={routes.home.path}>
+        <BackToTopIcon icon={Icons.backToTop} />
       </BackToTop>
       <SocialIcons>
         {copy.Footer.socialIcons.map(({ icon, link, title }) => (
           <a key={link} href={link} title={title}>
-            <SocialIcon icon={icon} />
+            <SocialIcon icon={Icons[icon]} />
           </a>
         ))}
       </SocialIcons>

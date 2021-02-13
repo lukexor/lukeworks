@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Route, Switch } from "react-router-dom";
-import SitePaths from "sitePaths";
 import { ThemeProvider } from "styled-components";
 import useEventListener from "util/hooks/useEventListener";
-
+import copy from "./data/copy.json";
 import Homepage from "./pages/Homepage/Homepage";
 import Post from "./pages/Post";
 import { GlobalStyles } from "./portfolio.styles";
+import routes from "./routes";
 import theme from "./theme";
-import { copy } from "./util/constants";
 
 const Portfolio: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -46,7 +45,7 @@ const Portfolio: React.FC = () => {
         <GlobalStyles />
         <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
           <Switch>
-            <Route exact path={SitePaths.post}>
+            <Route exact path={routes.post.path}>
               <Post />
             </Route>
             {/* TODO handle 404 responses */}

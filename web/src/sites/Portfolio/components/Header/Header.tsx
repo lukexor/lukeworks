@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import useClickOutside from "util/hooks/useClickOutside";
-
 import { HeaderBar, HeaderIcons, StyledHeader } from "./header.styles";
 import Logo from "./Logo";
 import Menu, { MenuIcon } from "./Menu";

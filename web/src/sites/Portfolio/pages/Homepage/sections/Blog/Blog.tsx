@@ -1,8 +1,7 @@
 import React from "react";
-import SitePaths from "sitePaths";
 import HashAnchor from "sites/Portfolio/components/HashAnchor";
-import { mockBlogPosts } from "sites/Portfolio/util/mockData";
-
+import blogPosts from "sites/Portfolio/data/blogPosts.json";
+import routes from "sites/Portfolio/routes";
 import {
   BlogPosts,
   BlogThumbnail,
@@ -39,11 +38,11 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
 const Blog: React.FC = () => {
   return (
     <>
-      <HashAnchor id={SitePaths.blog} />
+      <HashAnchor id={routes.blog.path} />
       <StyledBlog>
         <h1>Blog</h1>
         <BlogPosts>
-          {mockBlogPosts.map((post) => (
+          {blogPosts.map((post) => (
             <BlogPostCard key={post.id} post={post} />
           ))}
         </BlogPosts>

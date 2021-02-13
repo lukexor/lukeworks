@@ -1,8 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 import { Redirect, Route, RouteProps } from "react-router-dom";
-
-import SitePaths from "../sitePaths";
+import routes from "routes.json";
 
 // TODO: AuthRoute
 // Set up useAuth hook with AuthProvider
@@ -17,7 +16,7 @@ const AuthRoute: React.FC<RouteProps> = ({ children, ...props }) => {
           children
         ) : (
           <Redirect
-            to={{ pathname: SitePaths.login, state: { from: location } }}
+            to={{ pathname: routes.login.path, state: { from: location } }}
           />
         )
       }

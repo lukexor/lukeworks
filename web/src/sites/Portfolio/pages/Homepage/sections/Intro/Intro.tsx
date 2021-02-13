@@ -1,9 +1,9 @@
 import p5 from "p5";
 import React, { useEffect, useRef, useState } from "react";
 import { HashLink } from "react-router-hash-link";
-import SitePaths from "sitePaths";
-import { copy } from "sites/Portfolio/util/constants";
-
+import copy from "sites/Portfolio/data/copy.json";
+import Icons from "sites/Portfolio/Icons";
+import routes from "sites/Portfolio/routes";
 import {
   Explore,
   ExploreIcon,
@@ -44,7 +44,7 @@ const Intro: React.FC = () => {
             {copy.Intro.title} <Name>{copy.Contact.firstName}</Name>.
           </h1>
           <h2 ref={subtitleRef}>
-            {copy.Intro.subtitle.map((line, i) => (
+            {copy.Intro.subtitle.map((line: string, i: number) => (
               <span
                 key={`subtitle-${i}`}
                 className={`fade-enter ${
@@ -58,9 +58,9 @@ const Intro: React.FC = () => {
           </h2>
         </Heading>
         <Explore>
-          <ExploreText>{copy.Intro.Explore.text}</ExploreText>
-          <HashLink smooth to={SitePaths.blog}>
-            <ExploreIcon icon={copy.Intro.Explore.icon} swapOpacity />
+          <ExploreText>{copy.Intro.explore}</ExploreText>
+          <HashLink smooth to={routes.blog.path}>
+            <ExploreIcon icon={Icons.explore} swapOpacity />
           </HashLink>
         </Explore>
       </Splash>

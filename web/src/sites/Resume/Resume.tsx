@@ -1,6 +1,5 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-
 import Education from "./components/Education";
 import Employment from "./components/Employment";
 import Experience from "./components/Experience";

@@ -1,8 +1,8 @@
 import React, { SyntheticEvent, useEffect, useRef, useState } from "react";
+import Icons from "sites/Portfolio/Icons";
 import useClickOutside from "util/hooks/useClickOutside";
 import { useDebounce } from "util/hooks/useDebounce";
-
-import { copy } from "../../util/constants";
+import copy from "../../data/copy.json";
 import {
   SearchBox,
   StyledClearIcon,
@@ -20,19 +20,13 @@ type ClearIconProps = {
 };
 
 const SearchIcon: React.FC<SearchIconProps> = ({ onClick }) => (
-  <StyledSearchIcon
-    icon={copy.Search.icon}
-    onClick={onClick}
-  />
+  <StyledSearchIcon icon={Icons.search} onClick={onClick} />
 );
 
-const ClearIcon: React.FC<ClearIconProps> = ({
-  visible,
-  onClick,
-}) => (
+const ClearIcon: React.FC<ClearIconProps> = ({ visible, onClick }) => (
   <StyledClearIcon
     visible={visible}
-    icon={copy.Search.clearIcon}
+    icon={Icons.clearField}
     onClick={onClick}
   />
 );

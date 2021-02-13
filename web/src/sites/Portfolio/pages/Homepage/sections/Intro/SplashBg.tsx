@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import theme from "sites/Portfolio/theme";
-
 import { Bg, BgGlitch, StyledSplashBg } from "./splashBg.styles";
 
 const SplashBg: React.FC = () => {

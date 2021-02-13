@@ -1,0 +1,18 @@
+{
+  "resume": {
+    "path": "/resume",
+    "title": "Resume"
+  },
+  "admin": {
+    "path": "/admin",
+    "title": "Admin"
+  },
+  "login": {
+    "path": "/login",
+    "title": "Log In"
+  },
+  "tetanes": {
+    "path": "/tetanes",
+    "title": "TetaNES"
+  }
+}

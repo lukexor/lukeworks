@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
+import copy from "sites/Portfolio/data/copy.json";
+import Icons from "sites/Portfolio/Icons";
 import useEventListener from "util/hooks/useEventListener";
-
-import { copy } from "../../util/constants";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
 
 type MenuIconProps = {
@@ -14,7 +14,7 @@ type MenuProps = {
 };
 
 const MenuIcon: React.FC<MenuIconProps> = (props) => (
-  <StyledMenuIcon icon={copy.Menu.icon} {...props} />
+  <StyledMenuIcon icon={Icons.menu} {...props} />
 );
 
 const Menu: React.FC<MenuProps> = ({ visible, close }) => {
@@ -42,15 +42,15 @@ const Menu: React.FC<MenuProps> = ({ visible, close }) => {
 
   return (
     <StyledMenu visible={visible}>
-      {copy.Menu.links.map(([link, text], i) => (
+      {Object.entries(copy.Menu.links).map(([link,{ path, title }], i) => (
         <MenuLink
           key={link}
-          to={link}
+          to={path}
           active={active === i}
           onClick={close}
           smooth
         >
-          {text}
+          {title}
         </MenuLink>
       ))}
     </StyledMenu>

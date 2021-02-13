@@ -25,28 +25,33 @@
     "jsx-a11y"
   ],
   "rules": {
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
+    ],
     "indent": [
       "error",
       2,
       { "SwitchCase": 1, "ignoredNodes": ["TemplateLiteral > *"] }
     ],
-    "linebreak-style": ["error", "unix"],
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": [
-      "error",
-      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
-    ],
-    "quotes": ["error", "double"],
-    "react/prop-types": "off",
-    "react/jsx-uses-vars": "error",
-    "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off",
-    "semi": ["error", "always"],
-    "simple-import-sort/sort": "error",
-    "sort-imports": "off",
     "import/first": "error",
     "import/newline-after-import": "error",
-    "import/no-duplicates": "error"
+    "import/no-duplicates": "error",
+    "linebreak-style": ["error", "unix"],
+    "no-unused-vars": "off",
+    "quotes": ["error", "double"],
+    "react/jsx-uses-react": "off",
+    "react/jsx-uses-vars": "error",
+    "react/prop-types": "off",
+    "react/react-in-jsx-scope": "off",
+    "semi": ["error", "always"],
+    "simple-import-sort/sort": [
+      "error",
+      {
+        "groups": [["^\\u0000", "^@?\\w", "^", "^\\."]]
+      }
+    ],
+    "sort-imports": "off"
   },
   "settings": {
     "react": {

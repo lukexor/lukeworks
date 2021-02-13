@@ -2,7 +2,7 @@ import GlobalStyles from "global.styles";
 import React from "react";
 import { HelmetProvider } from "react-helmet-async";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import SitePaths from "sitePaths";
+import routes from "routes.json";
 import { Portfolio, Resume } from "sites";
 import Admin, { Login } from "sites/Admin";
 import AuthRoute from "util/AuthRoute";
@@ -14,13 +14,13 @@ const LukeWorks: React.FC = () => (
       <ErrorBoundary>
         <GlobalStyles />
         <Switch>
-          <Route exact path={SitePaths.resume}>
+          <Route exact path={routes.resume.path}>
             <Resume />
           </Route>
-          <AuthRoute path={SitePaths.admin}>
+          <AuthRoute path={routes.admin.path}>
             <Admin />
           </AuthRoute>
-          <Route path={SitePaths.login}>
+          <Route path={routes.login.path}>
             <Login />
           </Route>
           <Route>
