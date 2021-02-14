@@ -1,37 +1,13 @@
 {
-  "Head": {
-    "title": "Lucas Petherbridge | Software Engineer",
-    "description": "A blog and project portfolio by Lucas Petherbridge on programming, technology, and video game topics."
+  "About": {
+    "description": "I've been coding since age 15 when I first learned what HTML was.\n\nI primarily work with Javascript/React and Rust, but I've dabbled in several other technology stacks including Perl, Ruby, Python, Golang, Kotlin, C, Haskell, 6502 Assembly, and even some Arduino programming! I love learning new technologies and finding the best tool for the job. I've developed a borderline addiction to problem-solving over the years, with many late nights, refusing to go to bed until I was satisfied I had reached an acceptable solution.\n\nI am constantly looking for new projects, things to learn and better ways to solve problems. I'm excite dabout cutting-edge technologies, especially AI and Machine Learning. I'm always on the lookout for anything I can sink my teeth into. I post here to share my projects and ideas with the hope they spur discussions about code, technology and software practices."
   },
-  "Menu": {
-    "links": {
-        "about": {
-          "path": "#about",
-          "title": "Home"
-        },
-        "blog": {
-          "path": "#blog",
-          "title": "Blog"
-        },
-        "contact": {
-          "path": "#contact",
-          "title": "Contact"
-        },
-        "projects": {
-          "path": "#projects",
-          "title": "Projects"
-        },
-        "home": {
-          "path": "#",
-          "title": "Home"
-        }
-      }
-    },
-  "Logo": {
-    "text": "LP"
-  },
-  "Search": {
-    "placeholder": "Search..."
+  "Contact": {
+    "firstName": "Lucas",
+    "lastName": "Petherbridge",
+    "phone": "5036168265",
+    "email": "me@lukeworks.tech",
+    "content": "Have a question or want to work together? Drop me a line: "
   },
   "Footer": {
     "copyright": "©",
@@ -59,15 +35,48 @@
       }
     ]
   },
+  "Head": {
+    "title": "Lucas Petherbridge | Software Engineer",
+    "description": "A blog and project portfolio by Lucas Petherbridge on programming, technology, and video game topics."
+  },
   "Intro": {
-    "title": "Hi, I'm Luke",
+    "title": "Hi, I'm",
     "subtitle": ["Software Engineer.", "Designer.", "Thinker."],
     "explore": "Please, take a look around!"
   },
-  "Contact": {
-    "firstName": "Lucas",
-    "lastName": "Petherbridge",
-    "phone": "5036168265",
-    "email": "me@lukeworks.tech"
+  "Logo": {
+    "text": "LP"
+  },
+  "Menu": {
+    "links": [
+      {
+        "name": "home",
+        "path": "#",
+        "title": "Home"
+      },
+      {
+        "name": "blog",
+        "path": "#blog",
+        "title": "Blog"
+      },
+      {
+        "name": "projects",
+        "path": "#projects",
+        "title": "Projects"
+      },
+      {
+        "name": "about",
+        "path": "#about",
+        "title": "About"
+      },
+      {
+        "name": "contact",
+        "path": "#contact",
+        "title": "Contact"
+      }
+    ]
+  },
+  "Search": {
+    "placeholder": "Search..."
   }
 }

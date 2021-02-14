@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import HashAnchor from "sites/Portfolio/components/HashAnchor";
 import blogPosts from "sites/Portfolio/data/blogPosts.json";
 import routes from "sites/Portfolio/routes";
@@ -19,8 +20,9 @@ type BlogPost = {
   content: string;
   minutesToRead: number;
   category: string;
+  tags: string[];
   likes: number;
-  publishedOn: string;
+  publishedOn: Maybe<string>;
   createdOn: string;
   updatedOn: string;
 };
@@ -30,12 +32,14 @@ type BlogPostCardProps = {
 };
 
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
-  return (
+  return post.publishedOn ? (
     <StyledBlogPostCard>
-      {post.thumbnail && <BlogThumbnail src={post.thumbnail} />}
-      <h2>{post.title}</h2>
+      <Link to={post.url}>
+        <BlogThumbnail src={post.thumbnail} />
+        <h3>{post.title}</h3>
+      </Link>
     </StyledBlogPostCard>
-  );
+  ) : null;
 };
 
 // TODO: Blog
@@ -44,7 +48,7 @@ const Blog: React.FC = () => {
     <>
       <HashAnchor id={routes.blog.path} />
       <StyledBlog>
-        <h1>Blog</h1>
+        <h2>Blog</h2>
         <BlogPosts>
           {blogPosts.map((post) => (
             <BlogPostCard key={post.id} post={post} />

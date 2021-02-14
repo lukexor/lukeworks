@@ -11,6 +11,7 @@ import {
   Heading,
   Name,
   Splash,
+  Subtitle,
 } from "./intro.styles";
 import SplashBg from "./SplashBg";
 import splashSketch from "./splashSketch";
@@ -43,7 +44,7 @@ const Intro: React.FC = () => {
           <h1>
             {copy.Intro.title} <Name>{copy.Contact.firstName}</Name>.
           </h1>
-          <h2 ref={subtitleRef}>
+          <Subtitle ref={subtitleRef}>
             {copy.Intro.subtitle.map((line: string, i: number) => (
               <span
                 key={`subtitle-${i}`}
@@ -55,11 +56,11 @@ const Intro: React.FC = () => {
                 <br />
               </span>
             ))}
-          </h2>
+          </Subtitle>
         </Heading>
         <Explore>
           <ExploreText>{copy.Intro.explore}</ExploreText>
-          <HashLink smooth to={routes.blog.path}>
+          <HashLink smooth to={routes.blog.path} className="img">
             <ExploreIcon icon={Icons.explore} swapOpacity />
           </HashLink>
         </Explore>

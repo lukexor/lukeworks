@@ -43,6 +43,18 @@ const Heading = styled.div`
   }
 `;
 
+const Subtitle = styled.p`
+  font-family: ${(props) => props.theme.fontSerif};
+  font-size: ${(props) => props.theme.sizes.large};
+  font-weight: normal;
+  line-height: 1.6em;
+  text-align: center;
+
+  @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
+    font-size: ${(props) => props.theme.sizes.xlarge};
+  }
+`;
+
 const Name = styled.span`
   color: ${(props) => props.theme.colors.accentDark};
 `;
@@ -53,9 +65,8 @@ const Explore = styled.div`
   margin-bottom: 20px;
 `;
 
-const ExploreText = styled.h3`
+const ExploreText = styled.p`
   font-size: ${(props) => props.theme.sizes.med};
-  font-weight: normal;
 
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
     font-size: ${(props) => props.theme.sizes.medLarge};
@@ -78,6 +89,7 @@ export {
   ExploreIcon,
   ExploreText,
   Heading,
+  Subtitle,
   Name,
   Splash,
   StyledSection,

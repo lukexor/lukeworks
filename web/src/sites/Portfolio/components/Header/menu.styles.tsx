@@ -14,36 +14,34 @@ const StyledMenuIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const StyledMenu = styled.nav<{visible: boolean}>`
+const StyledMenu = styled.nav<{ visible: boolean }>`
   background-color: ${(props) => props.theme.colors.backgroundLight};
   box-shadow: 0 2px 0 ${(props) => props.theme.colors.accentDark};
   position: absolute;
   height: ${(props) => (props.visible ? "13ch" : 0)};
-  left: 0;
+  width: 15ch;
+  left: auto;
+  right: 1ch;
   overflow: hidden;
   text-align: center;
   font-family: ${(props) => props.theme.fontSerif};
   line-height: ${(props) => props.theme.sizes.xlarge};
   transition: height 0.3s ease-out;
-
-  @media (min-width: ${(props) => props.theme.breakpoints.desktopSmall}) {
-    width: 15ch;
-    left: auto;
-    right: 1ch;
-  }
 `;
 
 // Need to filter out invalid HTML props
 const MenuLink = styled(({ active: _, ...props }) => <HashLink {...props} />)`
   display: block;
   color: ${(props) =>
-    props.active ? props.theme.colors.primary : props.theme.colors.secondary};
+    props.active
+      ? props.theme.colors.primary
+      : props.theme.colors.secondary}!important;
   text-decoration: none;
   text-transform: uppercase;
-  transition: color 0.5s;
+  transition: color 0s;
 
   &:hover {
-    color: ${(props) => props.theme.colors.accentDark};
+    color: ${(props) => props.theme.colors.accentDark}!important;
   }
 `;
 

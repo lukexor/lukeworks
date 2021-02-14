@@ -16,18 +16,18 @@ import {
 const Footer: React.FC = () => (
   <StyledFooter>
     <FooterBar>
-      <BackToTop smooth to={routes.home.path}>
+      <BackToTop smooth to={routes.home.path} className="img">
         <BackToTopIcon icon={Icons.backToTop} />
       </BackToTop>
       <SocialIcons>
         {copy.Footer.socialIcons.map(({ icon, link, title }) => (
-          <a key={link} href={link} title={title}>
+          <a key={link} href={link} title={title} className="img">
             <SocialIcon icon={Icons[icon]} />
           </a>
         ))}
       </SocialIcons>
       <Copyright>
-        {copy.Footer.copyright}{" "}
+        {copy.Footer.copyright} {new Date().getFullYear()}{" "}
         <Name>
           {copy.Contact.firstName} {copy.Contact.lastName}
         </Name>{" "}

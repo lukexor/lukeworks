@@ -1,6 +1,5 @@
 import styled from "styled-components";
-import { StyledSection } from "../Intro/intro.styles";
 
-const StyledAbout = styled(StyledSection)``;
+const StyledAbout = styled.section``;
 
 export { StyledAbout };

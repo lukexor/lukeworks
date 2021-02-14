@@ -4,7 +4,7 @@ import routes from "../../routes";
 import { StyledLogo } from "./logo.styles";
 
 const Logo: React.FC = () => (
-  <StyledLogo smooth to={routes.home.path}>
+  <StyledLogo smooth to={routes.home.path} className="img">
     {copy.Logo.text}
   </StyledLogo>
 );

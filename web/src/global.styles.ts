@@ -11,6 +11,11 @@ const GlobalStyles = createGlobalStyle`
   a {
     user-select: none;
   }
+  p {
+    white-space: pre-line;
+    max-width: 70ch;
+    margin: 25px auto;
+  }
 
   .fade-enter {
     opacity: 0;

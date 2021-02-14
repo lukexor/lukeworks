@@ -4,30 +4,36 @@ const GlobalStyles = createGlobalStyle`
   body {
     background-color: ${(props) => props.theme.colors.background};
     -webkit-font-smoothing: antialiased;
-    color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.secondary};
     font-family: ${(props) => props.theme.fontSans};
     font-size: 1.2em;
   }
-  h1 {
+  h1, h2, h3, h4, h5, h6 {
     color: ${(props) => props.theme.colors.primary};
     font-family: ${(props) => props.theme.fontSerif};
-    font-size: ${(props) => props.theme.sizes.xlarge};
     font-weight: normal;
     text-align: center;
-
+  }
+  h1 {
+    font-size: ${(props) => props.theme.sizes.xxlarge};
+    @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
+      font-size: ${(props) => props.theme.sizes.xxxlarge};
+    }
+  }
+  h2 {
+    font-size: ${(props) => props.theme.sizes.xlarge};
     @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
       font-size: ${(props) => props.theme.sizes.xxlarge};
     }
   }
-  h2 {
-    font-family: ${(props) => props.theme.fontSerif};
-    font-size: ${(props) => props.theme.sizes.large};
-    font-weight: normal;
-    line-height: 1.6em;
-    text-align: center;
 
-    @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {
-      font-size: ${(props) => props.theme.sizes.xlarge};
+  a:not(.img) {
+    color: ${(props) => props.theme.colors.accentLight};
+    text-decoration: none;
+    transition: color 0.5s ease;
+
+    &:hover {
+      color: ${(props) => props.theme.colors.accentDark};
     }
   }
 

@@ -46,6 +46,7 @@ declare module "styled-components" {
       large: string;
       xlarge: string;
       xxlarge: string;
+      xxxlarge: string;
     };
   }
 }

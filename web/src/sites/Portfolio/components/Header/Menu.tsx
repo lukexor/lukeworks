@@ -42,9 +42,9 @@ const Menu: React.FC<MenuProps> = ({ visible, close }) => {
 
   return (
     <StyledMenu visible={visible}>
-      {Object.entries(copy.Menu.links).map(([link,{ path, title }], i) => (
+      {copy.Menu.links.map(({ path, title }, i) => (
         <MenuLink
-          key={link}
+          key={path}
           to={path}
           active={active === i}
           onClick={close}

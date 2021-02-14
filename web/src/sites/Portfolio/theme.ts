@@ -11,7 +11,7 @@ const theme = {
     background: "#0c141f",
     backgroundLight: "#121924",
     primary: "#6fc3df",
-    secondary: "#e6ffff",
+    secondary: "#d5eeee",
   },
   fontSerif: "Abril Fatface, serif",
   fontSans: "Rubik, sans-serif",
@@ -32,6 +32,7 @@ const theme = {
     large: "1.5rem",
     xlarge: "2rem",
     xxlarge: "3rem",
+    xxxlarge: "3.5rem",
   },
 };
 

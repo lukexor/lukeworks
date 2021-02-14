@@ -1,7 +1,22 @@
 import copy from "./data/copy.json";
 
+type Link = {
+  name: string;
+  path: string;
+  title: string;
+};
+
+type MenuMap = {
+  [key: string]: Link;
+};
+
+const MenuLinks = copy.Menu.links.reduce((map, link) => {
+  map[link.name] = link;
+  return map;
+}, {} as MenuMap);
+
 const routes = {
-  ...copy.Menu.links,
+  ...MenuLinks,
   post: {
     path: "/:title",
     title: "Post",

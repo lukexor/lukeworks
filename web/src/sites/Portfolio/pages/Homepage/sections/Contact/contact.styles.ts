@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { StyledSection } from "../Intro/intro.styles";
 
-const StyledContact = styled(StyledSection)``;
+const StyledContact = styled.section`
+  height: 300px;
+`;
 
 export { StyledContact };

@@ -12,18 +12,25 @@ const BlogPosts = styled.section`
 `;
 
 const StyledBlogPostCard = styled.article`
-  max-width: ${thumbWidth};
+  width: ${thumbWidth};
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 15px;
 
-  h2 {
+  h3 {
     font-size: ${(props) => props.theme.sizes.large};
+  }
+
+  a h3 {
+    transition: color 0.5s ease;
+  }
+  a:hover h3 {
+    color: ${(props) => props.theme.colors.accentDark} !important;
   }
 `;
 
-const BlogThumbnail = styled.div<{ src: string; }>`
+const BlogThumbnail = styled.div<{ src: Maybe<string> }>`
   width: ${thumbWidth};
   height: 250px;
   background-color: ${(props) => props.theme.colors.backgroundLight};

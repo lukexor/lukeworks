@@ -9,7 +9,7 @@ const StyledSearchIcon = styled(FontAwesomeIcon)`
   cursor: pointer;
   color: ${(props) => props.theme.colors.accentLight};
   font-size: ${(props) => props.theme.sizes.medLarge};
-  transition: color 0.5s ease;
+  transition: color 0.3s ease;
 
   &:hover {
     color: ${(props) => props.theme.colors.accentDark};
@@ -24,7 +24,7 @@ const StyledClearIcon = styled(({ visible: _, ...props }) => (
   display: ${(props) => (props.visible ? "block" : "none")};
   color: ${(props) => props.theme.colors.secondary};
   font-size: ${(props) => props.theme.sizes.medLarge};
-  transition: color 0.5s ease;
+  transition: color 0.3s ease;
 
   &:hover {
     color: ${(props) => props.theme.colors.accentDark};
