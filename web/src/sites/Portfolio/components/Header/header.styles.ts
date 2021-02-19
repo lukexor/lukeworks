@@ -5,6 +5,7 @@ const StyledHeader = styled.header`
   position: sticky;
   top: 0;
   width: 100%;
+  z-index: 10;
 `;
 
 const HeaderBar = styled.div`

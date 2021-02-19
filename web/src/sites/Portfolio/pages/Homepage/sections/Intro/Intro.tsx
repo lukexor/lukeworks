@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { HashLink } from "react-router-hash-link";
 import copy from "sites/Portfolio/data/copy.json";
 import Icons from "sites/Portfolio/Icons";
-import routes from "sites/Portfolio/routes";
+import routes from "sites/Portfolio/routes.json";
 import {
   Explore,
   ExploreIcon,
@@ -60,7 +60,7 @@ const Intro: React.FC = () => {
         </Heading>
         <Explore>
           <ExploreText>{copy.Intro.explore}</ExploreText>
-          <HashLink smooth to={routes.blog.path} className="img">
+          <HashLink smooth to={routes.Blog} className="img">
             <ExploreIcon icon={Icons.explore} swapOpacity />
           </HashLink>
         </Explore>

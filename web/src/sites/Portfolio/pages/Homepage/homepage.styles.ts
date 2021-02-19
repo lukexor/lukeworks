@@ -6,10 +6,6 @@ const StyledHomepage = styled.section`
 
   main {
     flex: 1;
-
-    section {
-      margin: 0 50px;
-    }
   }
 `;
 

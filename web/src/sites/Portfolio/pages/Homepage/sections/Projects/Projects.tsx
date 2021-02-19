@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import HashAnchor from "sites/Portfolio/components/HashAnchor";
 import projectPosts from "sites/Portfolio/data/projectPosts.json";
-import routes from "sites/Portfolio/routes";
+import routes from "sites/Portfolio/routes.json";
 import {
   ProjectPosts,
   ProjectThumbnail,
@@ -45,8 +45,8 @@ const ProjectPostCard: React.FC<ProjectPostCardProps> = ({ post }) => {
 // TODO: Projects
 const Projects: React.FC = () => (
   <>
-    <HashAnchor id={routes.projects.path} />
     <StyledProjects>
+      <HashAnchor id={routes.Projects} />
       <h2>Projects</h2>
       <ProjectPosts>
         {projectPosts.map((post) => (

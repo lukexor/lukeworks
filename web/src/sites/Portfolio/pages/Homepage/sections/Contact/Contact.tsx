@@ -1,14 +1,14 @@
 import React from "react";
 import HashAnchor from "sites/Portfolio/components/HashAnchor";
 import copy from "sites/Portfolio/data/copy.json";
-import routes from "sites/Portfolio/routes";
+import routes from "sites/Portfolio/routes.json";
 import { StyledContact } from "./contact.styles";
 
 // TODO: Contact
 const Contact: React.FC = () => (
   <>
-    <HashAnchor id={routes.contact.path} />
     <StyledContact>
+      <HashAnchor id={routes.Contact} />
       <h2>Contact</h2>
       <p>
         {copy.Contact.content}{" "}

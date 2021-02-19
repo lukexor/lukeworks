@@ -1,0 +1,8 @@
+{
+  "Home": "#",
+  "Blog": "#blog",
+  "Projects": "#projects",
+  "About": "#about",
+  "Contact": "#contact",
+  "Post": "/:title"
+}

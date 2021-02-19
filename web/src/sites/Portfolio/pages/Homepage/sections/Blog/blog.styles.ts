@@ -2,7 +2,10 @@ import styled from "styled-components";
 
 const thumbWidth = "300px";
 
-const StyledBlog = styled.section``;
+const StyledBlog = styled.section`
+  min-height: 50vh;
+  margin: 0 50px 100px 50px;
+`;
 
 const BlogPosts = styled.section`
   margin: ${(props) => props.theme.sizes.medSmall};

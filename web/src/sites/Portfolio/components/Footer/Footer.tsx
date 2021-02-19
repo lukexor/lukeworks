@@ -1,7 +1,7 @@
 import React from "react";
 import copy from "../../data/copy.json";
 import Icons from "../../Icons";
-import routes from "../../routes";
+import routes from "../../routes.json";
 import {
   BackToTop,
   BackToTopIcon,
@@ -16,7 +16,7 @@ import {
 const Footer: React.FC = () => (
   <StyledFooter>
     <FooterBar>
-      <BackToTop smooth to={routes.home.path} className="img">
+      <BackToTop smooth to={routes.Home} className="img">
         <BackToTopIcon icon={Icons.backToTop} />
       </BackToTop>
       <SocialIcons>

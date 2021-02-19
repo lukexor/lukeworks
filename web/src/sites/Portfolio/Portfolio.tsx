@@ -7,7 +7,7 @@ import copy from "./data/copy.json";
 import Homepage from "./pages/Homepage/Homepage";
 import Post from "./pages/Post";
 import { GlobalStyles } from "./portfolio.styles";
-import routes from "./routes";
+import routes from "./routes.json";
 import theme from "./theme";
 
 const Portfolio: React.FC = () => {
@@ -45,7 +45,7 @@ const Portfolio: React.FC = () => {
         <GlobalStyles />
         <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
           <Switch>
-            <Route exact path={routes.post.path}>
+            <Route exact path={routes.Post}>
               <Post />
             </Route>
             {/* TODO handle 404 responses */}

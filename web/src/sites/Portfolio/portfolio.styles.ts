@@ -38,7 +38,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   main span.anchor {
-    top: -${(props) => props.theme.sizes.xxlarge};
+    top: -${(props) => props.theme.sizes.xxxlarge};
     position: relative;
     display: block;
   }

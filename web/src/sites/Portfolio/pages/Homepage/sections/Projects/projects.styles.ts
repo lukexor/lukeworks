@@ -3,7 +3,10 @@ import styled from "styled-components";
 const thumbWidth = "300px";
 const thumbHeight = "250px";
 
-const StyledProjects = styled.section``;
+const StyledProjects = styled.section`
+  min-height: 50vh;
+  margin: 0 50px 100px 50px;
+`;
 
 const ProjectPosts = styled.section`
   display: flex;

@@ -1,8 +1,13 @@
 import React, { useCallback, useState } from "react";
 import copy from "sites/Portfolio/data/copy.json";
 import Icons from "sites/Portfolio/Icons";
+import routes from "sites/Portfolio/routes.json";
 import useEventListener from "util/hooks/useEventListener";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
+
+type Routes = {
+  [title: string]: string;
+};
 
 type MenuIconProps = {
   onClick: () => void;
@@ -42,15 +47,15 @@ const Menu: React.FC<MenuProps> = ({ visible, close }) => {
 
   return (
     <StyledMenu visible={visible}>
-      {copy.Menu.links.map(({ path, title }, i) => (
+      {copy.Menu.list.map((menuItem, i) => (
         <MenuLink
-          key={path}
-          to={path}
+          key={menuItem}
+          to={(routes as Routes)[menuItem]}
           active={active === i}
           onClick={close}
           smooth
         >
-          {title}
+          {menuItem}
         </MenuLink>
       ))}
     </StyledMenu>

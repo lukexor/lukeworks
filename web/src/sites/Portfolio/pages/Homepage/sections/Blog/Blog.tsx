@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import HashAnchor from "sites/Portfolio/components/HashAnchor";
 import blogPosts from "sites/Portfolio/data/blogPosts.json";
-import routes from "sites/Portfolio/routes";
+import routes from "sites/Portfolio/routes.json";
 import {
   BlogPosts,
   BlogThumbnail,
@@ -46,8 +46,8 @@ const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
 const Blog: React.FC = () => {
   return (
     <>
-      <HashAnchor id={routes.blog.path} />
       <StyledBlog>
+        <HashAnchor id={routes.Blog} />
         <h2>Blog</h2>
         <BlogPosts>
           {blogPosts.map((post) => (

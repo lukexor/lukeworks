@@ -1,6 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
+  *:not(svg) {
+    box-sizing: border-box;
+  }
   html, body {
     margin: 0;
     padding: 0;

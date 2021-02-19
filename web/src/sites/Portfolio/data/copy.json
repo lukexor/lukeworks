@@ -48,33 +48,7 @@
     "text": "LP"
   },
   "Menu": {
-    "links": [
-      {
-        "name": "home",
-        "path": "#",
-        "title": "Home"
-      },
-      {
-        "name": "blog",
-        "path": "#blog",
-        "title": "Blog"
-      },
-      {
-        "name": "projects",
-        "path": "#projects",
-        "title": "Projects"
-      },
-      {
-        "name": "about",
-        "path": "#about",
-        "title": "About"
-      },
-      {
-        "name": "contact",
-        "path": "#contact",
-        "title": "Contact"
-      }
-    ]
+    "list": ["Home", "Blog", "Projects", "About", "Contact"]
   },
   "Search": {
     "placeholder": "Search..."
