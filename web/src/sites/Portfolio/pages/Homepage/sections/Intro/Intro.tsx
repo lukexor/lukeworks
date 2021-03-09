@@ -60,7 +60,7 @@ const Intro: React.FC = () => {
         </Heading>
         <Explore>
           <ExploreText>{copy.Intro.explore}</ExploreText>
-          <HashLink smooth to={routes.Blog} className="img">
+          <HashLink smooth to={routes.blog} className="img">
             <ExploreIcon icon={Icons.explore} swapOpacity />
           </HashLink>
         </Explore>

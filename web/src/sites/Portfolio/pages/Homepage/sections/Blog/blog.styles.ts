@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const thumbWidth = "300px";
+const thumbHeight = "250px";
 
 const StyledBlog = styled.section`
   min-height: 50vh;
@@ -10,16 +11,15 @@ const StyledBlog = styled.section`
 const BlogPosts = styled.section`
   margin: ${(props) => props.theme.sizes.medSmall};
   display: flex;
-  justify-content: space-evenly;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 `;
 
 const StyledBlogPostCard = styled.article`
   width: ${thumbWidth};
+  min-height: ${thumbHeight};
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin: 15px;
 
   h3 {
     font-size: ${(props) => props.theme.sizes.large};
@@ -33,14 +33,9 @@ const StyledBlogPostCard = styled.article`
   }
 `;
 
-const BlogThumbnail = styled.div<{ src: Maybe<string> }>`
+const BlogThumbnail = styled.img`
   width: ${thumbWidth};
-  height: 250px;
-  background-color: ${(props) => props.theme.colors.backgroundLight};
-  background-image: url(${(props) => props.src});
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: ${(props) => props.theme.colors.backgroundLight};
 `;
 
 export { BlogPosts, BlogThumbnail, StyledBlog, StyledBlogPostCard };

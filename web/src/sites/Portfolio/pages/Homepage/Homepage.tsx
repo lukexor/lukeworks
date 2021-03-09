@@ -1,6 +1,4 @@
 import React from "react";
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
 import { StyledHomepage } from "./homepage.styles";
 import About from "./sections/About";
 import Blog from "./sections/Blog";
@@ -10,15 +8,11 @@ import Projects from "./sections/Projects";
 
 const Homepage: React.FC = () => (
   <StyledHomepage>
-    <Header />
-    <main>
-      <Intro />
-      <Blog />
-      <Projects />
-      <About />
-      <Contact />
-    </main>
-    <Footer />
+    <Intro />
+    <Blog />
+    <Projects />
+    <About />
+    <Contact />
   </StyledHomepage>
 );
 

@@ -5,11 +5,11 @@ const StyledLogo = styled(HashLink)`
   color: ${(props) => props.theme.colors.primary};
   font-family: ${(props) => props.theme.fontSerif};
   font-size: ${(props) => props.theme.sizes.large};
-  text-shadow: 1px 1px 2px ${(props) => props.theme.colors.accentDark};
   text-decoration: none;
+  transition: color 0.5s ease;
 
   &:hover {
-    text-shadow: 0 0px 4px ${(props) => props.theme.colors.accentLight};
+    color: ${(props) => props.theme.colors.accentDark};
   }
 
   @media (min-width: ${(props) => props.theme.breakpoints.tablet}) {

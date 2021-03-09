@@ -9,17 +9,28 @@ const StyledProjects = styled.section`
 `;
 
 const ProjectPosts = styled.section`
+  margin: ${(props) => props.theme.sizes.medSmall};
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
 `;
 
 const StyledProjectPostCard = styled.article`
   width: ${thumbWidth};
+  height: ${thumbHeight};
   display: flex;
   flex-direction: column;
+  flex: 1 1 ${thumbWidth};
+  background: ${(props) => props.theme.colors.background};
+  border: 1px solid ${(props) => props.theme.colors.backgroundLight};
 
   h3 {
     font-size: ${(props) => props.theme.sizes.large};
+  }
+
+  p {
+    text-align: center;
+    vertical-align: middle;
   }
 
   a {
@@ -31,22 +42,9 @@ const StyledProjectPostCard = styled.article`
   }
 `;
 
-const ProjectThumbnail = styled.div<{ title: string; src: Maybe<string> }>`
-  width: ${thumbWidth};
-  height: ${thumbHeight};
-  background-color: ${(props) => props.theme.colors.backgroundLight};
-  background-image: url(${(props) => props.src});
-  background-position: top left;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  &::before {
-    content: "${(props) => props.title}";
-    display: ${(props) => (props.src ? "none" : "flex")};
-    height: ${thumbHeight};
-    justify-content: center;
-    align-items: center;
-  }
+const ProjectThumbnail = styled.img`
+  width: 100%;
+  overflow: hidden;
 `;
 
 export {

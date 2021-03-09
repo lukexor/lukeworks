@@ -20,6 +20,11 @@ declare global {
   }
 }
 
+// declare module "*.json" {
+//   const value: JSONObject | JSONArray;
+//   export = value;
+// }
+
 declare module "styled-components" {
   export interface DefaultTheme {
     breakpoints: {

@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import useEventListener from "util/hooks/useEventListener";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 import copy from "./data/copy.json";
+import legacyRoutes from "./legacyRoutes";
 import Homepage from "./pages/Homepage/Homepage";
 import Post from "./pages/Post";
 import { GlobalStyles } from "./portfolio.styles";
@@ -12,27 +14,31 @@ import theme from "./theme";
 
 const Portfolio: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     setTimeout(() => {
       setIsLoaded(true);
-    }, 200);
+    }, 100);
   }, []);
 
-  // Required because of HashLink using ids without a hash
-  const scrollIntoView = useCallback(() => {
-    const hash = window.location.hash.substring(1);
-    if (!hash) {
-      return;
-    }
-    const el = document.getElementById(hash);
-    if (el) {
-      const yCoordinate = el.offsetTop;
-      window.scrollTo({ top: yCoordinate, behavior: "smooth" });
-    }
-  }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
 
-  useEventListener("load", scrollIntoView);
+    // Required because of HashLink using ids without a hash
+    const scrollIntoView = () => {
+      const hash = window.location.hash.substring(1);
+      if (!hash) {
+        return;
+      }
+      const el = document.getElementById(hash);
+      if (el) {
+        window.scrollTo({ top: el.offsetTop });
+      }
+    };
+
+    setTimeout(scrollIntoView, 300);
+  }, [pathname]);
 
   return (
     <>
@@ -44,8 +50,15 @@ const Portfolio: React.FC = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
+          <Header />
           <Switch>
-            <Route exact path={routes.Post}>
+            {/* TODO handle search */}
+            {Object.entries(legacyRoutes).map(([legacyRoute, newRoute]) => (
+              <Route key={legacyRoute} exact path={legacyRoute}>
+                <Redirect to={newRoute} />
+              </Route>
+            ))}
+            <Route exact path={routes.post}>
               <Post />
             </Route>
             {/* TODO handle 404 responses */}
@@ -53,6 +66,7 @@ const Portfolio: React.FC = () => {
               <Homepage />
             </Route>
           </Switch>
+          <Footer />
         </div>
       </ThemeProvider>
     </>

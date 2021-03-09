@@ -4,18 +4,15 @@ import copy from "sites/Portfolio/data/copy.json";
 import routes from "sites/Portfolio/routes.json";
 import { StyledContact } from "./contact.styles";
 
-// TODO: Contact
 const Contact: React.FC = () => (
-  <>
-    <StyledContact>
-      <HashAnchor id={routes.Contact} />
-      <h2>Contact</h2>
-      <p>
-        {copy.Contact.content}{" "}
-        <a href={`mailto:${copy.Contact.email}`}>{copy.Contact.email}</a>.
-      </p>
-    </StyledContact>
-  </>
+  <StyledContact>
+    <HashAnchor id={routes.contact.slice(1)} />
+    <h2>Contact</h2>
+    <p>
+      {copy.Contact.content}{" "}
+      <a href={`mailto:${copy.Contact.email}`}>{copy.Contact.email}</a>.
+    </p>
+  </StyledContact>
 );
 
 export default Contact;

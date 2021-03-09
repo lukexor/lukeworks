@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import HashAnchor from "sites/Portfolio/components/HashAnchor";
 import blogPosts from "sites/Portfolio/data/blogPosts.json";
+import { Post } from "sites/Portfolio/models/post";
 import routes from "sites/Portfolio/routes.json";
 import {
   BlogPosts,
@@ -10,52 +11,34 @@ import {
   StyledBlogPostCard,
 } from "./blog.styles";
 
-type BlogPost = {
-  id: number;
-  url: string;
-  title: string;
-  thumbnail: Maybe<string>;
-  image: Maybe<string>;
-  imageAlt: Maybe<string>;
-  content: string;
-  minutesToRead: number;
-  category: string;
-  tags: string[];
-  likes: number;
-  publishedOn: Maybe<string>;
-  createdOn: string;
-  updatedOn: string;
-};
-
 type BlogPostCardProps = {
-  post: BlogPost;
+  post: Post;
 };
 
+// TODO: Make BlogThumbnail a component with an image placeholder
 const BlogPostCard: React.FC<BlogPostCardProps> = ({ post }) => {
+  const { url, thumbnail, title } = post;
   return post.publishedOn ? (
     <StyledBlogPostCard>
-      <Link to={post.url}>
-        <BlogThumbnail src={post.thumbnail} />
-        <h3>{post.title}</h3>
+      <Link to={url}>
+        {thumbnail && <BlogThumbnail src={thumbnail.src} alt={thumbnail.alt} />}
+        <h3>{title}</h3>
       </Link>
     </StyledBlogPostCard>
   ) : null;
 };
 
-// TODO: Blog
 const Blog: React.FC = () => {
   return (
-    <>
-      <StyledBlog>
-        <HashAnchor id={routes.Blog} />
-        <h2>Blog</h2>
-        <BlogPosts>
-          {blogPosts.map((post) => (
-            <BlogPostCard key={post.id} post={post} />
-          ))}
-        </BlogPosts>
-      </StyledBlog>
-    </>
+    <StyledBlog>
+      <HashAnchor id={routes.blog.slice(1)} />
+      <h2>Blog</h2>
+      <BlogPosts>
+        {blogPosts.map((post) => (
+          <BlogPostCard key={post.id} post={post} />
+        ))}
+      </BlogPosts>
+    </StyledBlog>
   );
 };
 

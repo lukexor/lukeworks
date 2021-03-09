@@ -8,6 +8,7 @@ const SplashBg: React.FC = () => {
   const [direction, setDirection] = useState(1);
 
   useEffect(() => {
+    let glitchReset: ReturnType<typeof setTimeout>;
     const glitchTimer = setInterval(() => {
       if (Math.random() < 0.3) {
         Math.random() < 0.5
@@ -16,7 +17,7 @@ const SplashBg: React.FC = () => {
         Math.random() < 0.5 ? setDirection(-1) : setDirection(1);
         setGlitch(true);
 
-        setTimeout(() => {
+        glitchReset = setTimeout(() => {
           setGlitch(false);
         }, 300);
       }
@@ -24,6 +25,7 @@ const SplashBg: React.FC = () => {
 
     return () => {
       clearInterval(glitchTimer);
+      clearTimeout(glitchReset);
     };
   }, []);
 

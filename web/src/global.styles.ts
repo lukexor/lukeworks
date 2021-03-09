@@ -16,6 +16,7 @@ const GlobalStyles = createGlobalStyle`
   }
   p {
     white-space: pre-line;
+    line-height: 1.4em;
     max-width: 70ch;
     margin: 25px auto;
   }

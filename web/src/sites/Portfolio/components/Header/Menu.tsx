@@ -5,18 +5,24 @@ import routes from "sites/Portfolio/routes.json";
 import useEventListener from "util/hooks/useEventListener";
 import { MenuLink, StyledMenu, StyledMenuIcon } from "./menu.styles";
 
-type Routes = {
-  [title: string]: string;
-};
-
 type MenuIconProps = {
   onClick: () => void;
 };
-
 type MenuProps = {
   visible: boolean;
   close: () => void;
 };
+
+type Route = keyof typeof routes;
+type MenuItem = {
+  url: Route;
+  title: string;
+};
+
+const routeLinks: MenuItem[] = copy.Menu.list.map((item) => ({
+  title: item,
+  url: item.toLowerCase() as Route,
+}));
 
 const MenuIcon: React.FC<MenuIconProps> = (props) => (
   <StyledMenuIcon icon={Icons.menu} {...props} />
@@ -47,15 +53,15 @@ const Menu: React.FC<MenuProps> = ({ visible, close }) => {
 
   return (
     <StyledMenu visible={visible}>
-      {copy.Menu.list.map((menuItem, i) => (
+      {routeLinks.map(({ url, title }, i) => (
         <MenuLink
-          key={menuItem}
-          to={(routes as Routes)[menuItem]}
+          key={url}
+          to={routes[url]}
           active={active === i}
           onClick={close}
           smooth
         >
-          {menuItem}
+          {title}
         </MenuLink>
       ))}
     </StyledMenu>

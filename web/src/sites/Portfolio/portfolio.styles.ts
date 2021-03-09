@@ -37,14 +37,13 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
-  main span.anchor {
-    top: -${(props) => props.theme.sizes.xxxlarge};
+  span.anchor {
+    top: -1em;
     position: relative;
-    display: block;
+    display: inline-block;
   }
 
-  @media only screen (min-width: ${(props) =>
-    props.theme.breakpoints.desktopSmall}) {
+  @media (min-width: ${(props) => props.theme.breakpoints.desktopSmall}) {
     body {
       scrollbar-width: thin;
       scrollbar-color: ${(props) =>
