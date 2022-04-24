@@ -1,0 +1,48 @@
+.splash-bg {
+  position: absolute;
+  width: 100%;
+  min-height: calc(100vh - var(--size-xxlarge));
+  z-index: -2000;
+  overflow-x: hidden;
+};
+
+.bg {
+  opacity: 20%;
+  background-color: var(--colors-primary);
+  background-image: url(assets/code-bg.jpg);
+  background-repeat: repeat;
+  background-size: cover;
+  background-blend-mode: hard-light;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -2000;
+};
+
+.bg-glitch {
+  opacity: 0;
+  background-color: var(--color-accent-dark);
+  background-image: url(assets/code-bg.jpg);
+  background-repeat: repeat;
+  background-size: cover;
+  background-blend-mode: luminosity;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(30px);
+  z-index: -2000;
+};
+
+.bg-glitch .glitching {
+  opacity: 50%;
+}
+.bg-glitch .color {
+  background-color: var(--color-secondary);
+}
+.bg-glitch .left {
+  transform: translateX(-30px);
+}

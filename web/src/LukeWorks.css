@@ -1,0 +1,28 @@
+*:not(svg) {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #000;
+  color: #fff;
+}
+
+p {
+  white-space: pre-line;
+  line-height: 1.4em;
+  max-width: 70ch;
+  margin: 25px auto;
+}
+
+.fade-enter {
+  opacity: 0;
+  transition: opacity 1s ease-in 0.1s;
+}
+.fade-enter-active {
+  opacity: 1;
+}

@@ -1,4 +1,18 @@
 {
+  "portfolio": {
+    "path": "/",
+    "title": "LukeWorks",
+    "routes": {
+      "home": "#",
+      "blog": "#blog",
+      "projects": "#projects",
+      "about": "#about",
+      "contact": "#contact"
+    }
+  },
+  "post": {
+    "path": ":postTitle"
+  },
   "resume": {
     "path": "/resume",
     "title": "Resume"

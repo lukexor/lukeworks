@@ -1,61 +1,52 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:jsx-a11y/recommended"
   ],
   "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": 12,
-    "sourceType": "module"
-  },
   "plugins": [
-    "react",
     "@typescript-eslint",
-    "simple-import-sort",
-    "import",
-    "jsx-a11y"
+    "react",
+    "jsx-a11y",
+    "simple-import-sort"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": [
       "error",
-      { "varsIgnorePattern": "^_", "argsIgnorePattern": "^_" }
-    ],
-    "indent": [
-      "error",
-      2,
-      { "SwitchCase": 1, "ignoredNodes": ["TemplateLiteral > *"] }
-    ],
-    "import/first": "error",
-    "import/newline-after-import": "error",
-    "import/no-duplicates": "error",
-    "linebreak-style": ["error", "unix"],
-    "no-unused-vars": "off",
-    "quotes": ["error", "double"],
-    "react/jsx-uses-react": "off",
-    "react/jsx-uses-vars": "error",
-    "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off",
-    "semi": ["error", "always"],
-    "simple-import-sort/sort": [
-      "error",
       {
-        "groups": [["^\\u0000", "^@?\\w", "^", "^\\."]]
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_"
       }
     ],
-    "sort-imports": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"
-    }
+    "semi": [
+      "error",
+      "always"
+    ],
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        "groups": [
+          [
+            "^\\u0000",
+            "^@?\\w",
+            "^",
+            "^\\."
+          ]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "error"
   }
 }

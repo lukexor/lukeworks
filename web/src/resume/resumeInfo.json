@@ -1,0 +1,113 @@
+{
+  "title": "Lucas Petherbridge | Software Engineer Resume",
+  "description": "Software Engineer Resume for Lucas Petherbridge",
+  "header": "",
+  "profile": {
+    "name": "Lucas Petherbridge",
+    "position": "Senior Software Engineer",
+    "summary": "Passionate & driven polyglot software engineer with 8+ years of experience solving problems. Started programming at age 15 and have consistently sought to expand and grow. Great communicator and team collaborator willing to take on any challenge.",
+    "address": {
+      "line1": "9826 SW 59th Ave.",
+      "city": "Portland",
+      "state": "OR",
+      "postal": "97219"
+    },
+    "phone": "(503) 616-8265",
+    "email": "me@lukeworks.tech",
+    "website": "https://lukeworks.tech/",
+    "github": "http://github.com/lukexor/",
+    "linkedIn": "https://www.linkedin.com/in/lucaspetherbridge/"
+  },
+  "employment": [
+    {
+      "start": "2020-08-01",
+      "title": "Senior Software Engineer",
+      "entity": "Lithia Motors, Inc.",
+      "location": "Portland, OR",
+      "icon": "/images/resume/lithia-motors.jpeg",
+      "bullets": [
+        "Created & deployed Account Center pages for an automotive ecommerce website using React & Typescript deployed with Microsoft Azure & Kubernetes.",
+        "Implemented & integrated an authentication & authorization solution with Auth0 across 6 teams using React & Node.js.",
+        "Brought team unit testing standards for unit & end-to-end tests from zero to 80% coverage using Jest & Selenium Webdriver.",
+        "Provided technical leadership to junior team members by holding learning sessions, pair programming, & writing extensive documentation."
+      ]
+    },
+    {
+      "start": "2020-03-01",
+      "end": "2020-06-30",
+      "title": "Senior Software Engineer",
+      "entity": "TEKsystems - Consultant at Nike",
+      "location": "Beaverton, OR",
+      "icon": "/images/resume/teksystems.jpeg",
+      "bullets": [
+        "Extended a product planning tool that enabled Merchant & Product teams to plan future product lines using JavaScript, Angular, Node.js, Typescript, GraphQL, & MySQL.",
+        "Designed, configured, & set up cloud infrastructure as code for a GraphQL API using Okta authentication, AWS & Terraform.",
+        "Created & managed CI/CD pipelines using Github, AWS CLI, BMX Jenkins & Docker.",
+        "Led team in clarifying scope, technology & architecture decisions for a new merchant planning project.",
+        "Mentored, provided code reviews & pair programmed with junior developers.",
+        "Exit: Contract ended due to organization restructure."
+      ]
+    },
+    {
+      "start": "2013-11-01",
+      "end": "2020-02-29",
+      "title": "Senior Software Engineer",
+      "entity": "NetFortris (Formerly Fonality, Inc)",
+      "location": "Culver City, CA",
+      "icon": "/images/resume/netfortris.png",
+      "bullets": [
+        "Worked remotely for 6 years while maintaining high productivity & close collaboration with teams.",
+        "Extended mobile UCaaS application to enable a rich customer integration experience using React Native & Redux with Typescript.",
+        "Redesigned Salesforce integration using modern APIs on a solo project reducing project size by 90% by switching from Angular to Vue.js thus increasing maintainability using JavaScript, Vue.js, XML, & Apex.",
+        "Developed & integrated a flexible cloud platform for a UCaaS system to achieve high scalability & availability using Perl & Golang.",
+        "Reduced dependency on legacy systems by 80% by developing a fault tolerant & automated migration which led to a 15% reduction in support & billing costs.",
+        "Designed & developed an OSS/BSS for the ordering, billing, & provisioning of telephony services that led to a 20% increase in revenue using Perl, JavaScript, JQuery, & HTML/CSS."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "start": "2015",
+      "end": "2019",
+      "title": "Bachelor of Computer Science",
+      "entity": "Portland State University",
+      "location": "Portland, OR",
+      "icon": "/images/resume/psu.png",
+      "bullets": [
+        "Consulted as a Scrum/Agile coach for 10 teams during my senior capstone in lieu of a project, providing guidance & support in the completion of their team projects."
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "title": "Projects",
+      "bullets": [
+        {
+          "start": "2019-03",
+          "end": "2019-07",
+          "title": "TetaNES",
+          "desc": "A Nintendo Entertainment System (NES) cross-platform/web emulator written in Rust using SDL2 & WebAssembly.",
+          "website": "https://lukeworks.tech/tetanes"
+        },
+        {
+          "start": "2014-08",
+          "title": "Personal Portfolio/Blog",
+          "desc": "A website for blog articles & projects using Python/Django, NGINX, MySQL, & Redis. Currently working on a new version using React, GraphQL, & Rust/Rocket.",
+          "website": "https://lukeworks.tech/"
+        },
+        {
+          "title": "Miscellaneous",
+          "desc": "Various side projects & other coding exercises including a suite of visual programs showcasing algorithms, animations, & game physics using the p5.js JavaScript library & HTML5 canvas.",
+          "website": "https://lukeworks.tech/#projects"
+        }
+      ]
+    }
+  ],
+  "addtlExperience": [],
+  "langAndTech": [
+    "JavaScript; React; Typescript",
+    "Rust; Golang; Python",
+    "GraphQL; NGNIX; MySQL; PostgreSQL",
+    "AWS; Docker; Kubernetes; Jenkins; Terraform"
+  ]
+}

@@ -1,14 +1,17 @@
 import LukeWorks from "LukeWorks";
-import React, { StrictMode } from "react";
-import ReactDOM from "react-dom";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import reportWebVitals from "reportWebVitals";
 
-ReactDOM.render(
-  <StrictMode>
-    <LukeWorks />
-  </StrictMode>,
-  document.getElementById("root")
-);
+const container = document.getElementById("app");
+if (container) {
+  const root = createRoot(container);
+  root.render(
+    <StrictMode>
+      <LukeWorks />
+    </StrictMode>
+  );
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

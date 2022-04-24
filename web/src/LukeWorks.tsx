@@ -1,35 +1,72 @@
-import GlobalStyles from "global.styles";
-import React from "react";
-import { HelmetProvider } from "react-helmet-async";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./LukeWorks.css";
+import legacyRoutes from "legacyRoutes.json";
+import { lazy } from "react";
+import {
+  BrowserRouter as Router,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import routes from "routes.json";
-import { Portfolio, Resume } from "sites";
-import Admin, { Login } from "sites/Admin";
-import AuthRoute from "util/AuthRoute";
-import ErrorBoundary from "util/ErrorBoundary";
+import ErrorBoundary from "./ErrorBoundary";
 
-const LukeWorks: React.FC = () => (
-  <HelmetProvider>
-    <Router>
-      <ErrorBoundary>
-        <GlobalStyles />
-        <Switch>
-          <Route exact path={routes.resume.path}>
-            <Resume />
-          </Route>
-          <AuthRoute path={routes.admin.path}>
-            <Admin />
-          </AuthRoute>
-          <Route path={routes.login.path}>
-            <Login />
-          </Route>
-          <Route>
-            <Portfolio />
-          </Route>
-        </Switch>
-      </ErrorBoundary>
-    </Router>
-  </HelmetProvider>
+const { resume, login, admin, post, portfolio } = routes;
+
+const GuestGuard = lazy(() => import("guards/GuestGuard"));
+const AuthGuard = lazy(() => import("guards/AuthGuard"));
+const NotFound = lazy(() => import("./NotFound"));
+
+const Portfolio = lazy(() => import("portfolio"));
+const Homepage = lazy(() => import("portfolio/pages/homepage"));
+const Post = lazy(() => import("portfolio/pages/post"));
+const Resume = lazy(() => import("resume/Resume"));
+const Admin = lazy(() => import("admin/Admin"));
+const Login = lazy(() => import("admin/Login"));
+
+const LukeWorks = () => (
+  <Router>
+    <ErrorBoundary>
+      <Routes>
+        <Route
+          element={
+            <Portfolio>
+              <Outlet />
+            </Portfolio>
+          }
+        >
+          {/* TODO handle search */}
+          {Object.entries(legacyRoutes).map(([legacyRoute, newRoute]) => (
+            <Route
+              key={legacyRoute}
+              path={legacyRoute}
+              element={<Navigate to={newRoute} replace />}
+            />
+          ))}
+          <Route path={post.path} element={<Post />} />
+          <Route path={portfolio.path} element={<Homepage />} />
+        </Route>
+        <Route path={resume.path} element={<Resume />} />
+        <Route
+          path={login.path}
+          element={
+            <GuestGuard>
+              <Login />
+            </GuestGuard>
+          }
+        />
+        <Route
+          path={admin.path}
+          element={
+            <AuthGuard>
+              <Admin />
+            </AuthGuard>
+          }
+        />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </ErrorBoundary>
+  </Router>
 );
 
 export default LukeWorks;
