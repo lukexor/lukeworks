@@ -1,5 +1,3 @@
-import "./Header.css";
-
 type HeaderInfo = {
   name: string;
   position: string;

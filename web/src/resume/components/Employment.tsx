@@ -39,11 +39,13 @@ const calcDuration = (start: string, end?: string) => {
 
 const formattedDuration = (start: string, end?: string) => {
   const duration = calcDuration(start, end);
+  const yrStr = duration.years() == 1 ? "yr" : "yrs";
+  const moStr = duration.months() == 1 ? "mo" : "mos";
   return duration.years() > 0 && duration.months() > 0
-    ? duration.format("Y [yrs] M [mos]")
+    ? duration.format(`Y [${yrStr}] M [${moStr}]`)
     : duration.years() > 0
-    ? duration.format("Y [yrs]")
-    : duration.format("M [mos]");
+    ? duration.format(`Y [${yrStr}]`)
+    : duration.format(`M [${moStr}]`);
 };
 
 const formattedDate = (date?: string) => {

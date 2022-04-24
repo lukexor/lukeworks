@@ -55,7 +55,6 @@
           "end": "2020-06-30",
           "bullets": [
             "Designed, configured, & set up cloud infrastructure as code for a GraphQL API using Okta authentication, AWS & Terraform.",
-            "Created & managed CI/CD pipelines using Github, AWS CLI, BMX Jenkins & Docker.",
             "Exit: Contract ended due to organization restructure."
           ]
         }
@@ -72,7 +71,6 @@
           "end": "2020-03-01",
           "bullets": [
             "Redesigned Salesforce integration using modern APIs reducing project size by 90% by switching from Angular to Vue.js using JavaScript, Vue.js, XML & Apex.",
-            "Reduced dependency on legacy systems by 80% by developing an automated migration platform which led to a 15% reduction in support & billing costs using Perl & JavaScript.",
             "Designed & developed an OSS/BSS for the ordering, billing, & provisioning of telephony services which led to a 20% increase in revenue using Perl, JavaScript, JQuery & HTML/CSS."
           ]
         }
@@ -88,7 +86,7 @@
       "location": "Portland, OR",
       "icon": "/images/resume/psu.png",
       "bullets": [
-        "Consulted as a Scrum/Agile coach for 10 teams during my senior capstone in lieu of a project, providing guidance & support in the completion of their team projects."
+        "Consulted as a Scrum/Agile coach for 10 teams during my senior capstone in lieu of a project."
       ]
     }
   ],
