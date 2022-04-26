@@ -1,17 +1,23 @@
-// import copy from "portfolio/data/copy.json";
+import "./Contact.css";
+import HashAnchor from "portfolio/components/HashAnchor";
+import copy from "portfolio/data/copy.json";
+import routes from "routes.json";
 
-// const Contact = () => (
-//   <StyledContact>
-//     <HashAnchor id={routes.contact.slice(1)} />
-//     <h2>Contact</h2>
-//     <p>
-//       {copy.Contact.content}{" "}
-//       <a href={`mailto:${copy.Contact.email}`}>{copy.Contact.email}</a>.
-//     </p>
-//   </StyledContact>
-// );
-const Contact = () => {
-  return <></>;
-};
+const {
+  portfolio: {
+    sections: { contact },
+  },
+} = routes;
+
+const Contact = () => (
+  <section className="contact">
+    <HashAnchor id={contact.path.slice(1)} />
+    <h2>Contact</h2>
+    <p>
+      {copy.Contact.content}{" "}
+      <a href={`mailto:${copy.Contact.email}`}>{copy.Contact.email}</a>.
+    </p>
+  </section>
+);
 
 export default Contact;

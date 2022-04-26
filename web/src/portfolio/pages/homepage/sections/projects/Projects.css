@@ -1,55 +1,48 @@
-import styled from "styled-components";
-
-const thumbWidth = "300px";
-const thumbHeight = "250px";
-
-const StyledProjects = styled.section`
+.projects {
+  --thumb-width: 300px;
+  --thumb-height: 200px;
   min-height: 50vh;
   margin: 0 50px 100px 50px;
-`;
+}
 
-const ProjectPosts = styled.section`
-  margin: ${(props) => props.theme.sizes.medSmall};
+.project-posts {
+  margin: var(--size-med-small);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-`;
+}
 
-const StyledProjectPostCard = styled.article`
-  width: ${thumbWidth};
-  height: ${thumbHeight};
+.project-posts article {
+  width: var(--thumb-width);
   display: flex;
   flex-direction: column;
-  flex: 1 1 ${thumbWidth};
-  background: ${(props) => props.theme.colors.background};
-  border: 1px solid ${(props) => props.theme.colors.backgroundLight};
+  flex: 1 1 33%;
+  background: var(--color-bg-dark);
+  border: 1px solid var(--color-bg-light);
+}
 
-  h3 {
-    font-size: ${(props) => props.theme.sizes.large};
-  }
+.project-posts p {
+  text-align: center;
+  vertical-align: middle;
+  width: var(--thumb-width);
+  height: var(--thumb-height);
+}
 
-  p {
-    text-align: center;
-    vertical-align: middle;
-  }
-
-  a {
-    color: ${(props) => props.theme.colors.primary} !important;
-
-    &:hover {
-      color: ${(props) => props.theme.colors.accentDark} !important;
-    }
-  }
-`;
-
-const ProjectThumbnail = styled.img`
-  width: 100%;
+.project-posts a {
+  transition: border 0.5s ease;
+  border: 2px solid transparent;
   overflow: hidden;
-`;
+}
 
-export {
-  ProjectPosts,
-  ProjectThumbnail,
-  StyledProjects,
-  StyledProjectPostCard,
-};
+.project-posts a:hover {
+  border: 2px solid var(--color-accent-dark) !important;
+}
+
+.project-thumb {
+  width: 100%;
+  background: var(--color-bg-light);
+  overflow: hidden;
+  aspect-ratio: 5/3;
+  object-fit: cover;
+  object-position: top left;
+}

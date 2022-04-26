@@ -1,6 +1,6 @@
 import "./LukeWorks.css";
 import legacyRoutes from "legacyRoutes.json";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Navigate,
@@ -27,44 +27,48 @@ const Login = lazy(() => import("admin/Login"));
 const LukeWorks = () => (
   <Router>
     <ErrorBoundary>
-      <Routes>
-        <Route
-          element={
-            <Portfolio>
-              <Outlet />
-            </Portfolio>
-          }
-        >
-          {/* TODO handle search */}
-          {Object.entries(legacyRoutes).map(([legacyRoute, newRoute]) => (
-            <Route
-              key={legacyRoute}
-              path={legacyRoute}
-              element={<Navigate to={newRoute} replace />}
-            />
-          ))}
-          <Route path={post.path} element={<Post />} />
-          <Route path={portfolio.path} element={<Homepage />} />
-        </Route>
-        <Route path={resume.path} element={<Resume />} />
-        <Route
-          path={login.path}
-          element={
-            <GuestGuard>
-              <Login />
-            </GuestGuard>
-          }
-        />
-        <Route
-          path={admin.path}
-          element={
-            <AuthGuard>
-              <Admin />
-            </AuthGuard>
-          }
-        />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      <Suspense fallback={null}>
+        <Routes>
+          <Route
+            element={
+              <Portfolio>
+                <Suspense fallback={null}>
+                  <Outlet />
+                </Suspense>
+              </Portfolio>
+            }
+          >
+            {/* TODO handle search */}
+            {Object.entries(legacyRoutes).map(([legacyRoute, newRoute]) => (
+              <Route
+                key={legacyRoute}
+                path={legacyRoute}
+                element={<Navigate to={newRoute} replace />}
+              />
+            ))}
+            <Route path={post.path} element={<Post />} />
+            <Route path={portfolio.path} element={<Homepage />} />
+          </Route>
+          <Route path={resume.path} element={<Resume />} />
+          <Route
+            path={login.path}
+            element={
+              <GuestGuard>
+                <Login />
+              </GuestGuard>
+            }
+          />
+          <Route
+            path={admin.path}
+            element={
+              <AuthGuard>
+                <Admin />
+              </AuthGuard>
+            }
+          />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </ErrorBoundary>
   </Router>
 );

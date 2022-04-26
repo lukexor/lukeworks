@@ -1,63 +1,57 @@
 :root {
-  --color-accent-dark: #DF740C,
-  --color-accent-light: #FFE64D,
-  --color-bg-dark: #0C141F,
-  --color-bg-light: #121924,
-  --color-primary: #6FC3DF,
-  --color-secondary: #D5EEEE,
-  --font-serif: "Abril Fatface, serif",
-  --font-sans: "Rubik, sans-serif",
-  --size-xsmall: 0.25rem,
-  --size-small: 0.5rem,
-  --size-medsmall: 0.75rem,
-  --size-med: 1rem,
-  --size-medlarge: 1.25rem,
-  --size-large: 1.5rem,
-  --size-xlarge: 2rem,
-  --size-xxlarge: 3rem,
-  --size-xxxlarge: 3.5rem,
-  --bp-desktop-large: 1440px,
-  --bp-desktop-small: 1024px
-  --bp-tablet: 768px,
-  --bp-mobile: 360px,
+  --color-accent-dark: #DF740C;
+  --color-accent-light: #FFE64D;
+  --color-bg-dark: #0C141F;
+  --color-bg-light: #121924;
+  --color-primary: #6FC3DF;
+  --color-secondary: #D5EEEE;
+  --font-header: "Abril Fatface, serif";
+  --font-body: "Rubik, sans-serif";
+  --size-xsmall: 0.25rem;
+  --size-small: 0.5rem;
+  --size-medsmall: 0.75rem;
+  --size-med: 1rem;
+  --size-medlarge: 1.25rem;
+  --size-large: 1.5rem;
+  --size-xlarge: 2rem;
+  --size-xxlarge: 3rem;
+  --size-xxxlarge: 3.5rem;
+  --bp-desktop-large: 1440px;
+  --bp-desktop-small: 1024px;
+  --bp-tablet: 768px;
+  --bp-mobile: 360px;
 }
 
 body {
   background-color: var(--color-bg-dark);
   -webkit-font-smoothing: antialiased;
   color: var(--color-secondary);
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 1.2em;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: var(--color-primary);
-  font-family: var(--fontSerif);
+  font-family: var(--font-heading);
   font-weight: normal;
   text-align: center;
 }
 
 h1 {
-  font-size: var(--size-xxlarge);
-  @media (min-width: var(--bp-tablet)) {
-    font-size: var(--size-xxxlarge);
-  }
+  font-size: var(--size-xxxlarge);
 }
 
 h2 {
   font-size: var(--size-xlarge);
-  @media (min-width: var(--bp-tablet)) {
-    font-size: var(--size-xxlarge);
-  }
 }
 
-a:not(.img) {
+a:not(.img-link) {
   color: var(--color-accent-light);
   text-decoration: none;
   transition: color 0.5s ease;
 }
 
-a:not(.img):hover {
+a:not(.img-link):hover {
   color: var(--color-accent-dark);
 }
 
@@ -65,6 +59,16 @@ span.anchor {
   top: -1em;
   position: relative;
   display: inline-block;
+}
+
+@media only screen and (min-width: var(--bp-tablet)) {
+  h1 {
+    font-size: var(--size-xxxlarge);
+  }
+
+  h2 {
+    font-size: var(--size-xxlarge);
+  }
 }
 
 @media (min-width: var(--bp-desktop-small)) {

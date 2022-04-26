@@ -1,10 +1,11 @@
 .splash-bg {
   position: absolute;
   width: 100%;
-  min-height: calc(100vh - var(--size-xxlarge));
+  scroll-padding-top: var(--size-xxlarge);
+  height: 100vh;
   z-index: -2000;
   overflow-x: hidden;
-};
+}
 
 .bg {
   opacity: 20%;
@@ -19,11 +20,15 @@
   bottom: 0;
   left: 0;
   z-index: -2000;
-};
+}
+
 
 .bg-glitch {
-  opacity: 0;
-  background-color: var(--color-accent-dark);
+  --glitch-color: var(--color-accent-dark);
+  --glitch-opacity: 0;
+  --glitch-transform: 30px;
+  opacity: var(--glitch-opacity);
+  background-color: var(--glitch-color);
   background-image: url(assets/code-bg.jpg);
   background-repeat: repeat;
   background-size: cover;
@@ -33,16 +38,13 @@
   right: 0;
   bottom: 0;
   left: 0;
-  transform: translateX(30px);
+  transform: translateX(var(--glitch-transform));
   z-index: -2000;
-};
+}
 
-.bg-glitch .glitching {
+.bg-glitch.glitching {
   opacity: 50%;
 }
-.bg-glitch .color {
+.bg-glitch.color {
   background-color: var(--color-secondary);
-}
-.bg-glitch .left {
-  transform: translateX(-30px);
 }

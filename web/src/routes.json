@@ -2,12 +2,27 @@
   "portfolio": {
     "path": "/",
     "title": "LukeWorks",
-    "routes": {
-      "home": "#",
-      "blog": "#blog",
-      "projects": "#projects",
-      "about": "#about",
-      "contact": "#contact"
+    "sections": {
+      "home": {
+        "path": "/#",
+        "title": "Home"
+      },
+      "blog": {
+        "path": "/#blog",
+        "title": "Blog"
+      },
+      "projects": {
+        "path": "/#projects",
+        "title": "Projects"
+      },
+      "about": {
+        "path": "/#about",
+        "title": "About"
+      },
+      "contact": {
+        "path": "/#contact",
+        "title": "Contact"
+      }
     }
   },
   "post": {

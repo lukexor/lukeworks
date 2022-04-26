@@ -1,43 +1,52 @@
-// import { Link } from "react-router-dom";
-// import HashAnchor from "portfolio/components/HashAnchor";
-// import projectPosts from "portfolio/data/projectPosts.json";
-// import { ProjectPost } from "portfolio/models/projectPost";
-// import routes from "portfolio/routes.json";
+import "./Projects.css";
+import HashAnchor from "portfolio/components/HashAnchor";
+import projectPosts from "portfolio/data/projectPosts.json";
+import { ProjectPost } from "portfolio/models/projectPost";
+import { Link } from "react-router-dom";
+import routes from "routes.json";
 
-// type ProjectPostCardProps = {
-//   post: ProjectPost;
-// };
+const {
+  portfolio: {
+    sections: { projects },
+  },
+} = routes;
 
-// const ProjectPostCard: React.FC<ProjectPostCardProps> = ({ post }) => {
-//   const { publishedOn, url, thumbnail, title } = post;
-
-//   return publishedOn ? (
-//     <StyledProjectPostCard>
-//       <Link to={url}>
-//         {thumbnail.src ? (
-//           <ProjectThumbnail src={thumbnail.src} alt={thumbnail.alt} />
-//         ) : (
-//           <p>{title}</p>
-//         )}
-//       </Link>
-//     </StyledProjectPostCard>
-//   ) : null;
-// };
-
-// const Projects: React.FC = () => (
-//   <StyledProjects>
-//     <HashAnchor id={routes.projects.slice(1)} />
-//     <h2>Projects</h2>
-//     <ProjectPosts>
-//       {projectPosts.map((post) => (
-//         <ProjectPostCard key={post.id} post={post} />
-//       ))}
-//     </ProjectPosts>
-//   </StyledProjects>
-// );
-
-const Project = () => {
-  return <></>;
+type ProjectPostCardProps = {
+  post: ProjectPost;
 };
 
-export default Project;
+const ProjectPostCard = ({ post }: ProjectPostCardProps) => {
+  const { publishedOn, url, thumbnail, title } = post;
+
+  return publishedOn ? (
+    <article>
+      <Link to={url}>
+        {thumbnail ? (
+          <img
+            className="project-thumb"
+            src={thumbnail.src}
+            alt={thumbnail.alt}
+          />
+        ) : (
+          <p>{title}</p>
+        )}
+      </Link>
+    </article>
+  ) : null;
+};
+
+const Projects = () => {
+  return (
+    <section className="projects">
+      <HashAnchor id={projects.path.slice(1)} />
+      <h2>Projects</h2>
+      <section className="project-posts">
+        {projectPosts.map((post) => (
+          <ProjectPostCard key={post.id} post={post} />
+        ))}
+      </section>
+    </section>
+  );
+};
+
+export default Projects;

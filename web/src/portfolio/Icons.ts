@@ -21,4 +21,12 @@ const Icons = {
   explore: faChevronCircleDown,
 };
 
+type IconList = typeof Icons;
+
+const isIcon = (key: string): key is keyof IconList => {
+  return key in Icons;
+};
+
 export default Icons;
+export { isIcon };
+export type { IconList };

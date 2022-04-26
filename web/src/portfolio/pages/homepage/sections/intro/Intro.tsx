@@ -4,14 +4,13 @@ import p5 from "p5";
 import copy from "portfolio/data/copy.json";
 import Icons from "portfolio/Icons";
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import routes from "routes.json";
 import SplashBg from "./SplashBg";
 import splashSketch from "./splashSketch";
 
 const {
   portfolio: {
-    routes: { blog },
+    sections: { blog },
   },
 } = routes;
 const { firstName } = copy.Contact;
@@ -61,13 +60,13 @@ const Intro = () => {
         </header>
         <div className="explore">
           <p>{explore}</p>
-          <Link to={blog} className="img">
+          <a href={blog.path} className="img-link">
             <FontAwesomeIcon
               className="explore-icon"
               icon={Icons.explore}
               swapOpacity
             />
-          </Link>
+          </a>
         </div>
       </section>
     </>

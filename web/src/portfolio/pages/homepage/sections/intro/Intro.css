@@ -16,12 +16,6 @@
   padding: 50px 0;
 }
 
-@media (min-width: var(--bp-tablet)) {
-  .header {
-    padding: 100px 0;
-  }
-}
-
 .header::before {
   content: "";
   display: block;
@@ -41,45 +35,47 @@
 
 .subtitle {
   font-family: var(--font-serif);
-  font-size: var(--size-large);
+  font-size: var(--size-xlarge);
   font-weight: normal;
   line-height: 1.6em;
   text-align: center;
 }
 
-@media (min-width: var(--bp-tablet)) {
-  .subtitle {
-    font-size: var(--size-xlarge);
-  }
-}
-
 .name {
-  color: var(--colors-accent-dark);
-};
+  color: var(--color-accent-dark);
+}
 
 .explore {
   text-align: center;
-  padding: var(--sizes-medlarge) 0;
+  padding: var(--size-medlarge) 0;
   margin-bottom: 20px;
-};
-
-.explore p {
-  font-size: var(--sizes-med);
 }
 
-@media (min-width: var(--bp-tablet)) {
-  .explore p {
-    font-size: var(--sizes-medlarge);
-  }
+.explore p {
+  font-size: var(--size-medLarge);
 }
 
 .explore-icon {
-  color: var(--colors-accent-light);
-  font-size: var(--sizes-xxlarge);
+  color: var(--color-accent-light);
+  font-size: var(--size-xlarge);
   text-decoration: none;
   transition: color 0.5s;
 }
 
 .explore-icon:hover {
-  color: var(--colors-accent-dark);
+  color: var(--color-accent-dark);
+}
+
+@media only screen and (min-width: var(--bp-tablet)) {
+  .header {
+    padding: 100px 0;
+  }
+
+  .subtitle {
+    font-size: var(--size-xlarge);
+  }
+
+  .explore p {
+    font-size: var(--size-medlarge);
+  }
 }

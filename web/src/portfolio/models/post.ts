@@ -7,7 +7,7 @@ type Post = {
   id: number;
   url: string;
   title: string;
-  thumbnail: Image;
+  thumbnail?: Image;
   image: null | Image;
   content: string;
   category: string;

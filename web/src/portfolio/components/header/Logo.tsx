@@ -1,14 +1,10 @@
-// import copy from "../../data/copy.json";
-// import routes from "../../routes.json";
+import "./Logo.css";
+import copy from "../../data/copy.json";
 
-// const Logo = () => (
-//   <StyledLogo smooth to={routes.home} className="img">
-//     {copy.Logo.text}
-//   </StyledLogo>
-// );
-
-const Logo = () => {
-  return <></>;
-};
+const Logo = () => (
+  <a href="/" className="img-link logo">
+    {copy.Logo.text}
+  </a>
+);
 
 export default Logo;

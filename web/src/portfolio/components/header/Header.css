@@ -1,29 +1,26 @@
-import styled from "styled-components";
-
-const StyledHeader = styled.header`
-  background: ${({ theme }) => theme.colors.backgroundLight};
+.heading {
+  background: var(--color-bg-light);
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 10;
-  height: ${({ theme }) => theme.sizes.xxxlarge};
-`;
+  height: var(--size-xxlarge);
+  padding: 0 10px;
+}
 
-const HeaderBar = styled.div`
+.header-bar {
   display: flex;
   justify-content: space-between;
   flex: 1;
-  padding: ${({ theme }) => theme.sizes.small};
-`;
+  padding: var(--size-small);
+}
 
-const HeaderIcons = styled.div`
+.header-icons {
   display: flex;
   justify-content: space-around;
-  align-items: middle;
+  align-items: center;
+}
 
-  div {
-    margin: auto 0;
-  }
-`;
-
-export { HeaderBar, HeaderIcons, StyledHeader };
+.header-icons div {
+  margin: auto 0;
+}
