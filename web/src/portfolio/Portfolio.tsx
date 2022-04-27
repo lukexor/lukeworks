@@ -1,8 +1,10 @@
 import "./Portfolio.css";
+import ErrorBoundary from "ErrorBoundary";
 import useMetaTag from "hooks/useMetaTag";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "./components/footer";
+import HashAnchor from "./components/HashAnchor";
 import Header from "./components/header";
 import copy from "./data/copy.json";
 
@@ -14,7 +16,8 @@ type Props = {
 
 const Portfolio = ({ children }: Props) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useMetaTag({ title, description });
 
@@ -29,7 +32,7 @@ const Portfolio = ({ children }: Props) => {
 
     // Required because of HashLink using ids without a hash
     const scrollIntoView = () => {
-      const hash = window.location.hash.substring(1);
+      const hash = location.hash.substring(1);
       if (!hash) {
         return;
       }
@@ -40,13 +43,18 @@ const Portfolio = ({ children }: Props) => {
     };
 
     setTimeout(scrollIntoView, 300);
-  }, [pathname]);
+  }, [location.pathname]);
 
   return (
     <>
       <div className={`fade-enter ${isLoaded ? "fade-enter-active" : ""}`}>
-        <Header />
-        {children}
+        <div className="body-content">
+          <Header />
+          <HashAnchor id="top" />
+          <ErrorBoundary key={location.pathname} navigate={navigate}>
+            {children}
+          </ErrorBoundary>
+        </div>
         <Footer />
       </div>
     </>

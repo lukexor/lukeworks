@@ -18,7 +18,7 @@ const { title, subtitle, explore } = copy.Intro;
 
 const Intro = () => {
   const [loadSubtitle, setLoadSubtitle] = useState(0);
-  const [sketch, setSketch] = useState<p5>();
+  const sketchRef = useRef<null | p5>(null);
   const subtitleRef = useRef(null);
 
   // Incrementally fades in subtitle elements
@@ -27,12 +27,12 @@ const Intro = () => {
     setTimeout(() => setLoadSubtitle(2), 1200);
     setTimeout(() => setLoadSubtitle(3), 1800);
 
-    const splash = document.querySelector("#splash") as HTMLElement;
-    splash && setSketch(new window.p5(splashSketch, splash));
+    const splash: null | HTMLElement = document.querySelector("#splash");
+    if (splash) {
+      sketchRef.current = new window.p5(splashSketch, splash);
+    }
     return () => {
-      if (sketch) {
-        sketch.remove();
-      }
+      sketchRef.current?.remove();
     };
   }, []);
 
@@ -60,9 +60,9 @@ const Intro = () => {
         </header>
         <div className="explore">
           <p>{explore}</p>
-          <a href={blog.path} className="img-link">
+          <a href={`${blog.path}${blog.hash}`} className="img-link">
             <FontAwesomeIcon
-              className="explore-icon"
+              className="explore-icon ripple"
               icon={Icons.explore}
               swapOpacity
             />

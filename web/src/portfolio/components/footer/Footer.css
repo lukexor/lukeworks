@@ -1,6 +1,7 @@
 footer {
   position: relative;
   background: var(--color-bg-light);
+  height: var(--footer-height);
 }
 
 .footer-bar {
@@ -40,12 +41,13 @@ footer {
 .social-icon {
   color: var(--color-accent-light);
   font-size: var(--size-xlarge);
-  padding: 15px;
+  margin: 15px;
   text-decoration: none;
   transition: color 0.5s;
 }
 
-.to-top-icon:hover, .social-icon:hover {
-  color: var(--color-accent-dark);
+@media only screen and (hover: hover) and (pointer: fine) {
+  .to-top-icon:hover, .to-top-icon:active, .social-icon:hover, .social-icon:active {
+    color: var(--color-accent-dark);
+  }
 }
-

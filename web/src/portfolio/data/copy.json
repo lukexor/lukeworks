@@ -1,6 +1,6 @@
 {
   "About": {
-    "description": "I've been coding since age 15 when I first learned what HTML was.\n\nI primarily work with Javascript/React and Rust, but I've dabbled in several other technology stacks including Perl, Ruby, Python, Golang, Kotlin, C, Haskell, 6502 Assembly, and even some Arduino programming! I love learning new technologies and finding the best tool for the job. I've developed a borderline addiction to problem-solving over the years, with many late nights, refusing to go to bed until I was satisfied I had reached an acceptable solution.\n\nI am constantly looking for new projects, things to learn and better ways to solve problems. I'm excite dabout cutting-edge technologies, especially AI and Machine Learning. I'm always on the lookout for anything I can sink my teeth into. I post here to share my projects and ideas with the hope they spur discussions about code, technology and software practices."
+    "description": "I've been fascinated with computers and technology for as long as I can remember and have been coding since age 15 when I first learned about HTML and CSS.\n\nI primarily use Javascript/React and Rust these days, but I've dabbled in just about everything including Perl, Ruby, Python, Golang, Java/Kotlin, C/C++, Haskell, 6502 Assembly, and even some Arduino programming! I love learning new technologies and finding the best tool for the job. I've developed a borderline addiction to problem-solving over, with many late nights.\n\nI am constantly looking for new projects, things to learn and better ways to solve problems. I'm excited about cutting-edge technologies, especially AI and Machine Learning and I'm always on the lookout for anything I can sink my teeth into. My posts here share my projects and ideas with the hope they spur discussions about code, technology and software practices."
   },
   "Contact": {
     "firstName": "Luke",
@@ -46,7 +46,7 @@
       "Designer.",
       "Thinker."
     ],
-    "explore": "Take a look around!"
+    "explore": "Have a look around!"
   },
   "Logo": {
     "text": "LP"

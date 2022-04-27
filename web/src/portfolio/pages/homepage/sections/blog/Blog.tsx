@@ -1,7 +1,6 @@
-import "./Blog.css";
 import HashAnchor from "portfolio/components/HashAnchor";
 import blogPosts from "portfolio/data/blogPosts.json";
-import { Post } from "portfolio/models/post";
+import { Image } from "portfolio/models/post";
 import { Link } from "react-router-dom";
 import routes from "routes.json";
 
@@ -12,34 +11,43 @@ const {
 } = routes;
 
 type BlogPostCardProps = {
-  post: Post;
+  url: string;
+  thumbnail: Image;
+  title: string;
 };
 
-// TODO: Make BlogThumbnail a component with an image placeholder
-const BlogPostCard = ({ post }: BlogPostCardProps) => {
-  const { url, thumbnail, title } = post;
-  return post.publishedOn ? (
+const BlogPostCard = ({ title, thumbnail, url }: BlogPostCardProps) => {
+  return (
     <article>
       <Link to={url}>
-        {thumbnail ? (
-          <img className="blog-thumb" src={thumbnail.src} alt={thumbnail.alt} />
-        ) : (
-          <p>{title}</p>
-        )}
+        <div className="card">
+          <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
+          <div className="title slide-up">{title}</div>
+        </div>
       </Link>
     </article>
-  ) : null;
+  );
 };
 
 const Blog = () => {
   return (
-    <section className="blog">
-      <HashAnchor id={blog.path.slice(1)} />
+    <section className="page-section">
+      <HashAnchor id={blog.hash} />
       <h2>Blog</h2>
-      <section className="blog-posts">
-        {blogPosts.map((post) => (
-          <BlogPostCard key={post.id} post={post} />
-        ))}
+      <section className="card-grid">
+        {[...blogPosts]
+          .filter((post) => post.publishedOn && post.thumbnail)
+          .slice(0, 9)
+          .map(({ id, title, thumbnail, url }) =>
+            thumbnail ? (
+              <BlogPostCard
+                key={id}
+                title={title}
+                thumbnail={thumbnail}
+                url={url}
+              />
+            ) : null
+          )}
       </section>
     </section>
   );

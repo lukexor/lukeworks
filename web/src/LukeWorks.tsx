@@ -1,13 +1,7 @@
 import "./LukeWorks.css";
 import legacyRoutes from "legacyRoutes.json";
 import { lazy, Suspense } from "react";
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Outlet,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import routes from "routes.json";
 import ErrorBoundary from "./ErrorBoundary";
 
@@ -24,9 +18,11 @@ const Resume = lazy(() => import("resume/Resume"));
 const Admin = lazy(() => import("admin/Admin"));
 const Login = lazy(() => import("admin/Login"));
 
-const LukeWorks = () => (
-  <Router>
-    <ErrorBoundary>
+const LukeWorks = () => {
+  const navigate = useNavigate();
+
+  return (
+    <ErrorBoundary navigate={navigate}>
       <Suspense fallback={null}>
         <Routes>
           <Route
@@ -70,7 +66,7 @@ const LukeWorks = () => (
         </Routes>
       </Suspense>
     </ErrorBoundary>
-  </Router>
-);
+  );
+};
 
 export default LukeWorks;

@@ -4,15 +4,16 @@
   top: 0;
   width: 100%;
   z-index: 10;
-  height: var(--size-xxlarge);
-  padding: 0 10px;
+  height: var(--header-height);
+  padding: 0 20px;
 }
 
 .header-bar {
+  height: 100%;
   display: flex;
   justify-content: space-between;
   flex: 1;
-  padding: var(--size-small);
+  align-items: center;
 }
 
 .header-icons {

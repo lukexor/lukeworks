@@ -1,7 +1,6 @@
 .splash-bg {
   position: absolute;
   width: 100%;
-  scroll-padding-top: var(--size-xxlarge);
   height: 100vh;
   z-index: -2000;
   overflow-x: hidden;

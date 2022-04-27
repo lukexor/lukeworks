@@ -16,10 +16,17 @@
   --size-xlarge: 2rem;
   --size-xxlarge: 3rem;
   --size-xxxlarge: 3.5rem;
+  --header-height: 2.5em;
+  --footer-height: 9em;
+  --page-padding: 20px;
   --bp-desktop-large: 1440px;
   --bp-desktop-small: 1024px;
   --bp-tablet: 768px;
   --bp-mobile: 360px;
+}
+
+*:focus-visible {
+  outline: 1px dotted var(--color-accent-dark);
 }
 
 body {
@@ -38,11 +45,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: var(--size-xxxlarge);
+  font-size: var(--size-xlarge);
 }
 
 h2 {
-  font-size: var(--size-xlarge);
+  font-size: var(--size-large);
+  margin: 1rem;
 }
 
 a:not(.img-link) {
@@ -51,45 +59,155 @@ a:not(.img-link) {
   transition: color 0.5s ease;
 }
 
-a:not(.img-link):hover {
+span.anchor {
+  top: calc(-1 * var(--header-height));
+  position: relative;
+  display: block;
+  visibility: hidden;
+}
+
+.body-content {
+  min-height: calc(100vh - var(--footer-height));
+}
+
+.page-section {
+  min-height: 50vh;
+  padding: var(--header-height) var(--page-padding);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  justify-content: center;
+  margin: 50px 50px;
+}
+
+.card-grid a {
   color: var(--color-accent-dark);
 }
 
-span.anchor {
-  top: -1em;
+.card {
   position: relative;
-  display: inline-block;
+  overflow: hidden;
 }
 
-@media only screen and (min-width: var(--bp-tablet)) {
+.card > img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5/3;
+  object-fit: cover;
+  object-position: center;
+}
+
+.card > .title {
+  position: absolute;
+  inset: 0;
+  font-size: var(--size-large);
+  padding: 1rem;
+  background: rgba(12, 20, 31, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: 2px 0 2px black;
+  text-align: center;
+}
+
+.card > img, .card > .title {
+  transition: 200ms ease-in-out;
+}
+
+.card > .title.slide-up {
+  transform: translateY(100%);
+}
+
+.button {
+  border: 0;
+  display: flex;
+  width: 100px;
+  height: var(--size-xlarge);
+  background-color: var(--color-accent-light);
+  color: var(--color-bg-dark) !important;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (min-width: 768px) {
   h1 {
-    font-size: var(--size-xxxlarge);
+    font-size: var(--size-xxlarge);
   }
 
   h2 {
-    font-size: var(--size-xxlarge);
+    font-size: var(--size-xlarge);
   }
 }
 
-@media (min-width: var(--bp-desktop-small)) {
+@media only screen and (min-width: 1024px) {
   body {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-accent-dark) var(--color-bg-light);
+    scrollbar-color: #DF740C #FFE64D;
     scroll-behavior: smooth;
     overflow: hidden auto;
   }
   body::-webkit-scrollbar {
-    width: var(--size-medsmall);
+    width: 0.75rem;
   }
   body::-webkit-scrollbar-thumb {
-    background: var(--color-accent-dark);
+    background: #DF740C;
     border-radius: 6px;
-    border: 3px solid var(--color-bg-light);
+    border: 3px solid #121924;
     -webkit-border-radius: 10px;
   }
   body::-webkit-scrollbar-track {
-    background: var(--color-bg-light);
+    background: #121924;
     box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+}
+
+@media only screen and (min-width: 1440px) {
+  .card-grid {
+    margin: 50px 200px;
+  }
+}
+
+@media only screen and (hover: hover) and (pointer: fine) {
+  a:not(.img-link):hover, a:not(.img-link):focus-visible {
+    color: var(--color-accent-dark);
+  }
+  .button:hover {
+    background-color:  var(--color-accent-dark);
+  }
+  a:hover .card > img.blur, a:focus-visible .card > img.blur {
+    filter: blur(3px);
+  }
+  a:hover .card > .title.slide-up, a:focus-visible .card > .title.slide-up {
+    transform: translateY(0);
+  }
+}
+
+@media only screen and (pointer: coarse) {
+  .card > img.blur {
+    filter: blur(3px);
+  }
+  .card > .title.slide-up {
+    transform: translateY(0);
+  }
+
+  a:active {
+    color: var(--color-accent-dark);
+  }
+
+  .ripple {
+    transition: color 500ms, transform 500ms !important;
+  }
+  .ripple:hover {
+    color: var(--color-accent-light);
+    transform: scale(1);
+  }
+  .ripple:active {
+    color: var(--color-accent-dark);
+    transform: scale(1.2);
+    transition: color 0, transform 0 !important;
   }
 }

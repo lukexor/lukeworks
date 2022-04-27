@@ -1,6 +1,9 @@
+import "./ErrorBoundary.css";
 import { Component, ErrorInfo, ReactNode } from "react";
+import { Link, NavigateFunction } from "react-router-dom";
 
 type Props = {
+  navigate: NavigateFunction;
   children: ReactNode;
 };
 
@@ -8,7 +11,6 @@ type State = {
   error: null | Error;
 };
 
-// TODO: ErrorBoundary
 class ErrorBoundary extends Component<Props, State> {
   public state: State;
 
@@ -27,7 +29,22 @@ class ErrorBoundary extends Component<Props, State> {
 
   public render(): ReactNode {
     if (this.state.error) {
-      return <h1>Oops, something has gone horribly wrong.</h1>;
+      return (
+        <section className="error-boundary">
+          <h1>Oops, something has gone horribly wrong.</h1>
+          <Link
+            className="button"
+            to={document.referrer}
+            onClick={() => {
+              this.setState({ error: null });
+              this.props.navigate(-1);
+              return false;
+            }}
+          >
+            Go back
+          </Link>
+        </section>
+      );
     }
     return this.props.children;
   }

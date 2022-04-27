@@ -4,23 +4,28 @@
     "title": "LukeWorks",
     "sections": {
       "home": {
-        "path": "/#",
+        "path": "/",
+        "hash": "#",
         "title": "Home"
       },
       "blog": {
-        "path": "/#blog",
+        "path": "/",
+        "hash": "#blog",
         "title": "Blog"
       },
       "projects": {
-        "path": "/#projects",
+        "path": "/",
+        "hash": "#projects",
         "title": "Projects"
       },
       "about": {
-        "path": "/#about",
+        "path": "/",
+        "hash": "#about",
         "title": "About"
       },
       "contact": {
-        "path": "/#contact",
+        "path": "/",
+        "hash": "#contact",
         "title": "Contact"
       }
     }

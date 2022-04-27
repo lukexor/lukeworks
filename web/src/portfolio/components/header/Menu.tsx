@@ -5,6 +5,7 @@ import useClickOutside from "hooks/useClickOutside";
 import useEventListener from "hooks/useEventListener";
 import Icons from "portfolio/Icons";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import routes from "routes.json";
 
 const Menu = () => {
@@ -13,6 +14,7 @@ const Menu = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const menuIconRef = useRef<HTMLDivElement>(null);
   const toggleOpen = () => setOpen((open) => !open);
+  const location = useLocation();
 
   useEffect(() => {
     const height = open ? "17.5ch" : "0";
@@ -21,11 +23,10 @@ const Menu = () => {
 
   const updateActive = useCallback(() => {
     const offsets = Array.from(document.querySelectorAll("span.anchor"))
-      .concat(document.querySelector("section#splash") || [])
       .map((el) => (el as HTMLElement).offsetTop)
       .sort((a, b) => a - b);
 
-    let closest = active;
+    let closest = -1;
     let closestDiff = Infinity;
     offsets.forEach((offset, i) => {
       const diff = Math.abs(window.scrollY - offset);
@@ -39,7 +40,7 @@ const Menu = () => {
 
   useEffect(() => {
     updateActive();
-  }, []);
+  });
 
   useEventListener("scroll", updateActive);
 
@@ -55,31 +56,35 @@ const Menu = () => {
     <>
       <div ref={menuIconRef}>
         <FontAwesomeIcon
-          className="menu-icon"
+          className="menu-icon ripple"
           icon={Icons.menu}
           onClick={toggleOpen}
         />
       </div>
       <nav className="menu" ref={menuRef}>
-        {Object.values(routes.portfolio.sections).map(({ path, title }, i) => {
-          if (title == "Home" && location.pathname != "/") {
-            path = "/";
-          }
-          return (
-            <a
-              key={path}
-              href={path}
-              className={classNames({
+        {Object.values(routes.portfolio.sections).map(
+          ({ path, hash, title }, i) => {
+            const to = `${path}${hash}`;
+            const props = {
+              key: to,
+              className: classNames({
                 "menu-link": true,
                 active: active === i,
-              })}
-              onClick={() => setOpen(false)}
-              onFocus={() => setOpen(true)}
-            >
-              {title}
-            </a>
-          );
-        })}
+              }),
+              onClick: () => setOpen(false),
+              onFocus: () => setOpen(true),
+            };
+            return path === location.pathname ? (
+              <a href={to} {...props}>
+                {title}
+              </a>
+            ) : (
+              <Link to={to} {...props}>
+                {title}
+              </Link>
+            );
+          }
+        )}
       </nav>
     </>
   );

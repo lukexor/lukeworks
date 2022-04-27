@@ -1,5 +1,5 @@
 .splash {
-  min-height: calc(100vh - var(--size-xxlarge));
+  min-height: calc(100vh - var(--header-height));
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -33,6 +33,10 @@
   pointer-events: none;
 }
 
+.header h1 {
+  font-size: var(--size-xxlarge);
+}
+
 .subtitle {
   font-family: var(--font-serif);
   font-size: var(--size-xlarge);
@@ -48,25 +52,21 @@
 .explore {
   text-align: center;
   padding: var(--size-medlarge) 0;
-  margin-bottom: 20px;
+  margin-bottom: var(--size-small);
 }
 
 .explore p {
-  font-size: var(--size-medLarge);
+  font-size: var(--size-medlarge);
 }
 
 .explore-icon {
   color: var(--color-accent-light);
-  font-size: var(--size-xlarge);
+  font-size: 2.5rem;
   text-decoration: none;
-  transition: color 0.5s;
+  transition: color 500ms;
 }
 
-.explore-icon:hover {
-  color: var(--color-accent-dark);
-}
-
-@media only screen and (min-width: var(--bp-tablet)) {
+@media only screen and (min-width: 768px) {
   .header {
     padding: 100px 0;
   }
@@ -76,6 +76,12 @@
   }
 
   .explore p {
-    font-size: var(--size-medlarge);
+    font-size: var(--size-large);
+  }
+}
+
+@media only screen and (hover: hover) and (pointer: fine) {
+  a:hover > .explore-icon, a:active > .explore-icon {
+    color: var(--color-accent-dark);
   }
 }

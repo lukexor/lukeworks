@@ -1,7 +1,6 @@
-import "./Projects.css";
 import HashAnchor from "portfolio/components/HashAnchor";
 import projectPosts from "portfolio/data/projectPosts.json";
-import { ProjectPost } from "portfolio/models/projectPost";
+import { Image } from "portfolio/models/post";
 import { Link } from "react-router-dom";
 import routes from "routes.json";
 
@@ -12,38 +11,43 @@ const {
 } = routes;
 
 type ProjectPostCardProps = {
-  post: ProjectPost;
+  url: string;
+  thumbnail: Image;
+  title: string;
 };
 
-const ProjectPostCard = ({ post }: ProjectPostCardProps) => {
-  const { publishedOn, url, thumbnail, title } = post;
-
-  return publishedOn ? (
+const ProjectPostCard = ({ title, thumbnail, url }: ProjectPostCardProps) => {
+  return (
     <article>
       <Link to={url}>
-        {thumbnail ? (
-          <img
-            className="project-thumb"
-            src={thumbnail.src}
-            alt={thumbnail.alt}
-          />
-        ) : (
-          <p>{title}</p>
-        )}
+        <div className="card">
+          <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
+          <div className="title slide-up">{title}</div>
+        </div>
       </Link>
     </article>
-  ) : null;
+  );
 };
 
 const Projects = () => {
   return (
-    <section className="projects">
-      <HashAnchor id={projects.path.slice(1)} />
+    <section className="page-section">
+      <HashAnchor id={projects.hash} />
       <h2>Projects</h2>
-      <section className="project-posts">
-        {projectPosts.map((post) => (
-          <ProjectPostCard key={post.id} post={post} />
-        ))}
+      <section className="card-grid">
+        {[...projectPosts]
+          .filter((post) => post.publishedOn && post.thumbnail)
+          .slice(0, 9)
+          .map(({ id, title, thumbnail, url }) =>
+            thumbnail ? (
+              <ProjectPostCard
+                key={id}
+                title={title}
+                thumbnail={thumbnail}
+                url={url}
+              />
+            ) : null
+          )}
       </section>
     </section>
   );

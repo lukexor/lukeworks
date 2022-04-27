@@ -1,4 +1,3 @@
-import "./Contact.css";
 import HashAnchor from "portfolio/components/HashAnchor";
 import copy from "portfolio/data/copy.json";
 import routes from "routes.json";
@@ -10,8 +9,8 @@ const {
 } = routes;
 
 const Contact = () => (
-  <section className="contact">
-    <HashAnchor id={contact.path.slice(1)} />
+  <section className="page-section">
+    <HashAnchor id={contact.hash} />
     <h2>Contact</h2>
     <p>
       {copy.Contact.content}{" "}

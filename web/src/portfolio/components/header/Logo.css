@@ -6,12 +6,14 @@
   transition: color 0.5s ease;
 }
 
-.logo:hover {
-  color: var(--color-accent-dark);
+@media only screen and (min-width: 768px) {
+  .logo {
+    font-size: 2rem;
+  }
 }
 
-@media only screen and (min-width: var(--bp-tablet)) {
-  .logo-link {
-    font-size: var(--size-xlarge);
+@media only screen and (hover: hover) and (pointer: fine) {
+  .logo:hover, .logo:active {
+    color: var(--color-accent-dark);
   }
 }
