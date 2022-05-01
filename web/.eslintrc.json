@@ -26,6 +26,12 @@
         "argsIgnorePattern": "^_"
       }
     ],
+    "@typescript-eslint/ban-ts-comment": [
+      "error",
+      {
+        "ts-ignore": "allow-with-description"
+      }
+    ],
     "semi": [
       "error",
       "always"

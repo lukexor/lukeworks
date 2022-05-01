@@ -3,22 +3,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import copy from "portfolio/data/copy.json";
 import Icons, { isIcon } from "portfolio/Icons";
 
+const { copyright, socialIcons, rightsReserved, backToTop } = copy.Footer;
+const { firstName, lastName } = copy.Contact;
+
 const Footer = () => {
   return (
     <footer>
       <div className="footer-bar">
-        <a href="#top" className="to-top-link img-link">
+        <a href="#top" title={backToTop} className="to-top-link">
           <FontAwesomeIcon
-            className="to-top-icon ripple"
+            className="link-icon"
+            title={backToTop}
             icon={Icons.backToTop}
           />
         </a>
         <div className="social-icons">
-          {copy.Footer.socialIcons.map(({ icon, link, title }) => {
+          {socialIcons.map(({ icon, link, title }) => {
             return isIcon(icon) ? (
-              <a key={link} href={link} title={title} className="img-link">
+              <a key={link} href={link} title={title}>
                 <FontAwesomeIcon
-                  className="social-icon ripple"
+                  title={title}
+                  className="link-icon"
                   icon={Icons[icon]}
                 />
               </a>
@@ -26,11 +31,11 @@ const Footer = () => {
           })}
         </div>
         <p className="copyright">
-          {copy.Footer.copyright} {new Date().getFullYear()}{" "}
+          {copyright} {new Date().getFullYear()}{" "}
           <span className="bold">
-            {copy.Contact.firstName} {copy.Contact.lastName}
+            {firstName} {lastName}
           </span>
-          . {copy.Footer.rightsReserved}.
+          . {rightsReserved}.
         </p>
       </div>
     </footer>

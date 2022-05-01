@@ -1,18 +1,18 @@
+import classnames from "classnames";
 import HashAnchor from "portfolio/components/HashAnchor";
 import projectPosts from "portfolio/data/projectPosts.json";
 import { Image } from "portfolio/models/post";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import routes from "routes.json";
 
 const {
-  portfolio: {
-    sections: { projects },
-  },
+  menu: { projects },
 } = routes;
 
 type ProjectPostCardProps = {
   url: string;
-  thumbnail: Image;
+  thumbnail?: Image;
   title: string;
 };
 
@@ -21,8 +21,14 @@ const ProjectPostCard = ({ title, thumbnail, url }: ProjectPostCardProps) => {
     <article>
       <Link to={url}>
         <div className="card">
-          <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
-          <div className="title slide-up">{title}</div>
+          {thumbnail ? (
+            <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
+          ) : (
+            <div className="card-placeholder" />
+          )}
+          <div className={classnames({ title: true, "slide-up": !!thumbnail })}>
+            {title}
+          </div>
         </div>
       </Link>
     </article>
@@ -30,24 +36,22 @@ const ProjectPostCard = ({ title, thumbnail, url }: ProjectPostCardProps) => {
 };
 
 const Projects = () => {
+  const [posts] = useState(() =>
+    [...projectPosts].filter((post) => post.publishedOn).slice(0, 6)
+  );
   return (
     <section className="page-section">
       <HashAnchor id={projects.hash} />
       <h2>Projects</h2>
       <section className="card-grid">
-        {[...projectPosts]
-          .filter((post) => post.publishedOn && post.thumbnail)
-          .slice(0, 9)
-          .map(({ id, title, thumbnail, url }) =>
-            thumbnail ? (
-              <ProjectPostCard
-                key={id}
-                title={title}
-                thumbnail={thumbnail}
-                url={url}
-              />
-            ) : null
-          )}
+        {posts.map(({ id, title, thumbnail, url }) => (
+          <ProjectPostCard
+            key={id}
+            title={title}
+            thumbnail={thumbnail}
+            url={url}
+          />
+        ))}
       </section>
     </section>
   );

@@ -4,13 +4,22 @@ import classNames from "classnames";
 import useClickOutside from "hooks/useClickOutside";
 import useEventListener from "hooks/useEventListener";
 import Icons from "portfolio/Icons";
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Link, useLocation } from "react-router-dom";
 import routes from "routes.json";
+
+const { home } = routes;
 
 const Menu = () => {
   const [active, setActive] = useState(-1);
   const [open, setOpen] = useState(false);
+  const scrollUpdateRef = useRef<ReturnType<typeof setTimeout>>();
   const menuRef = useRef<HTMLDivElement>(null);
   const menuIconRef = useRef<HTMLDivElement>(null);
   const toggleOpen = () => setOpen((open) => !open);
@@ -21,7 +30,12 @@ const Menu = () => {
     menuRef.current?.style.setProperty("--height", height);
   }, [open]);
 
-  const updateActive = useCallback(() => {
+  const scrollUpdate = useCallback(() => {
+    if (location.pathname !== home.path) {
+      setActive(-1);
+      return;
+    }
+
     const offsets = Array.from(document.querySelectorAll("span.anchor"))
       .map((el) => (el as HTMLElement).offsetTop)
       .sort((a, b) => a - b);
@@ -36,13 +50,18 @@ const Menu = () => {
       }
     });
     setActive(closest);
-  }, []);
+  }, [location.pathname]);
 
-  useEffect(() => {
-    updateActive();
+  useLayoutEffect(() => {
+    scrollUpdate();
+  }, [location]);
+
+  useEventListener("scroll", () => {
+    if (scrollUpdateRef.current) {
+      clearTimeout(scrollUpdateRef.current);
+    }
+    scrollUpdateRef.current = setTimeout(scrollUpdate, 500);
   });
-
-  useEventListener("scroll", updateActive);
 
   useClickOutside(menuRef, (event) => {
     const icon = menuIconRef.current;
@@ -56,35 +75,34 @@ const Menu = () => {
     <>
       <div ref={menuIconRef}>
         <FontAwesomeIcon
-          className="menu-icon ripple"
+          className="link-icon"
+          title="Navigation Menu"
           icon={Icons.menu}
           onClick={toggleOpen}
         />
       </div>
       <nav className="menu" ref={menuRef}>
-        {Object.values(routes.portfolio.sections).map(
-          ({ path, hash, title }, i) => {
-            const to = `${path}${hash}`;
-            const props = {
-              key: to,
-              className: classNames({
-                "menu-link": true,
-                active: active === i,
-              }),
-              onClick: () => setOpen(false),
-              onFocus: () => setOpen(true),
-            };
-            return path === location.pathname ? (
-              <a href={to} {...props}>
-                {title}
-              </a>
-            ) : (
-              <Link to={to} {...props}>
-                {title}
-              </Link>
-            );
-          }
-        )}
+        {Object.values(routes.menu).map(({ hash, title }, i) => {
+          const props = {
+            key: hash,
+            className: classNames({
+              "menu-link": true,
+              active: active === i,
+            }),
+            onClick: () => setOpen(false),
+            onFocus: () => setOpen(true),
+          };
+          // Hashes on the same page can't use react-router
+          return location.pathname === home.path ? (
+            <a href={hash} {...props}>
+              {title}
+            </a>
+          ) : (
+            <Link to={`/${hash}`} {...props}>
+              {title}
+            </Link>
+          );
+        })}
       </nav>
     </>
   );

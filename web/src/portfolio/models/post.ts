@@ -17,6 +17,9 @@ type Post = {
   publishedOn: null | string;
   createdOn: string;
   updatedOn: string;
+  website?: null | string;
+  startedOn?: null | string;
+  completedOn?: null | string;
 };
 
 export type { Image, Post };

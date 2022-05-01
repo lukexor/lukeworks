@@ -8,6 +8,11 @@
   justify-content: center;
 }
 
+.post iframe {
+  overflow: hidden;
+  max-height: 500px;
+}
+
 .post pre {
   padding: 10px;
   color: var(--color-bg-dark);
@@ -36,6 +41,10 @@
   scroll-margin-top: calc(var(--header-height) + 10px);
 }
 
+.post img {
+  max-width: 100%;
+}
+
 .published {
   font-size: var(--size-med);
   color: var(--color-accent-dark);
@@ -61,4 +70,12 @@
 
 .post-img {
   width: 100%;
+}
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+}
+.post-nav svg {
+  margin: 0 20px 20px;
 }

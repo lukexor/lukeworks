@@ -1,37 +1,36 @@
 {
+  "home": {
+    "path": "/",
+    "title": "Home"
+  },
   "portfolio": {
     "path": "/",
-    "title": "LukeWorks",
-    "sections": {
-      "home": {
-        "path": "/",
-        "hash": "#",
-        "title": "Home"
-      },
-      "blog": {
-        "path": "/",
-        "hash": "#blog",
-        "title": "Blog"
-      },
-      "projects": {
-        "path": "/",
-        "hash": "#projects",
-        "title": "Projects"
-      },
-      "about": {
-        "path": "/",
-        "hash": "#about",
-        "title": "About"
-      },
-      "contact": {
-        "path": "/",
-        "hash": "#contact",
-        "title": "Contact"
-      }
+    "title": "LukeWorks"
+  },
+  "menu": {
+    "home": {
+      "hash": "#",
+      "title": "Home"
+    },
+    "blog": {
+      "hash": "#blog",
+      "title": "Blog"
+    },
+    "projects": {
+      "hash": "#projects",
+      "title": "Projects"
+    },
+    "about": {
+      "hash": "#about",
+      "title": "About"
+    },
+    "contact": {
+      "hash": "#contact",
+      "title": "Contact"
     }
   },
   "post": {
-    "path": ":postTitle"
+    "path": "/:postLink"
   },
   "resume": {
     "path": "/resume",
@@ -46,7 +45,11 @@
     "title": "Log In"
   },
   "tetanes": {
-    "path": "/tetanes",
+    "path": "/tetanes-web",
     "title": "TetaNES"
+  },
+  "p5js": {
+    "path": "/p5js/:title",
+    "title": "P5js Demo"
   }
 }

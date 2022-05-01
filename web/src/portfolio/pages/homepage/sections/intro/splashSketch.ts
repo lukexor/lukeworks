@@ -3,8 +3,8 @@ import p5 from "p5";
 const splashSketch = (p: p5): void => {
   p.disableFriendlyErrors = true;
 
-  const headerHeight = (document.querySelector("section#splash") as HTMLElement)
-    .offsetTop;
+  const headerHeight =
+    (document.querySelector("section#splash") as HTMLElement)?.offsetTop || 0;
 
   const electrons: Electron[] = [];
   const maxElectrons = 10;

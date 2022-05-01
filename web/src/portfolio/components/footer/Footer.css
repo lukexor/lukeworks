@@ -8,7 +8,7 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding-top: 40px;
 }
 
 .copyright {
@@ -22,15 +22,7 @@ footer {
 
 .to-top-link {
   position: absolute;
-  top: -36px;
-}
-
-.to-top-icon {
-  color: var(--color-accent-light);
-  font-size: var(--size-xlarge);
-  padding: 15px;
-  text-decoration: none;
-  transition: color 0.5s;
+  top: -20px;
 }
 
 .social-icons {
@@ -38,16 +30,6 @@ footer {
   justify-content: space-between;
 }
 
-.social-icon {
-  color: var(--color-accent-light);
-  font-size: var(--size-xlarge);
-  margin: 15px;
-  text-decoration: none;
-  transition: color 0.5s;
-}
-
-@media only screen and (hover: hover) and (pointer: fine) {
-  .to-top-icon:hover, .to-top-icon:active, .social-icon:hover, .social-icon:active {
-    color: var(--color-accent-dark);
-  }
+.social-icons .link-icon {
+  margin: 10px;
 }

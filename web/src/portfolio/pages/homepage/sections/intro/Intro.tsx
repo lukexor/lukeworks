@@ -9,29 +9,29 @@ import SplashBg from "./SplashBg";
 import splashSketch from "./splashSketch";
 
 const {
-  portfolio: {
-    sections: { blog },
-  },
+  menu: { blog },
 } = routes;
 const { firstName } = copy.Contact;
 const { title, subtitle, explore } = copy.Intro;
 
 const Intro = () => {
   const [loadSubtitle, setLoadSubtitle] = useState(0);
+  const containerRef = useRef(null);
   const sketchRef = useRef<null | p5>(null);
   const subtitleRef = useRef(null);
 
-  // Incrementally fades in subtitle elements
   useEffect(() => {
+    // Incrementally fades in subtitle elements
     setTimeout(() => setLoadSubtitle(1), 600);
     setTimeout(() => setLoadSubtitle(2), 1200);
     setTimeout(() => setLoadSubtitle(3), 1800);
 
-    const splash: null | HTMLElement = document.querySelector("#splash");
-    if (splash) {
-      sketchRef.current = new window.p5(splashSketch, splash);
+    let mounted = true;
+    if (mounted && containerRef.current) {
+      sketchRef.current = new window.p5(splashSketch, containerRef.current);
     }
     return () => {
+      mounted = false;
       sketchRef.current?.remove();
     };
   }, []);
@@ -39,7 +39,7 @@ const Intro = () => {
   return (
     <>
       <SplashBg />
-      <section id="splash" className="splash">
+      <section ref={containerRef} className="splash" id="splash">
         <header className="header">
           <h1>
             {title} <span className="name">{firstName}</span>.
@@ -59,10 +59,11 @@ const Intro = () => {
           </p>
         </header>
         <div className="explore">
-          <p>{explore}</p>
-          <a href={`${blog.path}${blog.hash}`} className="img-link">
+          <p>{explore.text}</p>
+          <a href={blog.hash} title={explore.title}>
             <FontAwesomeIcon
-              className="explore-icon ripple"
+              className="link-icon"
+              title={explore.title}
               icon={Icons.explore}
               swapOpacity
             />

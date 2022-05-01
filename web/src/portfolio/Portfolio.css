@@ -53,10 +53,26 @@ h2 {
   margin: 1rem;
 }
 
-a:not(.img-link) {
+a {
   color: var(--color-accent-light);
   text-decoration: none;
-  transition: color 0.5s ease;
+  transition: color 500ms ease;
+}
+
+hr {
+  border: 1px solid var(--color-accent-dark);
+  margin: 40px 0 10px 0;
+}
+
+.link-icon {
+  color: var(--color-accent-light);
+  cursor: pointer;
+  font-size: var(--size-xlarge);
+  transition: color 500ms ease;
+}
+.disabled-icon {
+  font-size: var(--size-xlarge);
+  color: #999;
 }
 
 span.anchor {
@@ -120,6 +136,15 @@ span.anchor {
   transform: translateY(100%);
 }
 
+.card-placeholder {
+  display: block;
+  background-image: url(assets/code-bg.jpg);
+  border: 20px solid var(--color-bg-dark);
+  filter: blur(1px) sepia(1);
+  width: 100%;
+  aspect-ratio: 5/3;
+}
+
 .button {
   border: 0;
   display: flex;
@@ -172,14 +197,14 @@ span.anchor {
 }
 
 @media only screen and (hover: hover) and (pointer: fine) {
-  a:not(.img-link):hover, a:not(.img-link):focus-visible {
+  a:hover, a:focus-visible, .link-icon:hover {
     color: var(--color-accent-dark);
   }
   .button:hover {
     background-color:  var(--color-accent-dark);
   }
   a:hover .card > img.blur, a:focus-visible .card > img.blur {
-    filter: blur(3px);
+    filter: blur(3px) sepia(1);
   }
   a:hover .card > .title.slide-up, a:focus-visible .card > .title.slide-up {
     transform: translateY(0);
@@ -198,14 +223,14 @@ span.anchor {
     color: var(--color-accent-dark);
   }
 
-  .ripple {
+  .link-icon {
     transition: color 500ms, transform 500ms !important;
   }
-  .ripple:hover {
+  .link-icon:hover {
     color: var(--color-accent-light);
     transform: scale(1);
   }
-  .ripple:active {
+  .link-icon:active {
     color: var(--color-accent-dark);
     transform: scale(1.2);
     transition: color 0, transform 0 !important;

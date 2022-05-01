@@ -1,7 +1,7 @@
 import "./Portfolio.css";
 import ErrorBoundary from "ErrorBoundary";
 import useMetaTag from "hooks/useMetaTag";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "./components/footer";
 import HashAnchor from "./components/HashAnchor";
@@ -27,23 +27,21 @@ const Portfolio = ({ children }: Props) => {
     }, 100);
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-
-    // Required because of HashLink using ids without a hash
+  useLayoutEffect(() => {
+    // Required because of HashAnchor using ids without a hash
     const scrollIntoView = () => {
       const hash = location.hash.substring(1);
       if (!hash) {
+        window.scrollTo(0, 0);
         return;
       }
       const el = document.getElementById(hash);
       if (el) {
-        window.scrollTo({ top: el.offsetTop });
+        window.scrollTo({ top: el.offsetTop, behavior: "smooth" });
       }
     };
-
-    setTimeout(scrollIntoView, 300);
-  }, [location.pathname]);
+    setTimeout(scrollIntoView, 100);
+  }, [location.hash, location.pathname]);
 
   return (
     <>

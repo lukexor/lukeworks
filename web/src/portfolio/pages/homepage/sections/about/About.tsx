@@ -3,9 +3,7 @@ import copy from "portfolio/data/copy.json";
 import routes from "routes.json";
 
 const {
-  portfolio: {
-    sections: { about },
-  },
+  menu: { about },
 } = routes;
 
 const About = () => (

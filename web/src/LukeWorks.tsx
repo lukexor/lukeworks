@@ -1,28 +1,38 @@
 import "./LukeWorks.css";
 import legacyRoutes from "legacyRoutes.json";
 import { lazy, Suspense } from "react";
-import { Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import routes from "routes.json";
 import ErrorBoundary from "./ErrorBoundary";
 
-const { resume, login, admin, post, portfolio } = routes;
+const { resume, login, admin, post, portfolio, tetanes, p5js } = routes;
 
 const GuestGuard = lazy(() => import("guards/GuestGuard"));
 const AuthGuard = lazy(() => import("guards/AuthGuard"));
 const NotFound = lazy(() => import("./NotFound"));
+const Admin = lazy(() => import("admin/Admin"));
+const Login = lazy(() => import("admin/Login"));
 
 const Portfolio = lazy(() => import("portfolio"));
 const Homepage = lazy(() => import("portfolio/pages/homepage"));
 const Post = lazy(() => import("portfolio/pages/post"));
+const P5js = lazy(() => import("portfolio/pages/p5js/P5js"));
+const Tetanes = lazy(() => import("portfolio/pages/tetanes"));
 const Resume = lazy(() => import("resume/Resume"));
-const Admin = lazy(() => import("admin/Admin"));
-const Login = lazy(() => import("admin/Login"));
 
 const LukeWorks = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   return (
-    <ErrorBoundary navigate={navigate}>
+    <ErrorBoundary key={location.pathname} navigate={navigate}>
       <Suspense fallback={null}>
         <Routes>
           <Route
@@ -44,8 +54,11 @@ const LukeWorks = () => {
             ))}
             <Route path={post.path} element={<Post />} />
             <Route path={portfolio.path} element={<Homepage />} />
+            <Route path={tetanes.path} element={<Tetanes />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
           <Route path={resume.path} element={<Resume />} />
+          <Route path={p5js.path} element={<P5js />} />
           <Route
             path={login.path}
             element={
@@ -62,7 +75,6 @@ const LukeWorks = () => {
               </AuthGuard>
             }
           />
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
     </ErrorBoundary>

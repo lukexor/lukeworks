@@ -2,7 +2,7 @@ import "./Header.css";
 import features from "../../data/features.json";
 import Logo from "./Logo";
 import Menu from "./Menu";
-import Search from "./Search";
+import SearchBox from "./Search";
 
 const Header = () => {
   return (
@@ -10,7 +10,7 @@ const Header = () => {
       <div className="header-bar">
         <Logo />
         <div className="header-icons">
-          {features.search && <Search />}
+          {features.search && <SearchBox />}
           <Menu />
         </div>
       </div>

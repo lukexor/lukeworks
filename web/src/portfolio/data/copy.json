@@ -12,6 +12,7 @@
   "Footer": {
     "copyright": "©",
     "rightsReserved": "All Rights Reserved",
+    "backToTop": "Back to Top",
     "socialIcons": [
       {
         "icon": "github",
@@ -46,12 +47,23 @@
       "Designer.",
       "Thinker."
     ],
-    "explore": "Have a look around!"
+    "explore": {
+      "title": "Explore",
+      "text": "Have a look around!"
+    }
   },
   "Logo": {
     "text": "LP"
   },
   "Search": {
     "placeholder": "Search..."
+  },
+  "NotFound": {
+    "title": "$ 404 Segmentation fault",
+    "message": "The page you're looking for is out of bounds.",
+    "action1": "Check your url, file a ",
+    "linkText1": "bug report",
+    "action2": ", or ",
+    "linkText2": "head back home"
   }
 }

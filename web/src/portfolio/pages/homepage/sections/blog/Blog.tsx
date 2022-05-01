@@ -1,13 +1,12 @@
 import HashAnchor from "portfolio/components/HashAnchor";
 import blogPosts from "portfolio/data/blogPosts.json";
 import { Image } from "portfolio/models/post";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import routes from "routes.json";
 
 const {
-  portfolio: {
-    sections: { blog },
-  },
+  menu: { blog },
 } = routes;
 
 type BlogPostCardProps = {
@@ -30,24 +29,26 @@ const BlogPostCard = ({ title, thumbnail, url }: BlogPostCardProps) => {
 };
 
 const Blog = () => {
+  const [posts] = useState(() =>
+    [...blogPosts]
+      .filter((post) => post.publishedOn && post.thumbnail)
+      .slice(0, 9)
+  );
   return (
     <section className="page-section">
       <HashAnchor id={blog.hash} />
       <h2>Blog</h2>
       <section className="card-grid">
-        {[...blogPosts]
-          .filter((post) => post.publishedOn && post.thumbnail)
-          .slice(0, 9)
-          .map(({ id, title, thumbnail, url }) =>
-            thumbnail ? (
-              <BlogPostCard
-                key={id}
-                title={title}
-                thumbnail={thumbnail}
-                url={url}
-              />
-            ) : null
-          )}
+        {posts.map(({ id, title, thumbnail, url }) =>
+          thumbnail ? (
+            <BlogPostCard
+              key={id}
+              title={title}
+              thumbnail={thumbnail}
+              url={url}
+            />
+          ) : null
+        )}
       </section>
     </section>
   );

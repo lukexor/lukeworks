@@ -2,7 +2,9 @@ import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import {
   faAngleDoubleUp,
   faBars,
-  faChevronCircleDown,
+  faCircleChevronDown,
+  faCircleChevronLeft,
+  faCircleChevronRight,
   faEnvelope,
   faRssSquare,
   faSearch,
@@ -18,7 +20,9 @@ const Icons = {
   linkedIn: faLinkedin,
   rss: faRssSquare,
   email: faEnvelope,
-  explore: faChevronCircleDown,
+  explore: faCircleChevronDown,
+  previous: faCircleChevronLeft,
+  next: faCircleChevronRight,
 };
 
 type IconList = typeof Icons;
