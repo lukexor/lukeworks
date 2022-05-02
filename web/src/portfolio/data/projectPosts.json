@@ -1,5 +1,46 @@
 [
   {
+    "id": 28,
+    "url": "pix-engine",
+    "title": "PixEngine - A Cross-Platform Graphics Library",
+    "image": null,
+    "content": "**PixEngine** is a cross-platform graphics & UI library for simple games, visualizations, digital art, and graphics applications written in [Rust][rust], supporting [SDL2][sdl2] (and soon [Web-Assembly][wasm]!) renderers.\r\n\r\nThe primary goal of this library is to be simple to setup and use for graphics or algorithm exploration and is not meant to be as fully-featured as other, larger graphics libraries.\r\nIt is intended to be more than just a toy library, however, and can be used to drive real applications. The Tetanes NES emulator, for example uses pix_engine for rendering, window and event handling.\r\nSome examples of things you can create with pix-engine:\r\n<ul>\r\n<li>2D ray casting of scenes or objects.</li>\r\n<li>2D games like Asteroids, Tetris, Pong, or platformers including sound effects, music and UI elements.</li>\r\n<li>User interfaces for basic applications or configuration.</li>\r\n<li>Algorithm visualizations for sorting, searching, or particle simulations.</li>\r\n<li>Image viewing and editing.</li>\r\n<li>Visual art.</li>\r\n</ul>\r\n\r\nYou can check out the code on [github].\r\n\r\n[rust]: https://www.rust-lang.org/tools/install\r\n[sdl2]: https://www.libsdl.org/\r\n[wasm]: https://www.rust-lang.org/what/wasm\r\n[github]: https://github.com/lukexor/pix-engine",
+    "website": "https://github.com/lukexor/pix-engine",
+    "category": "",
+    "tags": [],
+    "minutesToRead": 0,
+    "likes": 0,
+    "startedOn": "2019-09-29 23:14:15.000000",
+    "completedOn": null,
+    "publishedOn": "2022-05-02 00:00:00.000000",
+    "createdOn": "2022-05-02 00:00:00.000000",
+    "updatedOn": "2022-05-02 00:00:00.000000"
+  },
+  {
+    "id": 27,
+    "url": "tetanes",
+    "title": "TetaNES - An NES Emulator written in Rust",
+    "thumbnail": {
+      "src": "/images/blog/tetanes.webp",
+      "alt": "TetaNES Logo"
+    },
+    "image": {
+      "src": "/images/blog/tetanes.webp",
+      "alt": "TetaNES Logo"
+    },
+    "content": "**TetaNES** is an emulator for the Nintendo Entertainment System (NES) released in 1985, written using [Rust][rust] and [SDL2][sdl2].\r\n\r\nIt started as a personal curiosity that turned into a passion project to demonstrate a proficiency in Rust and in digital sound production. It can play most games but is still a work-in-progress. I hope to transform it into a fully-featured and performant NES emulator. It is my hope to see a Rust emulator rise in popularity and compete with the more popular C and C++ versions.\r\n\r\n<strong>TetaNES</strong> is also meant to showcase how clean and readable low-level Rust programs can be in addition to them having the type and memory-safety guarantees that Rust is known for.\r\n\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/donkey_kong.webp\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/super_mario_bros.webp\" width=\"300\" style=\"padding: 5px\">\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/legend_of_zelda.webp\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/metroid.webp\" width=\"300\" style=\"padding: 5px\">\r\n\r\nYou can check out the code on [github] and play it on the [web]!\r\n\r\n<small>photo credit: [Cerberus] via [Zsolt Palatinus] - [copyright]</small>\r\n\r\n[rust]: https://www.rust-lang.org/tools/install\r\n[sdl2]: https://www.libsdl.org/\r\n[github]: https://github.com/lukexor/tetanes\r\n[web]: /tetanes-web\r\n[Cerberus]: https://unsplash.com/photos/pEK3AbP8wa4\r\n[Zsolt Palatinus]: https://unsplash.com/@sunitalap\r\n[copyright]: https://unsplash.com/license",
+    "website": "https://github.com/lukexor/tetanes",
+    "category": "",
+    "tags": [],
+    "minutesToRead": 0,
+    "likes": 0,
+    "startedOn": "2019-04-01 00:00:00.000000",
+    "completedOn": null,
+    "publishedOn": "2019-08-21 15:24:57.000000",
+    "createdOn": "2019-08-21 15:19:30.000000",
+    "updatedOn": "2019-08-21 15:25:09.000000"
+  },
+  {
     "id": 26,
     "url": "fluid-simulation",
     "title": "Fluid Simulation",
@@ -245,30 +286,6 @@
     "publishedOn": "2019-06-01 00:00:00.000000",
     "createdOn": "2019-08-21 15:42:14.000000",
     "updatedOn": "2019-08-21 15:46:41.000000"
-  },
-  {
-    "id": 14,
-    "url": "tetanes",
-    "title": "TetaNES - An NES Emulator written in Rust",
-    "thumbnail": {
-      "src": "/images/blog/tetanes.webp",
-      "alt": "TetaNES Logo"
-    },
-    "image": {
-      "src": "/images/blog/tetanes.webp",
-      "alt": "TetaNES Logo"
-    },
-    "content": "**TetaNES** is an emulator for the Nintendo Entertainment System (NES) released in 1985, written using [Rust][rust] and [SDL2][sdl2].\r\n\r\nIt started as a personal curiosity that turned into a passion project to demonstrate a proficiency in Rust and in digital sound production. It can play most games but is still a work-in-progress. I hope to transform it into a fully-featured and performant NES emulator. It is my hope to see a Rust emulator rise in popularity and compete with the more popular C and C++ versions.\r\n\r\n<strong>TetaNES</strong> is also meant to showcase how clean and readable low-level Rust programs can be in addition to them having the type and memory-safety guarantees that Rust is known for.\r\n\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/donkey_kong.webp\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/super_mario_bros.webp\" width=\"300\" style=\"padding: 5px\">\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/legend_of_zelda.webp\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/metroid.webp\" width=\"300\" style=\"padding: 5px\">\r\n\r\nYou can check out the code on [github] and play it on the [web]!\r\n\r\n<small>photo credit: [Cerberus] via [Zsolt Palatinus] - [copyright]</small>\r\n\r\n[rust]: https://www.rust-lang.org/tools/install\r\n[sdl2]: https://www.libsdl.org/\r\n[github]: https://github.com/lukexor/tetanes\r\n[web]: /tetanes-web\r\n[Cerberus]: https://unsplash.com/photos/pEK3AbP8wa4\r\n[Zsolt Palatinus]: https://unsplash.com/@sunitalap\r\n[copyright]: https://unsplash.com/license",
-    "website": "https://github.com/lukexor/tetanes",
-    "category": "",
-    "tags": [],
-    "minutesToRead": 0,
-    "likes": 0,
-    "startedOn": "2019-04-01 00:00:00.000000",
-    "completedOn": "2019-06-09 00:00:00.000000",
-    "publishedOn": "2019-08-21 15:24:57.000000",
-    "createdOn": "2019-08-21 15:19:30.000000",
-    "updatedOn": "2019-08-21 15:25:09.000000"
   },
   {
     "id": 13,
