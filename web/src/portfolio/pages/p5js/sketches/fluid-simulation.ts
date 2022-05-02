@@ -6,10 +6,10 @@ const fluidSimSketch = (p: p5): void => {
   const SCALE = 4;
   const ITER = 3;
 
-  const DT = 0.02; // Time Step of Fluid
-  const DIFFUSE = 0.00008; // Diffusion of Fluid
-  const VISC = 0.000000001; // Viscosity of Fluid
-  const VEL = 2.0; // Velocity of fluid from perlin noise
+  const DT = 0.03; // Time Step of Fluid
+  const DIFFUSE = 0.00006; // Diffusion of Fluid
+  const VISC = 0.0000000015; // Viscosity of Fluid
+  const VEL = 2.8; // Velocity of fluid from perlin noise
 
   let fluid: Fluid;
   let demo = true;
@@ -33,7 +33,7 @@ const fluidSimSketch = (p: p5): void => {
     fluid = new Fluid(DT, DIFFUSE, VISC);
 
     fx = p.width / 2;
-    fy = p.height / 2;
+    fy = p.height - 30;
 
     p.frameRate(30);
     awaitClickStart(p, undefined, () => {
@@ -53,18 +53,6 @@ const fluidSimSketch = (p: p5): void => {
     }
     if (demo) {
       drag(fx, fy);
-      fx += p.random(-10, 10);
-      fy += p.random(-10, 10);
-      if (fx < 0) {
-        fx += 10;
-      } else if (fx > p.width) {
-        fx -= 10;
-      }
-      if (fy < 0) {
-        fy += 10;
-      } else if (fy > p.height) {
-        fy -= 10;
-      }
     } else if (p.mouseIsPressed) {
       drag(p.mouseX, p.mouseY);
     }

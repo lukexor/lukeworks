@@ -1,6 +1,7 @@
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import {
   faAngleDoubleUp,
+  faAngleDown,
   faBars,
   faCircleChevronDown,
   faCircleChevronLeft,
@@ -23,6 +24,7 @@ const Icons = {
   explore: faCircleChevronDown,
   previous: faCircleChevronLeft,
   next: faCircleChevronRight,
+  more: faAngleDown,
 };
 
 type IconList = typeof Icons;

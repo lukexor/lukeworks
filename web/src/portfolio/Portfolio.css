@@ -91,6 +91,30 @@ span.anchor {
   padding: var(--header-height) var(--page-padding);
 }
 
+.page-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: -25px;
+}
+
+.post-enter {
+  opacity: 0;
+}
+
+.post-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.post-exit {
+  opacity: 1;
+}
+
+.post-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}
+
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -107,7 +131,7 @@ span.anchor {
   overflow: hidden;
 }
 
-.card > img {
+.card img {
   display: block;
   width: 100%;
   aspect-ratio: 5/3;
@@ -115,7 +139,7 @@ span.anchor {
   object-position: center;
 }
 
-.card > .title {
+.card .title {
   position: absolute;
   inset: 0;
   font-size: var(--size-large);
@@ -128,11 +152,11 @@ span.anchor {
   text-align: center;
 }
 
-.card > img, .card > .title {
+.card img, .card .title {
   transition: 200ms ease-in-out;
 }
 
-.card > .title.slide-up {
+.card .title.slide-up {
   transform: translateY(100%);
 }
 
@@ -203,19 +227,19 @@ span.anchor {
   .button:hover {
     background-color:  var(--color-accent-dark);
   }
-  a:hover .card > img.blur, a:focus-visible .card > img.blur {
+  a:hover .card img.blur, a:focus-visible .card img.blur {
     filter: blur(3px) sepia(1);
   }
-  a:hover .card > .title.slide-up, a:focus-visible .card > .title.slide-up {
+  a:hover .card .title.slide-up, a:focus-visible .card .title.slide-up {
     transform: translateY(0);
   }
 }
 
 @media only screen and (pointer: coarse) {
-  .card > img.blur {
+  .card img.blur {
     filter: blur(3px);
   }
-  .card > .title.slide-up {
+  .card .title.slide-up {
     transform: translateY(0);
   }
 

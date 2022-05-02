@@ -1,8 +1,10 @@
 import HashAnchor from "portfolio/components/HashAnchor";
+import ShowMore from "portfolio/components/post/ShowMore";
 import blogPosts from "portfolio/data/blogPosts.json";
-import { Image } from "portfolio/models/post";
-import { useState } from "react";
+import { Image, Post } from "portfolio/models/post";
+import { createRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 import routes from "routes.json";
 
 const {
@@ -29,27 +31,47 @@ const BlogPostCard = ({ title, thumbnail, url }: BlogPostCardProps) => {
 };
 
 const Blog = () => {
-  const [posts] = useState(() =>
-    [...blogPosts]
-      .filter((post) => post.publishedOn && post.thumbnail)
-      .slice(0, 9)
-  );
+  const [postCount, setPostCount] = useState(9);
+  const [totalCount, setTotalCount] = useState(0);
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  useEffect(() => {
+    const posts = [...blogPosts].filter(
+      (post) => post.publishedOn && post.thumbnail
+    );
+    setPosts(posts.slice(0, postCount));
+    setTotalCount(posts.length);
+  }, [postCount]);
+
   return (
     <section className="page-section">
       <HashAnchor id={blog.hash} />
       <h2>Blog</h2>
-      <section className="card-grid">
-        {posts.map(({ id, title, thumbnail, url }) =>
-          thumbnail ? (
-            <BlogPostCard
-              key={id}
-              title={title}
-              thumbnail={thumbnail}
-              url={url}
-            />
-          ) : null
-        )}
+      <section>
+        <TransitionGroup component="span" className="card-grid">
+          {posts.map(({ id, title, thumbnail, url }) => {
+            const postRef = createRef<HTMLElement>();
+            return thumbnail ? (
+              <CSSTransition
+                key={id}
+                nodeRef={postRef}
+                timeout={500}
+                classNames="post"
+              >
+                <BlogPostCard
+                  key={id}
+                  title={title}
+                  thumbnail={thumbnail}
+                  url={url}
+                />
+              </CSSTransition>
+            ) : (
+              <></>
+            );
+          })}
+        </TransitionGroup>
       </section>
+      <ShowMore count={postCount} setCount={setPostCount} total={totalCount} />
     </section>
   );
 };
