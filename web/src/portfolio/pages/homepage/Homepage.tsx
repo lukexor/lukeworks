@@ -5,14 +5,16 @@ import Contact from "./sections/contact";
 import Intro from "./sections/intro";
 import Projects from "./sections/projects";
 
-const Homepage = () => (
-  <main className="homepage">
-    <Intro />
-    <Blog />
-    <Projects />
-    <About />
-    <Contact />
-  </main>
-);
+const Homepage = () => {
+  return (
+    <main className="homepage">
+      <Intro />
+      <Blog />
+      <Projects />
+      <About />
+      <Contact />
+    </main>
+  );
+};
 
 export default Homepage;

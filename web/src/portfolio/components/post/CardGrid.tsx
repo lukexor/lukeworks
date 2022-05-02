@@ -1,4 +1,5 @@
 import classnames from "classnames";
+import useOnScreen from "hooks/useOnScreen";
 import { Image, Post } from "portfolio/models/post";
 import { createRef, forwardRef } from "react";
 import { Link } from "react-router-dom";
@@ -16,15 +17,18 @@ type CardGridProps = {
 
 const Card = forwardRef<HTMLElement, CardProps>(
   ({ title, thumbnail, url }, ref) => {
+    const [imgRef, isImgVisible] = useOnScreen<HTMLDivElement>();
     return (
       <article ref={ref}>
         <Link to={url}>
           <div className="card">
-            {thumbnail ? (
-              <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
-            ) : (
-              <div className="card-placeholder" />
-            )}
+            <div ref={imgRef}>
+              {isImgVisible && thumbnail ? (
+                <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
+              ) : (
+                <div className="card-placeholder" />
+              )}
+            </div>
             <div
               className={classnames({ title: true, "slide-up": !!thumbnail })}
             >
@@ -41,7 +45,7 @@ Card.displayName = "Card";
 
 const CardGrid = ({ posts }: CardGridProps) => {
   return (
-    <section>
+    <section className="lazy">
       <TransitionGroup component="span" className="card-grid">
         {posts.map(({ id, title, thumbnail, url }) => {
           const postRef = createRef<HTMLElement>();

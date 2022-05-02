@@ -12,7 +12,7 @@ const useOnScreen = <T extends Element>(
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry) {
+        if (entry && entry.isIntersecting) {
           setIsVisible(entry.isIntersecting);
         }
       },

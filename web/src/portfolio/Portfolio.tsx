@@ -56,7 +56,7 @@ const Portfolio = ({ children }: Props) => {
             {children}
           </ErrorBoundary>
         </div>
-        <div ref={footerRef} className="footer-wrapper">
+        <div ref={footerRef} className="lazy">
           {isFooterVisible ? <Footer /> : null}
         </div>
       </div>
