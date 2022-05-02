@@ -1,14 +1,16 @@
 import "./Portfolio.css";
 import ErrorBoundary from "ErrorBoundary";
 import useMetaTag from "hooks/useMetaTag";
-import { useEffect, useLayoutEffect, useState } from "react";
+import useOnScreen from "hooks/useOnScreen";
+import { lazy, useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Footer from "./components/footer";
 import HashAnchor from "./components/HashAnchor";
 import Header from "./components/header";
 import copy from "./data/copy.json";
 
 const { title, description } = copy.Head;
+
+const Footer = lazy(() => import("./components/footer"));
 
 type Props = {
   children: React.ReactNode;
@@ -18,6 +20,7 @@ const Portfolio = ({ children }: Props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [footerRef, isFooterVisible] = useOnScreen<HTMLDivElement>();
 
   useMetaTag({ title, description });
 
@@ -53,7 +56,9 @@ const Portfolio = ({ children }: Props) => {
             {children}
           </ErrorBoundary>
         </div>
-        <Footer />
+        <div ref={footerRef} className="footer-wrapper">
+          {isFooterVisible ? <Footer /> : null}
+        </div>
       </div>
     </>
   );

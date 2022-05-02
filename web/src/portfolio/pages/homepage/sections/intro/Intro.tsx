@@ -28,7 +28,7 @@ const Intro = () => {
 
     let mounted = true;
     if (mounted && containerRef.current) {
-      sketchRef.current = new window.p5(splashSketch, containerRef.current);
+      sketchRef.current = new p5(splashSketch, containerRef.current);
     }
     return () => {
       mounted = false;

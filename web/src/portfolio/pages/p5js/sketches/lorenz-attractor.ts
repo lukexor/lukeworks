@@ -16,7 +16,7 @@ const lorenzAttractorSketch = (p: p5) => {
   p.disableFriendlyErrors = true;
 
   p.preload = () => {
-    font = p.loadFont("/noto_sans_regular.ttf");
+    font = p.loadFont("/fonts/noto_sans_regular.ttf");
   };
 
   p.setup = () => {

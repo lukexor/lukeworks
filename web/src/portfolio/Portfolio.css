@@ -5,8 +5,8 @@
   --color-bg-light: #121924;
   --color-primary: #6FC3DF;
   --color-secondary: #D5EEEE;
-  --font-header: "Abril Fatface, serif";
-  --font-body: "Rubik, sans-serif";
+  --font-header: "Yatra One", cursive;
+  --font-body: "Rubik", sans-serif;
   --size-xsmall: 0.25rem;
   --size-small: 0.5rem;
   --size-medsmall: 0.75rem;
@@ -14,9 +14,9 @@
   --size-medlarge: 1.25rem;
   --size-large: 1.5rem;
   --size-xlarge: 2rem;
-  --size-xxlarge: 3rem;
-  --size-xxxlarge: 3.5rem;
-  --header-height: 2.5em;
+  --size-xxlarge: 2.5rem;
+  --size-xxxlarge: 3.0rem;
+  --header-height: 2.0em;
   --footer-height: 9em;
   --page-padding: 20px;
   --bp-desktop-large: 1440px;
@@ -34,23 +34,27 @@ body {
   -webkit-font-smoothing: antialiased;
   color: var(--color-secondary);
   font-family: var(--font-body);
-  font-size: 1.2em;
+  font-size: 1.1em;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color: var(--color-primary);
-  font-family: var(--font-heading);
+  font-family: var(--font-header);
   font-weight: normal;
   text-align: center;
 }
 
 h1 {
-  font-size: var(--size-xlarge);
+  font-size: var(--size-large);
 }
 
 h2 {
   font-size: var(--size-large);
   margin: 1rem;
+}
+
+h3 {
+  font-size: var(--size-large);
 }
 
 a {
@@ -95,6 +99,10 @@ span.anchor {
   display: flex;
   justify-content: center;
   margin-top: -25px;
+}
+
+.footer-wrapper {
+  height: 50px;
 }
 
 .post-enter {
@@ -142,7 +150,7 @@ span.anchor {
 .card .title {
   position: absolute;
   inset: 0;
-  font-size: var(--size-large);
+  font-size: var(--size-medlarge);
   padding: 1rem;
   background: rgba(12, 20, 31, 0.8);
   display: flex;
@@ -162,7 +170,7 @@ span.anchor {
 
 .card-placeholder {
   display: block;
-  background-image: url(assets/code-bg.jpg);
+  background-image: url(assets/code-bg.webp);
   border: 20px solid var(--color-bg-dark);
   filter: blur(1px) sepia(1);
   width: 100%;
@@ -187,7 +195,7 @@ span.anchor {
   }
 
   h2 {
-    font-size: var(--size-xlarge);
+    font-size: var(--size-xxlarge);
   }
 }
 

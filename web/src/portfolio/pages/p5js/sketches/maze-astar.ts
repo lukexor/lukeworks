@@ -4,7 +4,7 @@ import { awaitClickStart } from "../utils";
 const mazeAstarSketch = (p: p5) => {
   const cellSize = p.windowWidth / 30;
   const canvasWidth = p.windowWidth;
-  const canvasHeight = cellSize * 15;
+  const canvasHeight = cellSize * 13;
 
   let createMazeBtn: p5.Element;
   let solveMazeBtn: p5.Element;
@@ -52,6 +52,7 @@ const mazeAstarSketch = (p: p5) => {
 
       msg = p.createP("");
       msg.style("padding", "0 5px");
+      msg.style("margin", "0");
     });
   };
 

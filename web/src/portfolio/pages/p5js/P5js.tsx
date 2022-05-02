@@ -34,10 +34,7 @@ const P5js = () => {
       try {
         const sketch = await import(`./sketches/${title}`);
         if (mounted && containerRef.current) {
-          sketchRef.current = new window.p5(
-            sketch.default,
-            containerRef.current
-          );
+          sketchRef.current = new p5(sketch.default, containerRef.current);
         }
       } catch (err) {
         console.error(err);

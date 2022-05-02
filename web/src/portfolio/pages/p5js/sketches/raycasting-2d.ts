@@ -76,7 +76,7 @@ const raycasting2DSketch = (p: p5) => {
         boundaries.forEach((b) => {
           const pt = r.cast(b);
           if (pt) {
-            const dist = window.p5.Vector.dist(this.pos, pt);
+            const dist = p5.Vector.dist(this.pos, pt);
             if (dist < closestDist) {
               closestDist = dist;
               closest = pt;
@@ -96,7 +96,7 @@ const raycasting2DSketch = (p: p5) => {
 
     constructor(pos: p5.Vector, angle: number) {
       this.pos = pos;
-      this.looking = window.p5.Vector.fromAngle(angle);
+      this.looking = p5.Vector.fromAngle(angle);
     }
 
     draw() {

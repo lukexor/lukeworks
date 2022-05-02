@@ -12,7 +12,7 @@ const matrixSketch = (p: p5) => {
   const GLYPH_COLOR_DARK = [0, 155, 0];
   const GLYPH_HIGHLIGHT = [200, 255, 200];
   const GLYPH_HIGHLIGHT_PROBABILITY = 25;
-  const MORPH_PROBABILITY = 20;
+  const MORPH_PROBABILITY = 10;
   const MORPH_INTERVAL_MIN = 2;
   const MORPH_INTERVAL_MAX = 20;
 
@@ -35,31 +35,33 @@ const matrixSketch = (p: p5) => {
 
   p.setup = () => {
     p.createCanvas(p.windowWidth, p.windowHeight);
-    p.background(BG_COLOR);
-    p.textStyle(p.BOLD);
-    p.textFont(GLYPH_FONT);
-    p.frameRate(30);
+    p.fill(255);
 
-    for (let i = 0; i < 10; ++i) {
-      chars.push(i.toString());
-    }
-    for (let i = 0; i < 96; ++i) {
-      chars.push(String.fromCharCode(0x30a0 + i));
-    }
+    awaitClickStart(p, undefined, () => {
+      p.background(BG_COLOR);
+      p.textStyle(p.BOLD);
+      p.textFont(GLYPH_FONT);
+      p.frameRate(30);
 
-    let x = 0;
-    for (let i = 0; i < p.floor(p.width / GLYPH_SIZE) - 1; ++i) {
-      const y = p.random(START_Y_MIN, START_Y_MAX);
-      const stream = new Stream(x, y);
-      streams.push(stream);
-      x += GLYPH_SIZE;
-    }
+      for (let i = 0; i < 10; ++i) {
+        chars.push(i.toString());
+      }
+      for (let i = 0; i < 96; ++i) {
+        chars.push(String.fromCharCode(0x30a0 + i));
+      }
 
-    awaitClickStart(p);
+      let x = 0;
+      for (let i = 0; i < p.floor(p.width / GLYPH_SIZE) - 1; ++i) {
+        const y = p.random(START_Y_MIN, START_Y_MAX);
+        const stream = new Stream(x, y);
+        streams.push(stream);
+        x += GLYPH_SIZE;
+      }
+    });
   };
 
   p.draw = () => {
-    if (!p.isLooping) {
+    if (!p.isLooping()) {
       return;
     }
     p.background(BG_COLOR);

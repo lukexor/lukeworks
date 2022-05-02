@@ -9,7 +9,7 @@
 .bg {
   opacity: 20%;
   background-color: var(--colors-primary);
-  background-image: url(assets/code-bg.jpg);
+  background-image: url(assets/code-bg.webp);
   background-repeat: repeat;
   background-size: cover;
   background-blend-mode: hard-light;
@@ -28,7 +28,7 @@
   --glitch-transform: 30px;
   opacity: var(--glitch-opacity);
   background-color: var(--glitch-color);
-  background-image: url(assets/code-bg.jpg);
+  background-image: url(assets/code-bg.webp);
   background-repeat: repeat;
   background-size: cover;
   background-blend-mode: luminosity;

@@ -4,7 +4,7 @@
     "url": "fluid-simulation",
     "title": "Fluid Simulation",
     "thumbnail": {
-      "src": "/images/projects/fluid-simulation.png",
+      "src": "/images/projects/fluid-simulation.webp",
       "alt": "Fluid Simulation"
     },
     "image": null,
@@ -25,7 +25,7 @@
     "url": "fourier",
     "title": "Discrete Fourier Transforms",
     "thumbnail": {
-      "src": "/images/projects/fourier.png",
+      "src": "/images/projects/fourier.webp",
       "alt": "Discrete Fourier Transform"
     },
     "image": null,
@@ -46,7 +46,7 @@
     "url": "asteroids",
     "title": "Asteroids!",
     "thumbnail": {
-      "src": "/images/projects/asteroids.png",
+      "src": "/images/projects/asteroids.webp",
       "alt": "Asteroids"
     },
     "image": null,
@@ -67,7 +67,7 @@
     "url": "pong",
     "title": "Pong",
     "thumbnail": {
-      "src": "/images/projects/pong.png",
+      "src": "/images/projects/pong.webp",
       "alt": "Pong"
     },
     "image": null,
@@ -88,7 +88,7 @@
     "url": "lorenz-attractor",
     "title": "Lorenz Attractor",
     "thumbnail": {
-      "src": "/images/projects/lorenz-attractor.png",
+      "src": "/images/projects/lorenz-attractor.webp",
       "alt": "Lorenz Attractor"
     },
     "image": null,
@@ -109,7 +109,7 @@
     "url": "raycasting-2d",
     "title": "2D Raycasting",
     "thumbnail": {
-      "src": "/images/projects/raycasting-2d.png",
+      "src": "/images/projects/raycasting-2d.webp",
       "alt": "2D Raycasting"
     },
     "image": null,
@@ -130,7 +130,7 @@
     "url": "fireworks",
     "title": "Fireworks!",
     "thumbnail": {
-      "src": "/images/projects/fireworks.png",
+      "src": "/images/projects/fireworks.webp",
       "alt": "Fireworks"
     },
     "image": null,
@@ -151,7 +151,7 @@
     "url": "matrix",
     "title": "The Matrix Has You",
     "thumbnail": {
-      "src": "/images/projects/matrix.png",
+      "src": "/images/projects/matrix.webp",
       "alt": "The Matrix"
     },
     "image": null,
@@ -172,7 +172,7 @@
     "url": "maze-astar",
     "title": "Maze Generation and A* Search",
     "thumbnail": {
-      "src": "/images/projects/maze-astar.png",
+      "src": "/images/projects/maze-astar.webp",
       "alt": "Maze A* Search"
     },
     "image": null,
@@ -227,11 +227,11 @@
     "url": "haskelltaire",
     "title": "Haskelltaire",
     "thumbnail": {
-      "src": "/images/projects/haskelltaire.png",
+      "src": "/images/projects/haskelltaire.webp",
       "alt": "Haskelltaire"
     },
     "image": {
-      "src": "/images/projects/haskelltaire.png",
+      "src": "/images/projects/haskelltaire.webp",
       "alt": "Haskelltaire"
     },
     "content": "<strong>Haskelltaire</strong> is a simple 1-card draw game of Solitaire played from the command line written in just 500 lines of [Haskell]. It was done as part of a class project in functional programming and highlights how powerful and terse functional programming can be. The PlayingCard library can be easily adapted and generalized to allow the creation of many other card games.\r\n\r\n[Haskell]: https://www.haskell.org/",
@@ -251,14 +251,14 @@
     "url": "tetanes",
     "title": "TetaNES - An NES Emulator written in Rust",
     "thumbnail": {
-      "src": "/images/blog/tetanes.png",
+      "src": "/images/blog/tetanes.webp",
       "alt": "TetaNES Logo"
     },
     "image": {
-      "src": "/images/blog/tetanes.png",
+      "src": "/images/blog/tetanes.webp",
       "alt": "TetaNES Logo"
     },
-    "content": "**TetaNES** is an emulator for the Nintendo Entertainment System (NES) released in 1985, written using [Rust][rust] and [SDL2][sdl2].\r\n\r\nIt started as a personal curiosity that turned into a passion project to demonstrate a proficiency in Rust and in digital sound production. It can play most games but is still a work-in-progress. I hope to transform it into a fully-featured and performant NES emulator. It is my hope to see a Rust emulator rise in popularity and compete with the more popular C and C++ versions.\r\n\r\n<strong>TetaNES</strong> is also meant to showcase how clean and readable low-level Rust programs can be in addition to them having the type and memory-safety guarantees that Rust is known for.\r\n\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/donkey_kong.png\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/super_mario_bros.png\" width=\"300\" style=\"padding: 5px\">\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/legend_of_zelda.png\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/metroid.png\" width=\"300\" style=\"padding: 5px\">\r\n\r\nYou can check out the code on [github] and play it on the [web]!\r\n\r\n<small>photo credit: [Cerberus] via [Zsolt Palatinus] - [copyright]</small>\r\n\r\n[rust]: https://www.rust-lang.org/tools/install\r\n[sdl2]: https://www.libsdl.org/\r\n[github]: https://github.com/lukexor/tetanes\r\n[web]: /tetanes-web\r\n[Cerberus]: https://unsplash.com/photos/pEK3AbP8wa4\r\n[Zsolt Palatinus]: https://unsplash.com/@sunitalap\r\n[copyright]: https://unsplash.com/license",
+    "content": "**TetaNES** is an emulator for the Nintendo Entertainment System (NES) released in 1985, written using [Rust][rust] and [SDL2][sdl2].\r\n\r\nIt started as a personal curiosity that turned into a passion project to demonstrate a proficiency in Rust and in digital sound production. It can play most games but is still a work-in-progress. I hope to transform it into a fully-featured and performant NES emulator. It is my hope to see a Rust emulator rise in popularity and compete with the more popular C and C++ versions.\r\n\r\n<strong>TetaNES</strong> is also meant to showcase how clean and readable low-level Rust programs can be in addition to them having the type and memory-safety guarantees that Rust is known for.\r\n\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/donkey_kong.webp\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/super_mario_bros.webp\" width=\"300\" style=\"padding: 5px\">\r\n<img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/legend_of_zelda.webp\" width=\"300\" style=\"padding: 5px\"><img src=\"https://raw.githubusercontent.com/lukexor/tetanes/main/static/metroid.webp\" width=\"300\" style=\"padding: 5px\">\r\n\r\nYou can check out the code on [github] and play it on the [web]!\r\n\r\n<small>photo credit: [Cerberus] via [Zsolt Palatinus] - [copyright]</small>\r\n\r\n[rust]: https://www.rust-lang.org/tools/install\r\n[sdl2]: https://www.libsdl.org/\r\n[github]: https://github.com/lukexor/tetanes\r\n[web]: /tetanes-web\r\n[Cerberus]: https://unsplash.com/photos/pEK3AbP8wa4\r\n[Zsolt Palatinus]: https://unsplash.com/@sunitalap\r\n[copyright]: https://unsplash.com/license",
     "website": "https://github.com/lukexor/tetanes",
     "category": "",
     "tags": [],
@@ -275,11 +275,11 @@
     "url": "umflint-env-sci-club",
     "title": "UM-Flint Environmental Science Club Website",
     "thumbnail": {
-      "src": "/images/projects/umflint_env_club.png",
+      "src": "/images/projects/umflint_env_club.webp",
       "alt": "UM-Flint Environmental Science Club Website"
     },
     "image": {
-      "src": "/images/projects/umflint_env_club.png",
+      "src": "/images/projects/umflint_env_club.webp",
       "alt": "UM-Flint Environmental Science Club Website"
     },
     "content": "When I was attending the University of Michigan-Flint for a few years and majoring in Environmental Science, I became heavily involved in the Environmental Science Club. There wasn't a lot of members or general interest at the time, so I ended up being Vice President and maintainer of the club website. The existing website was incredibly dated and hard to maintain, so I designed and developed a new website. It's very dated by today's standards, but it served its purpose well to keep members up-to-date on club activities and local environmental news.",
@@ -299,11 +299,11 @@
     "url": "personal-portfolio",
     "title": "Personal Portfolio/Blog",
     "thumbnail": {
-      "src": "/images/projects/portfolio_blog.png",
+      "src": "/images/projects/portfolio_blog.webp",
       "alt": "Portfolio Website"
     },
     "image": {
-      "src": "/images/projects/portfolio_blog.png",
+      "src": "/images/projects/portfolio_blog.webp",
       "alt": "Portfolio Website"
     },
     "content": "This website. I've had many iterations over the years, but I settled on this design and have been really happy with it for now. It was my first project using Python/Django and I used it to learn the framework and to learn testing out various security measures such as a honeypot field to prevent bots from spamming, learning how to set up HTTPS, etc. It's been a lot of fun. I've also used it as a place to write and post about things that interest me.\r\n\r\nMy current work on this site is migrating over to a Rust/Rocket implementation. Updates coming soon!",
@@ -323,11 +323,11 @@
     "url": "mindyou",
     "title": "MindYou",
     "thumbnail": {
-      "src": "/images/projects/mindyou_main.png",
+      "src": "/images/projects/mindyou_main.webp",
       "alt": "MindYou Screenshot"
     },
     "image": {
-      "src": "/images/projects/mindyou_main.png",
+      "src": "/images/projects/mindyou_main.webp",
       "alt": "MindYou Screenshot"
     },
     "content": "<strong>MindYou</strong> is a feature-packed task management system for iPhone.\r\nMindYou takes the most useful ideas from top productivity methodologies and combines them together into a single digital platform that can keep up with you wherever you are, with whatever you're doing. Get Clear, Get Current, Get Creative, and Get Insight. You'll get more done in less time than you ever thought possible by keeping your mind on your tasks to keep your tasks off your mind.\r\n\r\n<p>Still under development.</p>\r\n<p>Based on <a title=\"Getting Things Done\" href=\"http://gettingthingsdone.com/\">Getting Things Done</a> by David Allen, and <a title=\"Bullet Journal\" href=\"http://bulletjournal.com/\">Bullet Journal</a> by Ryder Carroll</p>\r\n<br style=\"clear: both\">",

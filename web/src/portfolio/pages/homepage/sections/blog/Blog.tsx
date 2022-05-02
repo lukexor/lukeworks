@@ -1,34 +1,14 @@
 import HashAnchor from "portfolio/components/HashAnchor";
+import CardGrid from "portfolio/components/post/CardGrid";
 import ShowMore from "portfolio/components/post/ShowMore";
 import blogPosts from "portfolio/data/blogPosts.json";
-import { Image, Post } from "portfolio/models/post";
-import { createRef, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
+import { Post } from "portfolio/models/post";
+import { useEffect, useState } from "react";
 import routes from "routes.json";
 
 const {
   menu: { blog },
 } = routes;
-
-type BlogPostCardProps = {
-  url: string;
-  thumbnail: Image;
-  title: string;
-};
-
-const BlogPostCard = ({ title, thumbnail, url }: BlogPostCardProps) => {
-  return (
-    <article>
-      <Link to={url}>
-        <div className="card">
-          <img className="blur" src={thumbnail.src} alt={thumbnail.alt} />
-          <div className="title slide-up">{title}</div>
-        </div>
-      </Link>
-    </article>
-  );
-};
 
 const Blog = () => {
   const [postCount, setPostCount] = useState(9);
@@ -36,9 +16,7 @@ const Blog = () => {
   const [posts, setPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    const posts = [...blogPosts].filter(
-      (post) => post.publishedOn && post.thumbnail
-    );
+    const posts = [...blogPosts].filter((post) => post.publishedOn);
     setPosts(posts.slice(0, postCount));
     setTotalCount(posts.length);
   }, [postCount]);
@@ -47,30 +25,7 @@ const Blog = () => {
     <section className="page-section">
       <HashAnchor id={blog.hash} />
       <h2>Blog</h2>
-      <section>
-        <TransitionGroup component="span" className="card-grid">
-          {posts.map(({ id, title, thumbnail, url }) => {
-            const postRef = createRef<HTMLElement>();
-            return thumbnail ? (
-              <CSSTransition
-                key={id}
-                nodeRef={postRef}
-                timeout={500}
-                classNames="post"
-              >
-                <BlogPostCard
-                  key={id}
-                  title={title}
-                  thumbnail={thumbnail}
-                  url={url}
-                />
-              </CSSTransition>
-            ) : (
-              <></>
-            );
-          })}
-        </TransitionGroup>
-      </section>
+      <CardGrid posts={posts} />
       <ShowMore count={postCount} setCount={setPostCount} total={totalCount} />
     </section>
   );

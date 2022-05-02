@@ -13,7 +13,7 @@
 
 .header {
   flex: 1;
-  padding: 50px 0;
+  padding: 50px 0 0 0;
 }
 
 .header::before {
@@ -38,8 +38,8 @@
 }
 
 .subtitle {
-  font-family: var(--font-serif);
-  font-size: var(--size-xlarge);
+  font-family: var(--font-body);
+  font-size: var(--size-large);
   font-weight: normal;
   line-height: 1.6em;
   text-align: center;
@@ -51,25 +51,29 @@
 
 .explore {
   text-align: center;
-  padding: var(--size-medlarge) 0;
+  padding-bottom: var(--size-medlarge);
   margin-bottom: var(--size-small);
 }
 
 .explore p {
-  font-size: var(--size-medlarge);
+  font-size: var(--size-med);
 }
 
 @media only screen and (min-width: 768px) {
   .header {
-    padding: 100px 0;
+    padding: 100px 0 0 0;
   }
+
+.header h1 {
+  font-size: var(--size-xxxlarge);
+}
 
   .subtitle {
     font-size: var(--size-xlarge);
   }
 
   .explore p {
-    font-size: var(--size-large);
+    font-size: var(--size-medlarge);
   }
 }
 

@@ -1,15 +1,9 @@
 .logo {
   color: var(--color-primary);
   font-family: var(--font-header);
-  font-size: var(--size-large);
+  font-size: var(--size-xlarge);
   text-decoration: none;
-  transition: color 0.5s ease;
-}
-
-@media only screen and (min-width: 768px) {
-  .logo {
-    font-size: 2rem;
-  }
+  transition: color 500ms ease;
 }
 
 @media only screen and (hover: hover) and (pointer: fine) {

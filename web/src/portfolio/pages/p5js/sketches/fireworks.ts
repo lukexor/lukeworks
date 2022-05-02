@@ -118,7 +118,7 @@ const fireworksSketch = (p: p5): void => {
             firework.pos.y,
             this.color
           );
-          particle.vel = window.p5.Vector.random2D();
+          particle.vel = p5.Vector.random2D();
           particle.vel.mult(p.random(2, 10));
           this.particles.push(particle);
         }

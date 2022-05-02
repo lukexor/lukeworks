@@ -19,14 +19,14 @@ const ShowMore = ({ count, setCount, total }: Props) => {
 
   const showMore = () => {
     const pageWidth = document.body.clientWidth;
-    const itemsPerRow = Math.floor(
-      pageWidth /
-        (document.getElementsByClassName("card")[0]?.clientWidth ?? pageWidth)
-    );
+    const card = document.getElementsByClassName("card")[0];
+    const cardWidth = card?.clientWidth ?? pageWidth;
+    const cardHeight = card?.clientHeight ?? 200;
+    const itemsPerRow = Math.floor(pageWidth / cardWidth);
     setCount((count: number) => count + itemsPerRow);
     if (actionsRef.current) {
       window.scrollTo({
-        top: actionsRef.current.offsetTop - 200,
+        top: actionsRef.current.offsetTop - cardHeight,
         behavior: "smooth",
       });
     }

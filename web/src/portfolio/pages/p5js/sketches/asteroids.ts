@@ -135,13 +135,13 @@ const asteroidSketch = (p: p5): void => {
               const ast1 = new Asteroid();
               ast1.size = asteroid.size >> 1;
               ast1.pos = asteroid.pos.copy();
-              ast1.vel = window.p5.Vector.random2D();
+              ast1.vel = p5.Vector.random2D();
               ast1.angle = p.random(360);
 
               const ast2 = new Asteroid();
               ast2.size = asteroid.size >> 1;
               ast2.pos = asteroid.pos.copy();
-              ast2.vel = window.p5.Vector.random2D();
+              ast2.vel = p5.Vector.random2D();
               ast2.angle = p.random(360);
 
               this.asteroids.push(ast1);
@@ -394,7 +394,7 @@ const asteroidSketch = (p: p5): void => {
       super();
       this.size = 64;
       this.pos = p.createVector(p.random(p.width), p.random(p.height));
-      this.vel = window.p5.Vector.random2D();
+      this.vel = p5.Vector.random2D();
       this.angle = p.random(360);
       this.color = "yellow";
       this.rotation = p.random(-0.02, 0.02);

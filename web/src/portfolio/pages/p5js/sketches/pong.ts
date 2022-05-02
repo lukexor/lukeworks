@@ -331,7 +331,7 @@ const pongSketch = (p: p5) => {
         p.width / 2 - this.radius,
         p.height / 2 - this.radius
       );
-      this.vel = window.p5.Vector.fromAngle(p.radians(p.random(-45, 45)));
+      this.vel = p5.Vector.fromAngle(p.radians(p.random(-45, 45)));
       if (p.random(1) < 0.5) {
         this.vel.x *= -1;
       }
@@ -400,7 +400,7 @@ const pongSketch = (p: p5) => {
         const yNormalizedIntersect =
           yRelativeIntersect / ((player.h + this.size) / 2);
         const bounceAngle = -1 * yNormalizedIntersect * max_angle;
-        const bounceVel = window.p5.Vector.fromAngle(p.radians(bounceAngle)).setMag(
+        const bounceVel = p5.Vector.fromAngle(p.radians(bounceAngle)).setMag(
           this.speed
         );
         if (player.type !== "player1") {
