@@ -34,7 +34,7 @@ const LukeWorks = () => {
 
   return (
     <ErrorBoundary key={location.pathname} navigate={navigate}>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={null}>
         <Routes>
           <Route
             element={

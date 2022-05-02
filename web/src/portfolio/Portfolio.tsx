@@ -2,7 +2,7 @@ import "./Portfolio.css";
 import ErrorBoundary from "ErrorBoundary";
 import useMetaTag from "hooks/useMetaTag";
 import useOnScreen from "hooks/useOnScreen";
-import { lazy, useEffect, useLayoutEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useLayoutEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import HashAnchor from "./components/HashAnchor";
 import Header from "./components/header";
@@ -57,7 +57,9 @@ const Portfolio = ({ children }: Props) => {
           </ErrorBoundary>
         </div>
         <div ref={footerRef} className="lazy">
-          {isFooterVisible ? <Footer /> : null}
+          <Suspense fallback={null}>
+            {isFooterVisible ? <Footer /> : null}
+          </Suspense>
         </div>
       </div>
     </>
