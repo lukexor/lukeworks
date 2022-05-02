@@ -1,5 +1,6 @@
 import "./LukeWorks.css";
 import legacyRoutes from "legacyRoutes.json";
+import Loading from "portfolio/components/loading";
 import { lazy, Suspense } from "react";
 import {
   Navigate,
@@ -33,12 +34,12 @@ const LukeWorks = () => {
 
   return (
     <ErrorBoundary key={location.pathname} navigate={navigate}>
-      <Suspense fallback={null}>
+      <Suspense fallback={<Loading />}>
         <Routes>
           <Route
             element={
               <Portfolio>
-                <Suspense fallback={null}>
+                <Suspense fallback={<Loading />}>
                   <Outlet />
                 </Suspense>
               </Portfolio>
