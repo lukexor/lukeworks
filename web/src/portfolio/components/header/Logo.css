@@ -4,6 +4,7 @@
   font-size: var(--size-xlarge);
   text-decoration: none;
   transition: color 500ms ease;
+  transform: translateY(-0.1em);
 }
 
 @media only screen and (hover: hover) and (pointer: fine) {

@@ -6,10 +6,10 @@ import SearchBox from "./Search";
 
 const Header = () => {
   return (
-    <div className="heading">
-      <div className="header-bar">
+    <div className="navbar-wrapper">
+      <div className="navbar">
         <Logo />
-        <div className="header-icons">
+        <div className="nav-icons">
           {features.search && <SearchBox />}
           <Menu />
         </div>

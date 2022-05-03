@@ -89,11 +89,16 @@ const pongSketch = (p: p5) => {
   };
 
   p.touchStarted = () => {
+    if (!p.isLooping()) {
+      game.playCpu();
+    }
     game.touchStarted();
+    return false;
   };
 
   p.touchEnded = () => {
     game.touchEnded();
+    return false;
   };
 
   class Game {

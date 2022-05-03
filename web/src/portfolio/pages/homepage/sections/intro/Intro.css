@@ -4,6 +4,7 @@
   flex-direction: column;
   flex: 1;
   align-content: center;
+  justify-content: space-between;
 }
 
 .splash canvas {
@@ -51,8 +52,7 @@
 
 .explore {
   text-align: center;
-  padding-bottom: var(--size-medlarge);
-  margin-bottom: var(--size-xxlarge);
+  padding-bottom: 20px;
 }
 
 .explore p {
@@ -64,9 +64,9 @@
     padding: 100px 0 0 0;
   }
 
-.header h1 {
-  font-size: var(--size-xxxlarge);
-}
+  .header h1 {
+    font-size: var(--size-xxxlarge);
+  }
 
   .subtitle {
     font-size: var(--size-xlarge);

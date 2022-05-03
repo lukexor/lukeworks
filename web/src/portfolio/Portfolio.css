@@ -16,7 +16,7 @@
   --size-xlarge: 2rem;
   --size-xxlarge: 2.5rem;
   --size-xxxlarge: 3.0rem;
-  --header-height: 2.0em;
+  --header-height: calc(2.0em + 10px);
   --footer-height: 9em;
   --page-padding: 20px;
   --bp-desktop-large: 1440px;

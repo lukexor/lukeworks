@@ -6,6 +6,8 @@ const asteroidSketch = (p: p5): void => {
   const R = 82;
 
   let game: Game;
+  let touching = false;
+  let touchStart = 0;
   let textX = 0;
   const textY = 150;
 
@@ -19,24 +21,41 @@ const asteroidSketch = (p: p5): void => {
     p.textFont("Courier");
     p.fill(255);
 
-    awaitClickStart(p, () => {
-      p.textAlign(p.CENTER);
-      p.textSize(70);
-      p.text("ASTEROIDS", textX, textY);
-      p.textSize(20);
-      p.text("CLICK OR TAP TO PLAY", textX, textY + 40);
-      p.textSize(15);
-      p.text(
-        "INSTRUCTIONS:\n\n" +
-          "LEFT / RIGHT: STEER SHIP\n" +
-          "UP: ACCELERATE\n" +
-          "SPACE: FIRE\n" +
-          "ESCAPE: TOGGLE PAUSE\n" +
-          "R: START NEW GAME\n",
-        textX,
-        textY + 80
-      );
-    });
+    awaitClickStart(
+      p,
+      () => {
+        p.textAlign(p.CENTER);
+        p.textSize(50);
+        p.text("ASTEROIDS", textX, textY);
+        p.textSize(20);
+        p.text("CLICK OR TAP TO PLAY", textX, textY + 40);
+        p.textSize(15);
+        p.text(
+          "INSTRUCTIONS:\n\n" +
+            "LEFT / RIGHT: STEER SHIP\n" +
+            "UP: ACCELERATE\n" +
+            "SPACE: FIRE\n" +
+            "ESCAPE: TOGGLE PAUSE\n" +
+            "R: START NEW GAME\n",
+          textX,
+          textY + 80
+        );
+      },
+      () => {
+        p.touchStarted = () => {
+          touching = true;
+          touchStart = Date.now();
+          return false;
+        };
+        p.touchEnded = () => {
+          touching = false;
+          if (Date.now() - touchStart < 200) {
+            game.fire();
+          }
+          return false;
+        };
+      }
+    );
   };
 
   p.draw = () => {
@@ -46,10 +65,11 @@ const asteroidSketch = (p: p5): void => {
     if (game.gameover) {
       p.background(0);
       p.textAlign(p.CENTER);
-      p.textSize(70);
+      p.textSize(50);
       p.text("GAME OVER", textX, textY);
       p.textSize(20);
-      p.text("PRESS ENTER TO RESTART", textX, textY + 40);
+      p.text("CLICK OR TAP TO RESTART", textX, textY + 40);
+      p.mousePressed = () => game.start();
       p.noLoop();
     } else if (game.started) {
       p.background(0);
@@ -122,6 +142,13 @@ const asteroidSketch = (p: p5): void => {
         this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
         this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
       }
+      const mouse = p.createVector(p.mouseX, p.mouseY);
+      const looking = mouse.sub(this.ship.pos);
+      this.ship.angle = looking.heading() + p.PI / 2;
+      if (touching && Date.now() - touchStart >= 100) {
+        this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
+        this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
+      }
     }
 
     updateBullets() {
@@ -131,7 +158,7 @@ const asteroidSketch = (p: p5): void => {
         this.asteroids.forEach((asteroid) => {
           if (bullet.hits(asteroid)) {
             bullet.destroyed = true;
-            if (asteroid.size > 16) {
+            if (asteroid.size > 12) {
               const ast1 = new Asteroid();
               ast1.size = asteroid.size >> 1;
               ast1.pos = asteroid.pos.copy();
@@ -269,7 +296,6 @@ const asteroidSketch = (p: p5): void => {
       if (!this.started) return;
 
       switch (keyCode) {
-        // TODO add delay since starting here
         case SPACE:
           this.fire();
           break;
@@ -392,7 +418,7 @@ const asteroidSketch = (p: p5): void => {
 
     constructor(ship?: Ship) {
       super();
-      this.size = 64;
+      this.size = 48;
       this.pos = p.createVector(p.random(p.width), p.random(p.height));
       this.vel = p5.Vector.random2D();
       this.angle = p.random(360);

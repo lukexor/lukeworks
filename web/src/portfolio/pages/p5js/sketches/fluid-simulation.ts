@@ -44,6 +44,26 @@ const fluidSimSketch = (p: p5): void => {
       p.mouseReleased = () => {
         demo = true;
       };
+
+      p.mouseMoved = () => {
+        if (p.mouseIsPressed) {
+          drag(p.mouseX, p.mouseY);
+        }
+      };
+
+      p.touchMoved = () => {
+        drag(p.mouseX, p.mouseY);
+        return false;
+      };
+
+      p.touchStarted = () => {
+        demo = false;
+        return false;
+      };
+      p.touchEnded = () => {
+        demo = true;
+        return false;
+      };
     });
   };
 
@@ -59,26 +79,6 @@ const fluidSimSketch = (p: p5): void => {
 
     fluid.step();
     fluid.draw();
-  };
-
-  p.mouseMoved = () => {
-    if (p.mouseIsPressed) {
-      drag(p.mouseX, p.mouseY);
-    }
-  };
-
-  p.touchMoved = () => {
-    drag(p.mouseX, p.mouseY);
-    return false;
-  };
-
-  p.touchStarted = () => {
-    demo = false;
-    return false;
-  };
-  p.touchEnded = () => {
-    demo = true;
-    return false;
   };
 
   const drag = (cx: number, cy: number) => {

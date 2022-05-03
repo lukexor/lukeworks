@@ -1,21 +1,21 @@
-.heading {
+.navbar-wrapper {
   background: var(--color-bg-light);
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 10;
-  height: calc(var(--header-height) + 5px);
-  padding: 0 20px;
+  height: calc(var(--header-height));
+  padding: 5px 20px;
 }
 
-.header-bar {
+.navbar {
   height: 100%;
   display: flex;
   justify-content: space-between;
   flex: 1;
 }
 
-.header-icons {
+.nav-icons {
   display: flex;
   justify-content: space-around;
   align-items: center;
