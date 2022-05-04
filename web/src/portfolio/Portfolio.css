@@ -71,7 +71,7 @@ hr {
 .link-icon {
   color: var(--color-accent-light);
   cursor: pointer;
-  font-size: var(--size-xlarge);
+  font-size: var(--size-xxlarge);
   transition: color 500ms ease;
 }
 .disabled-icon {
@@ -87,7 +87,10 @@ span.anchor {
 }
 
 .body-content {
-  min-height: calc(100vh - var(--footer-height));
+  min-height: 100vh;
+  min-height: -moz-available;
+  min-height: -webkit-fill-available;
+  min-height: fill-available;
 }
 
 .page-section {
@@ -245,10 +248,11 @@ span.anchor {
 
 @media only screen and (pointer: coarse) {
   .card img.blur {
-    filter: blur(3px);
+    filter: none;
   }
   .card .title.slide-up {
-    transform: translateY(0);
+    position: relative;
+    transform: none;
   }
 
   a:active {
@@ -265,6 +269,6 @@ span.anchor {
   .link-icon:active {
     color: var(--color-accent-dark);
     transform: scale(1.2);
-    transition: color 0, transform 0 !important;
+    transition: color 0s, transform 0s !important;
   }
 }

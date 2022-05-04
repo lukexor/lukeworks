@@ -26,8 +26,10 @@ const Menu = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const height = open ? "17.5ch" : "0";
-    menuRef.current?.style.setProperty("--height", height);
+    menuRef.current?.style.setProperty(
+      "height",
+      open ? "var(--menu-height)" : "0"
+    );
   }, [open]);
 
   const scrollUpdate = useCallback(() => {

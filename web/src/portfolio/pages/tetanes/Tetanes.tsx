@@ -1,7 +1,13 @@
 const Tetanes = () => {
   return (
     <section className="tetanes">
-      <h1>TetaNES Web</h1>
+      <iframe
+        title="TetaNES"
+        src="https://lukeworks.tech/tetanes/wasm"
+        frameBorder="0"
+        width="100%"
+        height="900px"
+      ></iframe>
     </section>
   );
 };

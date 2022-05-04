@@ -52,7 +52,8 @@
 
 .explore {
   text-align: center;
-  padding-bottom: 20px;
+  position: sticky;
+  bottom: 30px;
 }
 
 .explore p {
