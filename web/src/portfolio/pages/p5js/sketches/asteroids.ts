@@ -142,12 +142,14 @@ const asteroidSketch = (p: p5): void => {
         this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
         this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
       }
-      const mouse = p.createVector(p.mouseX, p.mouseY);
-      const looking = mouse.sub(this.ship.pos);
-      this.ship.angle = looking.heading() + p.PI / 2;
-      if (touching && Date.now() - touchStart >= 100) {
-        this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
-        this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
+      if (touching) {
+        const mouse = p.createVector(p.mouseX, p.mouseY);
+        const looking = mouse.sub(this.ship.pos);
+        this.ship.angle = looking.heading() + p.PI / 2;
+        if (Date.now() - touchStart >= 100) {
+          this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
+          this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
+        }
       }
     }
 
