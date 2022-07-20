@@ -17,7 +17,7 @@ const getKeyName = (code: string) => {
   return KEYS[code];
 };
 
-const useKonamiCode = (handler: () => void): boolean => {
+export default function useKonamiCode(handler: () => void): boolean {
   const [keys, setKeys] = useState<string[]>([]);
 
   const isKonamiCode =
@@ -44,6 +44,4 @@ const useKonamiCode = (handler: () => void): boolean => {
   }, [isKonamiCode, handler]);
 
   return isKonamiCode;
-};
-
-export default useKonamiCode;
+}

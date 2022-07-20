@@ -1,22 +1,19 @@
+import routes from "data/routes.json";
 import useAuth from "hooks/useAuth";
-import { Navigate, useLocation } from "react-router-dom";
-import routes from "routes.json";
+import { useRouter } from "next/router";
 
-type Props = {
-  children: React.ReactNode;
+export type AuthGuardProps = {
+  children?: React.ReactNode;
 };
 
-const AuthGuard = ({ children }: Props) => {
-  const location = useLocation();
+export default function AuthGuard({ children }: AuthGuardProps) {
+  const router = useRouter();
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return (
-      <Navigate to={routes.login.path} replace state={{ from: location }} />
-    );
+    router.replace(routes.login.path);
+    return null;
   }
 
   return <>{children}</>;
-};
-
-export default AuthGuard;
+}

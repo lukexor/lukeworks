@@ -2,12 +2,12 @@ import { RefObject, useEffect } from "react";
 
 type ClickEvent = MouseEvent | TouchEvent;
 
-type ClickHandler = (evt: ClickEvent) => void;
+export type ClickHandler = (evt: ClickEvent) => void;
 
-const useClickOutside = <T extends HTMLElement = HTMLElement>(
+export default function useClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
-  handler: ClickHandler
-): void => {
+  handler: ClickHandler,
+): void {
   useEffect(() => {
     const listener = (event: ClickEvent) => {
       // Do nothing if clicking ref's element or descendent elements
@@ -26,6 +26,4 @@ const useClickOutside = <T extends HTMLElement = HTMLElement>(
       document.removeEventListener("touchend", listener);
     };
   }, [ref, handler]);
-};
-
-export default useClickOutside;
+}

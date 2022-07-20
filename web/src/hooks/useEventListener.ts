@@ -1,30 +1,32 @@
-import { RefObject, useEffect, useLayoutEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
-interface UseEventListener {
-  <K extends keyof WindowEventMap>(
-    eventName: K,
-    handler: (evt: WindowEventMap[K]) => void
-  ): void;
-  <K extends keyof HTMLElementEventMap, T extends HTMLElement = HTMLDivElement>(
-    eventName: K,
-    handler: (evt: HTMLElementEventMap[K]) => void,
-    element: RefObject<T>
-  ): void;
-}
+export function useEventListener<K extends keyof WindowEventMap>(
+  eventName: K,
+  handler: (evt: WindowEventMap[K]) => void,
+): void;
+
+export function useEventListener<
+  K extends keyof HTMLElementEventMap,
+  T extends HTMLElement = HTMLDivElement,
+>(
+  eventName: K,
+  handler: (evt: HTMLElementEventMap[K]) => void,
+  element: RefObject<T>,
+): void;
 
 // Credit: https://usehooks.com/useEventListener/
-const useEventListener: UseEventListener = <
+export function useEventListener<
   KW extends keyof WindowEventMap,
   KH extends keyof HTMLElementEventMap, // this extends DocumentEventMap
-  T extends HTMLElement | void = void
+  T extends HTMLElement | void = void,
 >(
   eventName: KW | KH,
   handler: (evt: WindowEventMap[KW] | HTMLElementEventMap[KH] | Event) => void,
-  element?: RefObject<T>
-): void => {
+  element?: RefObject<T>,
+): void {
   const handlerRef = useRef(handler);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     handlerRef.current = handler;
   }, [handler]);
 
@@ -42,6 +44,6 @@ const useEventListener: UseEventListener = <
       target.removeEventListener(eventName, listener);
     };
   }, [eventName, element, handler]);
-};
+}
 
 export default useEventListener;

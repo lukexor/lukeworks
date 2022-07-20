@@ -1,19 +1,19 @@
+import routes from "data/routes.json";
 import useAuth from "hooks/useAuth";
-import { Navigate } from "react-router-dom";
-import routes from "routes.json";
+import { useRouter } from "next/router";
 
-type Props = {
-  children: React.ReactNode;
+export type GuestGuardProps = {
+  children?: React.ReactNode;
 };
 
-const GuestGuard = ({ children }: Props) => {
+export default function GuestGuard({ children }: GuestGuardProps) {
+  const router = useRouter();
   const { isAuthenticated } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to={routes.admin.path} replace />;
+    router.replace(routes.admin.path);
+    return null;
   }
 
   return <>{children}</>;
-};
-
-export default GuestGuard;
+}

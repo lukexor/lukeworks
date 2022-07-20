@@ -1,0 +1,32 @@
+.linkIcon {
+  color: var(--color-accent-light);
+  cursor: pointer;
+  font-size: var(--size-xxlarge);
+  transition: color 500ms ease;
+}
+
+.disabledIcon {
+  font-size: var(--size-xxlarge);
+  color: #999;
+}
+
+@media only screen and (hover: hover) and (pointer: fine) {
+  .linkIcon:hover {
+    color: var(--color-accent-dark);
+  }
+}
+
+@media only screen and (pointer: coarse) {
+  .linkIcon {
+    transition: color 500ms, transform 500ms !important;
+  }
+  .linkIcon:hover {
+    color: var(--color-accent-light);
+    transform: scale(1);
+  }
+  .linkIcon:active {
+    color: var(--color-accent-dark);
+    transform: scale(1.2);
+    transition: color 0s, transform 0s !important;
+  }
+}

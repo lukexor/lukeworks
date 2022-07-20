@@ -1,13 +1,9 @@
 import { useState } from "react";
 
-const useAuth = () => {
-  const [isAuthenticated] = useState(
-    process.env["REACT_APP_DEBUG"] ? true : false
-  );
+export default function useAuth() {
+  const [isAuthenticated] = useState(process.env["DEBUG"] ? true : false);
 
   return {
     isAuthenticated,
   };
-};
-
-export default useAuth;
+}

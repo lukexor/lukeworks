@@ -1,13 +1,11 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { RefObject, useEffect, useState } from "react";
 
-type UseOnScreenResult<T> = [RefObject<T>, boolean];
-
-const useOnScreen = <T extends Element>(
+export default function useOnScreen<T extends Element>(
+  ref: RefObject<T>,
   rootMargin = "0px",
   root = document
-): UseOnScreenResult<T> => {
+): boolean {
   const [isVisible, setIsVisible] = useState(false);
-  const ref = useRef<T>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -24,9 +22,7 @@ const useOnScreen = <T extends Element>(
     return () => {
       current && observer.unobserve(current);
     };
-  }, []);
+  }, [ref, root, rootMargin]);
 
-  return [ref, isVisible];
-};
-
-export default useOnScreen;
+  return isVisible;
+}

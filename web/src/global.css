@@ -1,0 +1,74 @@
+:root {
+  --color-accent-dark: #df740c;
+  --color-accent-light: #ffe64d;
+  --color-bg-dark: #0c141f;
+  --color-bg-light: #121924;
+  --color-primary: #6fc3df;
+  --color-secondary: #d5eeee;
+  --font-header: "Yatra One", serif;
+  --font-body: "Rubik", sans-serif;
+  --size-xsmall: 0.25rem;
+  --size-small: 0.5rem;
+  --size-medsmall: 0.75rem;
+  --size-med: 1rem;
+  --size-medlarge: 1.25rem;
+  --size-large: 1.5rem;
+  --size-xlarge: 2rem;
+  --size-xxlarge: 2.5rem;
+  --size-xxxlarge: 3rem;
+  --header-height: calc(2em + 10px);
+  --footer-height: 9em;
+  --page-padding: 20px;
+  --bp-desktop-large: 1440px;
+  --bp-desktop-small: 1024px;
+  --bp-tablet: 768px;
+  --bp-mobile: 360px;
+}
+
+*:focus-visible {
+  outline: 1px dotted var(--color-accent-dark);
+}
+
+*:not(svg) {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+/* Target root next div */
+body > div {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg-dark);
+  -webkit-font-smoothing: antialiased;
+  color: var(--color-secondary);
+  font-family: var(--font-body);
+  font-size: 1.1em;
+}
+
+p {
+  white-space: pre-line;
+  line-height: 1.4em;
+  max-width: 70ch;
+  margin: 25px auto;
+}
+
+ol li,
+ul li {
+  padding: 0.4em 0;
+}
+
+span.anchor {
+  top: calc(-1 * var(--header-height));
+  position: relative;
+  display: block;
+  visibility: hidden;
+}

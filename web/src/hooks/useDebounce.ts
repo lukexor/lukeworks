@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // Credit: https://usehooks.com/useDebounce/
-const useDebounce = <T>(value: T, delay = 500): T => {
+export function useDebounce<T>(value: T, delay = 500): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
   useEffect(() => {
@@ -14,11 +14,11 @@ const useDebounce = <T>(value: T, delay = 500): T => {
   }, [value, delay]);
 
   return debouncedValue;
-};
+}
 
-const useDebounceFn = <T>(func: () => T, delay = 500): (() => void) => {
+export function useDebounceFn<T>(func: () => T, delay = 500): () => void {
   const [timer, setTimer] = useState<null | ReturnType<typeof setTimeout>>(
-    null
+    null,
   );
 
   return () => {
@@ -27,9 +27,7 @@ const useDebounceFn = <T>(func: () => T, delay = 500): (() => void) => {
       setTimeout(() => {
         setTimer(null);
         func();
-      }, delay)
+      }, delay),
     );
   };
-};
-
-export { useDebounce, useDebounceFn };
+}

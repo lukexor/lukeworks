@@ -1,0 +1,154 @@
+.resume {
+  background: #FFF;
+  color: #444;
+  font-size: 0.9rem;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  margin-inline: auto;
+  padding: 10px 20px;
+  position: relative;
+  width: 8.5in;
+}
+
+.resume h1,
+.resume h2,
+.resume h3,
+.resume h4,
+.resume h5,
+.resume h6 {
+  color: #003D73;
+  font-family: "Georgia, Palatino, serif";
+}
+
+.resume h1 {
+  font-size: 2.4em;
+}
+
+.resume h2 {
+  font-size: 1.6em;
+}
+
+.resume h3 {
+  border-bottom: 2px solid #CCC;
+  font-size: 1.8em;
+  margin: 10px 0;
+  padding-bottom: 5px;
+}
+
+.resume h4 {
+  color: #333;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+  padding: 0;
+}
+
+.resume h5 {
+  color: #333;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 1.0em;
+  font-weight: bold;
+  margin: 1em 0 .4em 0;
+  padding: 0;
+}
+
+.resume a, .resume a:visited {
+  color: #05C;
+  text-decoration: none;
+}
+
+.resume a:hover, .resume a:active {
+  color: #08F;
+  text-decoration: underline;
+}
+
+.resume li {
+  padding-top: .5em;
+  padding-left: .5em;
+}
+
+.resume aside {
+  max-width: 30%;
+  margin-right: 2.0em;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+}
+
+.title {
+  white-space: nowrap;
+}
+
+.name {
+  margin-bottom: 10px;
+  margin-right: 1.5em;
+}
+
+.position {
+  font-style: italic;
+  margin-top: 0;
+}
+
+.technology {
+  padding: 0;
+  margin-left: 20px;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+}
+
+.content {
+  flex: 1;
+  margin-left: 40px;
+}
+
+.ribbon {
+  float: left;
+  margin: 0.4em 0 0 -40px;
+  padding: 0;
+}
+
+.employmentList {
+  display: flex;
+  flex-direction: column;
+}
+
+.positions {
+  margin-top: 0;
+  margin-left: 20px;
+}
+
+.positions > li {
+  list-style-type: disclosure-closed;
+}
+
+.resume em {
+  color: #777;
+  font-size: .95em;
+  font-style: normal;
+}
+
+.experienceImg {
+  margin: 15px 10px 5px 0;
+}
+
+.experience {
+  display: flex;
+  align-items: flex-start;
+}
+
+.experienceDescription {
+  margin: 10px 0;
+}
+
+.educationTitle {
+  display: inline-block;
+  padding-bottom: 5px;
+}
+
+.bullets {
+  margin-left: 20px;
+}

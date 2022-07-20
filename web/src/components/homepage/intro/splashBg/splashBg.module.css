@@ -1,0 +1,45 @@
+.wrapper {
+  position: absolute;
+  width: 100%;
+  height: calc(100vh - var(--header-height));
+  z-index: -2000;
+  overflow-x: hidden;
+}
+
+.bg {
+  opacity: 20%;
+  background-color: var(--colors-primary);
+  background-image: url(/images/code-bg.webp);
+  background-repeat: repeat;
+  background-size: cover;
+  background-blend-mode: hard-light;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -2000;
+}
+
+.bgGlitch {
+  --glitch-color: var(--color-accent-dark);
+  --glitch-opacity: 0;
+  --glitch-transform: 30px;
+  opacity: var(--glitch-opacity);
+  background-color: var(--glitch-color);
+  background-image: url(/images/code-bg.webp);
+  background-repeat: repeat;
+  background-size: cover;
+  background-blend-mode: luminosity;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(var(--glitch-transform));
+  z-index: -2000;
+}
+
+.bgGlitch.color {
+  background-color: var(--color-secondary);
+}

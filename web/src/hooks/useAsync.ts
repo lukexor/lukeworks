@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 
-enum AsyncStatus {
+export enum AsyncStatus {
   idle,
   pending,
   success,
   error,
 }
-type UseAsyncResult<T, E> = {
+
+export type UseAsyncResult<T, E> = {
   execute: () => Promise<T>;
   status: AsyncStatus;
   result: null | T;
@@ -14,10 +15,10 @@ type UseAsyncResult<T, E> = {
 };
 
 // Credit: https://usehooks.com/useAsync/
-const useAsync = <T, E = string>(
+export default function useAsync<T, E = string>(
   asyncFunc: () => Promise<T>,
-  immediate = true
-): UseAsyncResult<T, E> => {
+  immediate = true,
+): UseAsyncResult<T, E> {
   const [status, setStatus] = useState(AsyncStatus.idle);
   const [result, setResult] = useState<null | T>(null);
   const [error, setError] = useState<null | E>(null);
@@ -49,6 +50,4 @@ const useAsync = <T, E = string>(
   }, [execute, immediate]);
 
   return { execute, status, result, error };
-};
-
-export default useAsync;
+}
