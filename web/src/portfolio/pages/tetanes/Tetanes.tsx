@@ -6,10 +6,11 @@ const Tetanes = () => {
         src="https://lukeworks.tech/tetanes/wasm"
         frameBorder="0"
         width="100%"
-        height="900px"
+        height="1200px"
       ></iframe>
     </section>
   );
 };
 
 export default Tetanes;
+
