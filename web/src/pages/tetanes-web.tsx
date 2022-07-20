@@ -3,7 +3,7 @@ export default function Tetanes() {
     <section>
       <iframe
         title="TetaNES"
-        src="https://lukeworks.tech/tetanes/wasm"
+        src="https://lukexor.me/tetanes/wasm"
         frameBorder="0"
         width="100%"
         height="1200px"
