@@ -1,6 +1,7 @@
 import { NextIcon, PreviousIcon } from "components/icons";
 import Layout from "components/layout";
 import LinkIcon from "components/linkIcon";
+import copy from "data/index.json";
 import dayjs from "dayjs";
 import fs from "fs/promises";
 import { PostEntry } from "models/post";
@@ -114,7 +115,13 @@ export default function Post({
       <Head>
         <title>{title}</title>
         <meta property="og:title" content={title} key="title" />
-        {image && <meta property="og:image" content={image.src} key="image" />}
+        {image && (
+          <meta
+            property="og:image"
+            content={`${copy.origin}${image.src}`}
+            key="image"
+          />
+        )}
       </Head>
       <section className={s.post}>
         <h1>
