@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import fs from "fs/promises";
 import { PostEntry } from "models/post";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import Head from "next/head";
 import Image from "next/image";
 import path from "path";
 import { ParsedUrlQuery } from "querystring";
@@ -110,6 +111,11 @@ export default function Post({
 }: PostProps) {
   return (
     <Layout>
+      <Head>
+        <title>{title}</title>
+        <meta property="og:title" content={title} key="title" />
+        {image && <meta property="og:image" content={image.src} key="image" />}
+      </Head>
       <section className={s.post}>
         <h1>
           {website ? (

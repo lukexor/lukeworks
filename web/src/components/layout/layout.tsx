@@ -3,8 +3,6 @@ import ErrorBoundary from "components/errorBoundary";
 import Footer from "components/footer";
 import HashAnchor from "components/hashAnchor";
 import Header from "components/header";
-import copy from "data/index.json";
-import Head from "next/head";
 import { useEffect, useState } from "react";
 import s from "./layout.module.css";
 
@@ -39,10 +37,6 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className={s.wrapper}>
-      <Head>
-        <title>{copy.title}</title>
-        <meta name="description" content={copy.description} />
-      </Head>
       <div className={clsx(s.fadeEnter, isLoaded && s.fadeEnterActive)}>
         <div className={s.bodyContent}>
           <Header />

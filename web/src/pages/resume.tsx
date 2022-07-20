@@ -22,23 +22,31 @@ export type ResumeInfo = {
 
 export default function Resume() {
   return (
-    <div className={s.resume}>
+    <>
       <Head>
         <title>{resume?.title}</title>
         <meta name="description" content={resume?.description} />
+        <meta property="og:title" content={resume?.title} key="title" />
+        <meta
+          property="og:description"
+          content={resume?.description}
+          key="description"
+        />
       </Head>
-      <Header header={resume.header} />
-      <main className={s.main}>
-        <aside>
-          <Contact contact={resume.contact} />
-          <Technologies list={resume.langAndTech} />
-        </aside>
-        <section className={s.content}>
-          <Employment list={resume.employment} />
-          <Education list={resume.education} />
-          <Experience list={resume.experience} />
-        </section>
-      </main>
-    </div>
+      <div className={s.resume}>
+        <Header header={resume.header} />
+        <main className={s.main}>
+          <aside>
+            <Contact contact={resume.contact} />
+            <Technologies list={resume.langAndTech} />
+          </aside>
+          <section className={s.content}>
+            <Employment list={resume.employment} />
+            <Education list={resume.education} />
+            <Experience list={resume.experience} />
+          </section>
+        </main>
+      </div>
+    </>
   );
 }
