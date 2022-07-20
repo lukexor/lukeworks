@@ -84,10 +84,13 @@ export default function Sketch({ title }: SketchProps) {
     let mounted = true;
     const loadSketch = async () => {
       try {
-        const p5 = (await import("p5")).default;
-        const sketch = await import(`../../components/sketch/${title}`);
         if (mounted && containerRef.current) {
-          sketchRef.current = new p5(sketch.default, containerRef.current);
+          const p5 = await import("p5");
+          const sketch = await import(`../../components/sketch/${title}`);
+          sketchRef.current = new p5.default(
+            sketch.default,
+            containerRef.current,
+          );
         }
       } catch (err) {
         console.error(err);

@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import useOnScreen from "hooks/useOnScreen";
 import { PostEntry, PostImage } from "models/post";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,14 +29,13 @@ const Card = forwardRef(function Card(
   ref: ForwardedRef<HTMLElement>,
 ) {
   const imgRef = useRef<HTMLDivElement>(null);
-  const isImgVisible = useOnScreen(imgRef);
   return (
     <article ref={ref}>
       <Link href={url}>
         <a>
           <div className={s.card} data-type="card">
             <div ref={imgRef}>
-              {isImgVisible && thumbnail ? (
+              {thumbnail ? (
                 <Image
                   className={s.blur}
                   src={thumbnail.src}

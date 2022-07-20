@@ -5,6 +5,7 @@ import LinkIcon from "components/linkIcon";
 import contactCopy from "data/contact.json";
 import introCopy from "data/intro.json";
 import routes from "data/routes.json";
+import type p5 from "p5";
 import { useEffect, useRef, useState } from "react";
 import s from "./intro.module.css";
 import SplashBg from "./splashBg";
@@ -12,26 +13,38 @@ import SplashBg from "./splashBg";
 export default function Intro() {
   const [loadSubtitle, setLoadSubtitle] = useState(0);
   const containerRef = useRef(null);
-  // const sketchRef = useRef<null | p5>(null);
+  const sketchRef = useRef<null | p5>(null);
   const subtitleRef = useRef(null);
 
   useEffect(() => {
     // Incrementally fades in subtitle elements
-    setTimeout(() => setLoadSubtitle(1), 300);
-    setTimeout(() => setLoadSubtitle(2), 600);
-    setTimeout(() => setLoadSubtitle(3), 900);
+    setTimeout(() => setLoadSubtitle(1), 600);
+    setTimeout(() => setLoadSubtitle(2), 1200);
+    setTimeout(() => setLoadSubtitle(3), 1800);
   }, []);
 
-  // useEffect(() => {
-  //   let mounted = true;
-  //   if (mounted && containerRef.current) {
-  //     sketchRef.current = new p5(splashSketch, containerRef.current);
-  //   }
-  //   return () => {
-  //     mounted = false;
-  //     sketchRef.current?.remove();
-  //   };
-  // }, []);
+  useEffect(() => {
+    let mounted = true;
+    const loadSplash = async () => {
+      try {
+        if (mounted && containerRef.current) {
+          const p5 = await import("p5");
+          const splashSketch = await import("./splashSketch");
+          sketchRef.current = new p5.default(
+            splashSketch.default,
+            containerRef.current,
+          );
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadSplash();
+    return () => {
+      mounted = false;
+      sketchRef.current?.remove();
+    };
+  }, []);
 
   return (
     <>
