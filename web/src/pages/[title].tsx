@@ -43,7 +43,9 @@ export async function getStaticPaths() {
   const projectPosts = await getPosts("project");
   const paths = [...blogPosts, ...projectPosts].reduce<GetStaticPathsParams[]>(
     (paths, currentPost) => {
-      paths.push({ params: { title: currentPost.url } });
+      if (currentPost.publishedOn) {
+        paths.push({ params: { title: currentPost.url } });
+      }
       return paths;
     },
     [],
@@ -67,10 +69,13 @@ export async function getStaticProps(
       (post) => post.url.toLowerCase() === title.toLowerCase(),
     );
     if (postIdx > -1) {
+      const post = posts[postIdx];
+      const prev = posts[postIdx + 1];
+      const next = posts[postIdx - 1];
       return {
-        prev: posts[postIdx + 1] ?? null,
-        post: posts[postIdx] ?? null,
-        next: posts[postIdx - 1] ?? null,
+        prev: prev?.publishedOn ? prev : null,
+        post: post?.publishedOn ? post : null,
+        next: next?.publishedOn ? next : null,
       };
     } else {
       return null;
@@ -81,8 +86,7 @@ export async function getStaticProps(
   const projectPosts = await getPosts("project");
 
   const { title } = ctx.params;
-  const match =
-    findPost(title, blogPosts) || findPost(title, projectPosts);
+  const match = findPost(title, blogPosts) || findPost(title, projectPosts);
 
   if (match && match.post) {
     const { post, prev, next } = match;
