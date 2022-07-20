@@ -1,5 +1,5 @@
 import Image from "next/image";
-import s from "pages/resume.module.css";
+import s from "pages/styles/resume.module.css";
 import Ribbon from "./ribbon";
 
 export type EducationInfo = {

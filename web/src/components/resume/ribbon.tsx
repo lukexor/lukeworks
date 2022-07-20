@@ -1,5 +1,5 @@
 import Image from "next/image";
-import s from "pages/resume.module.css";
+import s from "pages/styles/resume.module.css";
 
 export default function Ribbon() {
   return (

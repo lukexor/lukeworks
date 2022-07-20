@@ -1,4 +1,4 @@
-import s from "pages/resume.module.css";
+import s from "pages/styles/resume.module.css";
 
 export type TechnologiesProps = {
   list: string[];

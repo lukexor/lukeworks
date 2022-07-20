@@ -38,11 +38,13 @@
 }
 
 @media only screen and (hover: hover) and (pointer: fine) {
-  .menuIcon:hover, .menuIcon:active {
+  .menuIcon:hover,
+  .menuIcon:active {
     color: var(--color-accent-dark);
   }
 
-  .menuLink:hover, .menuLink:active {
+  .menuLink:hover,
+  .menuLink:active {
     color: var(--color-accent-dark) !important;
   }
 }
@@ -57,4 +59,3 @@
     right: 0;
   }
 }
-

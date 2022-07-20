@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import s from "pages/resume.module.css";
+import s from "pages/styles/resume.module.css";
 import Ribbon from "./ribbon";
 
 dayjs.extend(customParseFormat);

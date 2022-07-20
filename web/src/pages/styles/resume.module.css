@@ -1,7 +1,7 @@
 .resume {
-  background: #FFF;
+  background: #fff;
   color: #444;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   margin-inline: auto;
   padding: 10px 20px;
@@ -15,7 +15,7 @@
 .resume h4,
 .resume h5,
 .resume h6 {
-  color: #003D73;
+  color: #003d73;
   font-family: "Georgia, Palatino, serif";
 }
 
@@ -28,7 +28,7 @@
 }
 
 .resume h3 {
-  border-bottom: 2px solid #CCC;
+  border-bottom: 2px solid #ccc;
   font-size: 1.8em;
   margin: 10px 0;
   padding-bottom: 5px;
@@ -45,30 +45,32 @@
 .resume h5 {
   color: #333;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-  font-size: 1.0em;
+  font-size: 1em;
   font-weight: bold;
-  margin: 1em 0 .4em 0;
+  margin: 1em 0 0.4em 0;
   padding: 0;
 }
 
-.resume a, .resume a:visited {
-  color: #05C;
+.resume a,
+.resume a:visited {
+  color: #05c;
   text-decoration: none;
 }
 
-.resume a:hover, .resume a:active {
-  color: #08F;
+.resume a:hover,
+.resume a:active {
+  color: #08f;
   text-decoration: underline;
 }
 
 .resume li {
-  padding-top: .5em;
-  padding-left: .5em;
+  padding-top: 0.5em;
+  padding-left: 0.5em;
 }
 
 .resume aside {
   max-width: 30%;
-  margin-right: 2.0em;
+  margin-right: 2em;
 }
 
 .header {
@@ -127,7 +129,7 @@
 
 .resume em {
   color: #777;
-  font-size: .95em;
+  font-size: 0.95em;
   font-style: normal;
 }
 
