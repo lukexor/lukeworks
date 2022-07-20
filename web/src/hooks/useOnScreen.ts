@@ -14,7 +14,7 @@ export default function useOnScreen<T extends Element>(
           setIsVisible(entry.isIntersecting);
         }
       },
-      { root: root ?? document, rootMargin },
+      { root: root ?? document, rootMargin, threshold: 0.1 },
     );
 
     const current = ref.current;
