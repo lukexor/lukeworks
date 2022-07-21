@@ -14,7 +14,8 @@ export default function useOnScreen<T extends Element>(
           setIsVisible(entry.isIntersecting);
         }
       },
-      { root: root ?? document, rootMargin, threshold: 0.1 },
+      // `document` is not supported as root on some browsers
+      { root: root ?? document.body, rootMargin, threshold: 0.1 },
     );
 
     const current = ref.current;
