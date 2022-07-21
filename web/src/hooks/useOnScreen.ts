@@ -3,7 +3,7 @@ import { RefObject, useEffect, useState } from "react";
 export default function useOnScreen<T extends Element>(
   ref: RefObject<T>,
   rootMargin = "0px",
-  root?: Element | Document,
+  root: null | HTMLElement = null,
 ): boolean {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -15,7 +15,7 @@ export default function useOnScreen<T extends Element>(
         }
       },
       // `document` is not supported as root on some browsers
-      { root: root ?? document.body, rootMargin, threshold: 0.1 },
+      { root: root, rootMargin, threshold: 0.1 },
     );
 
     const current = ref.current;
