@@ -5,11 +5,10 @@ export type PostImage = {
 
 export type PostEntry = {
   id: number;
-  url: string;
+  name: string;
   title: string;
   thumbnail?: PostImage;
   image: null | PostImage;
-  content: string;
   category: string;
   tags: string[];
   minutesToRead: number;

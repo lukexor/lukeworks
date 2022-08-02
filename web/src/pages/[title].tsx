@@ -17,8 +17,9 @@ import remarkGfm from "remark-gfm";
 import s from "./styles/post.module.css";
 
 type PostType = "blog" | "project";
-type PostProps = PostEntry & {
+type PostProps = {
   prev: null | PostEntry;
+  post: PostEntry & { content: string };
   next: null | PostEntry;
 };
 
@@ -46,7 +47,7 @@ export async function getStaticPaths() {
   const paths = [...blogPosts, ...projectPosts].reduce<GetStaticPathsParams[]>(
     (paths, currentPost) => {
       if (currentPost.publishedOn) {
-        paths.push({ params: { title: currentPost.url } });
+        paths.push({ params: { title: currentPost.name } });
       }
       return paths;
     },
@@ -66,17 +67,23 @@ export async function getStaticProps(
   }
 
   // Find a single post with previous and next entries
-  const findPost = (title: string, posts: PostEntry[]) => {
+  const findPost = async (title: string, posts: PostEntry[]) => {
     const postIdx = posts.findIndex(
-      (post) => post.url.toLowerCase() === title.toLowerCase(),
+      (post) => post.name.toLowerCase() === title.toLowerCase(),
     );
     if (postIdx > -1) {
-      const post = posts[postIdx];
+      const post = posts[postIdx]!;
       const prev = posts[postIdx + 1];
       const next = posts[postIdx - 1];
+
+      const content = await fs.readFile(
+        path.join(process.cwd(), `src/data/posts/${post.name}.md`),
+      );
       return {
         prev: prev?.publishedOn ? prev : null,
-        post: post?.publishedOn ? post : null,
+        post: post?.publishedOn
+          ? { ...post, content: content.toString() }
+          : null,
         next: next?.publishedOn ? next : null,
       };
     } else {
@@ -88,11 +95,12 @@ export async function getStaticProps(
   const projectPosts = await getPosts("project");
 
   const { title } = ctx.params;
-  const match = findPost(title, blogPosts) || findPost(title, projectPosts);
+  const match =
+    (await findPost(title, blogPosts)) || (await findPost(title, projectPosts));
 
   if (match && match.post) {
     const { post, prev, next } = match;
-    return { props: { ...post, prev, next } };
+    return { props: { post, prev, next } };
   } else {
     return {
       notFound: true,
@@ -101,12 +109,7 @@ export async function getStaticProps(
 }
 
 export default function Post({
-  title,
-  publishedOn,
-  minutesToRead,
-  image,
-  content,
-  website,
+  post: { title, publishedOn, minutesToRead, image, content, website },
   prev,
   next,
 }: PostProps) {
@@ -164,13 +167,13 @@ export default function Post({
           <hr />
           <nav className={s.postNav}>
             <LinkIcon
-              href={prev?.url ? `/${prev?.url}` : undefined}
+              href={prev?.name ? `/${prev.name}` : undefined}
               title={prev?.title}
               icon={PreviousIcon}
               swapOpacity
             />
             <LinkIcon
-              href={next?.url ? `/${next?.url}` : undefined}
+              href={next?.name ? `/${next.name}` : undefined}
               title={next?.title}
               icon={NextIcon}
               swapOpacity

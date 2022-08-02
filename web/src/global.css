@@ -72,3 +72,17 @@ span.anchor {
   display: block;
   visibility: hidden;
 }
+
+.footnotes p {
+  font-size: var(--size-med);
+  margin: 0;
+  text-indent: none;
+}
+
+.footnotes ol {
+  padding-left: 20px;
+}
+
+.footnotes li {
+  padding: 0;
+}

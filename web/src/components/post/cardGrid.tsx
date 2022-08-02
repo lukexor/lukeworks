@@ -62,7 +62,7 @@ export default function CardGrid({ posts }: CardGridProps) {
   return (
     <section>
       <TransitionGroup component="span" className={s.cardGrid} data-type="grid">
-        {posts.map(({ id, title, thumbnail, url }) => {
+        {posts.map(({ id, title, thumbnail, name }) => {
           const postRef = createRef<HTMLElement>();
           return (
             <CSSTransition
@@ -81,7 +81,7 @@ export default function CardGrid({ posts }: CardGridProps) {
                 ref={postRef}
                 title={title}
                 thumbnail={thumbnail}
-                url={url}
+                url={`/${name}`}
               />
             </CSSTransition>
           );

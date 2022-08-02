@@ -71,20 +71,6 @@
   margin: 0 20px 20px;
 }
 
-.footnotes p {
-  font-size: var(--size-med);
-  margin: 0;
-  text-indent: none;
-}
-
-.footnotes ol {
-  padding-left: 20px;
-}
-
-.footnotes li {
-  padding: 0;
-}
-
 .published {
   font-size: var(--size-med);
   color: var(--color-accent-dark);
