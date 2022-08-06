@@ -16,6 +16,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 17.8.0
+      - run: cd web
       - uses: actions/cache@v3
         with:
           path: ~/.npm
