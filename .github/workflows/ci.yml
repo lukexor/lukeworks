@@ -32,4 +32,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
         with:
+          directory: ./web/coverage
+          flags: unittests
+          verbose: true
           fail_ci_if_error: true
