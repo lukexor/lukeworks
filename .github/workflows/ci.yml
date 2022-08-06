@@ -27,7 +27,7 @@ jobs:
       - name: Build
         run: npm build
       - name: Test
-      - run: npm run test:ci
+        run: npm run test:ci
       - name: Upload Coverage
         if: matrix.os == 'ubuntu-latest'
         uses: codecov/codecov-action@v3
