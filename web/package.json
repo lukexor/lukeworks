@@ -10,7 +10,8 @@
     "start": "next start",
     "build": "npm run lint && npm run test:ci && next build",
     "test": "jest --watch",
-    "test:ci": "jest --ci --coverage",
+    "test:cov": "rm -rf coverage && jest --coverage && open coverage/index.html",
+    "test:ci": "rm -rf coverage && jest --ci --coverage --coverageReporters cobertura",
     "lint": "next lint --dir src",
     "lint:fix": "next lint --dir src --fix",
     "prepare": "cd .. && husky install web/.husky"
