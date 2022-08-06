@@ -25,10 +25,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
-      - name: Lint
-        run: npm run lint
-      - name: Build
-        run: npm run build
+      # Vercel runs build already, so skip here
       - name: Test
         run: npm run test:ci
       - name: Upload Coverage

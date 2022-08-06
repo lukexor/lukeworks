@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "start": "next start",
-    "build": "npm run lint && next build",
+    "build": "npm run lint && npm run test:ci && next build",
     "test": "jest --watch",
     "test:ci": "jest --ci --coverage",
     "lint": "next lint --dir src",
