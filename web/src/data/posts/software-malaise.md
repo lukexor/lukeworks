@@ -62,8 +62,8 @@ It's clear to me that much of the software landscape was built and designed by
 brilliant minds on hardware that we scoff at as being ancient and barely
 usable. However, I don't see enough new ideas or new ways of doing things that
 take advantage of the fact that we're not limited to 80 column screens or 8 KB
-of memory. Sure, new languages have been invented, some as recently as
-2014. Examples are Go, Rust, Swift, and Dart. But, they all seem to follow in
+of memory. Sure, new languages have been invented, some as recently as 2014.
+Examples are Go, Rust, Swift, and Dart. But, they all seem to follow in
 the footsteps of previous generations with few major changes. Or, in the case of
 Dart, opt to compile down to Javascript instead of just replacing it. Why is C
 syntax so popular among so many languages? Because it works or because it's what

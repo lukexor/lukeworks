@@ -10,7 +10,6 @@ import Head from "next/head";
 import Image from "next/image";
 import path from "path";
 import { ParsedUrlQuery } from "querystring";
-import { Suspense } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
@@ -155,15 +154,13 @@ export default function Post({
           </div>
         )}
         <section>
-          <Suspense fallback={null}>
-            <ReactMarkdown
-              skipHtml={false}
-              remarkPlugins={[remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
-            >
-              {content}
-            </ReactMarkdown>
-          </Suspense>
+          <ReactMarkdown
+            skipHtml={false}
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+          >
+            {content}
+          </ReactMarkdown>
           <hr />
           <nav className={s.postNav}>
             <LinkIcon

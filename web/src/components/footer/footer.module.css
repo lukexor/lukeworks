@@ -9,12 +9,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 40px;
 }
 
 .backToTop {
-  position: absolute;
-  top: -20px;
+  transform: translateY(-20px);
 }
 
 .socialIcons {
@@ -29,6 +27,8 @@
 .copyright {
   font-size: var(--size-med);
   color: var(--color-secondary);
+  margin: 0;
+  padding-top: var(--size-small);
 }
 
 .name {

@@ -11,7 +11,7 @@ PPU, APU, and Cartridge). In order to ensure everything communicates and
 coordinates properly, a clock is required to keep them in sync. Nintendo
 released multiple versions of the NES in different regions, with different
 hardware containing differing clock timing. In the United States, for example,
-the NES used the [NTSC] television standard with an
+the NES used the [NTSC][] television standard with an
 [RP2A03](https://en.wikipedia.org/wiki/Ricoh_2A03) CPU while the consoles
 released in Europe followed the [PAL][] standard and used a RP2A07 CPU. Both the
 television standard and the chosen hardware for that region affect the timing

@@ -42,7 +42,7 @@ body {
 }
 
 /* Target root next div */
-body > div {
+#__next {
   height: 100%;
 }
 
@@ -55,7 +55,6 @@ body {
 }
 
 p {
-  white-space: pre-line;
   line-height: 1.4em;
   max-width: 70ch;
   margin: 25px auto;
