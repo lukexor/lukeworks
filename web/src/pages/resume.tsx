@@ -22,7 +22,7 @@ export type ResumeInfo = {
 
 export default function Resume() {
   return (
-    <>
+    <div className={s.wrapper}>
       <Head>
         <title>{resume?.title}</title>
         <meta name="description" content={resume?.description} />
@@ -47,6 +47,6 @@ export default function Resume() {
           </section>
         </main>
       </div>
-    </>
+    </div>
   );
 }

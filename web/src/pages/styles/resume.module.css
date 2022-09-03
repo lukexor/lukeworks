@@ -1,3 +1,7 @@
+.wrapper {
+  width: 100%;
+  background: #fff;
+}
 .resume {
   background: #fff;
   color: #444;
@@ -49,6 +53,11 @@
   font-weight: bold;
   margin: 1em 0 0.4em 0;
   padding: 0;
+}
+
+.resume p {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .resume a,

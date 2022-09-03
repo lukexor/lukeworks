@@ -4,7 +4,7 @@
   "header": {
     "name": "Lucas Petherbridge",
     "position": "Principal Software Engineer",
-    "summary": "Polygot Software Engineer with 10+ years experience solving problems by developing innovative solutions in a variety of domains. I started programming at age 15 and love keeping up with the latest technology. I'm constantly looking for new challenges and opportunities for learning."
+    "summary": "Passionate & driven polyglot Software Engineer with 12+ years experience designing innovative solutions using the latest software technologies and practices. Started as a self-taught programmer at age 15 and am constantly seeking to expand and grow. Great communicator and team collaborator willing to take on any challenge."
   },
   "contact": {
     "email": "me@lukeworks.tech",
@@ -22,7 +22,8 @@
           "title": "Principal Software Engineer",
           "start": "2022-01-01",
           "bullets": [
-            "Led architecture initiatives for increasing website performance by 10% using LighthouseCI and PageSpeed Insights"
+            "Curated a suite of libraries and packages aligning company standards including a UI template and NPM package that doubled project delivery speed.",
+            "Led architecture initiative for 7 teams, increasing website performance by 100% using LighthouseCI and PageSpeed Insights by migrating to NextJS."
           ]
         },
         {
@@ -30,7 +31,7 @@
           "start": "2021-07-01",
           "end": "2022-01-01",
           "bullets": [
-            "Provided technical leadership to 6 teams by holding learning sessions, pair programming & writing extensive documentation."
+            "Provided technical leadership to 6 teams by scheduling learning sessions, pair programming & writing extensive documentation."
           ]
         },
         {
@@ -39,7 +40,7 @@
           "end": "2021-07-01",
           "bullets": [
             "Designed & implemented customer authentication platform for an automotive e-commerce website using Auth0, React & Typescript deployed with Microsoft Azure & Kubernetes.",
-            "Brought team testing standards for unit & end-to-end tests from zero to 60% coverage using Jest & Cypress."
+            "Increased team testing coverage for unit & end-to-end tests from zero to 60% using Jest & Cypress."
           ]
         }
       ]
@@ -54,7 +55,7 @@
           "start": "2020-03-01",
           "end": "2020-06-30",
           "bullets": [
-            "Designed, configured, & set up cloud infrastructure as code for a GraphQL API using Okta authentication, AWS & Terraform.",
+            "Designed & configured cloud infrastructure as code for a GraphQL API using Okta authentication, AWS & Terraform.",
             "Exit: Contract ended due to organization restructure."
           ]
         }
@@ -70,7 +71,7 @@
           "start": "2013-11-01",
           "end": "2020-03-01",
           "bullets": [
-            "Redesigned Salesforce integration using modern APIs reducing project size by 90% by switching from Angular to Vue.js using JavaScript, Vue.js, XML & Apex.",
+            "Redesigned Salesforce integration using modern technologies reducing project size by 90% by switching from Angular to Vue.js using JavaScript, Vue.js, & XML.",
             "Designed & developed an OSS/BSS for the ordering, billing, & provisioning of telephony services which led to a 20% increase in revenue using Perl, JavaScript, JQuery & HTML/CSS."
           ]
         }
@@ -86,7 +87,7 @@
       "location": "Portland, OR",
       "icon": "/images/resume/psu.png",
       "bullets": [
-        "Consulted as a Scrum/Agile coach for 10 teams during my senior capstone in lieu of a project."
+        "Provided Scrum & Agile Practice consultation services for 10 teams during my senior capstone."
       ]
     }
   ],
@@ -97,19 +98,19 @@
         {
           "start": "2019-09",
           "title": "PixEngine",
-          "desc": "A cross-platform graphics/UI engine framework for simple games, visualizations, and graphics demos written in Rust using SDL2.",
+          "desc": "A cross-platform graphics & UI library for simple games, visualizations, and graphics application written in Rust.",
           "website": "https://lukeworks.tech/pix-engine"
         },
         {
           "start": "2019-03",
           "title": "TetaNES",
-          "desc": "A Nintendo Entertainment System (NES) cross-platform/web emulator written in Rust using SDL2 & JavaScript/WebAssembly.",
+          "desc": "A cross-platform & web-browser emulator for the Nintendo Entertainment System (NES) written in Rust & Typescript supporting WebAssembly.",
           "website": "https://lukeworks.tech/tetanes"
         },
         {
-          "start": "2014-08",
+          "start": "2022-05",
           "title": "Personal Portfolio/Blog",
-          "desc": "A website for blog articles & projects using React, Typescript, Rust & MongoDB.",
+          "desc": "A personal blog & project portfolio website using React/NextJS & Typescript.",
           "website": "https://lukeworks.tech/"
         }
       ]
@@ -117,9 +118,9 @@
   ],
   "addtlExperience": [],
   "langAndTech": [
-    "JavaScript; Typescript; NodeJS; React",
-    "Rust; Golang; Python",
-    "NGINX; MySQL; PostgreSQL; MongoDB",
-    "AWS; Azure; Docker; Kubernetes"
+    "Rust, Golang, C/C++, Python",
+    "JavaScript/Typescript, NodeJS, React/NextJS, HTML, CSS",
+    "NGINX, MySQL, PostgreSQL, MongoDB",
+    "Microsoft Azure, Docker, Kubernetes"
   ]
 }
