@@ -14,6 +14,21 @@
   },
   "employment": [
     {
+      "entity": "Statherós",
+      "icon": "/images/resume/statheros.webp",
+      "location": "Crossville, TN",
+      "positions": [
+        {
+          "title": "Principal Software Engineer",
+          "start": "2022-10-17",
+          "bullets": [
+            "Developed software platform for Electromagnetic Spectrum Operations (EMSO) applications using Rust, RabbitMQ/ZeroMQ and Docker.",
+            "Designed an interoperability and portability specification for EMSO platform applications."
+          ]
+        }
+      ]
+    },
+    {
       "entity": "Lithia Motors, Inc.",
       "icon": "/images/resume/lithia-motors.png",
       "location": "Portland, OR",
@@ -21,6 +36,7 @@
         {
           "title": "Principal Software Engineer",
           "start": "2022-01-01",
+          "end": "2022-10-14",
           "bullets": [
             "Curated a suite of libraries and packages aligning company standards including a UI template and NPM package that doubled project delivery speed.",
             "Led architecture initiative for 7 teams, increasing website performance by 100% using LighthouseCI and PageSpeed Insights by migrating to NextJS."
