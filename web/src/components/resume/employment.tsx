@@ -34,12 +34,6 @@ type EmploymentItemProps = {
   employment: EmploymentInfo;
 };
 
-const calcDuration = (start: string, end?: string) => {
-  const startDate = dayjs(start, "YYYY-MM");
-  const endDate = end ? dayjs(end, "YYYY-MM") : dayjs();
-  return dayjs.duration(endDate.diff(startDate));
-};
-
 const formattedDate = (date?: string) => {
   return date ? dayjs(date).format("MMM YYYY") : "Present";
 };
