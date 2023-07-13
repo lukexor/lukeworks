@@ -51,7 +51,7 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 1em;
   font-weight: bold;
-  margin: 1em 0 0.4em 0;
+  margin: 0.3em 0 0.4em 0;
   padding: 0;
 }
 
@@ -73,8 +73,7 @@
 }
 
 .resume li {
-  padding-top: 0.5em;
-  padding-left: 0.5em;
+  padding: 0.3em;
 }
 
 .resume aside {
@@ -129,11 +128,12 @@
 
 .positions {
   margin-top: 0;
-  margin-left: 20px;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .positions > li {
-  list-style-type: disclosure-closed;
+  list-style-type: none;
 }
 
 .resume em {
@@ -145,10 +145,19 @@
 .experienceImg {
   margin: 15px 10px 5px 0;
 }
+.experienceEntity {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.experienceEntity em {
+  margin: 15px 0 5px 0;
+  font-size: 0.9em;
+}
 
 .experience {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .experienceDescription {
@@ -162,4 +171,5 @@
 
 .bullets {
   margin-left: 20px;
+  list-style-type: circle;
 }
