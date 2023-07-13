@@ -3,8 +3,8 @@
   "description": "Software Engineer Resume for Lucas Petherbridge",
   "header": {
     "name": "Lucas Petherbridge",
-    "position": "Principal Software Engineer",
-    "summary": "Passionate & driven polyglot Software Engineer with 12+ years experience designing innovative solutions using the latest software technologies and practices. Started as a self-taught programmer at age 15 and am constantly seeking to expand and grow. Great communicator and team collaborator willing to take on any challenge."
+    "position": "Senior Software Engineer",
+    "summary": "Passionate & driven polyglot software engineer with 12+ years experience designing innovative solutions using the latest software technologies and practices. Constantly seeking to expand and grow using modern technologies to create innovative solutions. Great communicator team collaborator, and mentor willing to take on any challenge."
   },
   "contact": {
     "email": "me@lukeworks.tech",
@@ -22,8 +22,9 @@
           "title": "Principal Software Engineer",
           "start": "2022-10-17",
           "bullets": [
-            "Developed software platform for Electromagnetic Spectrum Operations (EMSO) applications using Rust, RabbitMQ/ZeroMQ and Docker.",
-            "Designed an interoperability and portability specification for EMSO platform applications."
+            "Developed containerized software platform for Electromagnetic Spectrum Operations (EMSO) applications for the US Air Force using Rust, RabbitMQ/ZeroMQ, CouchDB, & Docker.",
+            "Drafted an interoperability & portability specification for heterogeneous EMSO containerized applications using YAML & Google Protocol Buffers.",
+            "Developed a container runtime system simulator for RF applications integrating with Software Defined Radios"
           ]
         }
       ]
@@ -38,8 +39,8 @@
           "start": "2022-01-01",
           "end": "2022-10-14",
           "bullets": [
-            "Curated a suite of libraries and packages aligning company standards including a UI template and NPM package that doubled project delivery speed.",
-            "Led architecture initiative for 7 teams, increasing website performance by 100% using LighthouseCI and PageSpeed Insights by migrating to NextJS."
+            "Curated suite of libraries including a UI template & NPM package that increased project delivery speed by 10% using React, Typescript & NextJS.",
+            "Led architecture initiatives for 7 teams, doubling website performance using LighthouseCI & PageSpeed Insights by migrating to NextJS."
           ]
         },
         {
@@ -47,7 +48,8 @@
           "start": "2021-07-01",
           "end": "2022-01-01",
           "bullets": [
-            "Provided technical leadership to 6 teams by scheduling learning sessions, pair programming & writing extensive documentation."
+            "Provided technical leadership to 6 teams by holding learning sessions, pair programming & writing extensive documentation using React & Typescript.",
+            "Increased test coverage for unit & end-to-end tests from 0% to 60% using Jest & Cypress."
           ]
         },
         {
@@ -55,8 +57,7 @@
           "start": "2020-07-01",
           "end": "2021-07-01",
           "bullets": [
-            "Designed & implemented customer authentication platform for an automotive e-commerce website using Auth0, React & Typescript deployed with Microsoft Azure & Kubernetes.",
-            "Increased team testing coverage for unit & end-to-end tests from zero to 60% using Jest & Cypress."
+            "Developed customer authentication platform for an automotive e-commerce website using Auth0, React & Typescript deployed with Microsoft Azure & Kubernetes."
           ]
         }
       ]
@@ -71,7 +72,7 @@
           "start": "2020-03-01",
           "end": "2020-06-30",
           "bullets": [
-            "Designed & configured cloud infrastructure as code for a GraphQL API using Okta authentication, AWS & Terraform.",
+            "Developed infrastructure as code for an AWS GraphQL API using Okta authentication & Terraform.",
             "Exit: Contract ended due to organization restructure."
           ]
         }
@@ -87,8 +88,8 @@
           "start": "2013-11-01",
           "end": "2020-03-01",
           "bullets": [
-            "Redesigned Salesforce integration using modern technologies reducing project size by 90% by switching from Angular to Vue.js using JavaScript, Vue.js, & XML.",
-            "Designed & developed an OSS/BSS for the ordering, billing, & provisioning of telephony services which led to a 20% increase in revenue using Perl, JavaScript, JQuery & HTML/CSS."
+            "Redesigned Salesforce integration plugin, reducing project size by 90% by switching from AngularJS to Vue.js.",
+            "Developed an OSS/BSS for the ordering, billing, & provisioning of telephony services which led to a 20% increase in revenue using Perl, JavaScript, JQuery & HTML/CSS."
           ]
         }
       ]
@@ -114,7 +115,7 @@
         {
           "start": "2019-09",
           "title": "PixEngine",
-          "desc": "A cross-platform graphics & UI library for simple games, visualizations, and graphics application written in Rust.",
+          "desc": "A cross-platform graphics & UI library for simple games, visualizations, & graphics application written in Rust.",
           "website": "https://lukeworks.tech/pix-engine"
         },
         {
@@ -134,9 +135,9 @@
   ],
   "addtlExperience": [],
   "langAndTech": [
-    "Rust, Golang, C/C++, Python",
+    "Rust, Python",
     "JavaScript/Typescript, NodeJS, React/NextJS, HTML, CSS",
-    "NGINX, MySQL, PostgreSQL, MongoDB",
-    "Microsoft Azure, Docker, Kubernetes"
+    "Actix, NGINX, MySQL, PostgreSQL, MongoDB, CouchDB",
+    "Docker, Kubernetes"
   ]
 }

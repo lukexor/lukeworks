@@ -40,28 +40,16 @@ const calcDuration = (start: string, end?: string) => {
   return dayjs.duration(endDate.diff(startDate));
 };
 
-const formattedDuration = (start: string, end?: string) => {
-  const duration = calcDuration(start, end);
-  const yrStr = duration.years() == 1 ? "yr" : "yrs";
-  const moStr = duration.months() == 1 ? "mo" : "mos";
-  return duration.years() > 0 && duration.months() > 0
-    ? duration.format(`Y [${yrStr}] M [${moStr}]`)
-    : duration.years() > 0
-    ? duration.format(`Y [${yrStr}]`)
-    : duration.format(`M [${moStr}]`);
-};
-
 const formattedDate = (date?: string) => {
   return date ? dayjs(date).format("MMM YYYY") : "Present";
 };
 
 function Position({ position }: PositionProps) {
   const { start, end, bullets } = position;
-  const duration = formattedDuration(start, end);
   return (
     <li>
       <h5>{position.title}</h5>
-      <em>{`${formattedDate(start)} - ${formattedDate(end)} ∙ ${duration}`}</em>
+      <em>{`${formattedDate(start)} - ${formattedDate(end)}`}</em>
       <ul>
         {bullets.map((bullet) => (
           <li key={bullet}>{bullet}</li>
@@ -73,9 +61,6 @@ function Position({ position }: PositionProps) {
 
 function EmploymentItem({ employment }: EmploymentItemProps) {
   const { positions, icon, entity, location } = employment;
-  const start = positions[positions.length - 1]?.start ?? "";
-  const end = positions[0]?.end;
-  const duration = formattedDuration(start, end);
 
   return (
     <>
@@ -88,11 +73,13 @@ function EmploymentItem({ employment }: EmploymentItemProps) {
             alt={`${employment.entity} Logo`}
           />
         </div>
-        <div>
-          <h4>{entity}</h4>
-          <em>
-            {duration} ∙ {location}
-          </em>
+        <div className={s.experienceEntity}>
+          <h4>
+            {entity}
+          </h4>
+            <em>
+              {location}
+            </em>
         </div>
       </div>
       <ul className={s.positions}>
