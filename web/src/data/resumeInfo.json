@@ -8,9 +8,13 @@
   },
   "contact": {
     "email": "me@lukeworks.tech",
+    "phone": "503-616-8265",
+    "location": "Portland, OR",
     "website": "lukeworks.tech",
-    "github": "github.com/lukexor",
-    "linkedIn": "linkedin.com/in/lucaspetherbridge"
+    "githubUrl": "github.com/lukexor",
+    "github": "lukexor",
+    "linkedInUrl": "linkedin.com/in/lucaspetherbridge",
+    "linkedIn": "lucaspetherbridge"
   },
   "employment": [
     {
@@ -79,7 +83,7 @@
       ]
     },
     {
-      "entity": "NetFortris (Formerly Fonality, Inc)",
+      "entity": "NetFortris",
       "location": "Culver City, CA",
       "icon": "/images/resume/netfortris.png",
       "positions": [
@@ -95,19 +99,18 @@
       ]
     }
   ],
-  "education": [
-    {
-      "start": "2015",
-      "end": "2019",
-      "title": "Bachelor of Computer Science",
-      "entity": "Portland State University",
-      "location": "Portland, OR",
-      "icon": "/images/resume/psu.png",
-      "bullets": [
-        "Provided Scrum & Agile Practice consultation services for 10 teams during my senior capstone."
-      ]
-    }
-  ],
+  "education": {
+    "start": "2015",
+    "end": "2019",
+    "degree": "Bachelor of Science",
+    "field": "Computer Science",
+    "entity": "Portland State University",
+    "location": "Portland, OR",
+    "icon": "/images/resume/psu.png",
+    "bullets": [
+      "Provided Scrum & Agile Practice consultation services for 10 teams during my senior capstone."
+    ]
+  },
   "experience": [
     {
       "title": "Projects",
@@ -115,7 +118,7 @@
         {
           "start": "2019-09",
           "title": "PixEngine",
-          "desc": "A cross-platform graphics & UI library for simple games, visualizations, & graphics application written in Rust.",
+          "desc": "A cross-platform graphics & UI library for simple games, visualizations, & graphics applications written in Rust & SDL2.",
           "website": "https://lukeworks.tech/pix-engine"
         },
         {
@@ -135,9 +138,13 @@
   ],
   "addtlExperience": [],
   "langAndTech": [
-    "Rust, Python",
-    "JavaScript/Typescript, NodeJS, React/NextJS, HTML, CSS",
-    "Actix, NGINX, MySQL, PostgreSQL, MongoDB, CouchDB",
-    "Docker, Kubernetes"
+    "Rust (Actix, Tokio)",
+    "Python",
+    "Javascript (ES6, React, NextJS, Node.js)",
+    "Typescript",
+    "HTML/CSS",
+    "SQL (PostgresSQL, MySQL)",
+    "NoSQL (MongoDB, CouchDB)",
+    "Containers (Docker, Kubernetes)"
   ]
 }

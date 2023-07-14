@@ -6,13 +6,14 @@ export type TechnologiesProps = {
 
 export default function Technologies({ list }: TechnologiesProps) {
   return (
-    <section>
+    <section className={s.technologies}>
       <h3>Technologies</h3>
-      <ul className={s.technology}>
-        {list.map((tech) => (
-          <li key={tech}>{tech}</li>
-        ))}
-      </ul>
+      {list.map((tech) => (
+        <div key={tech}>
+          {tech}
+          <br />
+        </div>
+      ))}
     </section>
   );
 }

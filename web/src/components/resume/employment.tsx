@@ -3,7 +3,6 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import duration from "dayjs/plugin/duration";
 import Image from "next/image";
 import s from "pages/styles/resume.module.css";
-import Ribbon from "./ribbon";
 
 dayjs.extend(duration);
 dayjs.extend(customParseFormat);
@@ -42,8 +41,10 @@ function Position({ position }: PositionProps) {
   const { start, end, bullets } = position;
   return (
     <li>
-      <h5>{position.title}</h5>
-      <em>{`${formattedDate(start)} - ${formattedDate(end)}`}</em>
+      <div className={s.experienceEntity}>
+        <h5>{position.title}</h5>
+        <em>{`${formattedDate(start)} - ${formattedDate(end)}`}</em>
+      </div>
       <ul>
         {bullets.map((bullet) => (
           <li key={bullet}>{bullet}</li>
@@ -68,12 +69,8 @@ function EmploymentItem({ employment }: EmploymentItemProps) {
           />
         </div>
         <div className={s.experienceEntity}>
-          <h4>
-            {entity}
-          </h4>
-            <em>
-              {location}
-            </em>
+          <h4>{entity}</h4>
+          <em>{location}</em>
         </div>
       </div>
       <ul className={s.positions}>
@@ -88,7 +85,6 @@ function EmploymentItem({ employment }: EmploymentItemProps) {
 export default function Employment({ list }: EmploymentProps) {
   return (
     <section>
-      <Ribbon />
       <h3>Work Experience</h3>
       <section className={s.employmentList}>
         {list.map((employment) => (
