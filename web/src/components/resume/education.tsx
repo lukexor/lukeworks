@@ -3,7 +3,8 @@ import s from "pages/styles/resume.module.css";
 export type EducationInfo = {
   start: string;
   end?: string;
-  title: string;
+  field: string;
+  degree: string;
   entity: string;
   location: string;
   icon: string;
