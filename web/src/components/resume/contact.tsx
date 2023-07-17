@@ -6,7 +6,9 @@ export type ContactInfo = {
   location: string;
   website: string;
   github: string;
+  githubUrl: string;
   linkedIn: string;
+  linkedInUrl: string;
 };
 
 export type ContactProps = {
