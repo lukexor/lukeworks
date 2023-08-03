@@ -1,0 +1,247 @@
+[meta]
+title_base = "Lucas Petherbridge"
+origin = "https://lukeworks.tech"
+
+[search]
+placeholder = "Search..."
+
+[homepage]
+title = "{title_base} | Software Engineer"
+description = """\
+  A blog and project portfolio by Lucas Petherbridge on programming, \
+  technology, and video games.\
+  """
+heading = "Hi, I'm Luke"
+subheading = "Software Engineer. Designer. Thinker."
+action = { alt = "Explore", text = "Have a look around!" }
+
+[about]
+title = "About - {title_base}"
+description = """\
+  My name is Lucas Petherbridge. I'm a software engineer and technology \
+  enthusiast.\
+
+  I've been fascinated with computers and technology for as long as I can \
+  remember and have been coding since age 15 when I first learned about HTML \
+  and CSS. I primarily use Rust these days, but I've dabbled in just about \
+  everything including Perl, Ruby, Python, Golang, Java/Kotlin, C/C++, \
+  Haskell, and 6502 Assembly!\
+
+  I love learning new technologies and finding the best tools for the job. I've \
+  developed a deep appreciation of problem-solving over the years, with many \
+  late nights (and cups of coffee!). I am constantly looking for new projects, \
+  things to learn and better ways to solve problems.\
+
+  I'm excited about cutting-edge technologies, especially AI and machine \
+  learning and I'm always on the lookout for anything I can sink my teeth \
+  into. My posts here share my projects and ideas with the hope they spur \
+  discussions about code, technology and software practices.\
+  """
+
+[contact]
+title = "Contact - {title_base}"
+first_name = "Lucas"
+last_name = "Petherbridge"
+email = "me@lukeworks.tech"
+github = "github.com/lukexor"
+linked_in = "linkedin.com/in/lucaspetherbridge"
+content = """\
+  Have a question or want to work together? \
+  Drop me a line: <a href="mailto:{email}" title="email {email}">{email}</a>.\
+  """
+
+
+[404]
+title = "$ 404 Segmentation Fault - {title_base}"
+message = "The page you're looking for is out of bounds."
+action = """\
+  Check if the url is correct, file a \
+  <a href="{origin}/report_issue">bug report</a>, \
+  or head back to the <a href="{origin}" title="homepage">homepage</a>.\
+  """
+
+[500]
+title = "$ 500 Fatal Exception - {title_base}"
+message = "Something blew up internally."
+action = """\
+  Try again later, file a \
+  <a href="{origin}/report_issue">bug report</a>, \
+  or head back to the <a href="{origin}" title="homepage">homepage</a>.\
+  """
+
+[tetanes]
+title = "TetaNES Web - {title_base}"
+description = """\
+  TetaNES Web is an emulator for the Nintendo Entertainment System (NES)\
+  written in Rust and WebAssembly (WASM).\
+  """
+image = "/images/blog/tetanes.webp"
+url = "{origin}/tetanes_web"
+
+[resume]
+title = "Software Engineer Resume - {title_base}"
+description = "Software Engineer Resume for Lucas Petherbridge"
+position = "Principal Software Engineer"
+summary = """\
+  Passionate & driven polyglot Software Engineer with 12+ years experience \
+  designing innovative solutions using the latest software technologies and \
+  practices. Started as a self-taught programmer at age 15 and am constantly \
+  seeking to expand and grow. Great communicator and team collaborator \
+  willing to take on any challenge.\
+  """
+additional_experience = []
+technologies = [
+  "Rust, Golang, C/C++, Python",
+  "JavaScript/Typescript, NodeJS, React/NextJS, HTML, CSS",
+  "NGINX, MySQL, PostgreSQL, MongoDB",
+  "Microsoft Azure, Docker, Kubernetes"
+]
+
+
+
+[[resume.employment]]
+entity = "Statherós"
+icon = "/images/resume/statheros.webp"
+location = "Crossville, TN"
+
+[[resume.employment.positions]]
+title = "Principal Software Engineer"
+start = "2022-10-17"
+bullets = [
+  """Developed software platform for Electromagnetic Spectrum Operations \
+  (EMSO) applications using Rust, RabbitMQ/ZeroMQ and Docker.""",
+  """Designed an interoperability and portability specification for EMSO \
+  platform applications.""",
+]
+
+[[resume.employment]]
+entity = "Lithia Motors, Inc."
+icon = "/images/resume/lithia-motors.webp"
+location = "Portland, OR"
+
+[[resume.employment.positions]]
+title = "Principal Software Engineer"
+start = "2022-01-01"
+end = "2022-10-14"
+bullets = [
+  """Curated a suite of libraries and packages aligning company standards \
+  including a UI template and NPM package that doubled project delivery \
+  speed.""",
+  """Led architecture initiative for 7 teams, increasing website performance \
+  by 100% using LighthouseCI and PageSpeed Insights by migrating to NextJS.""",
+]
+
+[[resume.employment.positions]]
+    title = "Staff Software Engineer"
+    start = "2021-07-01"
+    end = "2022-01-01"
+    bullets = [
+      """Provided technical leadership to 6 teams by scheduling learning sessions, \
+      pair programming & writing extensive documentation.""",
+    ]
+
+[[resume.employment.positions]]
+title = "Senior Software Engineer"
+start = "2020-07-01"
+end = "2021-07-01"
+bullets = [
+  """Designed & implemented customer authentication platform for an automotive \
+  e-commerce website using Auth0, React & Typescript deployed with Microsoft \
+  Azure & Kubernetes.""",
+  """Increased team testing coverage for unit & end-to-end tests from zero to \
+  60% using Jest & Cypress.""",
+]
+
+[[resume.employment]]
+entity = "TEKsystems - Consultant at Nike"
+icon = "/images/resume/teksystems.webp"
+location = "Beaverton, OR"
+
+[[resume.employment.positions]]
+title = "Senior Software Engineer"
+start = "2020-03-01"
+end = "2020-06-30"
+bullets = [
+  """Designed & configured cloud infrastructure as code for a GraphQL API \
+  using Okta authentication, AWS & Terraform.""",
+  "Exit: Contract ended due to organization restructure.",
+]
+
+[[resume.employment]]
+entity = "NetFortris (Formerly Fonality, Inc)"
+location = "Culver City, CA"
+icon = "/images/resume/netfortris.webp"
+
+[[resume.employment.positions]]
+title = "Senior Software Engineer"
+start = "2013-11-01"
+end = "2020-03-01"
+bullets = [
+  """Redesigned Salesforce integration using modern technologies reducing \
+  project size by 90% by switching from Angular to Vue.js using JavaScript, \
+  Vue.js, & XML.""",
+  """Designed & developed an OSS/BSS for the ordering, billing, & \
+  provisioning of telephony services which led to a 20% increase in revenue \
+  using Perl, JavaScript, JQuery & HTML/CSS.""",
+]
+
+[[resume.education]]
+start = "2015"
+end = "2019"
+title = "Bachelor of Computer Science"
+entity = "Portland State University"
+location = "Portland, OR"
+icon = "/images/resume/psu.webp"
+bullets = [
+  """Provided Scrum & Agile Practice consultation services for 10 teams during my \
+  senior capstone.""",
+]
+
+[[resume.experience]]
+title = "Projects"
+
+[[resume.experience.bullets]]
+start = "2019-09"
+title = "PixEngine"
+description = """A cross-platform graphics & UI library for simple games, \
+  visualizations, and graphics application written in Rust."""
+website = "{origin}/pix-engine"
+
+[[resume.experience.bullets]]
+start = "2019-03"
+title = "TetaNES"
+description = """A cross-platform & web-browser emulator for the Nintendo \
+  Entertainment System (NES) written in Rust & Typescript supporting \
+  WebAssembly."""
+website = "{origin}/tetanes"
+
+[[resume.experience.bullets]]
+start = "2022-05"
+title = "Personal Portfolio/Blog"
+description = """A personal blog & project portfolio website using \
+  React/NextJS & Typescript."""
+website = "{origin}"
+
+[footer]
+rightsReserved = "All Rights Reserved"
+backToTop = "Back to Top"
+
+[[footer.icons]]
+title = "GitHub"
+icon = "github"
+link = "{github}"
+
+[[footer.icons]]
+title = "LinkedIn"
+icon = "linkedIn"
+link = "{linked_in}"
+
+[[footer.icons]]
+title = "RSS Feed"
+icon = "rss"
+link = "https://feeds.feedburner.com/LucasPetherbridge"
+
+[[footer.icons]]
+title = "Email"
+icon = "email"
+link = "mailto:{email}"
