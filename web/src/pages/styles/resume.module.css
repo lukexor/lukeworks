@@ -24,6 +24,7 @@
 }
 
 .resume h1 {
+  margin-top: 10px;
   font-size: 2.4em;
 }
 
@@ -32,18 +33,17 @@
 }
 
 .resume h3 {
-  border-bottom: 2px solid #ccc;
   font-size: 1.8em;
-  margin: 10px 0;
-  padding-bottom: 5px;
+  margin-top: 0;
+  margin-bottom: 5px;
 }
 
 .resume h4 {
   color: #333;
   font-size: 1.3em;
   font-weight: bold;
-  margin: 15px 0 5px 0;
-  padding: 0;
+  margin: 0;
+  padding-right: 10px;
 }
 
 .resume h5 {
@@ -51,8 +51,8 @@
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 1em;
   font-weight: bold;
-  margin: 1em 0 0.4em 0;
-  padding: 0;
+  margin: 0;
+  padding-right: 10px;
 }
 
 .resume p {
@@ -73,18 +73,19 @@
 }
 
 .resume li {
-  padding-top: 0.5em;
-  padding-left: 0.5em;
+  padding: 0.3em;
 }
 
 .resume aside {
   max-width: 30%;
-  margin-right: 2em;
+  margin-right: 25px;
 }
 
 .header {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  text-align: center;
 }
 
 .title {
@@ -93,7 +94,23 @@
 
 .name {
   margin-bottom: 10px;
-  margin-right: 1.5em;
+}
+
+.contact,
+.technologies,
+.education {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.contactRow {
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+
+.contactRow svg {
+  padding-left: 10px;
 }
 
 .position {
@@ -113,7 +130,8 @@
 
 .content {
   flex: 1;
-  margin-left: 40px;
+  padding-left: 25px;
+  border-left: 2px solid #003d73;
 }
 
 .ribbon {
@@ -129,11 +147,12 @@
 
 .positions {
   margin-top: 0;
-  margin-left: 20px;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .positions > li {
-  list-style-type: disclosure-closed;
+  list-style-type: none;
 }
 
 .resume em {
@@ -143,12 +162,20 @@
 }
 
 .experienceImg {
-  margin: 15px 10px 5px 0;
+  margin-right: 10px;
+}
+.experienceEntity {
+  display: flex;
+  align-items: baseline;
+  width: 100%;
+}
+.experienceEntity em {
+  font-size: 0.8em;
 }
 
 .experience {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .experienceDescription {
@@ -162,4 +189,5 @@
 
 .bullets {
   margin-left: 20px;
+  list-style-type: circle;
 }

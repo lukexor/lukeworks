@@ -25,6 +25,7 @@
     "dayjs": "^1.11.1",
     "next": "^12.2.2",
     "p5": "^1.4.1",
+    "react": "^18.2.0",
     "react-markdown": "^8.0.3",
     "react-remark": "^2.1.0",
     "react-transition-group": "^4.4.2",

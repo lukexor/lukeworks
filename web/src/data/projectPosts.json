@@ -285,7 +285,8 @@
       "src": "/images/projects/umflint_env_club.webp",
       "alt": "UM-Flint Environmental Science Club Website"
     },
-    "website": "https://umflint-env.lukeworks.tech/",
+    "_website": "https://umflint-env.lukeworks.tech/",
+    "website": "",
     "category": "",
     "tags": [],
     "minutesToRead": 0,
@@ -318,28 +319,5 @@
     "publishedOn": "2019-08-21 16:09:16.000000",
     "createdOn": "2017-03-27 01:06:07.000000",
     "updatedOn": "2017-07-13 17:44:30.000000"
-  },
-  {
-    "id": 11,
-    "name": "mindyou",
-    "title": "MindYou",
-    "thumbnail": {
-      "src": "/images/projects/mindyou_main.webp",
-      "alt": "MindYou Screenshot"
-    },
-    "image": {
-      "src": "/images/projects/mindyou_main.webp",
-      "alt": "MindYou Screenshot"
-    },
-    "website": "https://mindyou.me/",
-    "category": "",
-    "tags": [],
-    "minutesToRead": 0,
-    "likes": 0,
-    "startedOn": "2014-11-18 21:24:18.000000",
-    "completedOn": null,
-    "publishedOn": null,
-    "createdOn": "2014-11-18 21:24:20.000000",
-    "updatedOn": "2017-05-06 03:00:27.000000"
   }
 ]

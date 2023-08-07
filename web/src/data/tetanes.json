@@ -2,5 +2,5 @@
   "title": "TetaNES",
   "description": "TetaNES is an emulator for the Nintendo Entertainment System (NES) written in Rust and WebAssembly.",
   "image": "/images/blog/tetanes.webp",
-  "url": "https://lukexor.me/tetanes/wasm"
+  "url": "tetanes-web/index.html"
 }
