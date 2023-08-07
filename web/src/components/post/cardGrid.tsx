@@ -18,10 +18,12 @@ type CardGridProps = {
 
 export const getCardsPerRow = (): number => {
   const sectionWidth =
-    document.querySelector("[data-type=grid]")?.clientWidth ?? 1;
+    document.querySelector("[data-type=grid]")?.clientWidth ?? 300;
   const cardWidth =
     document.querySelector("[data-type=card]")?.clientWidth ?? 300;
-  return Math.max(1, Math.floor(sectionWidth / cardWidth));
+  console.log(sectionWidth, cardWidth);
+  console.log(Math.max(1, Math.floor((sectionWidth - 30) / cardWidth)));
+  return Math.max(1, Math.floor((sectionWidth - 30) / cardWidth));
 };
 
 const Card = forwardRef(function Card(
