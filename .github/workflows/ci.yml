@@ -16,20 +16,43 @@ jobs:
         working-directory: ./web
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
         with:
-          node-version: 17.8.0
-      - uses: actions/cache@v3
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+      - name: Set up cache
+        uses: actions/cache@v3
+        continue-on-error: false
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
-      - name: Install dependencies
-        run: npm ci
-      # Vercel runs build already, so skip here
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - name: Lint
+        run: |
+          cargo fmt --all --check
+          cargo clippy -- -D warnings
+      - name: Install cargo tools
+        run: |
+          curl -L --proto '=https' --tlsv1.2 -sSf \
+            https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
+            | bash
+          cargo bininstall --locked --no-confirm --no-symlinks \
+            cargo-audit \
+            cargo-deny \
+            cargo-leptos \
+            cargo-pants
+      - name: Check
+        run: |
+          cargo deny check
+          cargo audit
+          cargo pants
       - name: Test
-        run: npm run test:ci
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          verbose: true
-          fail_ci_if_error: true
+        run: cargo-leptos test

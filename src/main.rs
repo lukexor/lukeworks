@@ -1,76 +1,52 @@
 #![doc = include_str!("../README.md")]
-#![warn(
-    clippy::branches_sharing_code,
-    clippy::cognitive_complexity,
-    clippy::dbg_macro,
-    clippy::debug_assert_with_mut_call,
-    clippy::doc_link_with_quotes,
-    clippy::doc_markdown,
-    clippy::empty_line_after_outer_attr,
-    clippy::expect_used,
-    clippy::float_cmp,
-    clippy::float_cmp_const,
-    clippy::float_equality_without_abs,
-    clippy::map_unwrap_or,
-    clippy::match_wildcard_for_single_variants,
-    clippy::missing_const_for_fn,
-    clippy::missing_errors_doc,
-    clippy::missing_panics_doc,
-    clippy::mod_module_files,
-    clippy::must_use_candidate,
-    clippy::needless_for_each,
-    clippy::option_if_let_else,
-    clippy::print_stderr,
-    clippy::print_stdout,
-    clippy::redundant_closure_for_method_calls,
-    clippy::semicolon_if_nothing_returned,
-    // clippy::shadow_unrelated,
-    clippy::similar_names,
-    clippy::suspicious_operation_groupings,
-    clippy::unreadable_literal,
-    clippy::unseparated_literal_suffix,
-    clippy::unused_self,
-    clippy::unwrap_used,
-    clippy::use_debug,
-    clippy::used_underscore_binding,
-    clippy::useless_let_if_seq,
-    clippy::wildcard_dependencies,
-    clippy::wildcard_imports,
-    deprecated_in_future,
-    future_incompatible,
-    missing_copy_implementations,
-    missing_debug_implementations,
-    missing_docs,
-    non_ascii_idents,
-    nonstandard_style,
-    noop_method_call,
-    rust_2018_compatibility,
-    rust_2018_idioms,
-    rust_2021_compatibility,
-    rustdoc::bare_urls,
-    rustdoc::broken_intra_doc_links,
-    rustdoc::invalid_html_tags,
-    rustdoc::invalid_rust_codeblocks,
-    rustdoc::private_intra_doc_links,
-    single_use_lifetimes,
-    trivial_casts,
-    trivial_numeric_casts,
-    unreachable_pub,
-    unused,
-    // unused_crate_dependencies,
-    unused_import_braces,
-    variant_size_differences
-)]
+#![warn(clippy::all, clippy::pedantic)]
+#![allow(clippy::module_name_repetitions)] // Too many false positives
 
+mod file_server;
 mod lukeworks;
-#[cfg(feature = "ssr")]
-mod server;
 
 #[cfg(feature = "ssr")]
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    server::run().await
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    use crate::lukeworks::LukeWorks;
+    use axum::Router;
+    use leptos::view;
+    use leptos_axum::LeptosRoutes;
+    use tracing_subscriber::EnvFilter;
+
+    tracing_subscriber::fmt()
+        .with_thread_names(true)
+        .with_thread_ids(true)
+        .with_env_filter(
+            EnvFilter::builder()
+                .with_default_directive(
+                    "lukeworks=info"
+                        .parse()
+                        .expect("failed to parse env filter"),
+                )
+                .from_env_lossy(),
+        )
+        .init();
+
+    let conf = leptos::get_configuration(None).await?;
+    let options = conf.leptos_options;
+    let addr = options.site_addr;
+    let routes = leptos_axum::generate_route_list(|cx| view! { cx, <LukeWorks /> }).await;
+
+    let app = Router::new()
+        .leptos_routes(&options, routes, |cx| view! { cx, <LukeWorks /> })
+        .fallback(file_server::serve)
+        .with_state(options);
+
+    tracing::info!("lukeworks listening on http://{addr}");
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .await?;
+
+    Ok(())
 }
 
 #[cfg(not(feature = "ssr"))]
-pub fn main() {}
+pub fn main() {
+    // no client-side main function
+}

@@ -12,13 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
         with:
-          node-version: 17.8.0
-      - uses: actions/cache@v3
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt, clippy
+      - name: Set up cache
+        uses: actions/cache@v3
+        continue-on-error: false
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
-      - name: Install
-        run: npm ci
-      - run: npm outdated
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo-
+      - name: Install cargo-outdated
+        run: |
+          curl -L --proto '=https' --tlsv1.2 -sSf \
+            https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh \
+            | bash
+          cargo bininstall --locked --no-confirm --no-symlinks \
+            cargo-outdated
+      - name: Check outdated
+        run: cargo outdated --exit-code 1

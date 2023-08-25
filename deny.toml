@@ -1,0 +1,11 @@
+[licenses]
+unlicensed = "allow"
+allow = [
+    "MIT",
+    "Apache-2.0",
+]
+copyleft = "allow"
+default = "allow"
+
+[bans]
+multiple-versions = "allow"
