@@ -11,12 +11,18 @@ get-version:
 
 clean:
   cargo clean
+  rm -rf .vercel/output
 
 build:
-  cargo leptos build -r
+  cargo build --release
+  cargo leptos build --release
+  mkdir -p .vercel/output/static .vercel/output/functions
+  cp -f target/site/pkg/* .vercel/output/static/
+  cp -f .vc-config.json .vercel/output/functions/
+  cp -f target/release/handler .vercel/output/functions/
 
 run:
-  cargo leptos serve -r
+  cargo leptos serve --release
 
 test:
   cargo leptos test

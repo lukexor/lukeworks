@@ -1,0 +1,12 @@
+{
+  "framework": "other",
+  "devCommand": "just dev",
+  "outputDirectory": "public",
+  "builds": [{ "src": "target/site/pkg/*", "use": "@vercel/static" }],
+  "routes": [{ "src": "/(.*)", "dest": "/target/site/pkg/$1" }],
+  "functions": {
+    "api/main.rs": {
+      "runtime": "vercel-rust@4.0.6"
+    }
+  }
+}

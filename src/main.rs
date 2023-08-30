@@ -2,13 +2,10 @@
 #![warn(clippy::all, clippy::pedantic)]
 #![allow(clippy::module_name_repetitions)] // Too many false positives
 
-mod file_server;
-mod lukeworks;
-
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    use crate::lukeworks::LukeWorks;
+    use lukeworks::{file_server, lukeworks::LukeWorks};
     use axum::Router;
     use leptos::view;
     use leptos_axum::LeptosRoutes;

@@ -1,11 +1,15 @@
 //! lukeworks.tech
 
 #![warn(clippy::all, clippy::pedantic)]
-#![allow(clippy::module_name_repetitions)] // Too many false positives with auto-generated leptos types
+// Too many false positives with auto-generated leptos types
+#![allow(clippy::module_name_repetitions, clippy::used_underscore_binding)]
 
 use cfg_if::cfg_if;
 
-mod lukeworks;
+pub mod components;
+#[cfg(feature = "ssr")]
+pub mod file_server;
+pub mod lukeworks;
 
 cfg_if! {
     if #[cfg(feature = "hydrate")] {

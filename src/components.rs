@@ -1,0 +1,3 @@
+//! Components.
+
+pub mod image;
