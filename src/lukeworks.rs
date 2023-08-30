@@ -1,8 +1,8 @@
 //! lukeworks.tech
 
 use crate::lukeworks::{
-    about::About, blog::Blog, contact::Contact, editor::Editor, homepage::Homepage, post::Post,
-    projects::Projects, tetanes_web::TetanesWeb,
+    about::About, blog::Blog, contact::Contact, editor::Editor, homepage::Homepage, nav::Nav,
+    post::Post, projects::Projects, tetanes_web::TetanesWeb,
 };
 use leptos::{component, view, IntoView, Scope};
 use leptos_meta::{provide_meta_context, Body, Html, Link, Meta, Stylesheet, Title};
@@ -16,6 +16,7 @@ pub mod contact;
 pub mod editor;
 pub mod errors;
 pub mod homepage;
+pub mod nav;
 pub mod post;
 pub mod projects;
 pub mod resume;
@@ -28,17 +29,6 @@ pub fn Logo(cx: Scope) -> impl IntoView {
         <div class="text-3xl dark:text-blue-500 font-monospace font-semibold">
             <span class="dark:text-red-400">"❱"</span>
             "L"
-        </div>
-    }
-}
-
-#[component]
-pub fn Nav(cx: Scope) -> impl IntoView {
-    view! { cx,
-        <div class="m-5 dark:text-blue-500">
-            <ul>
-                <li>Home</li>
-            </ul>
         </div>
     }
 }

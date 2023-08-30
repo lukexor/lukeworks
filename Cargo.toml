@@ -51,7 +51,8 @@ codegen-units = 1
 panic = "abort"
 
 [package.metadata.leptos]
-tailwind-input-file = "tailwind.css"
+style-file = "style/main.css"
+tailwind-input-file = "style/tailwind.css"
 assets-dir = "public"
 site-addr = "127.0.0.1:3000"
 bin-features = ["ssr"]

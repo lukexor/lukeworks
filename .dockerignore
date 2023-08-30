@@ -1,0 +1,4 @@
+justfile
+node_modules
+target
+_*
