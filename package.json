@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "vercel-build": "cargo leptos build -r"
+  },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.4"
   }

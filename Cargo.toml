@@ -15,10 +15,6 @@ hydrate = ["dep:console_error_panic_hook", "dep:console_log", "dep:log", "dep:wa
 ssr = ["dep:axum", "dep:leptos_axum", "dep:serde_json", "dep:tokio", "dep:tower", "dep:tower-http", "dep:tracing-subscriber", "dep:vercel_runtime"]
 perf = []
 
-[[bin]]
-name = "handler"
-path = "api/main.rs"
-
 [dependencies]
 anyhow = "1.0.72"
 cfg-if = "1.0.0"
@@ -48,6 +44,11 @@ tower-http = { version = "0.4.3", features = ["fs"], optional = true }
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"], optional = true }
 vercel_runtime = { version = "1.0.2", optional = true }
 
+[profile.release]
+strip = true
+lto = true
+codegen-units = 1
+
 [profile.wasm-release]
 inherits = "release"
 opt-level = 'z'
@@ -56,11 +57,9 @@ codegen-units = 1
 panic = "abort"
 
 [package.metadata.leptos]
-bin-target = "lukeworks"
-style-file = "style/main.css"
-tailwind-input-file = "style/tailwind.css"
-assets-dir = "public"
-site-addr = "127.0.0.1:3000"
 bin-features = ["ssr"]
 lib-features = ["hydrate"]
 lib-profile-release = "wasm-release"
+style-file = "style/main.css"
+tailwind-input-file = "style/tailwind.css"
+assets-dir = "assets"

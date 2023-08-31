@@ -1,4 +1,11 @@
 justfile
 node_modules
 target
+.envrc
+.env*
+.eslintrc.yaml
+.git
+.github
+.stylelintrc.json
+*Dockerfile
 _*

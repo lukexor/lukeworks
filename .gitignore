@@ -1,3 +1,4 @@
-/target
-/node_modules
-.vercel
+target
+node_modules
+_*
+.env*

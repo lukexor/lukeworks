@@ -1,32 +1,48 @@
-VERSION := `awk -F ' = ' '$1 ~ /version/ { gsub(/[\"]/, "", $2); printf("%s",$2) }' Cargo.toml`
+version := `awk -F ' = ' '$1 ~ /version/ { gsub(/[\"]/, "", $2); printf("%s",$2) }' Cargo.toml`
 
-CARGO := `command -v cargo 2> /dev/null`
-CARGO_WATCH := `command -v cargo-watch 2> /dev/null`
+check-docker:
+  @if ! command -v docker >/dev/null 2>&1; then \
+    echo "\033[31m\`docker\` is not available please install docker (https://docs.docker.com/engine/install/)\033[0m"; \
+    exit 1; \
+  fi
+
+check-cargo:
+  @if ! command -v cargo >/dev/null 2>&1; then \
+    echo "\033[31m\`cargo\` is not available please install cargo (https://www.rust-lang.org/tools/install)\033[0m"; \
+    exit 1; \
+  fi
+
+check-cargo-leptos: check-cargo
+  @if ! cargo leptos --version >/dev/null 2>&1; then \
+    echo "\033[31m\`cargo-leptos\` is not available please install cargo-leptos (https://crates.io/crates/cargo-leptos)\033[0m"; \
+    exit 1; \
+  fi
 
 default:
   @just --list
 
-get-version:
-  @echo {{VERSION}}
+version:
+  @echo {{version}}
 
-clean:
-  cargo clean
-  rm -rf .vercel/output
+clean: check-cargo
+  cargo clean -p lukeworks
 
-build:
-  cargo build --release
+lint: check-cargo
+  cargo clippy
+
+image: check-docker
+  sudo docker build --progress plain -t lukeworks-builder -f  builder.Dockerfile .
+  sudo docker build --progress plain -t lukeworks:{{version}} .
+  sudo docker system prune -f
+
+build: check-cargo-leptos
   cargo leptos build --release
-  mkdir -p .vercel/output/static .vercel/output/functions
-  cp -f target/site/pkg/* .vercel/output/static/
-  cp -f .vc-config.json .vercel/output/functions/
-  cp -f target/release/handler .vercel/output/functions/
 
-run:
+run: check-cargo-leptos
   cargo leptos serve --release
 
-test:
+test: check-cargo-leptos
   cargo leptos test
 
-dev:
+dev: check-cargo-leptos
   cargo leptos watch
-
