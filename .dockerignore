@@ -7,5 +7,6 @@ target
 .git
 .github
 .stylelintrc.json
+Dockerfile
 *Dockerfile
 _*

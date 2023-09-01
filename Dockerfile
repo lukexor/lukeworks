@@ -37,11 +37,14 @@ FROM gcr.io/distroless/cc AS runtime
 WORKDIR /app
 
 ENV RUST_LOG="info"
+ENV LEPTOS_SITE_ADDR="0.0.0.0:3000"
+ENV LEPTOS_SITE_ROOT="site"
 
 # Server binary
 COPY --from=builder --chown=nobody:nobody /app/target/server/release/lukeworks /app
 # Static assets
 COPY --from=builder --chown=nobody:nobody /app/target/site /app/site
+COPY --from=builder --chown=nobody:nobody /app/Cargo.toml /app/
 
 EXPOSE 3000
 USER nobody
