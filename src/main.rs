@@ -5,10 +5,10 @@
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    use lukeworks::{file_server, lukeworks::LukeWorks};
     use axum::Router;
     use leptos::view;
     use leptos_axum::LeptosRoutes;
+    use lukeworks::{file_server, lukeworks::LukeWorks};
     use tracing_subscriber::EnvFilter;
 
     tracing_subscriber::fmt()
@@ -38,9 +38,33 @@ async fn main() -> anyhow::Result<()> {
     tracing::info!("lukeworks listening on http://{addr}");
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal())
         .await?;
 
     Ok(())
+}
+
+#[cfg(feature = "ssr")]
+async fn shutdown_signal() {
+    use tokio::signal::{ctrl_c, unix};
+
+    let ctrl_c = async {
+        ctrl_c().await.expect("failed to install Ctrl+C handler");
+    };
+
+    let terminate = async {
+        unix::signal(unix::SignalKind::terminate())
+            .expect("failed to install signal handler")
+            .recv()
+            .await;
+    };
+
+    tokio::select! {
+        _ = ctrl_c => {},
+        _ = terminate => {},
+    }
+
+    tracing::info!("signal received, starting graceful shutdown");
 }
 
 #[cfg(not(feature = "ssr"))]
