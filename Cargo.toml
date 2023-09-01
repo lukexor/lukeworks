@@ -12,54 +12,53 @@ crate-type = ["cdylib", "rlib"]
 [features]
 default = ["ssr"]
 hydrate = ["dep:console_error_panic_hook", "dep:console_log", "dep:log", "dep:wasm-bindgen"]
-ssr = ["dep:axum", "dep:leptos_axum", "dep:serde_json", "dep:tokio", "dep:tower", "dep:tower-http", "dep:tracing-subscriber", "dep:vercel_runtime"]
+ssr = ["dep:axum", "dep:leptos_axum", "dep:serde_json", "dep:tokio", "dep:tower", "dep:tower-http", "dep:tracing-subscriber"]
 perf = []
 
 [dependencies]
-anyhow = "1.0.72"
-cfg-if = "1.0.0"
-chrono = { version = "0.4.26", default-features = false, features = ["clock", "serde", "std"] }
-leptos = { version = "0.4.8", features = ["rustls"] }
-leptos_meta = { version = "0.4.8" }
-leptos_dom = { version = "0.4.8" }
-leptos_router = { version = "0.4.8" }
-once_cell = "1.18.0"
-thiserror = "1.0.44"
-tracing = "0.1.37"
+anyhow = "1"
+cfg-if = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "std"] }
+leptos = { version = "0.4", features = ["rustls"] }
+leptos_meta = { version = "0.4" }
+leptos_dom = { version = "0.4" }
+leptos_router = { version = "0.4" }
+once_cell = "1"
+thiserror = "1"
+tracing = "0.1"
 
 # dependecies for client (enabled with `hydrate` feature)
-console_error_panic_hook = { version = "0.1.7", optional = true }
-console_log = { version = "1.0.0", optional = true }
-log = { version = "0.4.19", optional = true }
-wasm-bindgen = { version = "0.2.87", optional = true }
+console_error_panic_hook = { version = "0.1", optional = true }
+console_log = { version = "1", optional = true }
+log = { version = "0.4", optional = true }
+wasm-bindgen = { version = "0.2", optional = true }
 
 # dependecies for server (enabled with `ssr` feature)
-axum = { version = "0.6.20", optional = true }
-leptos_axum = { version = "0.4.8", optional = true }
-serde_json = { version = "1.0.104", optional = true }
-serde = { version = "1.0.181", features = ["derive"] }
-tokio = { version = "1.29.1", optional = true }
-tower = { version = "0.4.13", optional = true }
-tower-http = { version = "0.4.3", features = ["fs"], optional = true }
-tracing-subscriber = { version = "0.3.17", features = ["env-filter"], optional = true }
-vercel_runtime = { version = "1.0.2", optional = true }
+axum = { version = "0.6", optional = true }
+leptos_axum = { version = "0.4", optional = true }
+serde_json = { version = "1.0", optional = true }
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1", optional = true }
+tower = { version = "0.4", optional = true }
+tower-http = { version = "0.4", features = ["fs"], optional = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"], optional = true }
 
 [profile.release]
-strip = true
-lto = true
 codegen-units = 1
+lto = true
+strip = true
 
 [profile.wasm-release]
-inherits = "release"
-opt-level = 'z'
-lto = true
 codegen-units = 1
+inherits = "release"
+lto = true
+opt-level = 'z'
 panic = "abort"
 
 [package.metadata.leptos]
+assets-dir = "assets"
 bin-features = ["ssr"]
 lib-features = ["hydrate"]
 lib-profile-release = "wasm-release"
 style-file = "style/main.css"
 tailwind-input-file = "style/tailwind.css"
-assets-dir = "assets"

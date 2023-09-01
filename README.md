@@ -22,24 +22,5 @@ This is a website portfolio of projects and blog posts about things that
 intrigue and inspire me. Excellence in everything is rare and it is my hope that
 this site might inspire others to excellence.
 
-## TODO
-
-- Deployment
-  - [ ] Build tools
-  - [ ] Vercel configuration
-- Portfolio
-  - [ ] Homepage
-  - [ ] Post List
-        format: mdx?
-        types:
-    - Blog: name, title, thumbnail, image, category, tags, minutes to read,
-      likes, published, created, modified
-    - Project: name, title, thumbnail, image, website, category, tags, minutes
-      to read, likes, started, completed, published, created, modified
-  - [ ] Post Entry
-  - [ ] Post Editor
-  - [ ] About
-  - [ ] Contact
-  - [ ] Search Results
-- [ ] Resume
-- [ ] Tetanes Web
+It is built using [leptos](https://github.com/leptos-rs/leptos) (A web-assembly
+framework in Rust) and [tailwindcss](tailwindcss.com/).
