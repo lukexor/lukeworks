@@ -1,6 +1,6 @@
 //! HTTP static file server.
 
-use crate::lukeworks::LukeWorks;
+use crate::portfolio::Portfolio;
 use axum::{
     body::{boxed, Body},
     extract::State,
@@ -12,7 +12,7 @@ use leptos_axum::render_app_to_stream;
 use tower::ServiceExt;
 use tower_http::services::ServeDir;
 
-/// Serve a static file request.
+/// Serve a static file request, falling back to the portfolio homepage if not found.
 pub async fn serve(
     uri: Uri,
     State(options): State<LeptosOptions>,
@@ -42,7 +42,7 @@ pub async fn serve(
     if resp.status() == StatusCode::OK {
         resp.into_response()
     } else {
-        let handler = render_app_to_stream(options, move |cx| view! { cx, <LukeWorks /> });
+        let handler = render_app_to_stream(options, move || view! {  <Portfolio /> });
         handler(req).await.into_response()
     }
 }

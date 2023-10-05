@@ -1,0 +1,67 @@
+env_files = [".envrc"]
+
+[env]
+VERSION = { script = ["awk -F ' = ' '$1 ~ /version/ { gsub(/[\\\"]/, \"\", $2); printf(\"%s\",$2) }' Cargo.toml"] }
+
+[env.development]
+RUST_LOG = "debug,hyper=off"
+
+[env.production]
+RUST_LOG = "info"
+
+[tasks.default]
+alias = "image"
+
+[tasks.version]
+description = "Print the crate version"
+category = "Tools"
+script = ["echo Version: ${VERSION}"]
+
+[tasks.clean]
+description = "Clean up build artifacts"
+category = "Development"
+command = "cargo"
+args = ["clean", "-p", "lukeworks"]
+
+[tasks.lint]
+description = "Lint with clippy"
+category = "Development"
+command = "cargo"
+args = ["clippy"]
+
+[tasks.build]
+description = "Build with cargo-leptos"
+category = "Build"
+command = "cargo"
+args = ["leptos", "build", "--release"]
+
+[tasks.run]
+description = "Run SSR server in release mode"
+category = "Development"
+command = "cargo"
+args = ["leptos", "serve", "--release"]
+
+[tasks.dev]
+description = "Run SSR server in debug mode"
+category = "Development"
+command = "cargo"
+args = ["leptos", "watch"]
+
+[tasks.test]
+description = "Run SSR and client unit tests"
+category = "Development"
+command = "cargo"
+args = ["leptos", "test"]
+
+[tasks.image]
+description = "Build SSR image for deployment"
+category = "Build"
+command = "docker"
+args = ["build", "--progress", "plain", "-t", "lukeworks:${VERSION}", "."]
+dependencies = ["image-builder"]
+
+[tasks.image-builder]
+description = "Build SSR builder image to speed up image builds"
+category = "Build"
+command = "docker"
+args = ["build", "--progress", "plain", "-t", "lukeworks-builder", "-f", "builder.Dockerfile", "."]

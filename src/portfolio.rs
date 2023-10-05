@@ -1,43 +1,40 @@
-//! lukeworks.tech
+//! lukeworks.tech portfolio pages.
 
-use crate::lukeworks::{
-    about::About, blog::Blog, contact::Contact, editor::Editor, homepage::Homepage, nav::Nav,
-    post::Post, projects::Projects, tetanes_web::TetanesWeb,
+use crate::portfolio::{
+    about::About, blog::Blog, contact::Contact, data::IconAttrs, header::Header,
+    homepage::Homepage, post::Post, projects::Projects, tetanes_web::TetanesWeb,
 };
-use leptos::{component, view, IntoView, Scope};
+use leptos::{component, view, IntoView};
 use leptos_meta::{provide_meta_context, Body, Html, Link, Meta, Stylesheet, Title};
 use leptos_router::{Route, Router, Routes};
-
-// include_str!("../data/");
 
 pub mod about;
 pub mod blog;
 pub mod contact;
-pub mod editor;
+pub mod data;
 pub mod errors;
+pub mod header;
 pub mod homepage;
-pub mod nav;
 pub mod post;
 pub mod projects;
 pub mod resume;
 pub mod search;
 pub mod tetanes_web;
 
-#[component]
-pub fn Logo(cx: Scope) -> impl IntoView {
-    view! { cx,
-        <div class="text-3xl dark:text-blue-500 font-monospace font-semibold">
-            <span class="dark:text-red-400">"❱"</span>
-            "L"
-        </div>
-    }
+/// Portfolio layout copy.
+#[derive(Debug, Copy, Clone)]
+#[must_use]
+pub struct Layout {
+    pub logo: &'static str,
+    pub search_placeholder: &'static str,
+    pub social_icons: [IconAttrs; 4],
 }
 
 #[component]
-pub fn LukeWorks(cx: Scope) -> impl IntoView {
-    provide_meta_context(cx);
+pub fn Portfolio() -> impl IntoView {
+    provide_meta_context();
 
-    view! { cx,
+    view! {
         <Html lang="en" />
         <Title text="Lucas Petherbridge" />
         <Meta name="author" content="Lucas Petherbridge" />
@@ -51,15 +48,13 @@ pub fn LukeWorks(cx: Scope) -> impl IntoView {
         <Link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Rubik&family=Yatra+One&display=swap" rel="stylesheet" />
         <Router>
             <Body class="mx-8 my-4 font-sans dark:bg-gray-700 dark:text-blue-400" />
-            <Logo />
-            <Nav />
+            <Header />
             <main>
                 <Routes>
                     <Route path="" view=Homepage />
                     <Route path="about" view=About />
                     <Route path="blog" view=Blog />
                     <Route path="contact" view=Contact />
-                    <Route path="editor" view=Editor />
                     <Route path="projects" view=Projects />
                     <Route path="tetanes-web" view=TetanesWeb />
                     <Route path=":post" view=Post />

@@ -1,11 +1,11 @@
 //! Image.
 
-use leptos::{component, html::Img, view, IntoAttribute, IntoView, NodeRef, Scope};
+use leptos::{component, html::Img, view, IntoAttribute, IntoView, NodeRef};
 
 /// Image component.
 #[component]
-fn Image(cx: Scope, _ref: NodeRef<Img>, width: u32, height: u32, src: String) -> impl IntoView {
-    view! { cx,
+fn Image(_ref: NodeRef<Img>, width: u32, height: u32, src: String) -> impl IntoView {
+    view! {
         <img
             _ref=_ref
             width=width
