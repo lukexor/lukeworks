@@ -4,7 +4,7 @@ env_files = [".envrc"]
 VERSION = { script = ["awk -F ' = ' '$1 ~ /version/ { gsub(/[\\\"]/, \"\", $2); printf(\"%s\",$2) }' Cargo.toml"] }
 
 [env.development]
-RUST_LOG = "debug,hyper=off"
+RUST_LOG = "info,lukeworks=debug,tower_http=debug,axum::rejection=trace"
 
 [env.production]
 RUST_LOG = "info"
@@ -17,11 +17,17 @@ description = "Print the crate version"
 category = "Tools"
 script = ["echo Version: ${VERSION}"]
 
+[tasks.purge-logs]
+descriptiion = "Purge all log files"
+category = "Tools"
+script = ["rm -f logs/*"]
+
 [tasks.clean]
 description = "Clean up build artifacts"
 category = "Development"
 command = "cargo"
 args = ["clean", "-p", "lukeworks"]
+dependencies = ["purge-logs"]
 
 [tasks.lint]
 description = "Lint with clippy"
@@ -46,6 +52,7 @@ description = "Run SSR server in debug mode"
 category = "Development"
 command = "cargo"
 args = ["leptos", "watch"]
+dependencies = ["purge-logs"]
 
 [tasks.test]
 description = "Run SSR and client unit tests"
@@ -58,10 +65,3 @@ description = "Build SSR image for deployment"
 category = "Build"
 command = "docker"
 args = ["build", "--progress", "plain", "-t", "lukeworks:${VERSION}", "."]
-dependencies = ["image-builder"]
-
-[tasks.image-builder]
-description = "Build SSR builder image to speed up image builds"
-category = "Build"
-command = "docker"
-args = ["build", "--progress", "plain", "-t", "lukeworks-builder", "-f", "builder.Dockerfile", "."]

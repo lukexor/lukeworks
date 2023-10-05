@@ -11,36 +11,6 @@
     unused
 )]
 
-/// The primary SSR entrypoint.
-#[cfg(feature = "ssr")]
-#[tokio::main]
-async fn main() -> anyhow::Result<()> {
-    use axum::Router;
-    use leptos::view;
-    use leptos_axum::LeptosRoutes;
-    use lukeworks::{file_server, portfolio::Portfolio};
-
-    lukeworks::initialize_tracing();
-
-    let conf = leptos::get_configuration(None).await?;
-    let options = conf.leptos_options;
-    let addr = options.site_addr;
-
-    let routes = leptos_axum::generate_route_list(|| view! {  <Portfolio /> });
-    let app = Router::new()
-        .leptos_routes(&options, routes, || view! {  <Portfolio /> })
-        .fallback(file_server::serve)
-        .with_state(options);
-
-    tracing::info!("lukeworks.tech listening on http://{addr}");
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .with_graceful_shutdown(shutdown_signal())
-        .await?;
-
-    Ok(())
-}
-
 /// Handles graceful shutdown in the event of termination signals.
 #[cfg(feature = "ssr")]
 async fn shutdown_signal() {
@@ -62,6 +32,56 @@ async fn shutdown_signal() {
     }
 
     tracing::info!("signal received, starting graceful shutdown");
+}
+
+/// The primary SSR entrypoint.
+#[cfg(feature = "ssr")]
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    use axum::{extract::MatchedPath, http::Request, Router};
+    use leptos::view;
+    use leptos_axum::LeptosRoutes;
+    use lukeworks::{file_server, portfolio::Portfolio};
+    use tower_http::trace::TraceLayer;
+
+    let _guard = lukeworks::tracing_init();
+
+    let conf = leptos::get_configuration(None).await?;
+    let options = conf.leptos_options;
+    let addr = options.site_addr;
+
+    let routes = leptos_axum::generate_route_list(|| view! {  <Portfolio /> });
+    let app = Router::new()
+        .leptos_routes(&options, routes, || view! {  <Portfolio /> })
+        .fallback(file_server::serve)
+        .layer(
+            TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
+                // Log the matched route's path (with placeholders not filled in).
+                // Use request.uri() or OriginalUri if you want the real path.
+                let matched_path = request
+                    .extensions()
+                    .get::<MatchedPath>()
+                    .map(MatchedPath::as_str);
+
+                tracing::info_span!(
+                    "http_request",
+                    method = ?request.method(),
+                    uri = ?request.uri(),
+                    matched_path,
+                    some_other_field = tracing::field::Empty,
+                )
+            }),
+        )
+        .with_state(options);
+
+    tracing::info!("lukeworks.tech listening on http://{addr}", addr = addr);
+
+    axum::Server::bind(&addr)
+        .serve(app.into_make_service())
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
+
+    Ok(())
 }
 
 /// The primary client entrypoint.
