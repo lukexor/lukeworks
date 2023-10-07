@@ -1,18 +1,15 @@
 //! Portfolio static data.
 
-use crate::{
-    hashmap,
-    portfolio::{
-        contact::Contact,
-        errors::Error,
-        homepage::Intro,
-        post::{Blog, Meta, Project},
-        Layout,
-    },
+use crate::portfolio::{
+    contact::Contact,
+    errors::Error,
+    homepage::Intro,
+    post::{Blog, Meta, Project},
+    Layout,
 };
 use leptos::{view, IntoView};
 use once_cell::sync::Lazy;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 use uuid::uuid;
 
 /// URL string.
@@ -96,6 +93,21 @@ pub const META: SiteMeta = SiteMeta {
     origin: "https://lukeworks.tech",
 };
 
+#[derive(Debug)]
+#[must_use]
+pub struct Routes {
+    pub home: Route,
+    pub blog: Route,
+    pub projects: Route,
+    pub all_projects: Route,
+    pub about: Route,
+    pub contact: Route,
+    pub post: Route,
+    pub resume: Route,
+    pub tetanes_web: Route,
+    pub p5js: Route,
+}
+
 /// URL Route.
 #[derive(Debug)]
 #[must_use]
@@ -111,18 +123,17 @@ impl Route {
 }
 
 /// Portfolio URL Routes.
-pub static ROUTES: Lazy<HashMap<&'static str, Route>> = Lazy::new(|| {
-    hashmap! {
-        "home" => Route::new("Home", "/"),
-        "blog" => Route::new("Blog", "/#blog"),
-        "projects" => Route::new("Projects", "/#projects"),
-        "about" => Route::new("About", "/#about"),
-        "contact" => Route::new("Contact", "/#contact"),
-        "post" => Route::new("Post Entry", "/:postSlug"),
-        "resume" => Route::new("Resume", "/resume"),
-        "tetanes-web" => Route::new("TetaNES Web", "/tetanes-web"),
-        "p5js" => Route::new("P5JS Project", "/p5js/:title"),
-    }
+pub static ROUTES: Lazy<Routes> = Lazy::new(|| Routes {
+    home: Route::new("Home", "/"),
+    blog: Route::new("Blog", "/blog"),
+    projects: Route::new("Projects", "/#projects"),
+    all_projects: Route::new("All Projects", "/projects"),
+    about: Route::new("About", "/#about"),
+    contact: Route::new("Contact", "/#contact"),
+    post: Route::new("Post Entry", "/:postSlug"),
+    resume: Route::new("Resume", "/resume.pdf"),
+    tetanes_web: Route::new("TetaNES Web", "/tetanes-web"),
+    p5js: Route::new("P5JS Project", "/p5js/:title"),
 });
 
 /// Portfolio layout static copy.
