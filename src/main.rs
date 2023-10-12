@@ -38,10 +38,12 @@ async fn shutdown_signal() {
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    use axum::{extract::MatchedPath, http::Request, Router};
-    use leptos::view;
-    use leptos_axum::LeptosRoutes;
-    use lukeworks::{file_server, portfolio::Portfolio};
+    use axum::{extract::MatchedPath, http::Request, routing::post, Router};
+    use leptos_axum::{handle_server_fns, LeptosRoutes};
+    use lukeworks::{
+        file_server,
+        portfolio::{register_server_functions, Portfolio},
+    };
     use tower_http::trace::TraceLayer;
 
     let _guard = lukeworks::tracing_init();
@@ -50,9 +52,12 @@ async fn main() -> anyhow::Result<()> {
     let options = conf.leptos_options;
     let addr = options.site_addr;
 
-    let routes = leptos_axum::generate_route_list(|| view! {  <Portfolio /> });
+    register_server_functions();
+
+    let routes = leptos_axum::generate_route_list(Portfolio);
     let app = Router::new()
-        .leptos_routes(&options, routes, || view! {  <Portfolio /> })
+        .route("/api/*fn", post(handle_server_fns))
+        .leptos_routes(&options, routes, Portfolio)
         .fallback(file_server::serve)
         .layer(
             TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
@@ -75,7 +80,6 @@ async fn main() -> anyhow::Result<()> {
         .with_state(options);
 
     tracing::info!("lukeworks.tech listening on http://{addr}", addr = addr);
-
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .with_graceful_shutdown(shutdown_signal())

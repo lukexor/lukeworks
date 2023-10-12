@@ -38,6 +38,16 @@ impl IconAttrs {
     }
 }
 
+/// Social media icons.
+#[derive(Debug, Copy, Clone)]
+#[must_use]
+pub struct SocialIcons {
+    pub github: IconAttrs,
+    pub linkedin: IconAttrs,
+    pub rss: IconAttrs,
+    pub email: IconAttrs,
+}
+
 /// [Image] attributes.
 ///
 /// [Image]: crate::components::Image
@@ -140,24 +150,28 @@ pub static ROUTES: Lazy<Routes> = Lazy::new(|| Routes {
 pub const LAYOUT: Layout = Layout {
     logo: "L",
     search_placeholder: "Search...",
-    social_icons: [
-        IconAttrs::new("github", "GitHub", "http://github.com/lukexor"),
-        IconAttrs::new(
-            "linkedin",
-            "LinkedIn",
+    social_icons: SocialIcons {
+        github: IconAttrs::new(
+            "fa-brands fa-github",
+            "LukeWorks GitHub",
+            "http://github.com/lukexor",
+        ),
+        linkedin: IconAttrs::new(
+            "fa-brands fa-linkedin",
+            "LinkedIn - Lucas Petherbridge",
             "https://linkedin.com/in/lucaspetherbridge",
         ),
-        IconAttrs::new(
-            "rss",
-            "RSS Feed",
+        rss: IconAttrs::new(
+            "fa-solid fa-rss",
+            "LukeWorks RSS Feed",
             "https://feeds.feedburner.com/LucasPetherbridge",
         ),
-        IconAttrs::new(
-            "email",
+        email: IconAttrs::new(
+            "fa-solid fa-envelope",
             "Email me@lukeworks.tech",
             "mailto:me@lukeworks.tech",
         ),
-    ],
+    },
 };
 
 /// Portfolio homepage intro static copy.

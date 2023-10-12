@@ -1,8 +1,15 @@
 //! lukeworks.tech portfolio pages.
 
 use crate::portfolio::{
-    about::About, blog::Blog, contact::Contact, data::IconAttrs, header::Header,
-    homepage::Homepage, post::Post, projects::Projects, tetanes_web::TetanesWeb,
+    about::About,
+    blog::Blog,
+    contact::Contact,
+    data::{IconAttrs, SocialIcons},
+    header::Header,
+    homepage::Homepage,
+    post::Post,
+    projects::Projects,
+    tetanes_web::TetanesWeb,
 };
 use leptos::{component, view, IntoView};
 use leptos_meta::{provide_meta_context, Body, Html, Link, Meta, Stylesheet, Title};
@@ -27,15 +34,27 @@ pub mod tetanes_web;
 pub struct Layout {
     pub logo: &'static str,
     pub search_placeholder: &'static str,
-    pub social_icons: [IconAttrs; 4],
+    pub social_icons: SocialIcons,
 }
 
+/// Helper to register all our server functions, if we're in SSR mode
+#[cfg(feature = "ssr")]
+pub fn register_server_functions() {
+    use crate::portfolio::header::ToggleDarkMode;
+    use leptos::ServerFn;
+
+    // _ = ToggleDarkMode::register();
+}
+
+/// LukeWorks portfolio.
 #[component]
 pub fn Portfolio() -> impl IntoView {
     provide_meta_context();
 
     view! {
         <Html lang="en" />
+        <Meta http_equiv="X-UA-Compatible" content="ie=edge" />
+
         <Title text="Lucas Petherbridge" />
 
         <Meta name="author" content="Lucas Petherbridge" />
@@ -47,10 +66,11 @@ pub fn Portfolio() -> impl IntoView {
         <Link rel="icon" href="/favicon.ico" />
         <Link rel="preconnect" href="https://fonts.googleapis.com" />
         <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <Link href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Rubik&family=Yatra+One&display=swap" rel="stylesheet" />
+        <Link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Rubik&family=Yatra+One&display=swap" />
+        <Link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 
         <Router>
-            <Body class="mx-12 my-6 font-sans dark:bg-gray-700 dark:text-blue-400" />
+            <Body class="mx-4 my-2 md:mx-12 md:my-6 h-screen font-sans bg-white dark:bg-gray-800 dark:text-blue-400" />
             <Header />
             <main>
                 <Routes>

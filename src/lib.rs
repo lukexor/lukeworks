@@ -30,15 +30,12 @@ macro_rules! hashmap {
 #[cfg(feature = "hydrate")]
 #[cfg_attr(feature = "hydrate", wasm_bindgen::prelude::wasm_bindgen)]
 pub fn hydrate() {
-    use leptos::view;
     use portfolio::Portfolio;
 
     _ = console_log::init_with_level(log::Level::Debug);
     console_error_panic_hook::set_once();
 
-    leptos::mount_to_body(|| {
-        view! { <Portfolio /> }
-    });
+    leptos::mount_to_body(Portfolio);
 }
 
 /// Initialize trace logging.
