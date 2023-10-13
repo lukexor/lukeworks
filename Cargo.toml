@@ -34,7 +34,7 @@ web-sys = { version = "0.3", optional = true, features = [
   "AbortSignal",
   "HtmlDocument",
   "MediaQueryList",
-  "Window"
+  "Window",
 ] }
 
 # dependecies for server (enabled with `ssr` feature)

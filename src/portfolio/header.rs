@@ -23,6 +23,20 @@ fn Logo() -> impl IntoView {
     }
 }
 
+/// GitHub icon.
+#[component]
+fn GitHubIcon() -> impl IntoView {
+    let github_icon = LAYOUT.social_icons.github;
+    view! {
+        <a
+            class="icon-link text-xl mx-2"
+            class={github_icon.icon}
+            href={github_icon.href}
+            title={github_icon.title}
+        />
+    }
+}
+
 /// Portfolio navigation component.
 #[component]
 fn Nav() -> impl IntoView {
@@ -32,7 +46,7 @@ fn Nav() -> impl IntoView {
     let menu_tabindex = move || if menu_expanded.get() { "" } else { "-1" };
 
     view! {
-        <span class="relative md:hidden z-10">
+        <span class="relative lg:hidden z-10">
             <button
                 class="icon-link fa-solid fa-bars text-xl mx-2"
                 class=("fa-times", menu_expanded)
@@ -41,14 +55,20 @@ fn Nav() -> impl IntoView {
             />
         </span>
         <div
-            class="absolute md:relative top-0 right-0 w-0 md:w-auto transition-[width] h-full md:h-auto bg-gray-700 md:bg-transparent overflow-hidden z-0"
+            class="absolute lg:relative top-0 right-0 w-0 max-w-md lg:w-auto transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-0"
             class=("!w-3/4", menu_expanded)
         >
-            <ul class="flex flex-col md:flex-row items-center md:items-center px-6 py-3 md:p-0">
-                <li class="mt-12 md:mt-0 md:mr-8"><a tabindex=menu_tabindex href=ROUTES.about.path>{ROUTES.about.title}</a></li>
-                <li class="mt-8 md:mt-0 md:mr-8"><a tabindex=menu_tabindex href=ROUTES.projects.path>{ROUTES.projects.title}</a></li>
-                <li class="mt-8 md:mt-0 md:mr-8"><a tabindex=menu_tabindex href=ROUTES.blog.path>{ROUTES.blog.title}</a></li>
-                <li class="mt-8 md:mt-0 md:mr-8"><a tabindex=menu_tabindex href=ROUTES.contact.path>{ROUTES.contact.title}</a></li>
+            <ul class="flex flex-col lg:flex-row items-center lg:items-center px-6 py-3 lg:p-0">
+                <li class="mt-12 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.about.path>{ROUTES.about.title}</a></li>
+                <li class="mt-8 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.projects.path>{ROUTES.projects.title}</a></li>
+                <li class="mt-8 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.blog.path>{ROUTES.blog.title}</a></li>
+                <li class="mt-8 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.contact.path>{ROUTES.contact.title}</a></li>
+                <li class="mt-8 lg:hidden">
+                    <div class="flex">
+                        <DarkModeToggle />
+                        <GitHubIcon />
+                    </div>
+                </li>
             </ul>
         </div>
     }
@@ -69,8 +89,10 @@ fn SearchField() -> impl IntoView {
                 logging::error!("failed to focus search field");
             });
     };
-    let toggle_search =
-        move |_| update!(|set_search_expanded| *set_search_expanded = !*set_search_expanded);
+    let toggle_search = move |_| {
+        update!(|set_search_expanded| *set_search_expanded = !*set_search_expanded);
+        focus_search();
+    };
 
     let (query, set_query) = create_signal(String::new());
     let clear_search = move |_| {
@@ -98,24 +120,24 @@ fn SearchField() -> impl IntoView {
     view! {
         <div>
             <button
-                class="icon-link fa-solid fa-search mx-2 md:mx-8 text-xl md:text-base"
+                class="icon-link fa-solid fa-search mx-2 text-xl lg:text-base"
                 on:click=toggle_search
             />
             <div
-                class="absolute flex right-6 top-12 md:top-16 md:right-20 items-center w-0 transition-[width] overflow-hidden"
-                class=("!w-64", search_expanded)
+                class="absolute lg:relative flex lg:inline-flex top-12 right-4 lg:top-[unset] lg:right-[unset] items-center w-0 transition-[width] overflow-hidden"
+                class=("!w-72", search_expanded)
             >
                 <input
                     _ref={search_ref}
                     type="text"
                     placeholder={LAYOUT.search_placeholder}
-                    class="p-0 pl-2 pr-8 border bg-gray-100 dark:bg-gray-700 text-blue-500 dark:text-blue-400 border-blue-600 focus:border-red-400 dark:focus:border-red-500 focus-ring-red-400 dark:focus:ring-red-500"
+                    class="p-0 pl-2 pr-8 w-72 border bg-gray-100 dark:bg-gray-700 text-blue-500 dark:text-blue-400 border-blue-600 focus:border-red-400 dark:focus:border-red-500 focus-ring-red-400 dark:focus:ring-red-500"
                     tabindex=search_tabindex
                     prop:value=query
                     on:input=on_search_input
                 />
                 <button
-                    class="icon-link fa-solid fa-times absolute right-1 mr-2 text-lg"
+                    class="icon-link fa-solid fa-times absolute lg:relative right-1 lg:right-6 text-lg"
                     tabindex=search_tabindex
                     on:click=clear_search
                 />
@@ -143,7 +165,6 @@ fn SearchField() -> impl IntoView {
 #[cfg(not(feature = "ssr"))]
 pub fn initial_prefers_dark() -> bool {
     use wasm_bindgen::JsCast;
-    use web_sys::MediaQueryList;
 
     let doc = document().unchecked_into::<web_sys::HtmlDocument>();
     let cookie = doc.cookie().unwrap_or_default();
@@ -154,7 +175,7 @@ pub fn initial_prefers_dark() -> bool {
             .match_media("(prefers-color-scheme: dark)")
             .ok()
             .flatten()
-            .map_or(false, MediaQueryList::matches)
+            .map_or(false, |m| m.matches())
     }
 }
 
@@ -273,20 +294,18 @@ fn DarkModeToggle() -> impl IntoView {
 /// Portfolio header component.
 #[component]
 pub fn Header() -> impl IntoView {
-    let github_icon = LAYOUT.social_icons.github;
     view! {
         <header class="flex justify-between mb-12">
             <Logo />
-            <div class="flex items-center">
+            <div class="hidden lg:flex items-center">
+                <Nav />
+                <SearchField />
+                <DarkModeToggle />
+                <GitHubIcon />
+            </div>
+            <div class="flex lg:hidden items-center">
                 <SearchField />
                 <Nav />
-                <DarkModeToggle />
-                <a
-                    class="icon-link text-xl mx-2"
-                    class={github_icon.icon}
-                    href={github_icon.href}
-                    title={github_icon.title}
-                />
             </div>
         </header>
     }
