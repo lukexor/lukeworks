@@ -40,10 +40,7 @@ async fn shutdown_signal() {
 async fn main() -> anyhow::Result<()> {
     use axum::{extract::MatchedPath, http::Request, routing::post, Router};
     use leptos_axum::{handle_server_fns, LeptosRoutes};
-    use lukeworks::{
-        file_server,
-        portfolio::{register_server_functions, Portfolio},
-    };
+    use lukeworks::{file_server, portfolio::Portfolio};
     use tower_http::trace::TraceLayer;
 
     let _guard = lukeworks::tracing_init();
@@ -51,8 +48,6 @@ async fn main() -> anyhow::Result<()> {
     let conf = leptos::get_configuration(None).await?;
     let options = conf.leptos_options;
     let addr = options.site_addr;
-
-    register_server_functions();
 
     let routes = leptos_axum::generate_route_list(Portfolio);
     let app = Router::new()

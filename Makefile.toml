@@ -1,7 +1,9 @@
 env_files = [".envrc"]
 
 [env]
-VERSION = { script = ["awk -F ' = ' '$1 ~ /version/ { gsub(/[\\\"]/, \"\", $2); printf(\"%s\",$2) }' Cargo.toml"] }
+VERSION = { script = [
+  "awk -F ' = ' '$1 ~ /version/ { gsub(/[\\\"]/, \"\", $2); printf(\"%s\",$2) }' Cargo.toml",
+] }
 
 [env.development]
 RUST_LOG = "info,lukeworks=debug,tower_http=debug,axum::rejection=trace"
@@ -17,8 +19,13 @@ description = "Print the crate version"
 category = "Tools"
 script = ["echo Version: ${VERSION}"]
 
+[tasks.install-deps]
+description = "Install wasm target"
+command = "rustup"
+args = ["target", "add", "wasm32-unknown-unknown"]
+
 [tasks.purge-logs]
-descriptiion = "Purge all log files"
+description = "Purge all log files"
 category = "Tools"
 script = ["rm -f logs/*"]
 
@@ -39,29 +46,33 @@ args = ["clippy"]
 description = "Build with cargo-leptos"
 category = "Build"
 command = "cargo"
-args = ["leptos", "build", "--release"]
+args = ["leptos", "build", "--release", "-P"]
+dependencies = ["install-deps"]
 
 [tasks.run]
 description = "Run SSR server in release mode"
 category = "Development"
 command = "cargo"
-args = ["leptos", "serve", "--release"]
+args = ["leptos", "serve", "--release", "-P"]
+dependencies = ["purge-logs", "install-deps"]
 
 [tasks.dev]
 description = "Run SSR server in debug mode"
 category = "Development"
 command = "cargo"
 args = ["leptos", "watch"]
-dependencies = ["purge-logs"]
+dependencies = ["purge-logs", "install-deps"]
 
 [tasks.test]
 description = "Run SSR and client unit tests"
 category = "Development"
 command = "cargo"
 args = ["leptos", "test"]
+dependencies = ["install-deps"]
 
 [tasks.image]
 description = "Build SSR image for deployment"
 category = "Build"
 command = "docker"
 args = ["build", "--progress", "plain", "-t", "lukeworks:${VERSION}", "."]
+dependencies = ["install-deps"]

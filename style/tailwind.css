@@ -1,0 +1,53 @@
+/* FIXME: https://github.com/FortAwesome/Font-Awesome/issues/19925 */
+@import url("fontawesome.min.css");
+@import url("fontawesome-solid.min.css");
+@import url("fontawesome-brands.min.css");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+@layer base {
+  a:not(#logo),
+  .icon-link {
+    cursor: pointer;
+    background-image: linear-gradient(
+      45deg,
+      theme("colors.yellow.600"),
+      theme("colors.red.500")
+    );
+    background-size: 100%;
+    background-repeat: repeat;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+  }
+
+  a:hover:not(#logo),
+  .icon-link:hover {
+    color: theme("colors.red.500");
+    text-decoration: underline;
+    background-image: none;
+    -webkit-text-fill-color: inherit;
+    -moz-text-fill-color: inherit;
+  }
+
+  :is(.dark a):not(#logo),
+  :is(.dark .icon-link) {
+    background-image: linear-gradient(
+      45deg,
+      theme("colors.yellow.500"),
+      theme("colors.red.400")
+    );
+  }
+
+  :is(.dark a:hover):not(#logo),
+  :is(.dark .icon-link:hover) {
+    color: theme("colors.red.400");
+  }
+
+  .icon-link:hover {
+    text-decoration: none !important;
+  }
+}

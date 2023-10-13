@@ -37,22 +37,21 @@ pub struct Layout {
     pub social_icons: SocialIcons,
 }
 
-/// Helper to register all our server functions, if we're in SSR mode
-#[cfg(feature = "ssr")]
-pub fn register_server_functions() {
-    use crate::portfolio::header::ToggleDarkMode;
-    use leptos::ServerFn;
-
-    // _ = ToggleDarkMode::register();
-}
-
 /// LukeWorks portfolio.
 #[component]
 pub fn Portfolio() -> impl IntoView {
     provide_meta_context();
+    let prefers_dark = header::initial_prefers_dark();
+    let color_scheme = move || {
+        if prefers_dark {
+            "dark"
+        } else {
+            "light"
+        }
+    };
 
     view! {
-        <Html lang="en" />
+        <Html lang="en" class={color_scheme()} />
         <Meta http_equiv="X-UA-Compatible" content="ie=edge" />
 
         <Title text="Lucas Petherbridge" />
@@ -67,10 +66,9 @@ pub fn Portfolio() -> impl IntoView {
         <Link rel="preconnect" href="https://fonts.googleapis.com" />
         <Link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
         <Link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Mono&family=Rubik&family=Yatra+One&display=swap" />
-        <Link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
 
         <Router>
-            <Body class="mx-4 my-2 md:mx-12 md:my-6 h-screen font-sans bg-white dark:bg-gray-800 dark:text-blue-400" />
+            <Body class="mx-4 my-2 md:mx-12 md:my-6 h-screen font-sans bg-gray-200 dark:bg-gray-800 text-blue-500 dark:text-blue-400" />
             <Header />
             <main>
                 <Routes>

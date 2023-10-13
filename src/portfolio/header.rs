@@ -13,11 +13,11 @@ fn Logo() -> impl IntoView {
     view! {
         <a
             id="logo"
-            class="text-3xl text-blue-500 font-monospace font-semibold"
+            class="text-3xl text-blue-500 dark:text-blue-500 font-monospace font-semibold"
             href={ROUTES.home.path}
             title={ROUTES.home.title}
         >
-            <span class="text-red-400">"❱"</span>
+            <span class="text-red-400 dark:text-red-400">"❱"</span>
             "L"
         </a>
     }
@@ -109,7 +109,7 @@ fn SearchField() -> impl IntoView {
                     _ref={search_ref}
                     type="text"
                     placeholder={LAYOUT.search_placeholder}
-                    class="p-0 pl-2 pr-8 border bg-gray-700 text-blue-400 border-blue-600 focus:border-red-500 focus:ring-red-500"
+                    class="p-0 pl-2 pr-8 border bg-gray-100 dark:bg-gray-700 text-blue-500 dark:text-blue-400 border-blue-600 focus:border-red-400 dark:focus:border-red-500 focus-ring-red-400 dark:focus:ring-red-500"
                     tabindex=search_tabindex
                     prop:value=query
                     on:input=on_search_input
@@ -121,7 +121,7 @@ fn SearchField() -> impl IntoView {
                 />
             </div>
             <div
-                class="border-b-2 border-dotted border-blue-500 bg-gray-700 invisible absolute mt-10 p-6 left-0 w-full"
+                class="border-b-2 border-dotted border-blue-500 bg-gray-100 dark:bg-gray-700 invisible absolute mt-10 p-6 left-0 w-full"
                 class=("!visible", move || with!(|results, search_expanded| !results.is_empty() && *search_expanded))
             >
                 <p>{move || {
@@ -141,21 +141,25 @@ fn SearchField() -> impl IntoView {
 }
 
 #[cfg(not(feature = "ssr"))]
-fn initial_prefers_dark() -> bool {
+pub fn initial_prefers_dark() -> bool {
     use wasm_bindgen::JsCast;
+    use web_sys::MediaQueryList;
 
     let doc = document().unchecked_into::<web_sys::HtmlDocument>();
     let cookie = doc.cookie().unwrap_or_default();
-    logging::log!("client cookie: {:?}", cookie);
     if cookie.contains("darkmode=") {
         cookie.contains("darkmode=true")
     } else {
-        true
+        window()
+            .match_media("(prefers-color-scheme: dark)")
+            .ok()
+            .flatten()
+            .map_or(false, MediaQueryList::matches)
     }
 }
 
 #[cfg(feature = "ssr")]
-fn initial_prefers_dark() -> bool {
+pub fn initial_prefers_dark() -> bool {
     use axum_extra::extract::cookie::CookieJar;
     use leptos_axum::RequestParts;
 
@@ -163,13 +167,12 @@ fn initial_prefers_dark() -> bool {
         .map(|parts| {
             let cookies = CookieJar::from_headers(&parts.headers);
             if let Some(cookie) = cookies.get("darkmode") {
-                logging::log!("ssr cookie darkmode={:?}", cookie.value());
                 cookie.value() == "true"
             } else {
-                true
+                false
             }
         })
-        .unwrap_or(true)
+        .unwrap_or(false)
 }
 
 #[server(ToggleDarkMode, "/api")]
@@ -200,28 +203,57 @@ fn DarkModeToggle() -> impl IntoView {
     let toggle_dark_mode = create_server_action::<ToggleDarkMode>();
     let input = toggle_dark_mode.input();
     let value = toggle_dark_mode.value();
-
     let prefers_dark = move || match (input.get(), value.get()) {
         (Some(input), _) => input.prefers_dark,
         (_, Some(Ok(value))) => value,
         _ => initial,
     };
 
-    let color_scheme = move || {
-        if prefers_dark() {
-            logging::log!("prefers_dark: true");
-            "dark".to_string()
-        } else {
-            logging::log!("prefers_dark: false");
-            "light".to_string()
+    let toggle_dark_class = move || {
+        #[cfg(not(feature = "ssr"))]
+        {
+            use wasm_bindgen::JsCast;
+            let doc = document().unchecked_into::<web_sys::HtmlDocument>();
+            if let Some(html) = doc.document_element() {
+                if prefers_dark() {
+                    let _ = html.class_list().remove_1("dark");
+                } else {
+                    let _ = html.class_list().add_1("dark");
+                }
+            }
         }
     };
-    let icon = move || if prefers_dark() { "fa-moon" } else { "fa-sun" };
+
+    let color_scheme = move || {
+        if prefers_dark() {
+            "dark"
+        } else {
+            "light"
+        }
+    };
+    let theme_color = move || {
+        if prefers_dark() {
+            "#0b0d0a"
+        } else {
+            "#e5e9e1"
+        }
+    };
+    let icon = move || {
+        if prefers_dark() {
+            "fa-moon"
+        } else {
+            "fa-sun"
+        }
+    };
 
     view! {
         <Meta
             name="color-scheme"
             content=color_scheme
+        />
+        <Meta
+            name="theme-color"
+            content=theme_color
         />
         <ActionForm action=toggle_dark_mode>
             <input
@@ -231,7 +263,8 @@ fn DarkModeToggle() -> impl IntoView {
             />
             <button
                 type="submit"
-                class=move || format!("icon-link fa-solid {} text-xl mx-2", icon())
+                class=move || format!("icon-link fa-solid {} text-xl mx-2 w-[20px]", icon())
+                on:click=move |_| toggle_dark_class()
             />
         </ActionForm>
     }

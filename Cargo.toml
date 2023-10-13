@@ -11,7 +11,11 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 anyhow = "1"
-chrono = { version = "0.4", default-features = false, features = ["clock", "serde", "std"] }
+chrono = { version = "0.4", default-features = false, features = [
+  "clock",
+  "serde",
+  "std",
+] }
 leptos = { version = "0.5", features = ["rustls"] }
 leptos_meta = { version = "0.5" }
 leptos_dom = { version = "0.5" }
@@ -29,6 +33,8 @@ web-sys = { version = "0.3", optional = true, features = [
   "AbortController",
   "AbortSignal",
   "HtmlDocument",
+  "MediaQueryList",
+  "Window"
 ] }
 
 # dependecies for server (enabled with `ssr` feature)
@@ -40,22 +46,36 @@ tokio = { version = "1", optional = true }
 tower = { version = "0.4", optional = true }
 tower-http = { version = "0.4", features = ["fs", "trace"], optional = true }
 tracing = { version = "0.1" }
-tracing-subscriber = { version = "0.3", features = ["env-filter", "json"], optional = true }
+tracing-subscriber = { version = "0.3", features = [
+  "env-filter",
+  "json",
+], optional = true }
 tracing-appender = { version = "0.2", optional = true }
 axum-extra = { version = "0.8.0", features = ["cookie"] }
 
 [features]
 hydrate = [
-    "dep:console_error_panic_hook",
-    "dep:console_log",
-    "dep:log",
-    "dep:wasm-bindgen",
-    "dep:web-sys",
-    "leptos/hydrate",
-    "leptos_meta/hydrate",
-    "leptos_router/hydrate"
+  "dep:console_error_panic_hook",
+  "dep:console_log",
+  "dep:log",
+  "dep:wasm-bindgen",
+  "dep:web-sys",
+  "leptos/hydrate",
+  "leptos_meta/hydrate",
+  "leptos_router/hydrate",
 ]
-ssr = ["dep:axum", "dep:leptos_axum", "dep:tokio", "dep:tower", "dep:tower-http", "dep:tracing-appender", "dep:tracing-subscriber", "leptos/ssr", "leptos_meta/ssr", "leptos_router/ssr"]
+ssr = [
+  "dep:axum",
+  "dep:leptos_axum",
+  "dep:tokio",
+  "dep:tower",
+  "dep:tower-http",
+  "dep:tracing-appender",
+  "dep:tracing-subscriber",
+  "leptos/ssr",
+  "leptos_meta/ssr",
+  "leptos_router/ssr",
+]
 perf = []
 
 [profile.release]
@@ -77,4 +97,4 @@ bin-features = ["ssr"]
 lib-features = ["hydrate"]
 lib-profile-release = "wasm-release"
 style-file = "style/main.css"
-tailwind-input-file = "style/main.css"
+tailwind-input-file = "style/tailwind.css"
