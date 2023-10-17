@@ -1,8 +1,0 @@
-{
-  "title": "$ 500 Fatal Exception",
-  "message": "Something blew up internally.",
-  "action1": "Try again, file a ",
-  "linkText1": "bug report",
-  "action2": ", or ",
-  "linkText2": "head back home"
-}

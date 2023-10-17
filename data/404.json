@@ -1,8 +1,0 @@
-{
-  "title": "$ 404 Segmentation Fault",
-  "message": "The page you're looking for is out of bounds.",
-  "action1": "Check your url, file a ",
-  "linkText1": "bug report",
-  "action2": ", or ",
-  "linkText2": "head back home"
-}

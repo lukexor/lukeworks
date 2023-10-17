@@ -38,9 +38,17 @@ async fn shutdown_signal() {
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
-    use axum::{extract::MatchedPath, http::Request, routing::post, Router};
+    use axum::{
+        extract::MatchedPath,
+        http::Request,
+        routing::{self, post},
+        Router,
+    };
     use leptos_axum::{handle_server_fns, LeptosRoutes};
-    use lukeworks::{file_server, portfolio::Portfolio};
+    use lukeworks::{
+        file_server,
+        portfolio::{data::LAYOUT, rss, Portfolio},
+    };
     use tower_http::trace::TraceLayer;
 
     let _guard = lukeworks::tracing_init();
@@ -52,6 +60,7 @@ async fn main() -> anyhow::Result<()> {
     let routes = leptos_axum::generate_route_list(Portfolio);
     let app = Router::new()
         .route("/api/*fn", post(handle_server_fns))
+        .route(LAYOUT.icons.rss.href, routing::get(rss::feed))
         .leptos_routes(&options, routes, Portfolio)
         .fallback(file_server::serve)
         .layer(

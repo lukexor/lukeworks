@@ -1,6 +1,7 @@
 //! Image.
 
-use leptos::{component, html::Img, view, IntoAttribute, IntoView, NodeRef};
+use leptos::*;
+use leptos_dom::html::Img;
 
 /// Image component.
 #[component]

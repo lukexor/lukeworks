@@ -15,6 +15,14 @@ pub mod components;
 pub mod file_server;
 pub mod portfolio;
 
+/// Scroll anchor ID into view.
+// FIXME: Remove when https://github.com/leptos-rs/leptos/issues/1907 is resolved
+pub fn scroll_to_id(id: &str) {
+    if let Some(el) = leptos_dom::document().get_element_by_id(&id.replace("/#", "")) {
+        el.scroll_into_view()
+    }
+}
+
 /// Quickly create and populate a [`HashMap`].
 #[macro_export]
 macro_rules! hashmap {

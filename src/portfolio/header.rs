@@ -1,6 +1,15 @@
 //! Portfolio Header components.
 
-use crate::portfolio::data::{LAYOUT, ROUTES};
+use crate::{
+    portfolio::{
+        data::{
+            Route, DARK_COLOR_SCHEME, DARK_THEME_COLOR, LAYOUT, LIGHT_COLOR_SCHEME,
+            LIGHT_THEME_COLOR, ROUTES,
+        },
+        icons::{DynIconButton, GitHubIcon, LinkedInIcon},
+    },
+    scroll_to_id,
+};
 use leptos::*;
 use leptos_dom::{create_node_ref, helpers::debounce, html::Input};
 use leptos_meta::Meta;
@@ -13,27 +22,25 @@ fn Logo() -> impl IntoView {
     view! {
         <a
             id="logo"
-            class="text-3xl text-blue-500 dark:text-blue-500 font-monospace font-semibold"
+            class="text-3xl text-red-400 font-display font-bold"
             href={ROUTES.home.path}
             title={ROUTES.home.title}
         >
-            <span class="text-red-400 dark:text-red-400">"❱"</span>
+            <span class="font-mono text-blue-500">"❱"</span>
             "L"
         </a>
     }
 }
 
-/// GitHub icon.
+/// Portfolio navigation menu item.
 #[component]
-fn GitHubIcon() -> impl IntoView {
-    let github_icon = LAYOUT.social_icons.github;
+fn NavItem(route: &'static Route) -> impl IntoView {
     view! {
-        <a
-            class="icon-link text-xl mx-2"
-            class={github_icon.icon}
-            href={github_icon.href}
-            title={github_icon.title}
-        />
+        <li class="mt-8 lg:mt-0 lg:mx-4">
+            <a href=route.path on:click=|_| scroll_to_id(route.path)>
+                {route.title}
+            </a>
+        </li>
     }
 }
 
@@ -41,12 +48,14 @@ fn GitHubIcon() -> impl IntoView {
 #[component]
 fn Nav() -> impl IntoView {
     let (menu_expanded, set_menu_expanded) = create_signal(false);
+    let collapse = move |_| set_menu_expanded.set(false);
     let toggle_menu =
         move |_| update!(|set_menu_expanded| *set_menu_expanded = !*set_menu_expanded);
-    let menu_tabindex = move || if menu_expanded.get() { "" } else { "-1" };
+
+    // TODO: Ensure tab indexing is working correctly across links, both hidden and not
 
     view! {
-        <span class="relative lg:hidden z-10">
+        <span class="relative lg:hidden z-20">
             <button
                 class="icon-link fa-solid fa-bars text-xl mx-2"
                 class=("fa-times", menu_expanded)
@@ -55,18 +64,19 @@ fn Nav() -> impl IntoView {
             />
         </span>
         <div
-            class="absolute lg:relative top-0 right-0 w-0 max-w-md lg:w-auto transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-0"
+            class="absolute lg:relative top-0 right-0 w-0 max-w-md lg:w-auto transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-10 lg:z-0"
             class=("!w-3/4", menu_expanded)
         >
             <ul class="flex flex-col lg:flex-row items-center lg:items-center px-6 py-3 lg:p-0">
-                <li class="mt-12 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.about.path>{ROUTES.about.title}</a></li>
-                <li class="mt-8 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.projects.path>{ROUTES.projects.title}</a></li>
-                <li class="mt-8 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.blog.path>{ROUTES.blog.title}</a></li>
-                <li class="mt-8 lg:mt-0 lg:mr-8"><a tabindex=menu_tabindex href=ROUTES.contact.path>{ROUTES.contact.title}</a></li>
+                <NavItem route={&ROUTES.about} on:click=collapse />
+                <NavItem route={&ROUTES.blog} on:click=collapse />
+                <NavItem route={&ROUTES.projects} on:click=collapse />
+                <NavItem route={&ROUTES.contact} on:click=collapse />
                 <li class="mt-8 lg:hidden">
                     <div class="flex">
                         <DarkModeToggle />
                         <GitHubIcon />
+                        <LinkedInIcon />
                     </div>
                 </li>
             </ul>
@@ -230,16 +240,16 @@ fn DarkModeToggle() -> impl IntoView {
         _ => initial,
     };
 
-    let toggle_dark_class = move || {
+    let toggle_dark_class = move |_| {
         #[cfg(not(feature = "ssr"))]
         {
             use wasm_bindgen::JsCast;
             let doc = document().unchecked_into::<web_sys::HtmlDocument>();
             if let Some(html) = doc.document_element() {
                 if prefers_dark() {
-                    let _ = html.class_list().remove_1("dark");
+                    let _ = html.class_list().remove_1(DARK_COLOR_SCHEME);
                 } else {
-                    let _ = html.class_list().add_1("dark");
+                    let _ = html.class_list().add_1(DARK_COLOR_SCHEME);
                 }
             }
         }
@@ -247,45 +257,39 @@ fn DarkModeToggle() -> impl IntoView {
 
     let color_scheme = move || {
         if prefers_dark() {
-            "dark"
+            DARK_COLOR_SCHEME
         } else {
-            "light"
+            LIGHT_COLOR_SCHEME
         }
     };
     let theme_color = move || {
         if prefers_dark() {
-            "#0b0d0a"
+            DARK_THEME_COLOR
         } else {
-            "#e5e9e1"
+            LIGHT_THEME_COLOR
         }
     };
     let icon = move || {
         if prefers_dark() {
-            "fa-moon"
+            LAYOUT.icons.dark_mode.icon
         } else {
-            "fa-sun"
+            LAYOUT.icons.light_mode.icon
         }
     };
 
     view! {
-        <Meta
-            name="color-scheme"
-            content=color_scheme
-        />
-        <Meta
-            name="theme-color"
-            content=theme_color
-        />
+        <Meta name="color-scheme" content=color_scheme />
+        <Meta name="theme-color" content=theme_color />
         <ActionForm action=toggle_dark_mode>
             <input
                 type="hidden"
                 name="prefers_dark"
-                value=move || (!prefers_dark()).to_string()
+                value=move || !prefers_dark()
             />
-            <button
-                type="submit"
-                class=move || format!("icon-link fa-solid {} text-xl mx-2 w-[20px]", icon())
-                on:click=move |_| toggle_dark_class()
+            <DynIconButton
+                icon=icon
+                title="Toggle dark mode"
+                on_click=toggle_dark_class
             />
         </ActionForm>
     }
@@ -295,13 +299,14 @@ fn DarkModeToggle() -> impl IntoView {
 #[component]
 pub fn Header() -> impl IntoView {
     view! {
-        <header class="flex justify-between mb-12">
+        <header class="flex justify-between px-4 lg:px-12 py-2 bg-gray-200 dark:bg-gray-800">
             <Logo />
             <div class="hidden lg:flex items-center">
                 <Nav />
                 <SearchField />
                 <DarkModeToggle />
                 <GitHubIcon />
+                <LinkedInIcon />
             </div>
             <div class="flex lg:hidden items-center">
                 <SearchField />

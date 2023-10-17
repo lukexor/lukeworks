@@ -1,20 +1,15 @@
 //! Contact page.
 
-use leptos::{component, view, IntoView};
-
-/// Contact copy.
-#[derive(Debug, Copy, Clone)]
-#[must_use]
-pub struct Contact {
-    pub name: &'static str,
-    pub email: &'static str,
-    pub message: &'static str,
-}
+use crate::portfolio::data::CONTACT;
+use leptos::*;
 
 /// Contact page.
 #[component]
 pub fn Contact() -> impl IntoView {
     view! {
-        "Contact"
+        <div class="w-full max-w-prose py-16">
+            <h2 id="contact" class="font-display text-4xl my-6 text-blue-500">{CONTACT.title}</h2>
+            <p inner_html={CONTACT.content} />
+        </div>
     }
 }

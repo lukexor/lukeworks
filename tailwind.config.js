@@ -15,7 +15,7 @@ module.exports = {
       gray: {
         100: "#f7f7f7",
         200: "#e5e9e1",
-        300: "#b1b8a9",
+        300: "#d4d8cd",
         400: "#82857b",
         500: "#665f57",
         600: "#383730",
@@ -23,7 +23,8 @@ module.exports = {
         800: "#0b0d0a",
       },
       blue: {
-        400: "#95bdb2",
+        300: "#95bdb2",
+        400: "#7b9a9a",
         500: "#5a7b85",
         600: "#273245",
         700: "#131821",
@@ -47,13 +48,16 @@ module.exports = {
       },
     },
     fontFamily: {
-      serif: ["Yatra One", "serif"],
-      sans: ["Rubik", "sans-serif"],
-      monospace: ["PT Mono", "Courier", "monospace"],
+      display: ["Yatra One", "serif"],
+      body: ["Rubik", "sans-serif"],
+      mono: ["PT Mono", "Courier", "monospace"],
     },
     extend: {
       height: {
         screen: ["100vh", "100dvh"],
+      },
+      backgroundImage: {
+        "intro-texture": "url('/images/code-bg.webp')",
       },
     },
   },
