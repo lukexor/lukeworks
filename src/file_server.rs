@@ -3,6 +3,7 @@
 use crate::portfolio::Portfolio;
 use axum::{
     body::{boxed, Body},
+    debug_handler,
     extract::State,
     http::{Request, StatusCode, Uri},
     response::{IntoResponse, Response as AxumResponse},
@@ -13,6 +14,7 @@ use tower::ServiceExt;
 use tower_http::services::ServeDir;
 
 /// Serve a static file request, falling back to the portfolio homepage if not found.
+#[debug_handler]
 pub async fn serve(
     uri: Uri,
     State(options): State<LeptosOptions>,

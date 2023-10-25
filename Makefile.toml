@@ -2,6 +2,7 @@
 VERSION = { script = [
   "awk -F ' = ' '$1 ~ /version/ { gsub(/[\\\"]/, \"\", $2); printf(\"%s\",$2) }' Cargo.toml",
 ] }
+LEPTOS_TAILWIND_VERSION = "v3.3.4"
 
 [env.development]
 RUST_LOG = "info,lukeworks=debug,tower_http=debug,axum::rejection=trace"

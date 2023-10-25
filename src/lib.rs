@@ -10,16 +10,22 @@
     unused
 )]
 
+use web_sys::{ScrollBehavior, ScrollIntoViewOptions};
+
 pub mod components;
 #[cfg(feature = "ssr")]
 pub mod file_server;
 pub mod portfolio;
 
+leptos_i18n::load_locales!();
+
 /// Scroll anchor ID into view.
 // FIXME: Remove when https://github.com/leptos-rs/leptos/issues/1907 is resolved
 pub fn scroll_to_id(id: &str) {
     if let Some(el) = leptos_dom::document().get_element_by_id(&id.replace("/#", "")) {
-        el.scroll_into_view()
+        el.scroll_into_view_with_scroll_into_view_options(
+            ScrollIntoViewOptions::new().behavior(ScrollBehavior::Smooth),
+        )
     }
 }
 

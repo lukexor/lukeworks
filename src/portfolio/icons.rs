@@ -18,17 +18,15 @@ pub fn IconLink(attrs: IconLinkAttrs) -> impl IntoView {
 
 /// Icon button with on:click and dynamic icon.
 #[component]
-pub fn DynIconButton<I, C>(icon: I, title: &'static str, on_click: C) -> impl IntoView
+pub fn DynIconButton<I>(icon: I, title: &'static str, type_: &'static str) -> impl IntoView
 where
     I: Fn() -> &'static str + 'static,
-    C: FnMut(ev::MouseEvent) + 'static,
 {
     view! {
         <button
-            type="submit"
+            type=type_
             class=move || format!("icon-link {} text-xl mx-2 w-[20px]", icon())
             title=title
-            on:click=on_click
         />
     }
 }
@@ -37,7 +35,7 @@ where
 #[component]
 pub fn GitHubIcon() -> impl IntoView {
     view! {
-        <IconLink attrs={LAYOUT.icons.github} />
+        <IconLink attrs=LAYOUT.icons.github />
     }
 }
 
@@ -45,7 +43,7 @@ pub fn GitHubIcon() -> impl IntoView {
 #[component]
 pub fn LinkedInIcon() -> impl IntoView {
     view! {
-        <IconLink attrs={LAYOUT.icons.linkedin} />
+        <IconLink attrs=LAYOUT.icons.linkedin />
     }
 }
 
@@ -53,7 +51,7 @@ pub fn LinkedInIcon() -> impl IntoView {
 #[component]
 pub fn RssIcon() -> impl IntoView {
     view! {
-        <IconLink attrs={LAYOUT.icons.rss} />
+        <IconLink attrs=LAYOUT.icons.rss />
     }
 }
 
@@ -61,6 +59,6 @@ pub fn RssIcon() -> impl IntoView {
 #[component]
 pub fn EmailIcon() -> impl IntoView {
     view! {
-        <IconLink attrs={LAYOUT.icons.email} />
+        <IconLink attrs=LAYOUT.icons.email />
     }
 }

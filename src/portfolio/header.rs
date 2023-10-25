@@ -23,8 +23,8 @@ fn Logo() -> impl IntoView {
         <a
             id="logo"
             class="text-3xl text-red-400 font-display font-bold"
-            href={ROUTES.home.path}
-            title={ROUTES.home.title}
+            href=ROUTES.home.path
+            title=ROUTES.home.title
         >
             <span class="font-mono text-blue-500">"❱"</span>
             "L"
@@ -61,22 +61,22 @@ fn Nav() -> impl IntoView {
                 class=("fa-times", menu_expanded)
                 class=("!text-2xl", menu_expanded)
                 on:click=toggle_menu
-            />
+            ></button>
         </span>
         <div
             class="absolute lg:relative top-0 right-0 w-0 max-w-md lg:w-auto transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-10 lg:z-0"
             class=("!w-3/4", menu_expanded)
         >
             <ul class="flex flex-col lg:flex-row items-center lg:items-center px-6 py-3 lg:p-0">
-                <NavItem route={&ROUTES.about} on:click=collapse />
-                <NavItem route={&ROUTES.blog} on:click=collapse />
-                <NavItem route={&ROUTES.projects} on:click=collapse />
-                <NavItem route={&ROUTES.contact} on:click=collapse />
+                <NavItem route=&ROUTES.about on:click=collapse/>
+                <NavItem route=&ROUTES.blog on:click=collapse/>
+                <NavItem route=&ROUTES.projects on:click=collapse/>
+                <NavItem route=&ROUTES.contact on:click=collapse/>
                 <li class="mt-8 lg:hidden">
                     <div class="flex">
-                        <DarkModeToggle />
-                        <GitHubIcon />
-                        <LinkedInIcon />
+                        <DarkModeToggle/>
+                        <GitHubIcon/>
+                        <LinkedInIcon/>
                     </div>
                 </li>
             </ul>
@@ -126,22 +126,35 @@ fn SearchField() -> impl IntoView {
     };
 
     let search_tabindex = move || if search_expanded.get() { "" } else { "-1" };
+    let show_results =
+        move || with!(|results, search_expanded| !results.is_empty() && *search_expanded);
+    let results_count = move || {
+        let count = with!(|results| results.len());
+        format!(
+            r#"{count} result{} for "{}":"#,
+            if count > 1 { "s" } else { "" },
+            query.get(),
+        )
+    };
 
     view! {
         <div>
             <button
                 class="icon-link fa-solid fa-search mx-2 text-xl lg:text-base"
                 on:click=toggle_search
-            />
+            ></button>
             <div
-                class="absolute lg:relative flex lg:inline-flex top-12 right-4 lg:top-[unset] lg:right-[unset] items-center w-0 transition-[width] overflow-hidden"
+                class="absolute z-10 lg:relative flex lg:inline-flex top-12 right-4 lg:top-[unset]
+                lg:right-[unset] items-center w-0 transition-[width] overflow-hidden"
                 class=("!w-72", search_expanded)
             >
                 <input
-                    _ref={search_ref}
+                    node_ref=search_ref
                     type="text"
-                    placeholder={LAYOUT.search_placeholder}
-                    class="p-0 pl-2 pr-8 w-72 border bg-gray-100 dark:bg-gray-700 text-blue-500 dark:text-blue-400 border-blue-600 focus:border-red-400 dark:focus:border-red-500 focus-ring-red-400 dark:focus:ring-red-500"
+                    placeholder=LAYOUT.search_placeholder
+                    class="p-0 pl-2 pr-8 w-72 border bg-gray-100 dark:bg-gray-700 text-blue-500
+                        dark:text-blue-400 border-blue-600 focus:border-red-400
+                        dark:focus:border-red-500 focus-ring-red-400 dark:focus:ring-red-500"
                     tabindex=search_tabindex
                     prop:value=query
                     on:input=on_search_input
@@ -150,21 +163,16 @@ fn SearchField() -> impl IntoView {
                     class="icon-link fa-solid fa-times absolute lg:relative right-1 lg:right-6 text-lg"
                     tabindex=search_tabindex
                     on:click=clear_search
-                />
+                ></button>
             </div>
             <div
-                class="border-b-2 border-dotted border-blue-500 bg-gray-100 dark:bg-gray-700 invisible absolute mt-10 p-6 left-0 w-full"
-                class=("!visible", move || with!(|results, search_expanded| !results.is_empty() && *search_expanded))
+                class="border-b-2 border-dotted border-blue-500 bg-gray-100 dark:bg-gray-700
+                invisible absolute z-10 mt-10 lg:mt-4 p-6 left-0 w-full"
+                class=("!visible", show_results)
             >
-                <p>{move || {
-                    let count = with!(|results| results.len());
-                    format!(r#"{count} result{} for "{}":"#, if count > 1 { "s" } else { "" }, query.get())
-                }}</p>
-                <For
-                    each=move || results.get()
-                    key=|result| result.clone()
-                    let:result
-                >
+
+                <p>{results_count}</p>
+                <For each=move || results.get() key=|result| result.clone() let:result>
                     <div>{result}</div>
                 </For>
             </div>
@@ -194,16 +202,14 @@ pub fn initial_prefers_dark() -> bool {
     use axum_extra::extract::cookie::CookieJar;
     use leptos_axum::RequestParts;
 
+    let default_prefers_dark = true;
     use_context::<RequestParts>()
-        .map(|parts| {
-            let cookies = CookieJar::from_headers(&parts.headers);
-            if let Some(cookie) = cookies.get("darkmode") {
-                cookie.value() == "true"
-            } else {
-                false
-            }
+        .and_then(|parts| {
+            CookieJar::from_headers(&parts.headers)
+                .get("darkmode")
+                .map(|c| c.value() == "true")
         })
-        .unwrap_or(false)
+        .unwrap_or(default_prefers_dark)
 }
 
 #[server(ToggleDarkMode, "/api")]
@@ -240,20 +246,18 @@ fn DarkModeToggle() -> impl IntoView {
         _ => initial,
     };
 
-    let toggle_dark_class = move |_| {
-        #[cfg(not(feature = "ssr"))]
-        {
-            use wasm_bindgen::JsCast;
-            let doc = document().unchecked_into::<web_sys::HtmlDocument>();
-            if let Some(html) = doc.document_element() {
-                if prefers_dark() {
-                    let _ = html.class_list().remove_1(DARK_COLOR_SCHEME);
-                } else {
-                    let _ = html.class_list().add_1(DARK_COLOR_SCHEME);
-                }
+    #[cfg(feature = "hydrate")]
+    create_effect(move |_| {
+        use wasm_bindgen::JsCast;
+        let doc = document().unchecked_into::<web_sys::HtmlDocument>();
+        if let Some(html) = doc.document_element() {
+            if prefers_dark() {
+                let _ = html.class_list().add_1(DARK_COLOR_SCHEME);
+            } else {
+                let _ = html.class_list().remove_1(DARK_COLOR_SCHEME);
             }
         }
-    };
+    });
 
     let color_scheme = move || {
         if prefers_dark() {
@@ -278,19 +282,11 @@ fn DarkModeToggle() -> impl IntoView {
     };
 
     view! {
-        <Meta name="color-scheme" content=color_scheme />
-        <Meta name="theme-color" content=theme_color />
+        <Meta name="color-scheme" content=color_scheme/>
+        <Meta name="theme-color" content=theme_color/>
         <ActionForm action=toggle_dark_mode>
-            <input
-                type="hidden"
-                name="prefers_dark"
-                value=move || !prefers_dark()
-            />
-            <DynIconButton
-                icon=icon
-                title="Toggle dark mode"
-                on_click=toggle_dark_class
-            />
+            <input type="hidden" name="prefers_dark" value=move || (!prefers_dark()).to_string()/>
+            <DynIconButton icon=icon type_="submit" title="Toggle dark mode"/>
         </ActionForm>
     }
 }
@@ -299,18 +295,18 @@ fn DarkModeToggle() -> impl IntoView {
 #[component]
 pub fn Header() -> impl IntoView {
     view! {
-        <header class="flex justify-between px-4 lg:px-12 py-2 bg-gray-200 dark:bg-gray-800">
-            <Logo />
+        <header class="flex justify-between px-4 lg:px-12 py-2 bg-gray-200 dark:bg-blue-700">
+            <Logo/>
             <div class="hidden lg:flex items-center">
-                <Nav />
-                <SearchField />
-                <DarkModeToggle />
-                <GitHubIcon />
-                <LinkedInIcon />
+                <Nav/>
+                <SearchField/>
+                <DarkModeToggle/>
+                <GitHubIcon/>
+                <LinkedInIcon/>
             </div>
             <div class="flex lg:hidden items-center">
-                <SearchField />
-                <Nav />
+                <SearchField/>
+                <Nav/>
             </div>
         </header>
     }

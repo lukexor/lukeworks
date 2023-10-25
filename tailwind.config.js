@@ -56,6 +56,9 @@ module.exports = {
       height: {
         screen: ["100vh", "100dvh"],
       },
+      minHeight: {
+        screen: ["100vh", "100dvh"],
+      },
       backgroundImage: {
         "intro-texture": "url('/images/code-bg.webp')",
       },
