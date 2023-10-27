@@ -1,3 +1,20 @@
+# "Lost and Found" Series : Lessons Learned
+
+```yaml
+slug: lost-and-found-series
+description: |
+  Introduction to my "Lost and Found" Series on my programming career journey.
+category: Career
+tags: []
+image:
+  src: /images/blog/lost_and_found_part_0.webp
+  title: We can draw lessons from the past, but we cannot live in it.
+minutes_to_read: 2
+published: 2014-11-21 07:42:52
+```
+
+![Overgrown forest with text: "We can draw lessons from the past, but we cannot live in it"](/images/blog/lost_and_found_part_0.webp "We can draw lessons from the past, but we cannot live in it")
+
 My descent into the world of programming started at a pretty young age. This was
 back in the early days of the world wide web. Internet giants like Facebook and
 Twitter weren't on the scene yet and Google was just getting started. It was a
@@ -37,7 +54,7 @@ did have that going for it!
 
 As an outcome of all these experiences, I piqued the interest of my younger
 brother, launching him on his own path towards programming as a career and I had
-settled on a major for college: *Computer Science*. I didn't know it at the
+settled on a major for college: _Computer Science_. I didn't know it at the
 time, but I was **not** prepared to major in computer science.
 
 Not because I wasn't smart enough, or interested enough, but because I did not
@@ -45,7 +62,6 @@ fully understand what it was about. Computer Science is pretty self-explanatory,
 but the experience of school vs real world application are entirely different
 and I was about to learn that the hard way. I'll explain what I mean in [Part
 2][]. See you there!
-
 
 <small>photo credit: [lydia_shiningbrightly][] via [photopin][] [cc][]</small>
 
@@ -62,6 +78,7 @@ and I was about to learn that the hard way. I'll explain what I mean in [Part
 [Windows 98]: http://en.wikipedia.org/wiki/Windows_98 "Windows 98"
 [Perl]: http://perl.com/ "Perl"
 [RIP GeoCities]: http://www.pcworld.com/article/163765/So_Long_GeoCities_We_Forgot_You_Still_Existed.html "RIP GeoCities"
+
 [Part 2]: /lost-and-found-part-2 "\"Lost and Found\" : Part 2 - PC load letter?!"
 
 [lydia_shiningbrightly]: https://www.flickr.com/photos/lydiashiningbrightly/3423988153/

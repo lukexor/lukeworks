@@ -2,11 +2,8 @@
 
 use crate::{
     portfolio::{
-        data::{
-            Route, DARK_COLOR_SCHEME, DARK_THEME_COLOR, LAYOUT, LIGHT_COLOR_SCHEME,
-            LIGHT_THEME_COLOR, ROUTES,
-        },
-        icons::{DynIconButton, GitHubIcon, LinkedInIcon},
+        constants::{colors, layout, routes},
+        icons::{self, DynIconButton, GitHubIcon, LinkedInIcon},
     },
     scroll_to_id,
 };
@@ -23,22 +20,22 @@ fn Logo() -> impl IntoView {
         <a
             id="logo"
             class="text-3xl text-red-400 font-display font-bold"
-            href=ROUTES.home.path
-            title=ROUTES.home.title
+            href=routes::HOME
+            title=layout::menu::HOME
         >
             <span class="font-mono text-blue-500">"❱"</span>
-            "L"
+            {layout::LOGO}
         </a>
     }
 }
 
 /// Portfolio navigation menu item.
 #[component]
-fn NavItem(route: &'static Route) -> impl IntoView {
+fn NavItem(href: &'static str, title: &'static str) -> impl IntoView {
     view! {
         <li class="mt-8 lg:mt-0 lg:mx-4">
-            <a href=route.path on:click=|_| scroll_to_id(route.path)>
-                {route.title}
+            <a href=href on:click=|_| scroll_to_id(href)>
+                {title}
             </a>
         </li>
     }
@@ -47,10 +44,9 @@ fn NavItem(route: &'static Route) -> impl IntoView {
 /// Portfolio navigation component.
 #[component]
 fn Nav() -> impl IntoView {
-    let (menu_expanded, set_menu_expanded) = create_signal(false);
-    let collapse = move |_| set_menu_expanded.set(false);
-    let toggle_menu =
-        move |_| update!(|set_menu_expanded| *set_menu_expanded = !*set_menu_expanded);
+    let (menu_open, set_menu_open) = create_signal(false);
+    let handle_menu_close = move |_| set_menu_open.set(false);
+    let handle_menu_toggle = move |_| update!(|set_menu_open| *set_menu_open = !*set_menu_open);
 
     // TODO: Ensure tab indexing is working correctly across links, both hidden and not
 
@@ -58,20 +54,20 @@ fn Nav() -> impl IntoView {
         <span class="relative lg:hidden z-20">
             <button
                 class="icon-link fa-solid fa-bars text-xl mx-2"
-                class=("fa-times", menu_expanded)
-                class=("!text-2xl", menu_expanded)
-                on:click=toggle_menu
+                class=("fa-times", menu_open)
+                class=("!text-2xl", menu_open)
+                on:click=handle_menu_toggle
             ></button>
         </span>
         <div
-            class="absolute lg:relative top-0 right-0 w-0 max-w-md lg:w-auto transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-10 lg:z-0"
-            class=("!w-3/4", menu_expanded)
+            class="absolute lg:relative top-0 right-0 w-0 lg:w-auto max-w-md h-screen transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-10 lg:z-0"
+            class=("!w-3/4", menu_open)
         >
             <ul class="flex flex-col lg:flex-row items-center lg:items-center px-6 py-3 lg:p-0">
-                <NavItem route=&ROUTES.about on:click=collapse/>
-                <NavItem route=&ROUTES.blog on:click=collapse/>
-                <NavItem route=&ROUTES.projects on:click=collapse/>
-                <NavItem route=&ROUTES.contact on:click=collapse/>
+                <NavItem href=routes::HOME_ABOUT title=layout::menu::ABOUT on:click=handle_menu_close/>
+                <NavItem href=routes::HOME_BLOG title=layout::menu::BLOG on:click=handle_menu_close/>
+                <NavItem href=routes::HOME_PROJECTS title=layout::menu::PROJECTS on:click=handle_menu_close/>
+                <NavItem href=routes::HOME_CONTACT title=layout::menu::CONTACT on:click=handle_menu_close/>
                 <li class="mt-8 lg:hidden">
                     <div class="flex">
                         <DarkModeToggle/>
@@ -99,13 +95,13 @@ fn SearchField() -> impl IntoView {
                 logging::error!("failed to focus search field");
             });
     };
-    let toggle_search = move |_| {
+    let handle_search_toggle = move |_| {
         update!(|set_search_expanded| *set_search_expanded = !*set_search_expanded);
         focus_search();
     };
 
     let (query, set_query) = create_signal(String::new());
-    let clear_search = move |_| {
+    let handle_clear_search = move |_| {
         set_query.set(String::new());
         set_results.set(vec![]);
         focus_search();
@@ -128,20 +124,14 @@ fn SearchField() -> impl IntoView {
     let search_tabindex = move || if search_expanded.get() { "" } else { "-1" };
     let show_results =
         move || with!(|results, search_expanded| !results.is_empty() && *search_expanded);
-    let results_count = move || {
-        let count = with!(|results| results.len());
-        format!(
-            r#"{count} result{} for "{}":"#,
-            if count > 1 { "s" } else { "" },
-            query.get(),
-        )
-    };
+    let results_len = move || with!(|results| results.len());
+    let query_str = move || query.get();
 
     view! {
         <div>
             <button
                 class="icon-link fa-solid fa-search mx-2 text-xl lg:text-base"
-                on:click=toggle_search
+                on:click=handle_search_toggle
             ></button>
             <div
                 class="absolute z-10 lg:relative flex lg:inline-flex top-12 right-4 lg:top-[unset]
@@ -151,7 +141,7 @@ fn SearchField() -> impl IntoView {
                 <input
                     node_ref=search_ref
                     type="text"
-                    placeholder=LAYOUT.search_placeholder
+                    placeholder=layout::search::PLACEHOLDER
                     class="p-0 pl-2 pr-8 w-72 border bg-gray-100 dark:bg-gray-700 text-blue-500
                         dark:text-blue-400 border-blue-600 focus:border-red-400
                         dark:focus:border-red-500 focus-ring-red-400 dark:focus:ring-red-500"
@@ -162,7 +152,7 @@ fn SearchField() -> impl IntoView {
                 <button
                     class="icon-link fa-solid fa-times absolute lg:relative right-1 lg:right-6 text-lg"
                     tabindex=search_tabindex
-                    on:click=clear_search
+                    on:click=handle_clear_search
                 ></button>
             </div>
             <div
@@ -171,7 +161,7 @@ fn SearchField() -> impl IntoView {
                 class=("!visible", show_results)
             >
 
-                <p>{results_count}</p>
+                <p>{layout::search::result_summary(results_len, query_str)}</p>
                 <For each=move || results.get() key=|result| result.clone() let:result>
                     <div>{result}</div>
                 </For>
@@ -252,32 +242,32 @@ fn DarkModeToggle() -> impl IntoView {
         let doc = document().unchecked_into::<web_sys::HtmlDocument>();
         if let Some(html) = doc.document_element() {
             if prefers_dark() {
-                let _ = html.class_list().add_1(DARK_COLOR_SCHEME);
+                let _ = html.class_list().add_1("dark");
             } else {
-                let _ = html.class_list().remove_1(DARK_COLOR_SCHEME);
+                let _ = html.class_list().remove_1("dark");
             }
         }
     });
 
     let color_scheme = move || {
         if prefers_dark() {
-            DARK_COLOR_SCHEME
+            "dark"
         } else {
-            LIGHT_COLOR_SCHEME
+            "light"
         }
     };
     let theme_color = move || {
         if prefers_dark() {
-            DARK_THEME_COLOR
+            colors::DARK_THEME
         } else {
-            LIGHT_THEME_COLOR
+            colors::LIGHT_THEME
         }
     };
     let icon = move || {
         if prefers_dark() {
-            LAYOUT.icons.dark_mode.icon
+            icons::MOON
         } else {
-            LAYOUT.icons.light_mode.icon
+            icons::SUN
         }
     };
 
@@ -286,7 +276,7 @@ fn DarkModeToggle() -> impl IntoView {
         <Meta name="theme-color" content=theme_color/>
         <ActionForm action=toggle_dark_mode>
             <input type="hidden" name="prefers_dark" value=move || (!prefers_dark()).to_string()/>
-            <DynIconButton icon=icon type_="submit" title="Toggle dark mode"/>
+            <DynIconButton icon=icon type_="submit" title=layout::icons::DARK_MODE />
         </ActionForm>
     }
 }
@@ -295,7 +285,7 @@ fn DarkModeToggle() -> impl IntoView {
 #[component]
 pub fn Header() -> impl IntoView {
     view! {
-        <header class="flex justify-between px-4 lg:px-12 py-2 bg-gray-200 dark:bg-blue-700">
+        <header class="absolute w-full z-[1] flex justify-between px-4 lg:px-12 py-2">
             <Logo/>
             <div class="hidden lg:flex items-center">
                 <Nav/>

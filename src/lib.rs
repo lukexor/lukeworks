@@ -16,8 +16,7 @@ pub mod components;
 #[cfg(feature = "ssr")]
 pub mod file_server;
 pub mod portfolio;
-
-leptos_i18n::load_locales!();
+pub mod types;
 
 /// Scroll anchor ID into view.
 // FIXME: Remove when https://github.com/leptos-rs/leptos/issues/1907 is resolved

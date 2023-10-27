@@ -47,7 +47,7 @@ async fn main() -> anyhow::Result<()> {
     use leptos_axum::{handle_server_fns, LeptosRoutes};
     use lukeworks::{
         file_server,
-        portfolio::{data::LAYOUT, rss, Portfolio},
+        portfolio::{constants::routes, rss, Portfolio},
     };
     use tower_http::trace::TraceLayer;
 
@@ -60,7 +60,7 @@ async fn main() -> anyhow::Result<()> {
     let routes = leptos_axum::generate_route_list(Portfolio);
     let app = Router::new()
         .route("/api/*fn", post(handle_server_fns))
-        .route(LAYOUT.icons.rss.href, routing::get(rss::feed))
+        .route(routes::RSS, routing::get(rss::feed))
         .leptos_routes(&options, routes, Portfolio)
         .fallback(file_server::serve)
         .layer(

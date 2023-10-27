@@ -1,24 +1,26 @@
 //! RSS feed.
 
-use crate::portfolio::data::{
-    BlogPost, ProjectPost, SiteMeta, BLOG_POSTS, LAYOUT, META, PROJECT_POSTS,
+use crate::{
+    portfolio::{
+        constants::{meta, BLOG_POSTS, PROJECT_POSTS},
+        icons,
+        models::{BlogPost, ProjectPost},
+    },
+    types::{DateStr, Url},
 };
 use axum::response::IntoResponse;
-use uuid::Uuid;
 
 struct RssEntry {
-    pub guid: Uuid,
-    pub link: &'static str,
-    pub title: &'static str,
-    pub description: &'static str,
-    pub pub_date: &'static str,
+    pub slug: Url,
+    pub title: String,
+    pub description: String,
+    pub pub_date: DateStr,
 }
 
 impl RssEntry {
     fn to_item(&self) -> String {
         let Self {
-            guid,
-            link,
+            slug,
             title,
             description,
             pub_date,
@@ -26,8 +28,8 @@ impl RssEntry {
         format!(
             r#"
         <item>
-            <guid>{guid}</guid>
-            <link>https://lukeworks.tech/{link}</link>
+            <guid>https://lukeworks.tech/{slug}</guid>
+            <link>https://lukeworks.tech/{slug}</link>
             <title><![CDATA[{title}]]></title>
             <description><![CDATA[{description}]]></description>
             <pubDate>{pub_date}</pubDate>
@@ -36,26 +38,32 @@ impl RssEntry {
     }
 }
 
-impl From<&'static BlogPost> for RssEntry {
-    fn from(post: &'static BlogPost) -> Self {
-        Self {
-            guid: post.meta.id,
-            link: post.meta.slug,
-            title: post.meta.title,
-            description: post.meta.description,
-            pub_date: post.published.as_deref().unwrap_or_default(),
+#[derive(Debug)]
+struct MissingPubDate(Url);
+
+impl TryFrom<BlogPost> for RssEntry {
+    type Error = MissingPubDate;
+
+    fn try_from(post: BlogPost) -> Result<Self, Self::Error> {
+        match post.published {
+            Some(pub_date) => Ok(Self {
+                slug: post.meta.slug,
+                title: post.meta.title,
+                description: post.meta.description,
+                pub_date,
+            }),
+            None => Err(MissingPubDate(post.meta.slug)),
         }
     }
 }
 
-impl From<&'static ProjectPost> for RssEntry {
-    fn from(post: &'static ProjectPost) -> Self {
+impl From<ProjectPost> for RssEntry {
+    fn from(post: ProjectPost) -> Self {
         Self {
-            guid: post.meta.id,
-            link: post.meta.slug,
+            slug: post.meta.slug,
             title: post.meta.title,
             description: post.meta.description,
-            pub_date: &*post.started,
+            pub_date: post.started,
         }
     }
 }
@@ -64,15 +72,11 @@ impl From<&'static ProjectPost> for RssEntry {
 pub async fn feed() -> impl IntoResponse {
     let entries = BLOG_POSTS
         .iter()
-        .map(RssEntry::from)
-        .chain(PROJECT_POSTS.iter().map(RssEntry::from))
+        .cloned()
+        .filter_map(|post| RssEntry::try_from(post).ok())
+        .chain(PROJECT_POSTS.iter().cloned().map(RssEntry::from))
         .map(|r| r.to_item())
         .collect::<String>();
-    let SiteMeta {
-        title,
-        description,
-        origin,
-    } = META;
     format!(
         r#"<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -86,6 +90,9 @@ pub async fn feed() -> impl IntoResponse {
         {entries}
     </channel>
 </rss>"#,
-        rss_path = LAYOUT.icons.rss.href,
+        title = meta::TITLE,
+        description = meta::DESC,
+        origin = meta::ORIGIN,
+        rss_path = icons::RSS,
     )
 }

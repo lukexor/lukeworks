@@ -1,17 +1,29 @@
 //! Icon components.
 
-use crate::portfolio::data::{IconLinkAttrs, LAYOUT};
+use crate::portfolio::constants::{layout, links, routes};
 use leptos::*;
+
+pub const GITHUB: &str = "fa-brands fa-github";
+pub const LINKEDIN: &str = "fa-brands fa-linkedin";
+pub const RSS: &str = "fa-solid fa-rss";
+pub const EMAIL: &str = "fa-solid fa-envelope";
+pub const MOON: &str = "fa-solid fa-moon";
+pub const SUN: &str = "fa-solid fa-sun";
+pub const CHEVRON_DOWN: &str = "fa-solid fa-circle-chevron-down";
 
 /// Icon with an href link.
 #[component]
-pub fn IconLink(attrs: IconLinkAttrs) -> impl IntoView {
+pub fn IconLink(
+    icon_class: &'static str,
+    href: &'static str,
+    title: &'static str,
+) -> impl IntoView {
     view! {
         <a
             class="icon-link text-xl mx-2"
-            class=attrs.icon
-            href=attrs.href
-            title=attrs.title
+            class=icon_class
+            href=href
+            title=title
         />
     }
 }
@@ -35,7 +47,7 @@ where
 #[component]
 pub fn GitHubIcon() -> impl IntoView {
     view! {
-        <IconLink attrs=LAYOUT.icons.github />
+        <IconLink icon_class=GITHUB href=links::GITHUB title=layout::icons::GITHUB/>
     }
 }
 
@@ -43,7 +55,7 @@ pub fn GitHubIcon() -> impl IntoView {
 #[component]
 pub fn LinkedInIcon() -> impl IntoView {
     view! {
-        <IconLink attrs=LAYOUT.icons.linkedin />
+        <IconLink icon_class=LINKEDIN href=links::LINKEDIN title=layout::icons::LINKEDIN/>
     }
 }
 
@@ -51,7 +63,7 @@ pub fn LinkedInIcon() -> impl IntoView {
 #[component]
 pub fn RssIcon() -> impl IntoView {
     view! {
-        <IconLink attrs=LAYOUT.icons.rss />
+        <IconLink icon_class=RSS href=routes::RSS title=layout::icons::RSS/>
     }
 }
 
@@ -59,6 +71,6 @@ pub fn RssIcon() -> impl IntoView {
 #[component]
 pub fn EmailIcon() -> impl IntoView {
     view! {
-        <IconLink attrs=LAYOUT.icons.email />
+        <IconLink icon_class=EMAIL href=links::EMAIL title=layout::icons::EMAIL/>
     }
 }
