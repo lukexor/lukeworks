@@ -2,7 +2,6 @@
 
 use crate::portfolio::models::{BlogPost, ProjectPost};
 use once_cell::sync::Lazy;
-use std::fs;
 
 pub mod colors {
     /// Dark theme. Should match `tailwind.config.js` and `site.webmanifest`.
@@ -27,13 +26,6 @@ pub mod routes {
     pub const RSS: &str = "/rss.xml";
 }
 
-/// External Links.
-pub mod links {
-    pub const GITHUB: &str = "http://github.com/lukexor";
-    pub const LINKEDIN: &str = "https://linkedin.com/in/lucaspetherbridge";
-    pub const EMAIL: &str = "mailto:me@lukeworks.tech";
-}
-
 /// Layout constants.
 pub mod layout {
     pub const LOGO: &str = "L";
@@ -50,11 +42,22 @@ pub mod layout {
     }
 
     pub mod icons {
-        pub const GITHUB: &str = "GitHub - Lucas Petherbridge";
-        pub const LINKEDIN: &str = "LinkedIn - Lucas Petherbridge";
-        pub const RSS: &str = "RSS Feed - https://lukeworks.tech";
-        pub const EMAIL: &str = "Email me@lukeworks.tech";
-        pub const DARK_MODE: &str = "Toggle Dark Mode";
+        use crate::portfolio::constants::meta;
+        use once_cell::sync::Lazy;
+
+        pub static GITHUB_TITLE: Lazy<String> = Lazy::new(|| format!("GitHub - {}", meta::AUTHOR));
+        pub const GITHUB_HREF: &str = "http://github.com/lukexor";
+
+        pub static LINKEDIN_TITLE: Lazy<String> =
+            Lazy::new(|| format!("LinkedIn - {}", meta::AUTHOR));
+        pub const LINKEDIN_HREF: &str = "https://linkedin.com/in/lucaspetherbridge";
+
+        pub static RSS_TITLE: Lazy<String> = Lazy::new(|| format!("RSS Feed - {}", meta::ORIGIN));
+
+        pub static EMAIL_TITLE: Lazy<String> = Lazy::new(|| format!("Email {}", meta::EMAIL));
+        pub static EMAIL_HREF: Lazy<String> = Lazy::new(|| format!("mailto:{}", meta::EMAIL));
+
+        pub const DARK_MODE_TITLE: &str = "Toggle Dark Mode";
     }
 
     pub mod search {

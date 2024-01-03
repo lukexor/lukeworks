@@ -31,11 +31,11 @@ fn Logo() -> impl IntoView {
 
 /// Portfolio navigation menu item.
 #[component]
-fn NavItem(href: &'static str, title: &'static str) -> impl IntoView {
+fn NavItem(href: &'static str, number: &'static str, title: &'static str) -> impl IntoView {
     view! {
-        <li class="mt-8 lg:mt-0 lg:mx-4">
+        <li>
             <a href=href on:click=|_| scroll_to_id(href)>
-                {title}
+                <span aria-hidden="true" class="mr-2 font-bold">{number}</span>{title}
             </a>
         </li>
     }
@@ -51,32 +51,33 @@ fn Nav() -> impl IntoView {
     // TODO: Ensure tab indexing is working correctly across links, both hidden and not
 
     view! {
-        <span class="relative lg:hidden z-20">
-            <button
-                class="icon-link fa-solid fa-bars text-xl mx-2"
-                class=("fa-times", menu_open)
-                class=("!text-2xl", menu_open)
-                on:click=handle_menu_toggle
-            ></button>
-        </span>
-        <div
-            class="absolute lg:relative top-0 right-0 w-0 lg:w-auto max-w-md h-screen transition-[width] h-full lg:h-auto bg-gray-700 lg:bg-transparent overflow-hidden z-10 lg:z-0"
-            class=("!w-3/4", menu_open)
+        <button
+            aria-controls="primary-nav"
+            aria-expanded={move || menu_open.get().to_string()}
+            class="md:hidden absolute icon-link fa-solid fa-bars text-2xl mx-2 top-8 right-8
+                z-[9999]"
+            class=("fa-times", menu_open)
+            class=("!text-3xl", menu_open)
+            on:click=handle_menu_toggle
         >
-            <ul class="flex flex-col lg:flex-row items-center lg:items-center px-6 py-3 lg:p-0">
-                <NavItem href=routes::HOME_ABOUT title=layout::menu::ABOUT on:click=handle_menu_close/>
-                <NavItem href=routes::HOME_BLOG title=layout::menu::BLOG on:click=handle_menu_close/>
-                <NavItem href=routes::HOME_PROJECTS title=layout::menu::PROJECTS on:click=handle_menu_close/>
-                <NavItem href=routes::HOME_CONTACT title=layout::menu::CONTACT on:click=handle_menu_close/>
-                <li class="mt-8 lg:hidden">
-                    <div class="flex">
-                        <DarkModeToggle/>
-                        <GitHubIcon/>
-                        <LinkedInIcon/>
-                    </div>
-                </li>
+            <span class="sr-only">Menu</span>
+        </button>
+        <nav>
+            <ul
+                id="primary-nav"
+                class="flex gap-4 max-md:gap-8 max-md:flex-col max-md:fixed max-md:z-[1000]
+                    max-md:p-[min(30vh,8rem)_2em] max-md:inset-[0_0_0_30%] bg-slate-900
+                    supports-[backdrop-filter]:bg-slate-500/10
+                    supports-[backdrop-filter]:backdrop-blur-md max-md:translate-x-full transition
+                    transform ease-out"
+                class=("max-md:!translate-x-0", menu_open)
+            >
+                <NavItem href=routes::HOME_ABOUT number="00" title=layout::menu::ABOUT on:click=handle_menu_close/>
+                <NavItem href=routes::HOME_BLOG number="01" title=layout::menu::BLOG on:click=handle_menu_close/>
+                <NavItem href=routes::HOME_PROJECTS number="02" title=layout::menu::PROJECTS on:click=handle_menu_close/>
+                <NavItem href=routes::HOME_CONTACT number="03" title=layout::menu::CONTACT on:click=handle_menu_close/>
             </ul>
-        </div>
+        </nav>
     }
 }
 
@@ -161,7 +162,7 @@ fn SearchField() -> impl IntoView {
                 class=("!visible", show_results)
             >
 
-                <p>{layout::search::result_summary(results_len, query_str)}</p>
+                <p>{move || layout::search::result_summary(results_len, query_str)}</p>
                 <For each=move || results.get() key=|result| result.clone() let:result>
                     <div>{result}</div>
                 </For>
@@ -276,7 +277,7 @@ fn DarkModeToggle() -> impl IntoView {
         <Meta name="theme-color" content=theme_color/>
         <ActionForm action=toggle_dark_mode>
             <input type="hidden" name="prefers_dark" value=move || (!prefers_dark()).to_string()/>
-            <DynIconButton icon=icon type_="submit" title=layout::icons::DARK_MODE />
+            <DynIconButton icon=icon type_="submit" title=layout::icons::DARK_MODE_TITLE />
         </ActionForm>
     }
 }
@@ -285,19 +286,14 @@ fn DarkModeToggle() -> impl IntoView {
 #[component]
 pub fn Header() -> impl IntoView {
     view! {
-        <header class="absolute w-full z-[1] flex justify-between px-4 lg:px-12 py-2">
+        <header class="flex justify-between align-center p-6">
             <Logo/>
-            <div class="hidden lg:flex items-center">
-                <Nav/>
-                <SearchField/>
-                <DarkModeToggle/>
-                <GitHubIcon/>
-                <LinkedInIcon/>
-            </div>
-            <div class="flex lg:hidden items-center">
-                <SearchField/>
-                <Nav/>
-            </div>
+            <Nav/>
+                // <SearchField/>
+                // <DarkModeToggle/>
+                // <GitHubIcon/>
+                // <LinkedInIcon/>
+            // </div>
         </header>
     }
 }

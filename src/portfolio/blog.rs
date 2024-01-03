@@ -6,7 +6,9 @@ use leptos::{component, view, IntoView};
 #[component]
 pub fn BlogSummary() -> impl IntoView {
     view! {
-        "Blog Summary"
+        <section>
+            "Blog Summary"
+        </section>
     }
 }
 

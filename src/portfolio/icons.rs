@@ -1,6 +1,6 @@
 //! Icon components.
 
-use crate::portfolio::constants::{layout, links, routes};
+use crate::portfolio::constants::{layout::icons, routes};
 use leptos::*;
 
 pub const GITHUB: &str = "fa-brands fa-github";
@@ -13,17 +13,17 @@ pub const CHEVRON_DOWN: &str = "fa-solid fa-circle-chevron-down";
 
 /// Icon with an href link.
 #[component]
-pub fn IconLink(
-    icon_class: &'static str,
-    href: &'static str,
-    title: &'static str,
-) -> impl IntoView {
+pub fn IconLink<S1, S2>(icon_class: &'static str, href: S1, title: S2) -> impl IntoView
+where
+    S1: Into<String>,
+    S2: Into<String>,
+{
     view! {
         <a
             class="icon-link text-xl mx-2"
             class=icon_class
-            href=href
-            title=title
+            href=href.into()
+            title=title.into()
         />
     }
 }
@@ -47,7 +47,7 @@ where
 #[component]
 pub fn GitHubIcon() -> impl IntoView {
     view! {
-        <IconLink icon_class=GITHUB href=links::GITHUB title=layout::icons::GITHUB/>
+        <IconLink icon_class=GITHUB href=icons::GITHUB_HREF title=&*icons::GITHUB_TITLE/>
     }
 }
 
@@ -55,7 +55,7 @@ pub fn GitHubIcon() -> impl IntoView {
 #[component]
 pub fn LinkedInIcon() -> impl IntoView {
     view! {
-        <IconLink icon_class=LINKEDIN href=links::LINKEDIN title=layout::icons::LINKEDIN/>
+        <IconLink icon_class=LINKEDIN href=icons::LINKEDIN_HREF title=&*icons::LINKEDIN_TITLE/>
     }
 }
 
@@ -63,7 +63,7 @@ pub fn LinkedInIcon() -> impl IntoView {
 #[component]
 pub fn RssIcon() -> impl IntoView {
     view! {
-        <IconLink icon_class=RSS href=routes::RSS title=layout::icons::RSS/>
+        <IconLink icon_class=RSS href=routes::RSS title=&*icons::RSS_TITLE/>
     }
 }
 
@@ -71,6 +71,6 @@ pub fn RssIcon() -> impl IntoView {
 #[component]
 pub fn EmailIcon() -> impl IntoView {
     view! {
-        <IconLink icon_class=EMAIL href=links::EMAIL title=layout::icons::EMAIL/>
+        <IconLink icon_class=EMAIL href=icons::EMAIL_HREF.clone() title=&*icons::EMAIL_TITLE/>
     }
 }

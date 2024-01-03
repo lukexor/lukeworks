@@ -63,7 +63,10 @@ pub fn Portfolio() -> impl IntoView {
         />
 
         <Router>
-            <Body class="font-body bg-zinc-200 dark:bg-zinc-800 text-blue-400"/>
+            <Body class="font-body bg-zinc-200 dark:bg-zinc-800 text-blue-400 min-h-screen
+                bg-intro-texture bg-fixed bg-no-repeat bg-cover bg-blend-screen
+                dark:bg-blend-color-dodge backdrop-blur-sm overflow-x-hidden"
+            />
             <Header/>
             <main>
                 <Routes>
