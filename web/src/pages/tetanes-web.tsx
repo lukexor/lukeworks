@@ -27,7 +27,7 @@ export default function Tetanes() {
             src={tetanesCopy.url}
             frameBorder="0"
             width="100%"
-            height="1200px"
+            height="1250px"
           ></iframe>
         </section>
       </Layout>
