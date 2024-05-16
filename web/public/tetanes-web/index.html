@@ -4,22 +4,41 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TetaNES Web</title>
+    <link
+      rel="preload"
+      href="pixeloid-sans.ttf"
+      crossorigin="anonymous"
+      as="font"
+      type="font/ttf"
+    />
+    <link
+      rel="preload"
+      href="pixeloid-sans-bold.ttf"
+      crossorigin="anonymous"
+      as="font"
+      type="font/ttf"
+    />
     <style>
       @font-face {
-        font-family: "Emulogic";
-        src: local("Emulogic"), url("emulogic.ttf") format("truetype");
+        font-family: "Pixeloid Sans";
+        src: local("Pixeloid Sans"), url("pixeloid-sans.ttf") format("truetype");
+      }
+      @font-face {
+        font-family: "Pixeloid Sans Bold";
+        src: local("Pixeloid Sans Bold"),
+          url("pixeloid-sans-bold.ttf") format("truetype");
       }
 
       body {
-        --color: #aaa;
-        --heading: #92340b;
-        --background: #0c141f;
+        --color: #e6b673;
+        --heading: #a9491f;
+        --background: #0f1419;
         background-color: var(--background);
         max-width: 80%;
         margin: auto;
         margin-bottom: 100px;
         color: var(--color);
-        font-family: "Courier New", Courier, monospace;
+        font-family: "Pixeloid Sans", "Courier New", Courier, monospace;
       }
 
       h1 {
@@ -29,12 +48,12 @@
       h1,
       h2 {
         color: var(--heading);
-        font-family: Emulogic;
+        font-family: "Pixeloid Sans Bold", "Courier New", Courier, monospace;
         text-align: center;
       }
 
       p {
-        font-weight: 600;
+        font-size: 0.9rem;
         max-width: 70ch;
         margin: 15px 0;
       }
@@ -64,12 +83,11 @@
       }
 
       a {
-        color: #ffe64d;
+        color: #36a3d9;
         text-decoration: none;
       }
 
       a:hover {
-        color: #df740c;
         text-decoration: underline;
       }
 
@@ -78,75 +96,7 @@
         margin: 0 40px;
         width: fit-content;
         height: fit-content;
-      }
-
-      .load-rom {
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
-        overflow: hidden;
-        position: absolute;
-        z-index: -1;
-      }
-
-      button,
-      .load-rom-label {
-        background-color: #92340b; /* Rust color */
-        border: none;
-        color: white;
-        cursor: pointer;
-        display: inline-block;
-        text-decoration: none;
-        font-family: inherit;
-        font-size: 1em;
-        font-family: Emulogic;
-      }
-
-      #scale1,
-      #scale2,
-      #scale2 {
-        width: 3.5em;
-      }
-      button {
-        margin: 10px 0;
-        padding: 5px 8px;
-      }
-      button:hover,
-      label:hover {
-        background-color: #0b6992;
-      }
-
-      .load-rom-label {
-        margin-top: 20px;
-        margin-bottom: 10px;
-        width: 10em;
-        font-size: 1em;
-        padding: 10px 16px;
-        text-align: center;
-      }
-
-      button:focus,
-      button:hover,
-      .load-rom-label:focu,
-      .load-rom-label:hover {
-        color: #000;
-        background-color: #48bef1;
-      }
-
-      .load-rom-label:focus {
-        outline: 1px dotted #fff;
-        outline: -webkit-focus-ring-color auto 5px;
-      }
-
-      .load-rom-label * {
-        pointer-events: none;
-      }
-
-      #error {
-        color: red;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
+        outline: none;
       }
 
       #wrapper {
@@ -161,93 +111,197 @@
         margin: auto;
       }
 
-      #controls {
-        display: flex;
-        flex-direction: column;
-      }
-
-      #homebrew-menu {
-        top: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--background);
-        position: absolute;
-        width: 50%;
-        height: 500px;
-        border: 2px solid var(--heading);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      #homebrew-list {
-        display: flex;
-        flex-direction: column;
-      }
-
-      #homebrew-close {
-        position: absolute;
-        right: 10px;
-      }
-
       .hidden {
         display: none !important;
       }
+
+      #loading-status {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #loader {
+        border: 4px solid #e6b673;
+        border-top: 4px solid #a9491f;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        margin: 8px;
+        animation: spin 2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
+
+    <link
+      rel="icon"
+      href="tetanes_icon-f3edf6b008731de2.png"
+      integrity="sha384&#x2D;cXmDqLynydwEyI2pqEoydxzlp8cg5ADJCbTgvGOHx8iFLrpHGSHq8JpYTyouuN3m"
+    />
+
+    <script type="module">
+      async function __trunkInitializer(init, source, sourceSize, initializer) {
+        if (initializer === undefined) {
+          return await init(source);
+        }
+
+        return await __trunkInitWithProgress(
+          init,
+          source,
+          sourceSize,
+          initializer,
+        );
+      }
+
+      async function __trunkInitWithProgress(
+        init,
+        source,
+        sourceSize,
+        initializer,
+      ) {
+        const { onStart, onProgress, onComplete, onSuccess, onFailure } =
+          initializer;
+
+        onStart?.();
+
+        const response = fetch(source)
+          .then((response) => {
+            const reader = response.body.getReader();
+            const headers = response.headers;
+            const status = response.status;
+            const statusText = response.statusText;
+
+            const total = sourceSize;
+            let current = 0;
+
+            const stream = new ReadableStream({
+              start(controller) {
+                function push() {
+                  reader.read().then(({ done, value }) => {
+                    if (done) {
+                      onProgress?.({ current: total, total });
+                      controller.close();
+                      return;
+                    }
+
+                    current += value.byteLength;
+                    onProgress?.({ current, total });
+                    controller.enqueue(value);
+                    push();
+                  });
+                }
+
+                push();
+              },
+            });
+
+            return {
+              stream,
+              init: {
+                headers,
+                status,
+                statusText,
+              },
+            };
+          })
+          .then(({ stream, init }) => new Response(stream, init));
+
+        return init(response).then(
+          (value) => {
+            onComplete?.();
+            onSuccess?.(value);
+            return value;
+          },
+          (reason) => {
+            onComplete?.();
+            onFailure?.(reason);
+            return reason;
+          },
+        );
+      }
+
+      import init, * as bindings from "./tetanes-332a4452c8545967.js";
+      import initializer from "./8e694e2cf66511c1-initializer.js";
+
+      const wasm = await __trunkInitializer(
+        init,
+        "./tetanes-332a4452c8545967_bg.wasm",
+        9875136,
+        initializer(),
+      );
+
+      window.wasmBindings = bindings;
+
+      dispatchEvent(
+        new CustomEvent("TrunkApplicationStarted", { detail: { wasm } }),
+      );
+    </script>
+
+    <link
+      rel="modulepreload"
+      href="tetanes-332a4452c8545967.js"
+      crossorigin="anonymous"
+      integrity="sha384-cXpvc1KzpWCaTEe2QVoHnGGNy/I+AU2/aszPOuHB/Ao3I7EI0YzxNORj7sjyTmCg"
+    />
+    <link
+      rel="modulepreload"
+      href="8e694e2cf66511c1-initializer.js"
+      crossorigin="anonymous"
+      integrity="sha384-214+jKshJm6fQlvptGoResTjF3KYtO1P1LcTw+a3gzIDuh0qyj3FaXrIIdj8o0tR"
+    />
+    <link
+      rel="preload"
+      href="tetanes-332a4452c8545967_bg.wasm"
+      crossorigin="anonymous"
+      integrity="sha384-iqOSTmvnoICVvYtlCItqRLWLcj2Vy3yL7LCgwhXZTx4+6wrbkqXr0LeU/pm8wrZq"
+      as="fetch"
+      type="application/wasm"
+    />
   </head>
   <body>
-    <noscript
-      >This page contains WebAssembly and Javascript content, please enable
-      Javascript in your browser.</noscript
-    >
+    <noscript>
+      This page contains WebAssembly and Javascript content, please enable
+      Javascript in your browser.
+    </noscript>
 
     <h1>TetaNES</h1>
 
-    <div id="error"></div>
     <div id="wrapper">
-      <canvas id="view" width="512" height="480"></canvas>
-      <canvas id="backView" class="hidden"></canvas>
-
-      <div id="controls">
-        <input
-          type="file"
-          id="load-rom"
-          name="load-rom"
-          class="load-rom"
-          accept=".nes"
-        />
-        <label id="load-rom-label" for="load-rom" class="load-rom-label"
-          >Load ROM</label
-        >
-
-        <button id="load-homebrew">Homebrew ROMs</button>
-
-        <div id="scale">
-          <button id="scale1">1X</button>
-          <button id="scale2">2X</button>
-          <button id="scale3">3X</button>
-        </div>
-
-        <button id="toggle-audio">Unmute</button>
-        <button id="toggle-pause">Pause</button>
-
-        <div id="fps"></div>
-      </div>
+      <canvas id="frame" width="512" height="480"></canvas>
+      <input type="file" id="load-rom" accept=".nes" class="hidden" />
+      <input type="file" id="load-replay" accept=".replay" class="hidden" />
     </div>
+
+    <h3 id="loading-status">
+      <div id="loader"></div>
+      Loading...
+    </h3>
 
     <div id="content">
       <p>
-        <em>TetaNES</em> is an emulator for the Nintendo Entertainment System
-        (NES) written in <a href="https://www.rust-lang.org/">Rust</a> and
-        <a href="https://webassembly.org/">WebAssembly</a>. The desktop version
-        is much more performant and fully featured, written using
-        <a href="https://www.libsdl.org/">SDL2</a>.
+        <em>TetaNES</em> is a cross-platform emulator for the Nintendo
+        Entertainment System (NES) released in Japan in 1983 and North America
+        in 1986, written using
+        <a href="https://www.rust-lang.org/" title="Rust">Rust</a> and
+        <a href="https://wgpu.rs/" title="wgpu">wgpu</a>. It runs on Linux,
+        macOS, Windows, and in a web browser with
+        <a href="https://webassembly.org/">WebAssembly</a>. While the web
+        version is playable, the desktop version is much more performant and
+        fully featured.
       </p>
 
       <p>
-        You can choose from a list of homebrew games, or load your own ROM which
-        uses the <a href="https://www.nesdev.org/wiki/INES">iNES</a> or
-        <a href="https://www.nesdev.org/wiki/NES_2.0">NES 2.0</a> format.
+        Load any NES ROM which uses the
+        <a href="https://www.nesdev.org/wiki/INES">iNES</a> or
+        <a href="https://www.nesdev.org/wiki/NES_2.0">NES 2.0</a> header format.
       </p>
 
       <p>
@@ -275,29 +329,8 @@
         </tr>
         <tr>
           <td>B Button (Turbo)</td>
-          <td>S</td>
-        </tr>
-        <tr>
-          <td>Start Button</td>
-          <td>Return</td>
-        </tr>
-        <tr>
-          <td>Select Button</td>
-          <td>Right Shift</td>
-        </tr>
-        <tr>
-          <td>D-Pad</td>
-          <td>Arrow Keys</td>
         </tr>
       </table>
     </div>
-
-    <div id="homebrew-menu" class="hidden">
-      <h2>Homebrew ROMS</h2>
-      <div id="homebrew-list"></div>
-      <button id="homebrew-close">X</button>
-    </div>
-
-    <script src="dist/bundle.js"></script>
   </body>
 </html>
