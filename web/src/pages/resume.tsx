@@ -38,11 +38,11 @@ export default function Resume() {
         <main className={s.main}>
           <aside>
             <Contact contact={resume.contact} />
+            <Education education={resume.education} />
             <Technologies list={resume.langAndTech} />
           </aside>
           <section className={s.content}>
             <Employment list={resume.employment} />
-            <Education list={resume.education} />
             <Experience list={resume.experience} />
           </section>
         </main>

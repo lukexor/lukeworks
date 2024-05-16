@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import s from "pages/styles/resume.module.css";
-import Ribbon from "./ribbon";
 
 dayjs.extend(customParseFormat);
 
@@ -36,7 +35,7 @@ function ExperienceItem({ experience }: ExperienceItemProps) {
   return (
     <>
       <div className={s.experience}>
-        <div>
+        <div className={s.experienceEntity}>
           <h4>{title}</h4>
           {start && (
             <em>{`${formattedDate(start)} - ${formattedDate(end)}`}</em>
@@ -54,7 +53,6 @@ export default function Experience({ list }: ExperienceProps) {
   const { title, bullets } = list[0] || {}; // Don't have more than just projects for now
   return (
     <section>
-      <Ribbon />
       <h3>{title}</h3>
       <section>
         {bullets?.map((experience) => (
