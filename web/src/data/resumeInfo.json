@@ -18,6 +18,21 @@
   },
   "employment": [
     {
+      "entity": "LAIKA, Inc",
+      "icon": "/images/resume/laika.jpeg",
+      "location": "Hillsboro, OR",
+      "positions": [
+        {
+          "title": "Senior Software Engineer",
+          "start": "2024-10-01",
+          "bullets": [
+            "Developed full-stack web applications to manage and accelerate studio pipeline tasks and assets using React/Typescfript, Python, and Rust.",
+            "Built generative form building and grid-view protoypes for integration with business intelligence systems using SolidJS and Python"
+          ]
+        }
+      ]
+    },
+    {
       "entity": "Statherós",
       "icon": "/images/resume/statheros.webp",
       "location": "Crossville, TN",
@@ -25,6 +40,7 @@
         {
           "title": "Principal Software Engineer",
           "start": "2022-10-17",
+          "end": "2023-09-30",
           "bullets": [
             "Developed containerized software platform for Electromagnetic Spectrum Operations (EMSO) applications for the US Air Force using Rust, RabbitMQ/ZeroMQ, CouchDB, & Docker.",
             "Drafted an interoperability & portability specification for heterogeneous EMSO containerized applications using YAML & Google Protocol Buffers.",
