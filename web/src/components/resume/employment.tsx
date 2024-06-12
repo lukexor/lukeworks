@@ -16,6 +16,7 @@ export type PositionInfo = {
 
 export type EmploymentInfo = {
   entity: string;
+  subentity: string;
   location: string;
   icon: string;
   positions: PositionInfo[];
@@ -55,7 +56,7 @@ function Position({ position }: PositionProps) {
 }
 
 function EmploymentItem({ employment }: EmploymentItemProps) {
-  const { positions, icon, entity, location } = employment;
+  const { positions, icon, entity, subentity, location } = employment;
 
   return (
     <>
@@ -69,7 +70,10 @@ function EmploymentItem({ employment }: EmploymentItemProps) {
           />
         </div>
         <div className={s.experienceEntity}>
-          <h4>{entity}</h4>
+          <h4>
+            {entity}
+            <div className={s.subentity}>{subentity}</div>
+          </h4>
           <em>{location}</em>
         </div>
       </div>

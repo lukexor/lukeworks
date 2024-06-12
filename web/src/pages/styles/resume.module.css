@@ -88,6 +88,11 @@
   text-align: center;
 }
 
+.subentity {
+  font-size: 0.6em;
+  color: #666;
+}
+
 .title {
   white-space: nowrap;
 }
@@ -165,8 +170,6 @@
   margin-right: 10px;
 }
 .experienceEntity {
-  display: flex;
-  align-items: baseline;
   width: 100%;
 }
 .experienceEntity em {

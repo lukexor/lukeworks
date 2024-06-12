@@ -83,7 +83,8 @@
       ]
     },
     {
-      "entity": "TEKsystems - Consultant at Nike",
+      "entity": "TEKsystems",
+      "subentity": "Consultant at Nike",
       "icon": "/images/resume/teksystems.png",
       "location": "Beaverton, OR",
       "positions": [
