@@ -20,7 +20,7 @@
     />
 
     <base href="./" />
-    <style nonce="gOx6d/JwPDJYKhVhXM4a7w==">@font-face {
+    <style>@font-face {
   font-family: "Pixeloid Sans";
   src:
     local("Pixeloid Sans"),
@@ -186,16 +186,11 @@ canvas {
     
     
     
-<script type="module" nonce="O2R04/5RhAVfIXuDYT0jpw==">
-async function __trunkInitializer(init, source, sourceSize, initializer) {
+<script type="module">
+async function __trunkInitializer(init, source, sourceSize, initializer, initWithObject) {
   if (initializer === undefined) {
-    return await init(source);
+    return await init(initWithObject ? { module_or_path: source } : source);
   }
-
-  return await __trunkInitWithProgress(init, source, sourceSize, initializer);
-}
-
-async function __trunkInitWithProgress(init, source, sourceSize, initializer) {
 
   const {
     onStart, onProgress, onComplete, onSuccess, onFailure
@@ -244,7 +239,7 @@ async function __trunkInitWithProgress(init, source, sourceSize, initializer) {
           new Response(stream, init),
       );
 
-  return init(response)
+  return init(initWithObject ? { module_or_path: response } : response)
       .then((value) => {
         onComplete?.();
         onSuccess?.(value);
@@ -257,10 +252,10 @@ async function __trunkInitWithProgress(init, source, sourceSize, initializer) {
 }
 
 
-import init, * as bindings from './tetanes-4b562d32961c37db.js';
+import init, * as bindings from './tetanes-7b0e45c2cfce910d.js';
 import initializer from './804ea45b79221f1b-initializer.js';
 
-const wasm = await __trunkInitializer(init, './tetanes-4b562d32961c37db_bg.wasm', 10917831, initializer());
+const wasm = await __trunkInitializer(init, './tetanes-7b0e45c2cfce910d_bg.wasm', 12026530, initializer(), true);
 
 
 window.wasmBindings = bindings;
@@ -269,10 +264,7 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
-  
-<link rel="modulepreload" href="./tetanes-4b562d32961c37db.js" crossorigin=anonymous integrity="sha384-ALE+usP60oaqU4rqVw8GU7BZgHcJ9RX5wY1FTvuFxqwuZ1ien7ryx9ou6qdbhq7s">
-<link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin=anonymous integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v">
-<link rel="preload" href="./tetanes-4b562d32961c37db_bg.wasm" crossorigin=anonymous integrity="sha384-TM5gUzpFT8/e3vIkwzKAjETeVBw/flbb/6oes0KAIGJOWEoAsrif+XTmvZbCOynk" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./tetanes-7b0e45c2cfce910d.js" crossorigin="anonymous" integrity="sha384-jzfu2W6t6ueGdgfovTsRjrtcN85BRLiUzwcCY6QfMuFWj7ECz8ywVYmxOgtJRSzk"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-7b0e45c2cfce910d_bg.wasm" crossorigin="anonymous" integrity="sha384-zlIpFRGqd57SOy+3mV3LzLhYdrSSDuUnDM7EuYGAhcy9yTa5T4WYpzJNUVikGAx6" as="fetch" type="application/wasm"></head>
   <body>
     <noscript>
       This page contains WebAssembly and Javascript content, please enable
