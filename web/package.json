@@ -31,7 +31,7 @@
     "react-transition-group": "^4.4.2",
     "rehype-raw": "^6.1.1",
     "remark-gfm": "^3.0.1",
-    "sharp": "^0.30.7"
+    "sharp": "^0.32.6"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
