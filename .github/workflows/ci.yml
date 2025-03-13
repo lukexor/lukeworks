@@ -28,8 +28,3 @@ jobs:
       # Vercel runs build already, so skip here
       - name: Test
         run: npm run test:ci
-      - name: Upload Coverage
-        uses: codecov/codecov-action@v3
-        with:
-          verbose: true
-          fail_ci_if_error: true
