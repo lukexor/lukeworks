@@ -252,10 +252,10 @@ async function __trunkInitializer(init, source, sourceSize, initializer, initWit
 }
 
 
-import init, * as bindings from './tetanes-9db4ecad9571fa88.js';
+import init, * as bindings from './tetanes-32b77941a1193314.js';
 import initializer from './804ea45b79221f1b-initializer.js';
 
-const wasm = await __trunkInitializer(init, './tetanes-9db4ecad9571fa88_bg.wasm', 12025665, initializer(), true);
+const wasm = await __trunkInitializer(init, './tetanes-32b77941a1193314_bg.wasm', 11870229, initializer(), true);
 
 
 window.wasmBindings = bindings;
@@ -264,7 +264,7 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
-  <link rel="modulepreload" href="./tetanes-9db4ecad9571fa88.js" crossorigin="anonymous" integrity="sha384-bjoidmCjkkx44mfp72E+apL0alKRZjrqDl/RJ1y5aSDkfwoFOn2IuNly6e8bHfkF"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-9db4ecad9571fa88_bg.wasm" crossorigin="anonymous" integrity="sha384-jFeJ428nP55e2s6McB2xyTfb37RqURU2fDslEPiyzJ1svjU+sohct1a/ebthfwrU" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./tetanes-32b77941a1193314.js" crossorigin="anonymous" integrity="sha384-TnSCbyWDms2ENzj/wBkgRq3BSj6RkXeJ6YTjfkcH9zGNBpb173hYrRwzq09cUUQe"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-32b77941a1193314_bg.wasm" crossorigin="anonymous" integrity="sha384-1IV0cKGy3MwR2fdJuulrwsFw6NOZdPlTc+99EG9yS5bTAH2EDZOz+zf8d3EhsmKX" as="fetch" type="application/wasm"></head>
   <body>
     <noscript>
       This page contains WebAssembly and Javascript content, please enable
@@ -313,7 +313,7 @@ dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
         desktop version:
       </p>
 
-      <div id="version-download" class="version-download">
+      <div id="version-download" class="hidden version-download">
         <a id="selected-version" rel="nofollow noopener" target="_blank">
           Download for Windows
         </a>
