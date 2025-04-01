@@ -15,7 +15,7 @@ export default function fourierSketch(p: p5) {
     DEMO: "DEMO",
     DFT: "DFT",
   });
-  let mode = MODES.DEMO;
+  let mode: string = MODES.DEMO;
   let border: number;
   let drawing: Drawing;
   let waveSlider: p5.Element;
