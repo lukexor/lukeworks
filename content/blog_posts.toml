@@ -1,0 +1,162 @@
+[[post]]
+id = 1,
+name = "first-post",
+title = "First post",
+image = null,
+category = "Programming",
+published_on = "2014-11-18 00:00:00.000000",
+created_on = "2014-11-18 00:00:00.000000",
+updated_on = "2014-12-12 07:46:26.000000"
+
+[[post]]
+id = 2,
+name = "lost-and-found-series",
+title = "\"Lost and Found\" Series : Lessons Learned",
+thumbnail = {
+  src = "/images/blog/lost_and_found_part_0.webp",
+  alt = "We can draw lessons from the past, but we cannot live in it."
+},
+image = {
+  src = "/images/blog/lost_and_found_part_0.webp",
+  alt = "We can draw lessons from the past, but we cannot live in it."
+},
+category = "Career",
+published_on = "2014-11-21 07:42:52.000000",
+created_on = "2014-11-21 07:42:52.000000",
+updated_on = "2016-11-26 00:09:18.000000"
+
+[[post]]
+id = 3,
+name = "lost-and-found-part-1",
+title = "\"Lost and Found\" : Part 1 - From Dungeons & Dragons to HTML",
+thumbnail = {
+  src = "/images/blog/lost_and_found_part_1.webp",
+  alt = "multi-sided dice"
+},
+image = {
+  src = "/images/blog/lost_and_found_part_1.webp",
+  alt = "multi-sided dice"
+},
+category = "Career",
+published_on = "2014-11-26 00:52:11.000000",
+created_on = "2014-11-26 00:52:11.000000",
+updated_on = "2017-03-27 01:34:24.000000"
+
+[[post]]
+id = 4,
+name = "lost-and-found-part-2",
+title = "\"Lost and Found\" : Part 2 - PC load letter?!",
+thumbnail = {
+  src = "/images/blog/lost_and_found_part_2.webp",
+  alt = "Broken printer in a field"
+},
+image = {
+  src = "/images/blog/lost_and_found_part_2.webp",
+  alt = "Broken printer in a field"
+},
+category = "Career",
+published_on = "2014-12-04 03:06:26.000000",
+created_on = "2014-12-04 03:06:26.000000",
+updated_on = "2017-03-27 01:32:01.000000"
+
+[[post]]
+id = 5,
+name = "lost-and-found-part-3",
+title = "\"Lost and Found\" : Part 3 - I do not think it means what you think it means",
+thumbnail = {
+  src = "/images/blog/lost_and_found_part_3.webp",
+  alt = "Inigo Montoya from Princess Bride"
+},
+image = {
+  src = "/images/blog/lost_and_found_part_3.webp",
+  alt = "Inigo Montoya from Princess Bride"
+},
+category = "Career",
+published_on = "2014-12-18 21:49:53.000000",
+created_on = "2014-12-17 22:49:49.000000",
+updated_on = "2017-03-27 01:31:37.000000"
+
+[[post]]
+id = 6,
+name = "lost-and-found-part-4",
+title = "\"Lost and Found\" : Part 4 - Software development in practice",
+thumbnail = {
+  src = "/images/blog/lost_and_found_part_4.webp",
+  alt = "Street signs: Success Ln., Failure Dr."
+},
+image = {
+  src = "/images/blog/lost_and_found_part_4.webp",
+  alt = "Street signs: Success Ln., Failure Dr."
+},
+category = "Career",
+published_on = "2015-01-14 22:30:34.000000",
+created_on = "2015-01-14 19:45:21.000000",
+updated_on = "2017-03-27 04:46:14.000000"
+
+[[post]]
+id = 7,
+name = "lost-and-found-part-5",
+title = "\"Lost and Found\" : Part 5 - Turbo-charge your career and avoid stagnation",
+thumbnail = {
+  src = "/images/blog/lost_and_found_part_5.webp",
+  alt = "Lego Stormtrooper on a speeder"
+},
+image = {
+  src = "/images/blog/lost_and_found_part_5.webp",
+  alt = "Lego Stormtrooper on a speeder"
+},
+category = "Career",
+published_on = "2015-03-18 18:56:01.000000",
+created_on = "2015-03-18 17:24:34.000000",
+updated_on = "2017-03-27 04:46:02.000000"
+
+[[post]]
+id = 8,
+name = "software-malaise",
+title = "Software Malaise",
+thumbnail = {
+  src = "/images/blog/software_malaise.webp",
+  alt = "Empty derelict room with a single chair"
+},
+image = {
+  src = "/images/blog/software_malaise.webp",
+  alt = "Empty derelict room with a single chair"
+},
+category = "Programming",
+published_on = "2017-03-27 05:36:10.000000",
+created_on = "2017-03-27 02:06:39.000000",
+updated_on = "2018-10-30 20:26:29.000000"
+
+[[post]]
+id = 9,
+name = "tetanes-part-1",
+title = "Programming an NES Emulator from Scratch in Rust",
+thumbnail = {
+  src = "/images/blog/tetanes.webp",
+  alt = "TetaNES Logo"
+},
+image = {
+  src = "/images/blog/tetanes.webp",
+  alt = "TetaNES Logo"
+},
+category = "Programming",
+published_on = "2019-09-19 06:10:44.000000",
+created_on = "2019-09-18 03:52:26.000000",
+updated_on = "2019-09-18 03:55:00.000000"
+
+[[post]]
+id = 10,
+name = "tetanes-part-2",
+title = "NES Emulation in Rust: Designs and Frustrations",
+thumbnail = {
+  src = "/images/blog/nes_console.webp",
+  alt = "Nintendo Entertainment System console"
+},
+image = {
+  src = "/images/blog/nes_console.webp",
+  alt = "Nintendo Entertainment System console"
+},
+category = "programming",
+published_on = "2020-01-31 21:19:14.000000",
+created_on = "2019-09-19 07:11:06.000000",
+updated_on = "2019-09-19 07:12:30.000000"

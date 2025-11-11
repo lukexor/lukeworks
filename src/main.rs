@@ -1,99 +1,51 @@
 //! `lukeworks.tech` SSR server.
 
 #![doc = include_str!("../README.md")]
-#![warn(
-    clippy::all,
-    future_incompatible,
-    nonstandard_style,
-    rust_2018_compatibility,
-    rust_2018_idioms,
-    rust_2021_compatibility,
-    unused
-)]
 
-/// Handles graceful shutdown in the event of termination signals.
 #[cfg(feature = "ssr")]
-async fn shutdown_signal() {
-    use tokio::signal::{ctrl_c, unix};
+mod server;
 
-    let ctrl_c = async {
-        ctrl_c().await.expect("failed to install Ctrl+C handler");
-    };
-    let terminate = async {
-        unix::signal(unix::SignalKind::terminate())
-            .expect("failed to install signal handler")
-            .recv()
-            .await;
-    };
-
-    tokio::select! {
-        _ = ctrl_c => {},
-        _ = terminate => {},
-    }
-
-    tracing::info!("signal received, starting graceful shutdown");
-}
-
-/// The primary SSR entrypoint.
 #[cfg(feature = "ssr")]
 #[tokio::main]
-async fn main() -> anyhow::Result<()> {
-    use axum::{
-        extract::MatchedPath,
-        http::Request,
-        routing::{self, post},
-        Router,
-    };
-    use leptos_axum::{handle_server_fns, LeptosRoutes};
-    use lukeworks::{
-        file_server,
-        portfolio::{constants::routes, rss, Portfolio},
-    };
-    use tower_http::trace::TraceLayer;
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    use crate::server::{cache_control_middleware, cors_middleware};
+    use axum::{Router, extract::DefaultBodyLimit, middleware};
+    use leptos::prelude::*;
+    use leptos_axum::{LeptosRoutes, generate_route_list};
+    use lukeworks::lukeworks::*;
+    use tower::limit::ConcurrencyLimitLayer;
+    use tower_http::{compression::CompressionLayer, trace::TraceLayer};
 
-    let _guard = lukeworks::tracing_init();
+    let conf = get_configuration(None)?;
+    let addr = conf.leptos_options.site_addr;
+    let leptos_options = conf.leptos_options;
+    let routes = generate_route_list(LukeWorks);
 
-    let conf = leptos::get_configuration(None).await?;
-    let options = conf.leptos_options;
-    let addr = options.site_addr;
-
-    let routes = leptos_axum::generate_route_list(Portfolio);
     let app = Router::new()
-        .route("/api/*fn", post(handle_server_fns))
-        .route(routes::RSS, routing::get(rss::feed))
-        .leptos_routes(&options, routes, Portfolio)
-        .fallback(file_server::serve)
-        .layer(
-            TraceLayer::new_for_http().make_span_with(|request: &Request<_>| {
-                // Log the matched route's path (with placeholders not filled in).
-                // Use request.uri() or OriginalUri if you want the real path.
-                let matched_path = request
-                    .extensions()
-                    .get::<MatchedPath>()
-                    .map(MatchedPath::as_str);
+        .leptos_routes(&leptos_options, routes, {
+            let leptos_options = leptos_options.clone();
+            move || shell(leptos_options.clone())
+        })
+        .fallback(leptos_axum::file_and_error_handler(shell))
+        .with_state(leptos_options)
+        .layer(middleware::from_fn(cache_control_middleware))
+        .layer(CompressionLayer::new())
+        .layer(cors_middleware())
+        .layer(DefaultBodyLimit::max(1024 * 1024 * 1024)) // 1GB
+        .layer(TraceLayer::new_for_http())
+        .layer(ConcurrencyLimitLayer::new(100));
 
-                tracing::info_span!(
-                    "http_request",
-                    method = ?request.method(),
-                    uri = ?request.uri(),
-                    matched_path,
-                    some_other_field = tracing::field::Empty,
-                )
-            }),
-        )
-        .with_state(options);
+    tracing::info!("lukeworks.tech listening on {addr}");
 
-    tracing::info!("lukeworks.tech listening on http://{addr}", addr = addr);
-    axum::Server::bind(&addr)
-        .serve(app.into_make_service())
-        .with_graceful_shutdown(shutdown_signal())
-        .await?;
+    let listener = tokio::net::TcpListener::bind(&addr).await?;
+    axum::serve(listener, app.into_make_service()).await?;
 
     Ok(())
 }
 
-/// The primary client entrypoint.
 #[cfg(not(feature = "ssr"))]
 pub fn main() {
-    // no client-side functionality
+    // no client-side main function
+    // unless we want this to work with e.g., Trunk for pure client-side testing
+    // see lib.rs for hydration function instead
 }

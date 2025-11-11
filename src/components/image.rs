@@ -1,22 +1,7 @@
-//! Image.
-
-use leptos::*;
-use std::borrow::Cow;
+use leptos::prelude::*;
 
 /// Image component.
 #[component]
-pub fn Img(
-    width: u32,
-    height: u32,
-    #[prop(into)] src: Cow<'static, str>,
-    #[prop(attrs)] attrs: Vec<(&'static str, Attribute)>,
-) -> impl IntoView {
-    view! {
-        <img
-            width=width
-            height=height
-            src=move || format!("/_vercel/image?url={src}&w={width}&q=75")
-            {..attrs}
-        />
-    }
+pub fn Image(src: TextProp, title: TextProp, alt: TextProp) -> impl IntoView {
+    view! { <image src=src title=title alt=alt /> }
 }

@@ -7,10 +7,6 @@ placeholder = "Search..."
 
 [homepage]
 title = "{title_base} | Software Engineer"
-description = """\
-  A blog and project portfolio by Lucas Petherbridge on programming, \
-  technology, and video games.\
-  """
 heading = "Hi, I'm Luke"
 subheading = "Software Engineer. Designer. Thinker."
 action = { alt = "Explore", text = "Have a look around!" }
@@ -25,7 +21,7 @@ description = """\
   remember and have been coding since age 15 when I first learned about HTML \
   and CSS. I primarily use Rust these days, but I've dabbled in just about \
   everything including Perl, Ruby, Python, Golang, Java/Kotlin, C/C++, \
-  Haskell, and 6502 Assembly!\
+  Haskell, and even some 6502 Assembly!\
 
   I love learning new technologies and finding the best tools for the job. I've \
   developed a deep appreciation of problem-solving over the years, with many \
@@ -89,15 +85,12 @@ summary = """\
   seeking to expand and grow. Great communicator and team collaborator \
   willing to take on any challenge.\
   """
-additional_experience = []
 technologies = [
   "Rust, Golang, C/C++, Python",
   "JavaScript/Typescript, NodeJS, React/NextJS, HTML, CSS",
   "NGINX, MySQL, PostgreSQL, MongoDB",
-  "Microsoft Azure, Docker, Kubernetes"
+  "Microsoft Azure, Docker, Kubernetes",
 ]
-
-
 
 [[resume.employment]]
 entity = "Statherós"
@@ -132,13 +125,13 @@ bullets = [
 ]
 
 [[resume.employment.positions]]
-    title = "Staff Software Engineer"
-    start = "2021-07-01"
-    end = "2022-01-01"
-    bullets = [
-      """Provided technical leadership to 6 teams by scheduling learning sessions, \
+title = "Staff Software Engineer"
+start = "2021-07-01"
+end = "2022-01-01"
+bullets = [
+  """Provided technical leadership to 6 teams by scheduling learning sessions, \
       pair programming & writing extensive documentation.""",
-    ]
+]
 
 [[resume.employment.positions]]
 title = "Senior Software Engineer"

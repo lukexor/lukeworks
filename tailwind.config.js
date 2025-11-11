@@ -1,27 +1,9 @@
-/** @type {import('tailwindcss').Config} */
+/* @type {import('tailwindcss').Config} */
+/* Tailwind 4.0 doesn't need a config but tailwindcss-intellisense still
+ * requires it to work */
 module.exports = {
-  darkMode: "class",
   content: {
     relative: true,
     files: ["*.html", "./src/**/*.rs"],
   },
-  theme: {
-    fontFamily: {
-      display: ["Yatra One", "serif"],
-      body: ["Rubik", "sans-serif"],
-      mono: ["PT Mono", "Courier", "monospace"],
-    },
-    extend: {
-      height: {
-        screen: ["100vh", "100dvh"],
-      },
-      minHeight: {
-        screen: ["100vh", "100dvh"],
-      },
-      backgroundImage: {
-        "intro-texture": "url('/images/code-bg.webp')",
-      },
-    },
-  },
-  plugins: [require("@tailwindcss/forms")],
 };

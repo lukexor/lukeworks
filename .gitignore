@@ -1,5 +1,4 @@
 target
 logs
-node_modules
 _*
 .env*

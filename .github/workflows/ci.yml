@@ -31,11 +31,11 @@ jobs:
             .cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          restore-keys: ${{ runner.os }}-cargo
       - name: Lint
         run: |
           cargo fmt --all --check
-          cargo clippy -- -D warnings
+          cargo clippy --all-targets --all-features --keep-going
       - name: Install cargo tools
         run: |
           curl -LO https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz
@@ -43,17 +43,13 @@ jobs:
           mv cargo-binstall /usr/local/cargo/bin
           cargo bininstall --locked -y \
             just \
-            cargo-audit \
             cargo-deny \
             cargo-leptos \
-            cargo-pants
-      - name: Check
-        run: |
-          cargo deny check
-          cargo audit
-          cargo pants
+            cargo-nextest
+      - name: Audit
+        run: just audit
       - name: Test
-        run: cargo-leptos test
+        run: just test
       - name: Build
         run: just build
       - name: Deploy

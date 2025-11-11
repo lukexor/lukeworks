@@ -1,0 +1,225 @@
+[[post]]
+id = 1,
+name = "personal-portfolio",
+title = "Personal Portfolio/Blog",
+thumbnail = {
+  src = "/images/projects/portfolio_blog.webp",
+  alt = "Portfolio Website"
+},
+image = {
+  src = "/images/projects/portfolio_blog.webp",
+  alt = "Portfolio Website"
+},
+website = "https://lukeworks.tech/",
+started_on = "2014-08-12 16:49:29.000000",
+completed_on = "2015-03-18 17:58:41.000000",
+published_on = "2019-08-21 16:09:16.000000",
+created_on = "2017-03-27 01:06:07.000000",
+updated_on = "2017-07-13 17:44:30.000000"
+
+[[post]]
+id = 2,
+name = "umflint-env-sci-club",
+title = "UM-Flint Environmental Science Club Website",
+thumbnail = {
+  src = "/images/projects/umflint_env_club.webp",
+  alt = "UM-Flint Environmental Science Club Website"
+},
+image = {
+  src = "/images/projects/umflint_env_club.webp",
+  alt = "UM-Flint Environmental Science Club Website"
+},
+started_on = "2007-09-01 12:00:00.000000",
+completed_on = "2007-11-01 12:00:00.000000",
+published_on = "2007-11-01 12:00:00.000000",
+created_on = "2017-03-27 01:41:46.000000",
+updated_on = "2017-05-06 02:59:59.000000"
+
+[[post]]
+id = 3,
+name = "haskelltaire",
+title = "Haskelltaire",
+thumbnail = {
+  src = "/images/projects/haskelltaire.webp",
+  alt = "Haskelltaire"
+},
+image = {
+  src = "/images/projects/haskelltaire.webp",
+  alt = "Haskelltaire"
+},
+website = "https://github.com/lukexor/haskelltaire",
+started_on = "2019-03-01 00:00:00.000000",
+completed_on = "2019-03-27 00:00:00.000000",
+published_on = "2019-06-01 00:00:00.000000",
+created_on = "2019-08-21 15:42:14.000000",
+updated_on = "2019-08-21 15:46:41.000000"
+
+[[post]]
+id = 4,
+name = "bell-demodulator",
+title = "A Bell 103 Demodulator",
+website = "https://github.com/lukexor/bell103_demodulator",
+started_on = "2019-04-26 02:42:01.000000",
+completed_on = "2019-04-26 02:42:04.000000",
+published_on = "2019-04-26 02:42:15.000000",
+created_on = "2020-01-23 02:39:36.000000",
+updated_on = "2020-01-23 02:42:18.000000"
+
+[[post]]
+id = 5,
+name = "chatdot",
+title = "ChatDot",
+website = "https://github.com/lukexor/ChatDot",
+started_on = "2017-04-24 02:45:29.000000",
+completed_on = "2017-06-19 02:45:43.000000",
+published_on = "2017-06-19 02:45:47.000000",
+created_on = "2020-01-23 02:42:17.000000",
+updated_on = "2020-01-23 02:45:49.000000"
+
+[[post]]
+id = 6,
+name = "maze-astar",
+title = "Maze Generation and A* Search",
+thumbnail = {
+  src = "/images/projects/maze-astar.webp",
+  alt = "Maze A* Search"
+},
+website = "/sketch/maze-astar",
+started_on = "2020-01-28 19:57:34.000000",
+completed_on = "2020-01-29 18:16:02.000000",
+published_on = "2020-02-01 19:57:51.000000",
+created_on = "2020-02-01 19:56:40.000000",
+updated_on = "2020-02-01 19:57:57.000000"
+
+[[post]]
+id = 7,
+name = "matrix",
+title = "The Matrix Has You",
+thumbnail = {
+  src = "/images/projects/matrix.webp",
+  alt = "The Matrix"
+},
+website = "/sketch/matrix",
+started_on = "2020-01-30 19:59:02.000000",
+completed_on = "2020-01-30 19:59:03.000000",
+published_on = "2020-02-01 19:59:05.000000",
+created_on = "2020-02-01 19:58:25.000000",
+updated_on = "2020-02-01 19:59:07.000000"
+
+[[post]]
+id = 8,
+name = "fireworks",
+title = "Fireworks!",
+thumbnail = {
+  src = "/images/projects/fireworks.webp",
+  alt = "Fireworks"
+},
+website = "/sketch/fireworks",
+started_on = "2020-02-03 12:00:00.000000",
+completed_on = "2020-02-05 22:40:57.000000",
+published_on = "2020-02-05 22:41:11.000000",
+created_on = "2020-02-05 22:39:04.000000",
+updated_on = "2020-02-05 22:41:13.000000"
+
+[[post]]
+id = 9,
+name = "lorenz-attractor",
+title = "Lorenz Attractor",
+thumbnail = {
+  src = "/images/projects/lorenz-attractor.webp",
+  alt = "Lorenz Attractor"
+},
+website = "/sketch/lorenz-attractor",
+started_on = "2020-02-06 01:45:16.000000",
+completed_on = "2020-02-06 01:45:15.000000",
+published_on = "2020-02-06 01:45:17.000000",
+created_on = "2020-02-06 01:43:11.000000",
+updated_on = "2020-02-06 01:45:19.000000"
+
+[[post]]
+id = 10,
+name = "pong",
+title = "Pong",
+thumbnail = {
+  src = "/images/projects/pong.webp",
+  alt = "Pong"
+},
+website = "/sketch/pong",
+started_on = "2020-02-11 02:21:54.000000",
+completed_on = "2020-02-11 02:21:56.000000",
+published_on = "2020-02-11 02:21:57.000000",
+created_on = "2020-02-11 02:19:01.000000",
+updated_on = "2020-02-11 02:21:59.000000"
+
+[[post]]
+id = 11,
+name = "asteroids",
+title = "Asteroids!",
+thumbnail = {
+  src = "/images/projects/asteroids.webp",
+  alt = "Asteroids"
+},
+website = "/sketch/asteroids",
+started_on = "2020-02-11 20:52:02.000000",
+completed_on = "2020-02-11 20:52:05.000000",
+published_on = "2020-02-11 20:52:04.000000",
+created_on = "2020-02-11 20:50:22.000000",
+updated_on = "2020-02-11 20:52:06.000000"
+
+[[post]]
+id = 12,
+name = "fourier",
+title = "Discrete Fourier Transforms",
+thumbnail = {
+  src = "/images/projects/fourier.webp",
+  alt = "Discrete Fourier Transform"
+},
+website = "/sketch/fourier",
+started_on = "2020-02-12 22:44:58.000000",
+completed_on = "2020-02-12 22:44:59.000000",
+published_on = "2020-02-12 22:45:01.000000",
+created_on = "2020-02-12 22:38:57.000000",
+updated_on = "2020-02-12 22:45:03.000000"
+
+[[post]]
+id = 13,
+name = "fluid-simulation",
+title = "Fluid Simulation",
+thumbnail = {
+  src = "/images/projects/fluid-simulation.webp",
+  alt = "Fluid Simulation"
+},
+website = "/sketch/fluid-simulation",
+started_on = "2020-02-21 23:50:51.000000",
+completed_on = "2020-02-21 23:50:52.000000",
+published_on = "2020-02-21 23:50:53.000000",
+created_on = "2020-02-21 23:43:43.000000",
+updated_on = "2020-02-21 23:50:55.000000"
+
+[[post]]
+id = 14,
+name = "tetanes",
+title = "TetaNES - An NES Emulator written in Rust",
+thumbnail = {
+  src = "/images/blog/tetanes.webp",
+  alt = "TetaNES Logo"
+},
+image = {
+  src = "/images/blog/tetanes.webp",
+  alt = "TetaNES Logo"
+},
+website = "https://github.com/lukexor/tetanes",
+started_on = "2019-04-01 00:00:00.000000",
+published_on = "2019-08-21 15:24:57.000000",
+created_on = "2019-08-21 15:19:30.000000",
+updated_on = "2019-08-21 15:25:09.000000"
+
+[[post]]
+id = 15,
+name = "pix-engine",
+title = "PixEngine - A Cross-Platform Graphics Library",
+website = "https://github.com/lukexor/pix-engine",
+started_on = "2019-09-29 23:14:15.000000",
+published_on = "2022-05-02 00:00:00.000000",
+created_on = "2022-05-02 00:00:00.000000",
+updated_on = "2022-05-02 00:00:00.000000"
