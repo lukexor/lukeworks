@@ -26,19 +26,20 @@ export default function LinkIcon({
     titleId: title, // to avoid FontAwesome generating a unique one causing re-hydration errors
     title,
     icon,
-    onClick,
     swapOpacity,
   };
 
   if (href) {
     return (
-      <Link href={href} {...props}>
-        <a>
-          <FontAwesomeIcon {...iconProps} />
-        </a>
+      <Link href={href} onClick={onClick} {...props}>
+        <FontAwesomeIcon {...iconProps} />
       </Link>
     );
   } else {
-    return <FontAwesomeIcon {...iconProps} />;
+    return (
+      <span onClick={onClick}>
+        <FontAwesomeIcon {...iconProps} />
+      </span>
+    );
   }
 }

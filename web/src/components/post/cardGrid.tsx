@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { PostEntry, PostImage } from "models/post";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import { createRef, ForwardedRef, forwardRef, useRef } from "react";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
@@ -21,8 +21,6 @@ export const getCardsPerRow = (): number => {
     document.querySelector("[data-type=grid]")?.clientWidth ?? 300;
   const cardWidth =
     document.querySelector("[data-type=card]")?.clientWidth ?? 300;
-  console.log(sectionWidth, cardWidth);
-  console.log(Math.max(1, Math.floor((sectionWidth - 30) / cardWidth)));
   return Math.max(1, Math.floor((sectionWidth - 30) / cardWidth));
 };
 
@@ -34,27 +32,25 @@ const Card = forwardRef(function Card(
   return (
     <article ref={ref}>
       <Link href={url}>
-        <a>
-          <div className={s.card} data-type="card">
-            <div ref={imgRef}>
-              {thumbnail ? (
-                <Image
-                  className={s.blur}
-                  src={thumbnail.src}
-                  width={1000}
-                  height={600}
-                  alt={thumbnail.alt}
-                  layout="responsive"
-                />
-              ) : (
-                <div className={s.cardPlaceholder} />
-              )}
-            </div>
-            <div className={clsx(s.title, !!thumbnail && s.slideUp)}>
-              {title}
-            </div>
+        <div className={s.card} data-type="card">
+          <div ref={imgRef}>
+            {thumbnail ? (
+              <Image
+                className={s.blur}
+                src={thumbnail.src}
+                width={1000}
+                height={600}
+                alt={thumbnail.alt}
+                layout="responsive"
+              />
+            ) : (
+              <div className={s.cardPlaceholder} />
+            )}
           </div>
-        </a>
+          <div className={clsx(s.title, !!thumbnail && s.slideUp)}>
+            {title}
+          </div>
+        </div>
       </Link>
     </article>
   );

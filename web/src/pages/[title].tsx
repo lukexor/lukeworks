@@ -7,7 +7,7 @@ import fs from "fs/promises";
 import { PostEntry } from "models/post";
 import { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import Head from "next/head";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import path from "path";
 import { ParsedUrlQuery } from "querystring";
 import ReactMarkdown from "react-markdown";

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <base href="./" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>TetaNES Web</title>
@@ -19,7 +20,6 @@
       type="font/ttf"
     />
 
-    <base href="./" />
     <style>
       @font-face {
         font-family: "Pixeloid Sans";
@@ -111,7 +111,7 @@
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        margin-bottom: 20px;
+        margin-bottom: 40px;
       }
 
       #content {
@@ -127,9 +127,14 @@
       }
 
       #loading-status {
+        position: absolute;
         display: flex;
         justify-content: center;
         align-items: center;
+        width: 880px;
+        height: 696px;
+        border: 2px dotted #e6b673;
+        margin: 0;
       }
 
       .loader {
@@ -184,7 +189,7 @@
     <link
       rel="icon"
       href="./tetanes_icon-f3edf6b008731de2.png"
-      integrity="sha384&#x2D;cXmDqLynydwEyI2pqEoydxzlp8cg5ADJCbTgvGOHx8iFLrpHGSHq8JpYTyouuN3m"
+      integrity="sha384-cXmDqLynydwEyI2pqEoydxzlp8cg5ADJCbTgvGOHx8iFLrpHGSHq8JpYTyouuN3m"
     />
 
     <script type="module">
@@ -264,13 +269,13 @@
         );
       }
 
-      import init, * as bindings from "./tetanes-dc57606e33dad5ba.js";
+      import init, * as bindings from "./tetanes-f86d1b9355340c04.js";
       import initializer from "./804ea45b79221f1b-initializer.js";
 
       const wasm = await __trunkInitializer(
         init,
-        "./tetanes-dc57606e33dad5ba_bg.wasm",
-        12313191,
+        "./tetanes-f86d1b9355340c04_bg.wasm",
+        12680517,
         initializer(),
         true,
       );
@@ -283,9 +288,9 @@
     </script>
     <link
       rel="modulepreload"
-      href="./tetanes-dc57606e33dad5ba.js"
+      href="./tetanes-f86d1b9355340c04.js"
       crossorigin="anonymous"
-      integrity="sha384-AbLWywqY8QAgfN4iRFMUpOXHKrql0ljd52iKEBXW63OxrN98zKCTj+I7uyGn3fkA"
+      integrity="sha384-Vc5KgINi+yLfYIvN1Az+EaIV7pNjO/G6RFAYbxG44qnDg1XPaJdtp5PSK1mtRO9M"
     />
     <link
       rel="modulepreload"
@@ -295,9 +300,9 @@
     />
     <link
       rel="preload"
-      href="./tetanes-dc57606e33dad5ba_bg.wasm"
+      href="./tetanes-f86d1b9355340c04_bg.wasm"
       crossorigin="anonymous"
-      integrity="sha384-rNIO4nx7J0UUBeclBMwvR4/jiIztpfguZ28FcRdVuWIpIQ8WekSZCg21LnJd6B9F"
+      integrity="sha384-oQulohOW602dO7WpKkyu4OxQMlvYqax6kVinGtHoO03Rx2Imbh2u3rmgBdy/jr1c"
       as="fetch"
       type="application/wasm"
     />
@@ -310,20 +315,20 @@
 
     <h1>TetaNES<br /><span id="version"></span></h1>
 
-    <div id="wrapper">
-      <canvas id="frame" width="512" height="480"></canvas>
-      <input type="file" id="load-rom" accept=".nes" class="hidden" />
-      <input type="file" id="load-replay" accept=".replay" class="hidden" />
-    </div>
-
-    <h2 id="loading-status">
-      <div class="loader"></div>
-      Loading...
-    </h2>
     <p id="error" class="hidden">
       An internal error occurred. Try refreshing the page or filing a
       <a href="https://github.com/lukexor/tetanes/issues/new">bug report</a>.
     </p>
+
+    <div id="wrapper">
+      <h2 id="loading-status">
+        <span class="loader"></span>
+        Loading...
+      </h2>
+      <canvas id="frame" width="880" height="696"></canvas>
+      <input type="file" id="load-rom" accept=".nes" class="hidden" />
+      <input type="file" id="load-replay" accept=".replay" class="hidden" />
+    </div>
 
     <div id="content">
       <p>

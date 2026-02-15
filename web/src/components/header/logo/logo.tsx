@@ -5,8 +5,8 @@ import s from "./logo.module.css";
 
 export default function Logo() {
   return (
-    <Link href={routes.home.path}>
-      <a className={s.logo}>{copy.logo}</a>
+    <Link href={routes.home.path} className={s.logo}>
+      {copy.logo}
     </Link>
   );
 }

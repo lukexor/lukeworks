@@ -41,16 +41,16 @@ export default withRouter(
         return (
           <section className={s.wrapper}>
             <h1>Oops, something has gone horribly wrong.</h1>
-            <Link className={s.backButton} href={document.referrer}>
-              <a
-                onClick={() => {
-                  this.setState({ error: null });
-                  this.props.router.back();
-                  return false;
-                }}
-              >
-                Go back
-              </a>
+            <Link
+              className={s.backButton}
+              href={document.referrer}
+              onClick={() => {
+                this.setState({ error: null });
+                this.props.router.back();
+                return false;
+              }}
+            >
+              Go back
             </Link>
           </section>
         );

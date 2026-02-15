@@ -85,14 +85,14 @@ export default function Menu() {
       </div>
       <nav className={s.menu} ref={menuRef}>
         {Object.values(routes.menu).map(({ hash, title }, i) => (
-          <Link key={hash} href={`/${hash}`}>
-            <a
-              className={clsx(s.menuLink, active === i && s.active)}
-              onClick={handleMenuClick}
-              onFocus={handleMenuFocus}
-            >
-              {title}
-            </a>
+          <Link
+            key={hash}
+            href={`/${hash}`}
+            className={clsx(s.menuLink, active === i && s.active)}
+            onClick={handleMenuClick}
+            onFocus={handleMenuFocus}
+          >
+            {title}
           </Link>
         ))}
       </nav>

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "next/legacy/image";
 import s from "pages/styles/resume.module.css";
 
 export default function Ribbon() {
