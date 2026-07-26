@@ -1,0 +1,61 @@
+# Permanent (301) redirects carried over from the Next.js site.
+#
+# Source: `git show d82ff04^:web/next.config.js`
+#
+# ORDER IS SIGNIFICANT. Next.js matched these top-to-bottom, and two pairs
+# overlap: the three specific `/articles/<date>/<slug>` rules must be tried
+# before the generic `/articles/:year/:month/:title` rule, or the old TetaNES
+# URLs land on the wrong page. Preserve this ordering when implementing.
+#
+# `:param` segments match exactly one path segment.
+
+[[redirect]]
+from = "/about"
+to = "/#about"
+
+[[redirect]]
+from = "/articles"
+to = "/#blog"
+
+# Specific article rules — must precede the generic /articles rule below.
+[[redirect]]
+from = "/articles/2019/09/rustynes_part_1"
+to = "/tetanes-part-1"
+
+[[redirect]]
+from = "/articles/2020/01/rustynes_part_2"
+to = "/tetanes-part-2"
+
+[[redirect]]
+from = "/projects/2019/08/rustynes"
+to = "/tetanes"
+
+[[redirect]]
+from = "/articles/:year/:month/:title"
+to = "/:title"
+
+# NOTE: the next two rules are inherited dead weight. Their destinations
+# (/category/* and /tag/*) were never implemented as pages on the Next.js site
+# either — there are no such entries in routes.json and no matching files under
+# src/pages. Following them produced a 404 then and would now.
+# Decide during Phase 4: implement category/tag listing pages, or drop both rules.
+[[redirect]]
+from = "/articles/category/:category"
+to = "/category/:category"
+
+# Also unusually greedy: matches /<anything>/tag/<anything>.
+[[redirect]]
+from = "/:section/tag/:tag"
+to = "/tag/:tag"
+
+[[redirect]]
+from = "/contact"
+to = "/#contact"
+
+[[redirect]]
+from = "/feed"
+to = "/rss"
+
+[[redirect]]
+from = "/projects"
+to = "/#projects"
