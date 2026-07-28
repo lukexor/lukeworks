@@ -35,7 +35,7 @@ mod tests {
     fn every_post_compiled() {
         // Guards against build.rs silently emitting nothing, which would
         // otherwise look like a site with no content rather than a build error.
-        assert_eq!(POSTS.len(), 27, "expected every content/posts/*.md");
+        assert_eq!(POSTS.len(), 26, "expected every content/posts/*.md");
     }
 
     #[test]
@@ -82,11 +82,14 @@ mod tests {
 
     #[test]
     fn drafts_are_excluded_from_listings() {
-        // mindyou has a body but never had a metadata entry, so it was
-        // unreachable on the old site and stays unlisted here.
-        let draft = find("mindyou").expect("mindyou should still compile");
-        assert!(draft.draft);
-        assert!(published(Kind::Project).all(|post| post.slug != "mindyou"));
+        // No draft posts exist right now, so this asserts the rule rather than
+        // a specific post: anything unpublished or flagged stays out of listings.
+        for kind in [Kind::Blog, Kind::Project] {
+            assert!(
+                published(kind).all(|post| !post.draft && post.published.is_some()),
+                "{kind:?} listing includes a draft"
+            );
+        }
     }
 
     #[test]

@@ -69,8 +69,18 @@ icondata = { version = "0.7", default-features = false, features = [
 ] }
 # `islands`: only `#[island]` components ship to the browser; `#[component]`
 # bodies are server-rendered and never execute client-side.
-# `islands-router`: client-side navigation between server-rendered pages.
-leptos = { version = "0.8", features = ["rustls", "islands", "islands-router"] }
+#
+# `islands-router` is deliberately NOT enabled. Its client-side page diff keys
+# off `bo-TypeId(..)` branch markers, which are derived from view *types*, so
+# every post renders byte-identical markers — they all flow through the same
+# `Post` component. The diff therefore never replaces the branch and instead
+# patches node-by-node, which is only correct when both pages have the same DOM
+# shape. Post bodies are `inner_html` from markdown and are opaque to the typed
+# view tree, so the walkers desync partway through and the page keeps stale
+# content. Verified by running leptos's own islands_routing.js against real
+# responses. Plain full-page navigation is correct and, for a server-rendered
+# content site, fast.
+leptos = { version = "0.8", features = ["rustls", "islands"] }
 leptos_router = { version = "0.8" }
 leptos_meta = { version = "0.8" }
 # Island props are passed to the browser as JSON in a `data-props` attribute,
@@ -96,7 +106,7 @@ console_error_panic_hook = { version = "0.1", optional = true }
 # `ssr` dependencies
 axum = { version = "0.8", optional = true }
 axum-extra = { version = "0.12", features = ["cookie"], optional = true }
-leptos_axum = { version = "0.8", features = ["islands-router"], optional = true }
+leptos_axum = { version = "0.8", optional = true }
 thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 tower = { version = "0.5", features = ["limit"], optional = true }

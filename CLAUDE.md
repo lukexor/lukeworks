@@ -34,9 +34,9 @@ Toolchain is pinned by `rust-toolchain.toml` (1.91.1, edition 2024, `wasm32-unkn
 
 ## Islands mode
 
-`leptos` is built with the `islands` + `islands-router` features. **Only `#[island]` components
-run in the browser**; `#[component]` bodies are server-rendered and never execute client-side.
-This is the single most important fact about the codebase:
+`leptos` is built with the `islands` feature. **Only `#[island]` components run in the browser**;
+`#[component]` bodies are server-rendered and never execute client-side. This is the single most
+important fact about the codebase:
 
 - An `Effect`, an event handler, or a signal update written in a `#[component]` will silently do
   nothing in the browser. If it needs to run client-side, it belongs in an `#[island]`.
@@ -49,6 +49,14 @@ This is the single most important fact about the codebase:
 
 `src/components/theme_toggle.rs` is the reference island, and `src/hooks/use_theme.rs` documents
 the server/inline-script/island split that replaced the old root-level effect.
+
+**`islands-router` is deliberately off.** Its client-side page diff keys off `bo-TypeId(..)`
+branch markers derived from view *types*, so every post emits identical markers — they all flow
+through the same `Post` component. The diff never replaces the branch and instead patches
+node-by-node, which is only correct when both pages have the same DOM shape. Post bodies are
+`inner_html` from markdown, opaque to the typed view tree, so the walkers desync partway and the
+page keeps stale content. Navigation is plain full-page loads. Don't re-enable it without
+re-testing navigation between two posts with different body structure.
 
 ## The two-target build
 

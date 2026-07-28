@@ -45,14 +45,20 @@ pub fn prefers_dark_from_request() -> bool {
     let Some(parts) = use_context::<axum::http::request::Parts>() else {
         return true;
     };
-    let Some(cookies) = parts
+    parts
         .headers
         .get(axum::http::header::COOKIE)
         .and_then(|value| value.to_str().ok())
-    else {
-        return true;
-    };
+        .is_none_or(prefers_dark_from_cookie_header)
+}
 
+/// Parse a `Cookie:` header value. Split out from the request plumbing so the
+/// precedence rules are testable without standing up a server.
+///
+/// Dark unless the cookie is explicitly `false`, so a missing or malformed
+/// cookie lands on the site's default rather than flipping the theme.
+#[must_use]
+pub fn prefers_dark_from_cookie_header(cookies: &str) -> bool {
     cookies
         .split(';')
         .filter_map(|cookie| cookie.split_once('='))
@@ -66,4 +72,48 @@ pub fn prefers_dark_from_request() -> bool {
 #[must_use]
 pub const fn body_class(prefers_dark: bool) -> &'static str {
     if prefers_dark { "dark" } else { "" }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn defaults_to_dark() {
+        assert!(prefers_dark_from_cookie_header(""));
+        assert!(prefers_dark_from_cookie_header("other=1"));
+        // Malformed values must not flip the theme.
+        assert!(prefers_dark_from_cookie_header("prefers-dark"));
+        assert!(prefers_dark_from_cookie_header("prefers-dark=wat"));
+    }
+
+    #[test]
+    fn honours_an_explicit_light_preference() {
+        assert!(!prefers_dark_from_cookie_header("prefers-dark=false"));
+        assert!(!prefers_dark_from_cookie_header(
+            "a=1; prefers-dark=false; b=2"
+        ));
+        // Whitespace around the pair is normal in a Cookie header.
+        assert!(!prefers_dark_from_cookie_header(
+            "a=1;  prefers-dark = false "
+        ));
+    }
+
+    #[test]
+    fn explicit_dark_stays_dark() {
+        assert!(prefers_dark_from_cookie_header("prefers-dark=true"));
+    }
+
+    #[test]
+    fn does_not_match_a_similarly_named_cookie() {
+        // A prefix match here would let an unrelated cookie drive the theme.
+        assert!(prefers_dark_from_cookie_header("prefers-dark-mode=false"));
+        assert!(prefers_dark_from_cookie_header("xprefers-dark=false"));
+    }
+
+    #[test]
+    fn body_class_tracks_preference() {
+        assert_eq!(body_class(true), "dark");
+        assert_eq!(body_class(false), "");
+    }
 }

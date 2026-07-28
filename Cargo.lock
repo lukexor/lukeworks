@@ -2972,8 +2972,6 @@ dependencies = [
  "rustc-hash",
  "rustc_version",
  "send_wrapper",
- "serde",
- "serde_json",
  "slotmap",
  "throw_error",
  "wasm-bindgen",

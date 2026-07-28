@@ -75,7 +75,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 />
 
                 <AutoReload options=options.clone() />
-                <HydrationScripts options=options.clone() islands=true islands_router=true />
+                <HydrationScripts options=options.clone() islands=true />
                 <RootStylesheet options />
                 <MetaTags />
 
@@ -108,13 +108,18 @@ pub fn LukeWorks() -> impl IntoView {
     view! {
         <Title formatter=move |text| format!("{text} — Lucas Petherbridge | Software Engineer") />
 
+        // Header is not route-dependent and uses plain <a>, so it needs no
+        // router context and sits outside it.
+        <Header />
+
         // No `set_is_routing`/`RoutingProgress`: that pairing needs a signal
         // updated in the browser, and this component never runs there under
-        // islands. The islands router handles navigation itself.
+        // islands.
         <Router>
-            <Header />
             <main>
-                <FlatRoutes transition=true fallback=NotFound>
+                // No `transition=true`: transitions are driven by client-side
+                // reactivity that never runs under islands.
+                <FlatRoutes fallback=NotFound>
                     <Route path=StaticSegment("") view=Home />
                     <Route path=StaticSegment("/about") view=About />
                     <Route path=StaticSegment("/blog") view=Blog />

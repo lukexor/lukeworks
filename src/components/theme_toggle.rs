@@ -32,9 +32,11 @@ pub fn ThemeToggle() -> impl IntoView {
         // lets the server render the right theme on the next request.
         let cookie =
             format!("{PREFERS_DARK_COOKIE}={prefers_dark}; path=/; max-age=31536000; SameSite=Lax");
-        if let Some(document) = document().dyn_ref::<web_sys::HtmlDocument>() {
-            let _ = document.set_cookie(&cookie);
-        }
+        // `unchecked_into` rather than `dyn_ref`: the document is always an
+        // HtmlDocument here, and a failed `dyn_ref` would silently skip
+        // persisting the choice rather than surface anything.
+        let document: web_sys::HtmlDocument = document().unchecked_into();
+        let _ = document.set_cookie(&cookie);
     };
 
     view! {
