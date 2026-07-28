@@ -52,13 +52,18 @@ chrono = { version = "0.4", default-features = false, features = [
   "std",
   "wasmbind",
 ] }
-comrak = { version = "0.47", default-features = false }
-icondata = { version = "0.6", default-features = false, features = [
+icondata = { version = "0.7", default-features = false, features = [
   "bootstrap-icons",
 ] }
-leptos = { version = "0.8", features = ["rustls"] }
+# `islands`: only `#[island]` components ship to the browser; `#[component]`
+# bodies are server-rendered and never execute client-side.
+# `islands-router`: client-side navigation between server-rendered pages.
+leptos = { version = "0.8", features = ["rustls", "islands", "islands-router"] }
 leptos_router = { version = "0.8" }
 leptos_meta = { version = "0.8" }
+# Island props are passed to the browser as JSON in a `data-props` attribute,
+# so every island prop type must be Serialize + Deserialize.
+serde = { version = "1", features = ["derive"] }
 web-sys = { version = "0.3", features = [
   "Clipboard",
   "Document",
@@ -68,15 +73,19 @@ web-sys = { version = "0.3", features = [
 
 # `hydrate` dependencies
 console_error_panic_hook = { version = "0.1", optional = true }
-wasm-bindgen = { version = "=0.2.105", optional = true }
+# Pinned exactly: the wasm-bindgen CLI that cargo-leptos runs must match the
+# crate version. Bump both together.
+wasm-bindgen = { version = "=0.2.126", optional = true }
 
 # `ssr` dependencies
 axum = { version = "0.8", optional = true }
 axum-extra = { version = "0.12", features = ["cookie"], optional = true }
-leptos_axum = { version = "0.8", optional = true }
+leptos_axum = { version = "0.8", features = ["islands-router"], optional = true }
 thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 tower = { version = "0.5", features = ["limit"], optional = true }
+# Held at 0.6 deliberately: leptos_axum still depends on tower-http 0.6, and
+# bumping to 0.7 only duplicates the crate in the graph. Nothing we use changed.
 tower-http = { version = "0.6", features = [
   "compression-gzip",
   "cors",
@@ -90,7 +99,7 @@ tracing = { version = "0.1", features = [
 tracing-subscriber = { version = "0.3", features = [
   "env-filter",
 ], optional = true }
-leptos-use = { version = "0.16", default-features = false, features = [
+leptos-use = { version = "0.19", default-features = false, features = [
   "use_cookie",
 ] }
 

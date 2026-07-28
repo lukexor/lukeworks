@@ -21,7 +21,6 @@ pub mod pages {
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]
 pub fn hydrate() {
-    use crate::lukeworks::LukeWorks;
     use std::panic;
 
     panic::set_hook(Box::new(|info: &panic::PanicHookInfo<'_>| {
@@ -36,5 +35,7 @@ pub fn hydrate() {
 
         console_error_panic_hook::hook(info);
     }));
-    leptos::mount::hydrate_body(LukeWorks);
+    // Islands mode: hydrate only `#[island]` subtrees. Plain `#[component]`
+    // bodies are rendered on the server and never run in the browser.
+    leptos::mount::hydrate_islands();
 }
