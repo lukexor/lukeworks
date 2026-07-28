@@ -1,6 +1,19 @@
+---
+title: "Lorenz Attractor"
+kind: project
+image:
+  src: /images/projects/lorenz-attractor.webp
+  alt: "Lorenz Attractor"
+website: /sketch/lorenz-attractor
+published: 2020-02-06T01:45:17Z
+started: 2020-02-06T01:45:16Z
+completed: 2020-02-06T01:45:15Z
+updated: 2020-02-06T01:45:19Z
+---
+
 <iframe
   title="Lorenz Attractor"
-  src="https://lukeworks.tech/sketch/lorenz-attractor"
+  src="/sketch/lorenz-attractor"
   frameborder="0"
   width="100%"
   height="500px"

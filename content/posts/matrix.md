@@ -1,6 +1,19 @@
+---
+title: "The Matrix Has You"
+kind: project
+image:
+  src: /images/projects/matrix.webp
+  alt: "The Matrix"
+website: /sketch/matrix
+published: 2020-02-01T19:59:05Z
+started: 2020-01-30T19:59:02Z
+completed: 2020-01-30T19:59:03Z
+updated: 2020-02-01T19:59:07Z
+---
+
 <iframe
   title="The Matrix"
-  src="https://lukeworks.tech/sketch/matrix"
+  src="/sketch/matrix"
   frameborder="0"
   width="100%"
   height="500px"

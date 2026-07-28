@@ -38,9 +38,12 @@ audit:
   @cargo deny check
 
 # Run tests
+#
+# `--features ssr` matters: the generated post table is compiled into the ssr
+# build only, so without it the content tests run against an empty table.
 test:
   @cargo leptos test
-  @cargo nextest run
+  @cargo nextest run --features ssr
 
 # Build artifacts
 build:

@@ -1,3 +1,14 @@
+---
+title: "NES Emulation in Rust: Designs and Frustrations"
+kind: blog
+category: programming
+image:
+  src: /images/blog/nes_console.webp
+  alt: "Nintendo Entertainment System console"
+published: 2020-01-31T21:19:14Z
+updated: 2019-09-19T07:12:30Z
+---
+
 In [Part 1][], I went over the current state of my NES emulator project in Rust,
 and today I'll continue by going into the details of how the NES operates at a
 hardware level, and some of the constructs I used to emulate that with Rust.
@@ -451,9 +462,9 @@ own debugging suite of tools and a whole drawing engine to render them
 with. Without these, I would have spent many more hours and may have gone
 insane.
 
-<img src="https://lukeworks.tech/images/projects/tetanes/nametable_viewer.webp" width="300" style="padding: 2px">
-<img src="https://lukeworks.tech/images/projects/tetanes/ppu_viewer.webp" width="300" style="padding: 2px">
-<img src="https://lukeworks.tech/images/projects/tetanes/debugger.webp" width="600" style="padding: 2px">
+<img src="/images/projects/tetanes/nametable_viewer.webp" width="300" style="padding: 2px">
+<img src="/images/projects/tetanes/ppu_viewer.webp" width="300" style="padding: 2px">
+<img src="/images/projects/tetanes/debugger.webp" width="600" style="padding: 2px">
 
 ## Conclusion
 

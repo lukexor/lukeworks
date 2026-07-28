@@ -1,3 +1,14 @@
+---
+title: "Software Malaise"
+kind: blog
+category: programming
+image:
+  src: /images/blog/software_malaise.webp
+  alt: "Empty derelict room with a single chair"
+published: 2017-03-27T05:36:10Z
+updated: 2018-10-30T20:26:29Z
+---
+
 It's rant time. I haven't written an article in a while partly because I've been
 busy with work, school, and a self-identity crisis and partly because I haven't
 had something worth writing about. Until now.

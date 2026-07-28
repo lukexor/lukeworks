@@ -1,6 +1,19 @@
+---
+title: "Discrete Fourier Transforms"
+kind: project
+image:
+  src: /images/projects/fourier.webp
+  alt: "Discrete Fourier Transform"
+website: /sketch/fourier
+published: 2020-02-12T22:45:01Z
+started: 2020-02-12T22:44:58Z
+completed: 2020-02-12T22:44:59Z
+updated: 2020-02-12T22:45:03Z
+---
+
 <iframe
   title="Discrete Fourier Transforms"
-  src="https://lukeworks.tech/sketch/fourier"
+  src="/sketch/fourier"
   frameborder="0"
   width="100%"
   height="500px"

@@ -44,6 +44,18 @@ ssr = [
   "leptos-use/ssr",
 ]
 
+# Markdown is rendered to HTML at build time, so comrak and the frontmatter
+# parser are build-only — none of this ships in either the server binary or the
+# WASM bundle.
+[build-dependencies]
+comrak = { version = "0.54", default-features = false, features = [
+  # `syntect-fancy` uses the pure-Rust regex engine, avoiding an oniguruma C
+  # dependency in the build graph.
+  "syntect-fancy",
+] }
+gray_matter = { version = "0.3", default-features = false, features = ["yaml"] }
+serde = { version = "1", features = ["derive"] }
+
 [dependencies]
 # global dependencies
 chrono = { version = "0.4", default-features = false, features = [

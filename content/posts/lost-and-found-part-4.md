@@ -1,3 +1,14 @@
+---
+title: "\"Lost and Found\" : Part 4 - Software development in practice"
+kind: blog
+category: career
+image:
+  src: /images/blog/lost_and_found_part_4.webp
+  alt: "Street signs: Success Ln., Failure Dr."
+published: 2015-01-14T22:30:34Z
+updated: 2017-03-27T04:46:14Z
+---
+
 The "Lost and Found" series continues from [Part 3][] with a deeper look into
 the practice of software development and the kinds of wins and losses I've seen
 along the way. Rewinding back a bit to my days working in technical support, I

@@ -1,6 +1,19 @@
+---
+title: "Fluid Simulation"
+kind: project
+image:
+  src: /images/projects/fluid-simulation.webp
+  alt: "Fluid Simulation"
+website: /sketch/fluid-simulation
+published: 2020-02-21T23:50:53Z
+started: 2020-02-21T23:50:51Z
+completed: 2020-02-21T23:50:52Z
+updated: 2020-02-21T23:50:55Z
+---
+
 <iframe
   title="Fluid Simulation"
-  src="https://lukeworks.tech/sketch/fluid-simulation"
+  src="/sketch/fluid-simulation"
   frameborder="0"
   width="100%"
   height="500px"

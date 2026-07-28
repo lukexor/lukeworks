@@ -1,3 +1,14 @@
+---
+title: "Programming an NES Emulator from Scratch in Rust"
+kind: blog
+category: programming
+image:
+  src: /images/blog/tetanes.webp
+  alt: "TetaNES Logo"
+published: 2019-09-19T06:10:44Z
+updated: 2019-09-18T03:55:00Z
+---
+
 I decided several months ago that it'd be a neat idea to create my own [NES
 emulator][tetanes] using my new favorite language: [Rust][]. Little did I
 know how complicated it would be or how much of my soul would be required (and

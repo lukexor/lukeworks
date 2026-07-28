@@ -1,3 +1,14 @@
+---
+title: "\"Lost and Found\" : Part 1 - From Dungeons & Dragons to HTML"
+kind: blog
+category: career
+image:
+  src: /images/blog/lost_and_found_part_1.webp
+  alt: "multi-sided dice"
+published: 2014-11-26T00:52:11Z
+updated: 2017-03-27T01:34:24Z
+---
+
 # "Lost and Found" Series : Lessons Learned
 
 ```yaml

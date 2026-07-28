@@ -1,3 +1,14 @@
+---
+title: "\"Lost and Found\" : Part 5 - Turbo-charge your career and avoid stagnation"
+kind: blog
+category: career
+image:
+  src: /images/blog/lost_and_found_part_5.webp
+  alt: "Lego Stormtrooper on a speeder"
+published: 2015-03-18T18:56:01Z
+updated: 2017-03-27T04:46:02Z
+---
+
 The "Lost and Found" series comes to a close. Previously, in [Part 4][] I talked
 about the importance of unit testing your code. As the final chapter in this
 series, I want to talk about my most recent struggle: career stagnation.

@@ -1,6 +1,19 @@
+---
+title: "Pong"
+kind: project
+image:
+  src: /images/projects/pong.webp
+  alt: "Pong"
+website: /sketch/pong
+published: 2020-02-11T02:21:57Z
+started: 2020-02-11T02:21:54Z
+completed: 2020-02-11T02:21:56Z
+updated: 2020-02-11T02:21:59Z
+---
+
 <iframe
   title="Pong"
-  src="https://lukeworks.tech/sketch/pong"
+  src="/sketch/pong"
   frameborder="0"
   width="100%"
   height="500px"

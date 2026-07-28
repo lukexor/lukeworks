@@ -1,6 +1,19 @@
+---
+title: "Asteroids!"
+kind: project
+image:
+  src: /images/projects/asteroids.webp
+  alt: "Asteroids"
+website: /sketch/asteroids
+published: 2020-02-11T20:52:04Z
+started: 2020-02-11T20:52:02Z
+completed: 2020-02-11T20:52:05Z
+updated: 2020-02-11T20:52:06Z
+---
+
 <iframe
   title="Asteroids!"
-  src="https://lukeworks.tech/sketch/asteroids"
+  src="/sketch/asteroids"
   frameborder="0"
   width="100%"
   height="500px"

@@ -1,3 +1,12 @@
+---
+title: "PixEngine - A Cross-Platform Graphics Library"
+kind: project
+website: https://github.com/lukexor/pix-engine
+published: 2022-05-02T00:00:00Z
+started: 2019-09-29T23:14:15Z
+updated: 2022-05-02T00:00:00Z
+---
+
 **PixEngine** is a cross-platform graphics & UI library for simple games,
 visualizations, digital art, and graphics applications written in [Rust][],
 supporting [SDL2][] (and soon [Web-Assembly][]!) renderers.

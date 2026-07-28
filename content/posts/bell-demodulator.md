@@ -1,3 +1,13 @@
+---
+title: "A Bell 103 Demodulator"
+kind: project
+website: https://github.com/lukexor/bell103_demodulator
+published: 2019-04-26T02:42:15Z
+started: 2019-04-26T02:42:01Z
+completed: 2019-04-26T02:42:04Z
+updated: 2020-01-23T02:42:18Z
+---
+
 This was done as a class project and is the basic start to implementing a full
 Bell 103 modem. Currently, only the demodulating portion is implemented and is
 not fully featured.

@@ -1,3 +1,16 @@
+---
+title: "UM-Flint Environmental Science Club Website"
+kind: project
+image:
+  src: /images/projects/umflint_env_club.webp
+  alt: "UM-Flint Environmental Science Club Website"
+# website disabled in source data: https://umflint-env.lukeworks.tech/
+published: 2007-11-01T12:00:00Z
+started: 2007-09-01T12:00:00Z
+completed: 2007-11-01T12:00:00Z
+updated: 2017-05-06T02:59:59Z
+---
+
 When I was attending the University of Michigan-Flint for a few years and
 majoring in Environmental Science, I became heavily involved in the
 Environmental Science Club. There wasn't a lot of members or general interest at

@@ -1,3 +1,15 @@
+---
+title: "TetaNES - An NES Emulator written in Rust"
+kind: project
+image:
+  src: /images/blog/tetanes.webp
+  alt: "TetaNES Logo"
+website: https://github.com/lukexor/tetanes
+published: 2019-08-21T15:24:57Z
+started: 2019-04-01T00:00:00Z
+updated: 2019-08-21T15:25:09Z
+---
+
 **TetaNES** is an emulator for the Nintendo Entertainment System (NES) released
 in 1985, written using [Rust][] and [SDL2][].
 
@@ -11,8 +23,8 @@ rise in popularity and compete with the more popular C and C++ versions.
 low-level Rust programs can be in addition to them having the type and
 memory-safety guarantees that Rust is known for.
 
-<img src="https://lukeworks.tech/images/projects/tetanes/donkey_kong.webp" width="300" style="padding: 5px"><img src="https://lukeworks.tech/images/projects/tetanes/super_mario_bros.webp" width="300" style="padding: 5px">
-<img src="https://lukeworks.tech/images/projects/tetanes/legend_of_zelda.webp" width="300" style="padding: 5px"><img src="https://lukeworks.tech/images/projects/tetanes/metroid.webp" width="300" style="padding: 5px">
+<img src="/images/projects/tetanes/donkey_kong.webp" width="300" style="padding: 5px"><img src="/images/projects/tetanes/super_mario_bros.webp" width="300" style="padding: 5px">
+<img src="/images/projects/tetanes/legend_of_zelda.webp" width="300" style="padding: 5px"><img src="/images/projects/tetanes/metroid.webp" width="300" style="padding: 5px">
 
 You can check out the code on [github][] and play it on the [web][]!
 

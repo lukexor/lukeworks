@@ -1,6 +1,19 @@
+---
+title: "Maze Generation and A* Search"
+kind: project
+image:
+  src: /images/projects/maze-astar.webp
+  alt: "Maze A* Search"
+website: /sketch/maze-astar
+published: 2020-02-01T19:57:51Z
+started: 2020-01-28T19:57:34Z
+completed: 2020-01-29T18:16:02Z
+updated: 2020-02-01T19:57:57Z
+---
+
 <iframe
   title="Maze A* Search"
-  src="https://lukeworks.tech/sketch/maze-astar"
+  src="/sketch/maze-astar"
   width="100%"
   frameborder="0"
   height="500px"

@@ -1,3 +1,9 @@
+---
+title: "MindYou"
+kind: project
+draft: true
+---
+
 **MindYou** is a feature-packed task management system for
 iPhone. MindYou takes the most useful ideas from top productivity methodologies
 and combines them together into a single digital platform that can keep up with

@@ -1,6 +1,19 @@
+---
+title: "2D Raycasting"
+kind: project
+image:
+  src: /images/projects/raycasting-2d.webp
+  alt: "2D Raycasting"
+website: /sketch/raycasting-2d
+published: 2020-02-06T00:22:12Z
+started: 2020-02-06T00:22:09Z
+completed: 2020-02-06T00:22:13Z
+updated: 2020-02-06T00:21:58Z
+---
+
 <iframe
   title="2D Raycasting"
-  src="https://lukeworks.tech/sketch/raycasting-2d"
+  src="/sketch/raycasting-2d"
   frameborder="0"
   width="100%"
   height="500px"

@@ -1,6 +1,19 @@
+---
+title: "Fireworks!"
+kind: project
+image:
+  src: /images/projects/fireworks.webp
+  alt: "Fireworks"
+website: /sketch/fireworks
+published: 2020-02-05T22:41:11Z
+started: 2020-02-03T12:00:00Z
+completed: 2020-02-05T22:40:57Z
+updated: 2020-02-05T22:41:13Z
+---
+
 <iframe
   title="Fireworks!"
-  src="https://lukeworks.tech/sketch/fireworks"
+  src="/sketch/fireworks"
   frameborder="0"
   width="100%"
   height="500px"

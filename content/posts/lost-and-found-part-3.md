@@ -1,3 +1,14 @@
+---
+title: "\"Lost and Found\" : Part 3 - I do not think it means what you think it means"
+kind: blog
+category: career
+image:
+  src: /images/blog/lost_and_found_part_3.webp
+  alt: "Inigo Montoya from Princess Bride"
+published: 2014-12-18T21:49:53Z
+updated: 2017-03-27T01:31:37Z
+---
+
 In the post-college world I recounted in [Part 2][], things are much different
 than I imagined. At this point in my career, I was working on increasingly more
 side software projects. Software Engineering, in practice, was still a bit of a

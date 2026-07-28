@@ -1,3 +1,14 @@
+---
+title: "\"Lost and Found\" : Part 2 - PC load letter?!"
+kind: blog
+category: career
+image:
+  src: /images/blog/lost_and_found_part_2.webp
+  alt: "Broken printer in a field"
+published: 2014-12-04T03:06:26Z
+updated: 2017-03-27T01:32:01Z
+---
+
 In [Part 1][] I regaled you with my first encounter with programming and the
 bygone era of the early web computing days. Now, I'm going to explain why school
 turned out very differently for me than the real world. This may seem like a

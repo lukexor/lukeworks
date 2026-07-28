@@ -1,3 +1,14 @@
+---
+title: "\"Lost and Found\" Series : Lessons Learned"
+kind: blog
+category: career
+image:
+  src: /images/blog/lost_and_found_part_0.webp
+  alt: "We can draw lessons from the past, but we cannot live in it."
+published: 2014-11-21T07:42:52Z
+updated: 2016-11-26T00:09:18Z
+---
+
 My software development career has been a long and insightful journey. I've
 learned a lot in a short time and I'd like to share my story in this five part
 series I'm titling *"Lost and Found"*. It's a tale of my meandering past;
