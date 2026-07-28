@@ -37,7 +37,5 @@ pub fn hydrate() {
 
         console_error_panic_hook::hook(info);
     }));
-    // Islands mode: hydrate only `#[island]` subtrees. Plain `#[component]`
-    // bodies are rendered on the server and never run in the browser.
-    leptos::mount::hydrate_islands();
+    leptos::mount::hydrate_body(crate::lukeworks::LukeWorks);
 }

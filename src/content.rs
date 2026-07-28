@@ -2,10 +2,15 @@
 //!
 //! The generated table holds every post's metadata plus its body already
 //! rendered to HTML. Bodies are compiled into the `ssr` build only; under
-//! `hydrate` `POSTS` is an empty slice, which keeps the post content out of the
-//! WASM bundle. That is safe because in islands mode `#[component]` bodies are
-//! server-rendered and never execute in the browser — an island that needs post
-//! data must reach for it through a server function.
+//! `hydrate` `POSTS` is an empty slice, which keeps ~124KB of rendered HTML out
+//! of the WASM bundle.
+//!
+//! **Because of that, this module is server-only in practice.** Component
+//! bodies re-run in the browser during hydration, so a component that reads
+//! `POSTS` directly would find it empty there and render as though the content
+//! did not exist. Reach it through a server function instead — see
+//! [`crate::pages::post::fetch_post`], whose resolved value leptos serializes
+//! into the page so hydration costs no extra request.
 
 include!(concat!(env!("OUT_DIR"), "/content.rs"));
 

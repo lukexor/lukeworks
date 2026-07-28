@@ -6,12 +6,13 @@ use wasm_bindgen::JsCast;
 
 /// Toggles the colour scheme and persists it for a year.
 ///
-/// An `#[island]`, so this is one of the few pieces of the app compiled into
-/// the WASM bundle. It deliberately holds no theme state of its own: the
-/// authority is the `dark` class the server rendered onto `<body>`, which this
-/// reads on click. That keeps it correct regardless of how the initial value
-/// was arrived at — cookie, inline script, or the dark default.
-#[island]
+/// Deliberately holds no theme state of its own: the authority is the `dark`
+/// class the server rendered onto `<body>`, which this reads on click. `<body>`
+/// lives outside the reactive tree (it is written by `shell`), so driving it
+/// from a signal would mean an effect syncing the two anyway — reading the DOM
+/// keeps it correct regardless of how the initial value was arrived at: cookie,
+/// inline script, or the dark default.
+#[component]
 pub fn ThemeToggle() -> impl IntoView {
     let toggle = move |_| {
         let Some(body) = document().body() else {

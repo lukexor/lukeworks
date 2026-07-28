@@ -9,7 +9,7 @@ use leptos_meta::{
 };
 use leptos_router::{
     ParamSegment, StaticSegment,
-    components::{FlatRoutes, Route, Router},
+    components::{A, FlatRoutes, Route, Router},
 };
 
 /// Support email.
@@ -51,8 +51,7 @@ fn RootStylesheet(options: LeptosOptions) -> impl IntoView {
 /// HTML shell with metadata and reload scripts.
 pub fn shell(options: LeptosOptions) -> impl IntoView {
     // Resolved on the server so the correct theme is in the very first byte of
-    // HTML. Only the WASM build lacks a request to read, and it never renders
-    // the shell.
+    // HTML. The WASM build has no request to read and never renders the shell.
     #[cfg(feature = "ssr")]
     let prefers_dark = use_theme::prefers_dark_from_request();
     #[cfg(not(feature = "ssr"))]
@@ -75,12 +74,12 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 />
 
                 <AutoReload options=options.clone() />
-                <HydrationScripts options=options.clone() islands=true />
+                <HydrationScripts options=options.clone() />
                 <RootStylesheet options />
                 <MetaTags />
 
-                // Now server-rendered rather than synced by an effect, which
-                // under islands would never have run in the browser.
+                // Server-rendered rather than synced by an effect: <body> and
+                // this tag both live outside the reactive tree.
                 <Meta name="color-scheme" content=color_scheme />
 
                 <Link rel="icon" href="/favicon.ico" />
@@ -108,18 +107,12 @@ pub fn LukeWorks() -> impl IntoView {
     view! {
         <Title formatter=move |text| format!("{text} — Lucas Petherbridge | Software Engineer") />
 
-        // Header is not route-dependent and uses plain <a>, so it needs no
-        // router context and sits outside it.
-        <Header />
-
-        // No `set_is_routing`/`RoutingProgress`: that pairing needs a signal
-        // updated in the browser, and this component never runs there under
-        // islands.
+        // Header lives inside <Router> so its nav links are client-side
+        // navigations rather than full page loads.
         <Router>
+            <Header />
             <main>
-                // No `transition=true`: transitions are driven by client-side
-                // reactivity that never runs under islands.
-                <FlatRoutes fallback=NotFound>
+                <FlatRoutes transition=true fallback=NotFound>
                     <Route path=StaticSegment("") view=Home />
                     <Route path=StaticSegment("/about") view=About />
                     <Route path=StaticSegment("/blog") view=Blog />
@@ -142,13 +135,13 @@ pub fn Header() -> impl IntoView {
             "."
         </p>
         <header class="flex items-center justify-between gap-4 p-4">
-            <a href=ROUTES.home class="font-bold">
+            <A href=ROUTES.home attr:class="font-bold">
                 "LukeWorks"
-            </a>
+            </A>
             <nav class="flex items-center gap-4">
-                <a href=ROUTES.blog>"Blog"</a>
-                <a href=ROUTES.projects>"Projects"</a>
-                <a href=ROUTES.about>"About"</a>
+                <A href=ROUTES.blog>"Blog"</A>
+                <A href=ROUTES.projects>"Projects"</A>
+                <A href=ROUTES.about>"About"</A>
                 <ThemeToggle />
             </nav>
         </header>

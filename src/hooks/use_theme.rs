@@ -1,17 +1,15 @@
 //! Dark/light theme.
 //!
-//! Under islands, `#[component]` bodies never execute in the browser, so the
-//! old approach — an `Effect` at the app root syncing `<body>` — could not work:
-//! the effect would only ever run during server rendering. Responsibility is
-//! split three ways instead:
+//! `<body>` is rendered by `shell` and lives outside the reactive tree, so the
+//! theme is not driven by a signal. Responsibility is split three ways:
 //!
 //! 1. The **server** resolves the theme from the `prefers-dark` cookie and
 //!    renders it straight into the `<body>` class. No flash, no JS, and it is
 //!    correct on the very first paint for anyone who has toggled before.
 //! 2. A tiny **inline script** covers the one case the server cannot know: a
 //!    visitor with no cookie whose OS prefers light. It runs before first paint.
-//! 3. [`ThemeToggle`] is an `#[island]` — the only part that ships to the
-//!    browser — which flips the class and persists the choice.
+//! 3. [`crate::components::theme_toggle::ThemeToggle`] flips the class on click
+//!    and persists the choice.
 //!
 //! Default is dark, which is why the no-cookie no-JS path needs no fallback.
 

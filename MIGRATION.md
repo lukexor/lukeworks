@@ -22,15 +22,33 @@ git ls-tree -r --name-only d82ff04^ -- web/src
 | 2 — Content pipeline | done (`8fad448`) |
 | 3 — Islands conversion | done — theme reworked, toggle island, nav |
 
-`islands-router` was enabled in Phase 1 and removed after it was found to leave stale page
-content. Its diff keys off `bo-TypeId(..)` markers derived from view types, so all posts emit
-identical markers and the branch is never replaced; it falls back to a node-by-node patch that
-assumes both pages share a DOM shape. Markdown bodies rendered via `inner_html` are opaque to the
-typed view tree, so the tree walkers desync and everything past that point stays stale.
+### Islands: tried, measured, abandoned
 
-Reproduced headlessly by running leptos's own `islands_routing.js` (jsdom) against real server
-responses — navigating between two posts desynced at node #205 with zero differing branch markers.
-Worth revisiting only if upstream gains data-dependent branch keys.
+Islands were adopted in Phase 1 to cut WASM size, then dropped after two bugs.
+
+**`islands-router` left stale content after navigation.** Its diff keys off `bo-TypeId(..)`
+markers derived from view *types*, so all posts emit identical markers and the branch is never
+replaced; it falls back to a node-by-node patch that assumes both pages share a DOM shape.
+Markdown bodies rendered via `inner_html` are opaque to the typed view tree, so the walkers desync
+and everything past that point stays stale. Reproduced headlessly by running leptos's own
+`islands_routing.js` under jsdom against real responses — two posts desynced at node #205 with
+zero differing branch markers.
+
+**The theme toggle never worked** under islands, and the cause was never established (no browser
+automation was available to diagnose it).
+
+Measured cost of dropping islands, release build (`opt-level='z'` + LTO):
+
+| | raw | gzipped |
+|---|---|---|
+| islands | 97,755 | 42,292 |
+| full hydration | 294,444 | 119,990 |
+
+So ~78KB gzipped is the price of the working, well-trodden path. A third option was considered and
+not taken: **SSR with no WASM at all** (0KB on content pages, theme toggle as inline JS, per-page
+bundles for the sketches and tetanes-web). That remains the best answer if bundle size ever
+becomes the binding constraint — it would mean leaving cargo-leptos's front-end pipeline for a
+plain `cargo build` plus a direct `tailwindcss` call.
 | 4–7 | not started |
 
 `cargo-leptos` had to move 0.2.47 → 0.3.7 during Phase 3, not as tidying: 0.2.47
@@ -45,8 +63,8 @@ tree needs `just install` first.
 |---|---|
 | Post metadata | YAML frontmatter in each `content/posts/*.md`; delete `content/*.toml` |
 | Rendering | Markdown → HTML at **build time** (`build.rs` + comrak), embedded in the server binary |
-| Interactivity | Islands (`#[island]`), everything else server-rendered only |
-| Navigation | Full page loads. `islands-router` was tried and removed — see below |
+| Interactivity | SSR + full hydration. Islands tried and abandoned — see below |
+| Navigation | Client-side routing via `leptos_router` |
 | p5.js sketches | Rewritten in Rust on `<canvas>` via `web-sys` — no JS dependency |
 | Carrying over | Search, RSS, resume page, tetanes-web |
 | Dropped | `/login`, `/admin` (auth had no backend), likes counter |

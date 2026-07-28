@@ -32,31 +32,29 @@ There are currently no tests in the tree.
 Toolchain is pinned by `rust-toolchain.toml` (1.91.1, edition 2024, `wasm32-unknown-unknown`).
 `.cargo/config.toml` links with `mold` on Linux — it must be installed.
 
-## Islands mode
+## Rendering model: SSR + full hydration
 
-`leptos` is built with the `islands` feature. **Only `#[island]` components run in the browser**;
-`#[component]` bodies are server-rendered and never execute client-side. This is the single most
-important fact about the codebase:
+Standard Leptos SSR with client hydration. Component bodies run on the server **and again in the
+browser during hydration**, which drives one non-obvious rule:
 
-- An `Effect`, an event handler, or a signal update written in a `#[component]` will silently do
-  nothing in the browser. If it needs to run client-side, it belongs in an `#[island]`.
-- Island props cross to the browser as JSON in a `data-props` attribute, so prop types must be
-  `Serialize + Deserialize`.
-- Enabling islands narrows a blanket impl in `tachys`: `<For>` keys must implement `Serialize`.
-  For static server-rendered lists, plain iteration + `collect_view()` is simpler and avoids it.
-- Islands compile for *both* targets, so island bodies must typecheck under `ssr` too — which is
-  why `wasm-bindgen` is a non-optional dependency.
+**Never read `crate::content::POSTS` from a component.** The compiled post table is
+`#[cfg(feature = "ssr")]`-gated to keep ~124KB of rendered HTML out of the WASM bundle, so under
+`hydrate` it is an empty slice. A component reading it directly renders correctly on the server
+and then blanks out during hydration. Go through a server function instead —
+`pages::post::fetch_post` is the pattern: leptos serializes the resolved `Resource` value into the
+page, so hydration costs no extra request and only client-side navigation to a *new* post fetches.
 
-`src/components/theme_toggle.rs` is the reference island, and `src/hooks/use_theme.rs` documents
-the server/inline-script/island split that replaced the old root-level effect.
+The tradeoff is that a post's HTML appears twice in the response (rendered DOM + serialized
+resource). Raw size roughly +40%, but the copies are near-identical text so gzip absorbs most of
+it — a large post is ~21KB on the wire.
 
-**`islands-router` is deliberately off.** Its client-side page diff keys off `bo-TypeId(..)`
-branch markers derived from view *types*, so every post emits identical markers — they all flow
-through the same `Post` component. The diff never replaces the branch and instead patches
-node-by-node, which is only correct when both pages have the same DOM shape. Post bodies are
-`inner_html` from markdown, opaque to the typed view tree, so the walkers desync partway and the
-page keeps stale content. Navigation is plain full-page loads. Don't re-enable it without
-re-testing navigation between two posts with different body structure.
+**Islands mode was tried and abandoned** (see `MIGRATION.md`). It cut the WASM bundle from 120KB
+to 42KB gzipped, but `islands-router` left stale content after navigation and the theme toggle
+never worked. If you reconsider it, the constraints were: `#[component]` bodies never run in the
+browser, island props must be `Serialize`, and `<For>` keys must be `Serialize`.
+
+`wasm-bindgen` is a non-optional dependency because component bodies that touch `web_sys` must
+still typecheck under `ssr`.
 
 ## The two-target build
 
