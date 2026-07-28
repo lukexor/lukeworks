@@ -1,6 +1,7 @@
 use crate::{
-    hooks::use_theme::{Theme, use_theme},
-    pages::{home::Home, not_found::NotFound, post::Post},
+    components::theme_toggle::ThemeToggle,
+    hooks::use_theme,
+    pages::{blog::Blog, home::Home, not_found::NotFound, post::Post, projects::Projects},
 };
 use leptos::{either::Either, prelude::*};
 use leptos_meta::{
@@ -8,19 +9,27 @@ use leptos_meta::{
 };
 use leptos_router::{
     ParamSegment, StaticSegment,
-    components::{FlatRoutes, Route, Router, RoutingProgress},
+    components::{FlatRoutes, Route, Router},
 };
 
 /// Support email.
 pub const SUPPORT_EMAIL: &str = "me@lukeworks.tech";
 /// Application routes.
-pub const ROUTES: AppRoutes = AppRoutes { home: "/" };
+pub const ROUTES: AppRoutes = AppRoutes {
+    home: "/",
+    about: "/about",
+    blog: "/blog",
+    projects: "/projects",
+};
 
 /// Type for application routes.
 #[derive(Debug)]
 #[must_use]
 pub struct AppRoutes {
     pub home: &'static str,
+    pub about: &'static str,
+    pub blog: &'static str,
+    pub projects: &'static str,
 }
 
 /// Renders either a HashedStylesheet or Stylesheet based on configured option for `hash_files`.
@@ -41,6 +50,16 @@ fn RootStylesheet(options: LeptosOptions) -> impl IntoView {
 
 /// HTML shell with metadata and reload scripts.
 pub fn shell(options: LeptosOptions) -> impl IntoView {
+    // Resolved on the server so the correct theme is in the very first byte of
+    // HTML. Only the WASM build lacks a request to read, and it never renders
+    // the shell.
+    #[cfg(feature = "ssr")]
+    let prefers_dark = use_theme::prefers_dark_from_request();
+    #[cfg(not(feature = "ssr"))]
+    let prefers_dark = true;
+
+    let color_scheme = if prefers_dark { "dark" } else { "light" };
+
     view! {
         <!DOCTYPE html>
         <html lang="en">
@@ -60,9 +79,20 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <RootStylesheet options />
                 <MetaTags />
 
+                // Now server-rendered rather than synced by an effect, which
+                // under islands would never have run in the browser.
+                <Meta name="color-scheme" content=color_scheme />
+
                 <Link rel="icon" href="/favicon.ico" />
+                <Link rel="manifest" href="/site.webmanifest" />
+            // The rel="alternate" feed link belongs here, but goes in with the
+            // /rss route in Phase 4 rather than advertising a 404 until then.
             </head>
-            <body>
+            <body class=use_theme::body_class(prefers_dark) style=format!("color-scheme:{color_scheme}")>
+                // Corrects the one case the server cannot know: no cookie, and
+                // the OS prefers light. Inline and before the body content so it
+                // lands ahead of first paint.
+                <script>{use_theme::NO_FLASH_SCRIPT}</script>
                 <LukeWorks />
             </body>
         </html>
@@ -75,32 +105,22 @@ pub fn LukeWorks() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    let Theme {
-        prefers_dark,
-        toggle_prefers_dark,
-    } = use_theme();
-    let (is_routing, set_is_routing) = signal(false);
-
     view! {
-        <noscript>
-            "This page contains WebAssembly and Javascript content, please enable
-            Javascript in your browser."
-        </noscript>
-
         <Title formatter=move |text| format!("{text} — Lucas Petherbridge | Software Engineer") />
-        // This can't really be reactive, so use_theme uses an Effect to synchronize it
-        <Meta name="color-scheme" content="" />
 
-        <Router set_is_routing>
-            // Ensure progress bar is above header
-            <div class="z-20 [&_progress]:h-[2px] [&_progress]:w-full [&_progress]:absolute [&_progress]:text-brand-fg2 [&_progress::-moz-progress-bar]:bg-brand-fg2 [&_progress::-webkit-progress-value]:bg-brand-fg2">
-                <RoutingProgress is_routing />
-            </div>
+        // No `set_is_routing`/`RoutingProgress`: that pairing needs a signal
+        // updated in the browser, and this component never runs there under
+        // islands. The islands router handles navigation itself.
+        <Router>
             <Header />
             <main>
                 <FlatRoutes transition=true fallback=NotFound>
                     <Route path=StaticSegment("") view=Home />
                     <Route path=StaticSegment("/about") view=About />
+                    <Route path=StaticSegment("/blog") view=Blog />
+                    <Route path=StaticSegment("/projects") view=Projects />
+                    // Must stay last: a bare param segment matches any single
+                    // path segment, including the static routes above.
                     <Route path=ParamSegment("post") view=Post />
                 </FlatRoutes>
             </main>
@@ -113,9 +133,20 @@ pub fn Header() -> impl IntoView {
     view! {
         <p id="panic-error" class="hidden self-center">
             "An internal error occurred. Try refreshing the page or file a "
-            <a href=format!("email:{SUPPORT_EMAIL}")>"bug report"</a>
+            <a href=format!("mailto:{SUPPORT_EMAIL}")>"bug report"</a>
             "."
         </p>
+        <header class="flex items-center justify-between gap-4 p-4">
+            <a href=ROUTES.home class="font-bold">
+                "LukeWorks"
+            </a>
+            <nav class="flex items-center gap-4">
+                <a href=ROUTES.blog>"Blog"</a>
+                <a href=ROUTES.projects>"Projects"</a>
+                <a href=ROUTES.about>"About"</a>
+                <ThemeToggle />
+            </nav>
+        </header>
     }
 }
 

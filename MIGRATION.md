@@ -13,6 +13,22 @@ git ls-tree -r --name-only d82ff04^ -- web/src
 
 ---
 
+## Status
+
+| Phase | State |
+|---|---|
+| 0 — Recover lost assets | done (`c494c40`) |
+| 1 — Deps + islands | done (`ddb95f1`) |
+| 2 — Content pipeline | done (`8fad448`) |
+| 3 — Islands conversion | done — theme reworked, toggle island, nav |
+| 4–7 | not started |
+
+`cargo-leptos` had to move 0.2.47 → 0.3.7 during Phase 3, not as tidying: 0.2.47
+bundles a wasm-bindgen CLI pinned to 0.2.105, and the Phase 1 bump to 0.2.126
+(forced by leptos-use 0.19) made every build fail with a bindgen schema
+mismatch. 0.3.x resolves the CLI from the lockfile instead. Anyone building this
+tree needs `just install` first.
+
 ## Decisions
 
 | Area | Decision |

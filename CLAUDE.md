@@ -32,6 +32,24 @@ There are currently no tests in the tree.
 Toolchain is pinned by `rust-toolchain.toml` (1.91.1, edition 2024, `wasm32-unknown-unknown`).
 `.cargo/config.toml` links with `mold` on Linux — it must be installed.
 
+## Islands mode
+
+`leptos` is built with the `islands` + `islands-router` features. **Only `#[island]` components
+run in the browser**; `#[component]` bodies are server-rendered and never execute client-side.
+This is the single most important fact about the codebase:
+
+- An `Effect`, an event handler, or a signal update written in a `#[component]` will silently do
+  nothing in the browser. If it needs to run client-side, it belongs in an `#[island]`.
+- Island props cross to the browser as JSON in a `data-props` attribute, so prop types must be
+  `Serialize + Deserialize`.
+- Enabling islands narrows a blanket impl in `tachys`: `<For>` keys must implement `Serialize`.
+  For static server-rendered lists, plain iteration + `collect_view()` is simpler and avoids it.
+- Islands compile for *both* targets, so island bodies must typecheck under `ssr` too — which is
+  why `wasm-bindgen` is a non-optional dependency.
+
+`src/components/theme_toggle.rs` is the reference island, and `src/hooks/use_theme.rs` documents
+the server/inline-script/island split that replaced the old root-level effect.
+
 ## The two-target build
 
 This is a single crate that compiles **twice**, and that shapes almost everything:
@@ -82,13 +100,23 @@ Dark mode is a custom variant: `@custom-variant dark (&:where(.dark, .dark *))`,
 Stylelint config (`.stylelintrc.json`) targets the CSS; there is no npm project at the repo root
 to run it from.
 
-## Content pipeline (unfinished)
+## Content pipeline
 
-`content/*.toml` and `content/posts/*.md` hold the site data, but **nothing parses them yet**:
-there is no `serde`/`toml` dependency, the TOML files still carry JSON-isms (trailing commas,
-`null`, multi-line inline tables) and would not parse as-is, and `find_post` in
-`src/pages/post.rs` is a hardcoded stub around an unused `include_str!`. `comrak` is a dependency
-for eventual markdown rendering but is not wired in. Expect to build this out rather than extend it.
+`build.rs` compiles `content/posts/*.md` into a static `POSTS` table: it parses YAML frontmatter
+(`gray_matter`), renders markdown to HTML (`comrak` + syntect highlighting), derives reading time,
+sorts newest-first, and writes a generated module to `OUT_DIR`. `src/content.rs` includes it and
+adds `find`/`published` helpers. See `content/README.md` for the frontmatter schema.
+
+Consequences worth knowing:
+
+- comrak and gray_matter are **`[build-dependencies]`** — no markdown machinery ships in either
+  binary, and the server does no I/O and no parsing at runtime.
+- The generated table is `#[cfg(feature = "ssr")]`; under `hydrate`, `POSTS` is an empty slice so
+  post bodies stay out of the WASM bundle. Adding a `#[component]` that reads `POSTS` is fine;
+  an **island** that needs post data must go through a server function instead.
+- Adding a post means adding one markdown file. There is no index to update.
+- `content/portfolio.toml` (site copy) and `content/redirects.toml` are hand-maintained data,
+  not generated.
 
 ## Migration
 
@@ -102,12 +130,19 @@ The pre-port Next.js source is not in the working tree; it's in git at `d82ff04^
 
 ## Current state
 
-The branch is mid-restructure (`wip` commits). Most of `src/pages/` and `src/components/` are
-stubs, only `/`, `/about`, and `/:post` are routed, and some class names in `src/lukeworks.rs`
-(e.g. `text-brand-fg2`) refer to design tokens that no longer exist in `style/tailwind.css`.
+Phases 0–3 of `MIGRATION.md` are done. Content, theming, and islands work end to end; both
+targets build clean with no warnings.
 
-`web/` is untracked leftover node_modules/build output from the previous Next.js site. It is not
-part of the build — ignore it.
+Still stubs: `Home`, `About`, `Blog`, `Projects`, `Resume`, `Search`, `TetanesWeb`, and the
+`Button`/`Image` components render placeholders. Routed so far: `/`, `/about`, `/blog`,
+`/projects`, `/:post`. The `/:post` route is a bare param segment and **must stay last** in
+`FlatRoutes` — it matches any single path segment.
+
+Not yet built (Phase 4+): the redirect layer (`content/redirects.toml` is transcribed but unused),
+`/rss`, `/sketch/:name` — several posts embed `<iframe src="/sketch/...">` that 404 until then —
+`/resume`, `/tetanes-web`, and search.
+
+Styling is deliberately minimal pending the Phase 5 design pass.
 
 ## Deployment
 

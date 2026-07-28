@@ -3,6 +3,7 @@ pub mod lukeworks;
 pub mod components {
     pub mod button;
     pub mod image;
+    pub mod theme_toggle;
 }
 pub mod hooks {
     pub mod use_theme;

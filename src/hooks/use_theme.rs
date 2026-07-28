@@ -1,91 +1,69 @@
-use leptos::{prelude::*, server::codee::string::FromToStringCodec};
-use leptos_use::use_cookie;
+//! Dark/light theme.
+//!
+//! Under islands, `#[component]` bodies never execute in the browser, so the
+//! old approach — an `Effect` at the app root syncing `<body>` — could not work:
+//! the effect would only ever run during server rendering. Responsibility is
+//! split three ways instead:
+//!
+//! 1. The **server** resolves the theme from the `prefers-dark` cookie and
+//!    renders it straight into the `<body>` class. No flash, no JS, and it is
+//!    correct on the very first paint for anyone who has toggled before.
+//! 2. A tiny **inline script** covers the one case the server cannot know: a
+//!    visitor with no cookie whose OS prefers light. It runs before first paint.
+//! 3. [`ThemeToggle`] is an `#[island]` — the only part that ships to the
+//!    browser — which flips the class and persists the choice.
+//!
+//! Default is dark, which is why the no-cookie no-JS path needs no fallback.
 
-/// Reactive theme.
-#[derive(Copy, Clone)]
-pub struct Theme {
-    /// Preference for dark mode.
-    pub prefers_dark: Signal<bool>,
-    /// Toggle preference for dark mode.
-    pub toggle_prefers_dark: Callback<()>,
-}
+/// Cookie used to persist the visitor's colour-scheme preference.
+pub const PREFERS_DARK_COOKIE: &str = "prefers-dark";
 
-/// Get prefers dark preference.
-pub fn use_prefers_dark() -> Signal<bool> {
-    with_context::<Theme, _>(|theme| theme.prefers_dark).expect("valid Theme context")
-}
-
-/// Returns theme reflecting the the users preference for dark mode.
+/// Runs before first paint to apply the OS preference when no cookie is set.
 ///
-/// `leptos_use` has `use_preferred_dark` and `use_media_query` hooks, but neither of those support
-/// setting the "default" as Dark mode.
-pub fn use_theme() -> Theme {
-    if let Some(theme) = use_context::<Theme>() {
-        return theme;
-    }
+/// Only ever *removes* `dark`: the server already renders the dark class, and
+/// dark is the default, so light is the only case needing correction. Keeping
+/// it to one branch means no flash in the common path.
+pub const NO_FLASH_SCRIPT: &str = "\
+if(!document.cookie.includes('prefers-dark')\
+&&window.matchMedia('(prefers-color-scheme: light)').matches){\
+document.body.classList.remove('dark');\
+document.body.style.colorScheme='light';}";
 
-    // Cookie used to track users color scheme preference.
-    pub const PREFERS_SCHEME_COOKIE: &str = "prefers-dark";
+/// Resolve the visitor's preference during server rendering.
+///
+/// Reads the `prefers-dark` cookie, defaulting to dark. Nothing else is
+/// consulted: the previous implementation also read a `sec-ch-prefers-color-scheme`
+/// request header, but that is a client hint the browser only sends once the
+/// server has advertised `Accept-CH`, which this server never did. That branch
+/// could therefore never fire, and its absence was masked by falling through to
+/// the same dark default. The inline script above covers the case properly.
+#[cfg(feature = "ssr")]
+#[must_use]
+pub fn prefers_dark_from_request() -> bool {
+    use leptos::prelude::use_context;
 
-    // Get initial preference from media-query or HTTP headers, defaulting to true
-    #[cfg(not(feature = "ssr"))]
-    let initial_prefers_dark = window()
-        .match_media("(prefers-color-scheme: dark)")
-        .unwrap_or(None)
-        .is_none_or(|query| query.matches());
-    #[cfg(feature = "ssr")]
-    let initial_prefers_dark = {
-        use axum::http::request;
-        let headers = use_context::<request::Parts>().map(|parts| parts.headers);
-        let prefers_scheme = headers
-            .and_then(|headers| headers.get("sec-ch-prefers-color-scheme").cloned())
-            .map(|header| header.to_str().unwrap_or_default().to_owned());
-        matches!(prefers_scheme.as_deref(), None | Some("dark"))
+    let Some(parts) = use_context::<axum::http::request::Parts>() else {
+        return true;
     };
-    // Get cookie preference, if previously set
-    let (prefers_dark_cookie, set_prefers_dark_cookie) =
-        use_cookie::<bool, FromToStringCodec>(PREFERS_SCHEME_COOKIE);
-
-    // Use cookie, or default to initial value based on headers or defaulting to dark
-    let prefers_dark =
-        Signal::derive(move || prefers_dark_cookie.get().unwrap_or(initial_prefers_dark));
-
-    // Toggling preference sets a cookie to persist.
-    let toggle_prefers_dark = move || {
-        let new_prefers_dark = !prefers_dark.get();
-        set_prefers_dark_cookie.set(Some(new_prefers_dark));
+    let Some(cookies) = parts
+        .headers
+        .get(axum::http::header::COOKIE)
+        .and_then(|value| value.to_str().ok())
+    else {
+        return true;
     };
 
-    Effect::new(move |_| {
-        let color_scheme = if prefers_dark.get() { "dark" } else { "light" };
+    cookies
+        .split(';')
+        .filter_map(|cookie| cookie.split_once('='))
+        .find(|(name, _)| name.trim() == PREFERS_DARK_COOKIE)
+        .is_none_or(|(_, value)| value.trim() != "false")
+}
 
-        // Fixes issue toggling theme after page is loaded to update meta tags which aren't reactive
-        if let Ok(Some(el)) = document().query_selector("meta[name=\"color-scheme\"]") {
-            let _ = el.set_attribute("content", color_scheme);
-        }
-
-        // Since body is outside App, we need to sync color-scheme on it as well
-        if let Some(el) = document()
-            .get_elements_by_tag_name("body")
-            .get_with_index(0)
-        {
-            let _ = el.style(("color-scheme", color_scheme));
-
-            let class_list = el.class_list();
-            if prefers_dark.get() {
-                let _ = class_list.add_1("dark");
-            } else {
-                let _ = class_list.remove_1("dark");
-            }
-        }
-    });
-
-    let theme = Theme {
-        prefers_dark,
-        toggle_prefers_dark: toggle_prefers_dark.into(),
-    };
-    // Allow other parts of the app to react to theme changes.
-    provide_context(theme);
-
-    theme
+/// Body class carrying the server-resolved theme.
+///
+/// Tailwind's dark variant is `&:where(.dark, .dark *)`, driven by this class.
+#[must_use]
+pub const fn body_class(prefers_dark: bool) -> &'static str {
+    if prefers_dark { "dark" } else { "" }
 }

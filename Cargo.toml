@@ -27,7 +27,7 @@ rust_2024_compatibility = "warn"
 unused = "warn"
 
 [features]
-hydrate = ["dep:console_error_panic_hook", "dep:wasm-bindgen", "leptos/hydrate"]
+hydrate = ["dep:console_error_panic_hook", "leptos/hydrate"]
 ssr = [
   "dep:axum",
   "dep:axum-extra",
@@ -79,15 +79,19 @@ serde = { version = "1", features = ["derive"] }
 web-sys = { version = "0.3", features = [
   "Clipboard",
   "Document",
+  "HtmlDocument",
   "MediaQueryList",
   "Window",
 ] }
+# Not optional: island bodies compile for both targets, and they need `JsCast`
+# even in the `ssr` build where the browser code is never reached. web-sys
+# already pulls this in regardless, so it costs nothing.
+# Pinned exactly — the wasm-bindgen CLI cargo-leptos runs must match the crate
+# version. Bump both together.
+wasm-bindgen = "=0.2.126"
 
 # `hydrate` dependencies
 console_error_panic_hook = { version = "0.1", optional = true }
-# Pinned exactly: the wasm-bindgen CLI that cargo-leptos runs must match the
-# crate version. Bump both together.
-wasm-bindgen = { version = "=0.2.126", optional = true }
 
 # `ssr` dependencies
 axum = { version = "0.8", optional = true }

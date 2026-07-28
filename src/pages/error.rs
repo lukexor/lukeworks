@@ -27,7 +27,7 @@ pub fn Error(#[prop(into)] errors: Signal<Errors>) -> impl IntoView {
                 }}
             </ul>
             <p>
-                "Check the URL, file a " <a href=format!("email:{SUPPORT_EMAIL}")>bug report</a>
+                "Check the URL, file a " <a href=format!("mailto:{SUPPORT_EMAIL}")>bug report</a>
                 ", or " <A href=ROUTES.home>"head back home"</A>"."
             </p>
         </div>

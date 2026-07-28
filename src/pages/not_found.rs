@@ -22,7 +22,7 @@ pub fn NotFound() -> impl IntoView {
             <h1 class="my-4 text-3xl">"Page not found."</h1>
             <p>"The page you were looking for is not available"</p>
             <p>
-                "Check the URL, file a " <a href=format!("email:{SUPPORT_EMAIL}")>bug report</a>
+                "Check the URL, file a " <a href=format!("mailto:{SUPPORT_EMAIL}")>bug report</a>
                 ", or " <A href=ROUTES.home>"head back home"</A>"."
             </p>
         </div>
