@@ -14,6 +14,8 @@ Adding a post means adding one file — there is no index to update.
 title: "NES Emulation in Rust: Designs and Frustrations"   # required
 kind: blog                                                 # required: blog | project
 category: programming                                      # optional, lowercase
+series: TetaNES                                            # optional, groups posts
+part: 2                                                    # optional, omit on an intro
 image:                                                     # optional
   src: /images/blog/nes_console.webp
   alt: "Nintendo Entertainment System console"
@@ -35,6 +37,12 @@ Notes:
   Full timestamps rather than dates because four pairs of posts share a
   publication date and the time-of-day is what orders them.
 - **Reading time is derived** (~200 wpm) rather than stored.
+- **Series.** `series` is the display name and repeats verbatim in every post
+  that belongs to it. `part` orders them. A post carrying a `series` but no
+  `part` is the introduction and sorts ahead of part 1. `build.rs` rejects a
+  `part` without a `series`, two posts claiming the same part, and two spellings
+  of one series name, since a typo would otherwise split a series in two.
+  Two exist: `Lost and Found` (intro plus five parts) and `TetaNES` (two parts).
 - **Drafts.** A post with `draft: true` or no `published` is excluded from
   listings but still compiled. There are none right now.
 - There is no `tags` field. Add one here and in `build.rs` if tag pages get

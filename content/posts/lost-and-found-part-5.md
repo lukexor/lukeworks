@@ -2,6 +2,8 @@
 title: "\"Lost and Found\" : Part 5 - Turbo-charge your career and avoid stagnation"
 kind: blog
 category: career
+series: Lost and Found
+part: 5
 image:
   src: /images/blog/lost_and_found_part_5.webp
   alt: "Lego Stormtrooper on a speeder"

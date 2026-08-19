@@ -2,6 +2,8 @@
 title: "Programming an NES Emulator from Scratch in Rust"
 kind: blog
 category: programming
+series: TetaNES
+part: 1
 image:
   src: /images/blog/tetanes.webp
   alt: "TetaNES Logo"

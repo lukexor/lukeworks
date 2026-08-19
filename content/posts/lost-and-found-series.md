@@ -2,6 +2,7 @@
 title: "\"Lost and Found\" Series : Lessons Learned"
 kind: blog
 category: career
+series: Lost and Found
 image:
   src: /images/blog/lost_and_found_part_0.webp
   alt: "We can draw lessons from the past, but we cannot live in it."

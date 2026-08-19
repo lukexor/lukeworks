@@ -2,29 +2,14 @@
 title: "\"Lost and Found\" : Part 1 - From Dungeons & Dragons to HTML"
 kind: blog
 category: career
+series: Lost and Found
+part: 1
 image:
   src: /images/blog/lost_and_found_part_1.webp
   alt: "multi-sided dice"
 published: 2014-11-26T00:52:11Z
 updated: 2017-03-27T01:34:24Z
 ---
-
-# "Lost and Found" Series : Lessons Learned
-
-```yaml
-slug: lost-and-found-series
-description: |
-  Introduction to my "Lost and Found" Series on my programming career journey.
-category: Career
-tags: []
-image:
-  src: /images/blog/lost_and_found_part_0.webp
-  title: We can draw lessons from the past, but we cannot live in it.
-minutes_to_read: 2
-published: 2014-11-21 07:42:52
-```
-
-![Overgrown forest with text: "We can draw lessons from the past, but we cannot live in it"](/images/blog/lost_and_found_part_0.webp "We can draw lessons from the past, but we cannot live in it")
 
 My descent into the world of programming started at a pretty young age. This was
 back in the early days of the world wide web. Internet giants like Facebook and

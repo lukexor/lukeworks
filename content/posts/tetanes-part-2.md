@@ -2,6 +2,8 @@
 title: "NES Emulation in Rust: Designs and Frustrations"
 kind: blog
 category: programming
+series: TetaNES
+part: 2
 image:
   src: /images/blog/nes_console.webp
   alt: "Nintendo Entertainment System console"

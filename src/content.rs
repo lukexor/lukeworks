@@ -35,6 +35,21 @@ pub fn published(kind: Kind) -> impl Iterator<Item = &'static Post> {
         .filter(move |post| post.kind == kind && !post.draft && post.published.is_some())
 }
 
+/// Every published post in `series`, in reading order.
+///
+/// A post with no `part` is the series introduction and comes first. The rest
+/// follow by part number. `build.rs` rejects a duplicate part, so the order is
+/// total. Returns an empty vec for a series nobody belongs to.
+#[must_use]
+pub fn series(name: &str) -> Vec<&'static Post> {
+    let mut entries: Vec<_> = POSTS
+        .iter()
+        .filter(|post| post.series == Some(name) && !post.draft && post.published.is_some())
+        .collect();
+    entries.sort_by_key(|post| post.part.unwrap_or(0));
+    entries
+}
+
 // Only meaningful against the generated table, which is compiled into the `ssr`
 // build. Run with `cargo nextest run --features ssr`.
 #[cfg(all(test, feature = "ssr"))]
@@ -116,6 +131,43 @@ mod tests {
                     post.slug
                 );
             }
+        }
+    }
+
+    #[test]
+    fn a_series_reads_intro_first_then_parts_in_order() {
+        let entries = series("Lost and Found");
+        assert_eq!(
+            entries.iter().map(|p| p.slug).collect::<Vec<_>>(),
+            [
+                "lost-and-found-series",
+                "lost-and-found-part-1",
+                "lost-and-found-part-2",
+                "lost-and-found-part-3",
+                "lost-and-found-part-4",
+                "lost-and-found-part-5",
+            ]
+        );
+        // Publication order happens to agree here. `part` orders the list, so a
+        // backfilled post still lands in the right place.
+        assert_eq!(entries[0].part, None);
+        assert_eq!(entries[5].part, Some(5));
+    }
+
+    #[test]
+    fn an_unknown_series_is_empty_rather_than_a_panic() {
+        assert!(series("No Such Series").is_empty());
+    }
+
+    #[test]
+    fn every_part_belongs_to_a_series() {
+        // `build.rs` rejects this, so a failure here means the check regressed.
+        for post in POSTS {
+            assert!(
+                post.part.is_none() || post.series.is_some(),
+                "{} has a part but no series",
+                post.slug
+            );
         }
     }
 

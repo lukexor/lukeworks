@@ -13,13 +13,21 @@ use comrak::{
 };
 use gray_matter::{Matter, engine::YAML};
 use serde::Deserialize;
-use std::{env, fmt::Write as _, fs, path::Path};
+use std::{
+    collections::{BTreeMap, btree_map::Entry},
+    env,
+    fmt::Write as _,
+    fs,
+    path::Path,
+};
 
 #[derive(Deserialize)]
 struct FrontMatter {
     title: String,
     kind: String,
     category: Option<String>,
+    series: Option<String>,
+    part: Option<usize>,
     image: Option<Image>,
     website: Option<String>,
     published: Option<String>,
@@ -91,6 +99,10 @@ fn main() {
             panic!("{}: kind must be \"blog\" or \"project\"", path.display());
         }
 
+        if fm.part.is_some() && fm.series.is_none() {
+            panic!("{}: `part` needs a `series` to be part of", path.display());
+        }
+
         let body_html = markdown_to_html_with_plugins(&parsed.content, &options, &plugins);
         // ~200 wpm, the usual reading-speed approximation.
         let words = parsed.content.split_whitespace().count();
@@ -98,6 +110,8 @@ fn main() {
 
         posts.push((slug, fm, body_html, reading_minutes));
     }
+
+    check_series(&posts);
 
     // Newest first. Sorting here means the runtime never parses a date to order
     // a listing. Undated drafts sort last.
@@ -130,6 +144,11 @@ pub struct Post {
     pub title: &'static str,
     pub kind: Kind,
     pub category: Option<&'static str>,
+    /// Display name of the series this post belongs to.
+    pub series: Option<&'static str>,
+    /// Position within [`Post::series`]. `None` marks the series introduction,
+    /// which sorts ahead of every numbered part.
+    pub part: Option<usize>,
     pub image: Option<Image>,
     pub website: Option<&'static str>,
     /// RFC 3339, e.g. "2020-01-31T21:19:14Z".
@@ -164,6 +183,11 @@ pub struct Post {
         writeln!(out, "        title: {},", lit(&fm.title)).unwrap();
         writeln!(out, "        kind: {kind},").unwrap();
         writeln!(out, "        category: {},", opt(fm.category.as_deref())).unwrap();
+        writeln!(out, "        series: {},", opt(fm.series.as_deref())).unwrap();
+        match fm.part {
+            Some(part) => writeln!(out, "        part: Some({part}),").unwrap(),
+            None => writeln!(out, "        part: None,").unwrap(),
+        }
         match &fm.image {
             Some(img) => writeln!(
                 out,
@@ -193,6 +217,45 @@ pub struct Post {
 struct Rule {
     from: String,
     to: String,
+}
+
+/// Reject the two ways a series can be miswritten across files.
+///
+/// Series membership is a plain string repeated in every post, so a typo does
+/// not fail anything by itself: it quietly produces a second series holding one
+/// post. Comparing names case- and space-insensitively catches that, and
+/// catching duplicate parts keeps the reading order total.
+fn check_series(posts: &[(String, FrontMatter, String, usize)]) {
+    let key = |name: &str| name.to_lowercase().replace([' ', '-', '_'], "");
+
+    let mut canonical: BTreeMap<String, (&str, &str)> = BTreeMap::new();
+    let mut parts: BTreeMap<(String, usize), &str> = BTreeMap::new();
+
+    for (slug, fm, _, _) in posts {
+        let Some(series) = fm.series.as_deref() else {
+            continue;
+        };
+
+        match canonical.entry(key(series)) {
+            Entry::Vacant(e) => {
+                e.insert((series, slug));
+            }
+            Entry::Occupied(e) => {
+                let (seen_name, seen_slug) = *e.get();
+                assert!(
+                    seen_name == series,
+                    "series name disagrees between posts: {seen_slug} says {seen_name:?}, \
+                     {slug} says {series:?}. Pick one spelling."
+                );
+            }
+        }
+
+        if let Some(part) = fm.part
+            && let Some(other) = parts.insert((key(series), part), slug)
+        {
+            panic!("{series:?} part {part} is claimed by both {other} and {slug}");
+        }
+    }
 }
 
 /// Read the `[[redirect]]` tables out of `content/redirects.toml`.

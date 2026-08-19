@@ -2,6 +2,8 @@
 title: "\"Lost and Found\" : Part 3 - I do not think it means what you think it means"
 kind: blog
 category: career
+series: Lost and Found
+part: 3
 image:
   src: /images/blog/lost_and_found_part_3.webp
   alt: "Inigo Montoya from Princess Bride"

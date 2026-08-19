@@ -2,6 +2,8 @@
 title: "\"Lost and Found\" : Part 4 - Software development in practice"
 kind: blog
 category: career
+series: Lost and Found
+part: 4
 image:
   src: /images/blog/lost_and_found_part_4.webp
   alt: "Street signs: Success Ln., Failure Dr."

@@ -2,6 +2,8 @@
 title: "\"Lost and Found\" : Part 2 - PC load letter?!"
 kind: blog
 category: career
+series: Lost and Found
+part: 2
 image:
   src: /images/blog/lost_and_found_part_2.webp
   alt: "Broken printer in a field"
