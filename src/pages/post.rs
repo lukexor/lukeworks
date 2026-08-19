@@ -239,56 +239,51 @@ pub fn Post() -> impl IntoView {
 #[component]
 fn PostBody(post: PostView) -> impl IntoView {
     let date = published_date(post.published.as_deref()).map(ToOwned::to_owned);
-    // Mirrors what the two rail sections actually render. A series of one is the
-    // post itself, so counting it here reserves a 236px column for just the back
-    // link and narrows the article for no reason.
-    let has_rail = !post.headings.is_empty() || post.siblings.len() >= 2;
 
     view! {
         <Title text=post.title.clone() />
 
-        <div class=move || {
-            if has_rail { "grid gap-12 lg:grid-cols-[236px_minmax(0,1fr)]" } else { "max-w-3xl" }
-        }>
-            <Show when=move || has_rail>
-                <aside class="hidden lg:block">
-                    <div class="flex sticky top-8 flex-col gap-7 text-[13px]">
-                        <A
-                            href=ROUTES.blog
-                            attr:class="inline-flex gap-1.5 items-center font-mono text-xs"
-                        >
-                            <BackArrowIcon class="size-3" />
-                            "all posts"
-                        </A>
+        // The rail is unconditional. Reserving the column only when there is a
+        // table of contents or a series would shift the article left and right
+        // as the reader moves between posts, and the metadata below fills it on
+        // every post regardless.
+        <div class="grid gap-12 lg:grid-cols-[236px_minmax(0,1fr)]">
+            <aside class="hidden lg:block">
+                <div class="flex sticky top-8 flex-col gap-7 text-[13px]">
+                    <A
+                        href=ROUTES.blog
+                        attr:class="inline-flex gap-1.5 items-center font-mono text-xs"
+                    >
+                        <BackArrowIcon class="size-3" />
+                        "all posts"
+                    </A>
 
-                        <PostRailToc headings=post.headings.clone() />
-                        <PostRailSeries
-                            series=post.series.clone()
-                            siblings=post.siblings.clone()
-                            current=post.slug.clone()
-                        />
-                    </div>
-                </aside>
-            </Show>
+                    <PostMeta
+                        category=post.category.clone()
+                        date=date.clone()
+                        reading_minutes=post.reading_minutes
+                        class="flex flex-col gap-1"
+                    />
+
+                    <PostRailToc headings=post.headings.clone() />
+                    <PostRailSeries
+                        series=post.series.clone()
+                        siblings=post.siblings.clone()
+                        current=post.slug.clone()
+                    />
+                </div>
+            </aside>
 
             <article class="min-w-0">
-                <div class="flex flex-wrap gap-4 items-center mb-5 font-mono text-xs text-ink-dim">
-                    {post
-                        .category
-                        .clone()
-                        .map(|category| {
-                            let href = format!("{}?category={category}", ROUTES.blog);
-                            view! {
-                                <A
-                                    href=href
-                                    attr:class="tracking-widest uppercase no-underline text-primary hover:text-accent"
-                                >
-                                    {category}
-                                </A>
-                            }
-                        })} {date.map(|date| view! { <span>{date}</span> })}
-                    <span>{post.reading_minutes} " min read"</span>
-                </div>
+                // Below `lg` the rail is hidden, so the same metadata rides
+                // above the title instead. Only one of the two is ever in the
+                // accessibility tree, since the other is `display: none`.
+                <PostMeta
+                    category=post.category.clone()
+                    date=date
+                    reading_minutes=post.reading_minutes
+                    class="flex flex-wrap gap-4 items-center mb-5 lg:hidden"
+                />
 
                 <h1 class="mb-8 font-mono text-3xl font-bold tracking-tighter leading-tight text-balance sm:text-[2.75rem]">
                     {post.title.clone()}
@@ -312,6 +307,38 @@ fn PostBody(post: PostView) -> impl IntoView {
 
                 <PostNeighbours previous=post.previous.clone() next=post.next.clone() />
             </article>
+        </div>
+    }
+}
+
+/// Category, date and reading time.
+///
+/// Rendered twice per page, once in the rail and once above the title, with the
+/// caller's `class` deciding which breakpoint each appears at.
+#[component]
+fn PostMeta(
+    category: Option<String>,
+    date: Option<String>,
+    reading_minutes: usize,
+    #[prop(into)] class: String,
+) -> impl IntoView {
+    view! {
+        <div class=format!(
+            "font-mono text-xs text-ink-dim {class}",
+        )>
+            {category
+                .map(|category| {
+                    let href = format!("{}?category={category}", ROUTES.blog);
+                    view! {
+                        <A
+                            href=href
+                            attr:class="tracking-widest uppercase no-underline text-primary hover:text-accent"
+                        >
+                            {category}
+                        </A>
+                    }
+                })} {date.map(|date| view! { <span>{date}</span> })}
+            <span>{reading_minutes} " min read"</span>
         </div>
     }
 }
