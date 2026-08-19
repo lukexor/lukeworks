@@ -277,10 +277,14 @@ fn PostBody(post: PostView) -> impl IntoView {
                         .category
                         .clone()
                         .map(|category| {
+                            let href = format!("{}?category={category}", ROUTES.blog);
                             view! {
-                                <span class="tracking-widest uppercase text-primary">
+                                <A
+                                    href=href
+                                    attr:class="tracking-widest uppercase no-underline text-primary hover:text-accent"
+                                >
                                     {category}
-                                </span>
+                                </A>
                             }
                         })} {date.map(|date| view! { <span>{date}</span> })}
                     <span>{post.reading_minutes} " min read"</span>
@@ -413,6 +417,15 @@ fn PostNeighbours(previous: Option<Neighbour>, next: Option<Neighbour>) -> impl 
         return None;
     }
 
+    // The oldest post has no previous, so its lone Next card would otherwise
+    // sit in the left column while its own text is right-aligned. Starting it
+    // in the second column keeps forward navigation on the right either way.
+    let next_column = if previous.is_none() {
+        "sm:col-start-2"
+    } else {
+        ""
+    };
+
     Some(view! {
         <nav class="grid gap-4 mt-16 sm:grid-cols-2">
             {previous
@@ -435,7 +448,9 @@ fn PostNeighbours(previous: Option<Neighbour>, next: Option<Neighbour>) -> impl 
                     view! {
                         <A
                             href=format!("/{}", entry.slug)
-                            attr:class="block px-5 py-4 rounded border sm:text-right border-rule bg-panel text-ink no-underline hover:border-accent hover:no-underline"
+                            attr:class=format!(
+                                "block px-5 py-4 rounded border sm:text-right border-rule bg-panel text-ink no-underline hover:border-accent hover:no-underline {next_column}",
+                            )
                         >
                             <span class="flex gap-1.5 items-center mb-2 font-mono tracking-widest uppercase sm:justify-end text-ink-dim text-[11px]">
                                 "Next" <ArrowIcon class="size-3" />

@@ -3,8 +3,9 @@
 //! Both pages are the same view over a different `kind`, so the data types, the
 //! server function and the markup all live here rather than being written twice.
 
+use crate::lukeworks::ROUTES;
 use leptos::prelude::*;
-use leptos_router::components::A;
+use leptos_router::{components::A, hooks::use_query_map};
 use serde::{Deserialize, Serialize};
 
 /// Which listing to fetch.
@@ -48,6 +49,8 @@ pub struct Listing {
     pub years: Vec<(String, usize)>,
     /// Post count per category, most posts first.
     pub categories: Vec<(String, usize)>,
+    /// The category [`Listing::posts`] was narrowed to, if any.
+    pub selected: Option<String>,
 }
 
 /// Fetch a listing from the compiled post table.
@@ -59,8 +62,15 @@ pub struct Listing {
 ///
 /// The counts are tallied here rather than in the view so the browser never
 /// walks the whole list to render a sidebar.
+///
+/// `category` narrows the returned posts. The counts stay whole either way, so
+/// the rail keeps offering every category rather than collapsing to the one
+/// already chosen.
 #[server]
-pub async fn list_posts(kind: PostKind) -> Result<Listing, ServerFnError> {
+pub async fn list_posts(
+    kind: PostKind,
+    category: Option<String>,
+) -> Result<Listing, ServerFnError> {
     use crate::content::Kind;
     use std::collections::BTreeMap;
 
@@ -71,7 +81,7 @@ pub async fn list_posts(kind: PostKind) -> Result<Listing, ServerFnError> {
 
     // `published` already yields newest-first and filters drafts; build.rs did
     // the sorting, so nothing here parses a date to order the list.
-    let posts: Vec<_> = crate::content::published(kind)
+    let all: Vec<_> = crate::content::published(kind)
         .map(|post| PostSummary {
             slug: post.slug.to_owned(),
             title: post.title.to_owned(),
@@ -84,7 +94,7 @@ pub async fn list_posts(kind: PostKind) -> Result<Listing, ServerFnError> {
 
     let mut years: BTreeMap<String, usize> = BTreeMap::new();
     let mut categories: BTreeMap<String, usize> = BTreeMap::new();
-    for post in &posts {
+    for post in &all {
         if let Some(year) = published_year(post.published.as_deref()) {
             *years.entry(year.to_owned()).or_default() += 1;
         }
@@ -98,10 +108,20 @@ pub async fn list_posts(kind: PostKind) -> Result<Listing, ServerFnError> {
     let mut categories: Vec<_> = categories.into_iter().collect();
     categories.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
 
+    let selected = category.filter(|name| !name.is_empty());
+    let posts = match &selected {
+        Some(name) => all
+            .into_iter()
+            .filter(|post| post.category.as_deref() == Some(name.as_str()))
+            .collect(),
+        None => all,
+    };
+
     Ok(Listing {
         posts,
         years,
         categories,
+        selected,
     })
 }
 
@@ -133,22 +153,25 @@ fn published_day(published: Option<&str>) -> Option<String> {
 }
 
 /// Render the listing for one kind of post.
+///
+/// A `category` query parameter narrows the rows. The resource keys on it, so a
+/// client-side navigation between filters refetches instead of showing the
+/// previous set.
 #[component]
 pub fn PostList(kind: PostKind) -> impl IntoView {
-    let listing = Resource::new(move || kind, list_posts);
+    let query = use_query_map();
+    let category = move || query.read().get("category").filter(|it| !it.is_empty());
+
+    let listing = Resource::new(
+        move || (kind, category()),
+        |(kind, category)| list_posts(kind, category),
+    );
 
     view! {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
                 let listing = listing.await.unwrap_or_default();
-                if listing.posts.is_empty() {
-                    return // Reached when a listing genuinely has no published posts,
-                    // and when the server function errors — the reader needs
-                    // the same thing either way.
-                    view! { <p class="text-ink-dim">"Nothing published here yet."</p> }
-                        .into_any();
-                }
-                view! { <ListingBody listing /> }.into_any()
+                view! { <ListingBody listing /> }
             })}
         </Suspense>
     }
@@ -169,11 +192,28 @@ fn ListingBody(listing: Listing) -> impl IntoView {
         }
     }
 
+    let empty = groups.is_empty();
+    let selected = listing.selected.clone();
+
     view! {
         <div class="grid gap-12 lg:grid-cols-[236px_minmax(0,1fr)]">
-            <ListingRail years=listing.years categories=listing.categories />
+            <ListingRail
+                years=listing.years
+                categories=listing.categories
+                selected=listing.selected
+            />
 
             <div class="min-w-0">
+                <Show when=move || empty>
+                    <p class="text-ink-dim">
+                        {selected
+                            .clone()
+                            .map_or_else(
+                                || "Nothing published here yet.".to_owned(),
+                                |name| format!("Nothing published under \"{name}\" yet."),
+                            )}
+                    </p>
+                </Show>
                 {groups
                     .into_iter()
                     .map(|(year, rows)| {
@@ -249,8 +289,13 @@ fn ListingRow(post: PostSummary) -> impl IntoView {
 }
 
 #[component]
-fn ListingRail(years: Vec<(String, usize)>, categories: Vec<(String, usize)>) -> impl IntoView {
+fn ListingRail(
+    years: Vec<(String, usize)>,
+    categories: Vec<(String, usize)>,
+    selected: Option<String>,
+) -> impl IntoView {
     let has_categories = !categories.is_empty();
+    let filtering = selected.is_some();
     view! {
         <aside class="hidden lg:block">
             <div class="flex sticky top-8 flex-col gap-8 text-[13px]">
@@ -289,15 +334,43 @@ fn ListingRail(years: Vec<(String, usize)>, categories: Vec<(String, usize)>) ->
                                 .clone()
                                 .into_iter()
                                 .map(|(category, count)| {
+                                    let active = selected.as_deref() == Some(category.as_str());
+                                    let href = if active {
+                                        ROUTES.blog.to_owned()
+                                    } else {
+                                        format!("{}?category={category}", ROUTES.blog)
+                                    };
+                                    let class = if active {
+                                        "flex justify-between py-1.5 px-2.5 font-mono no-underline rounded-sm hover:no-underline bg-panel text-accent"
+                                    } else {
+                                        "flex justify-between py-1.5 px-2.5 font-mono no-underline rounded-sm hover:no-underline text-ink-dim hover:bg-panel hover:text-accent"
+                                    };
+                                    // Clicking the category already showing clears
+                                    // the filter, so the row doubles as its own
+                                    // off switch.
                                     view! {
-                                        <li class="flex justify-between py-1.5 px-2.5 font-mono text-ink-dim">
-                                            <span>{category}</span>
-                                            <span>{count}</span>
+                                        <li>
+                                            <A
+                                                href=href
+                                                attr:class=class
+                                                attr:aria-current=active.then_some("true")
+                                            >
+                                                <span>{category}</span>
+                                                <span>{count}</span>
+                                            </A>
                                         </li>
                                     }
                                 })
                                 .collect_view()}
                         </ul>
+                        <Show when=move || filtering>
+                            <A
+                                href=ROUTES.blog
+                                attr:class="inline-block mt-2 px-2.5 font-mono text-[11px] tracking-widest uppercase"
+                            >
+                                "Clear filter"
+                            </A>
+                        </Show>
                     </nav>
                 </Show>
             </div>
