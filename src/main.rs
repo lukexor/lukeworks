@@ -9,19 +9,42 @@ mod server;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     use crate::server::{cache_control_middleware, cors_middleware, redirect_middleware};
-    use axum::{Router, extract::DefaultBodyLimit, middleware};
+    use axum::{Router, extract::DefaultBodyLimit, middleware, routing::get_service};
     use leptos::prelude::*;
     use leptos_axum::{LeptosRoutes, generate_route_list};
     use lukeworks::lukeworks::*;
     use tower::limit::ConcurrencyLimitLayer;
-    use tower_http::{compression::CompressionLayer, trace::TraceLayer};
+    use tower_http::{compression::CompressionLayer, services::ServeFile, trace::TraceLayer};
 
     let conf = get_configuration(None)?;
     let addr = conf.leptos_options.site_addr;
     let leptos_options = conf.leptos_options;
     let routes = generate_route_list(LukeWorks);
 
-    let app = Router::new()
+    // Assets sitting at the root of the site directory need a literal route
+    // each. `generate_route_list` registers the bare `/{post}` param route, and
+    // a fallback only runs when nothing matched at all, so `/robots.txt` and
+    // friends would otherwise be claimed by the post handler and answered with
+    // a 404. A literal segment beats a param in the router's matcher, so these
+    // win. Anything nested (`/images/…`, `/pkg/…`) has two segments and never
+    // collided in the first place.
+    let mut app = Router::new();
+    for entry in std::fs::read_dir(&*leptos_options.site_root)? {
+        let entry = entry?;
+        if !entry.file_type()?.is_file() {
+            continue;
+        }
+        let Some(name) = entry.file_name().to_str().map(ToOwned::to_owned) else {
+            continue;
+        };
+        tracing::debug!("serving root asset /{name}");
+        app = app.route(
+            &format!("/{name}"),
+            get_service(ServeFile::new(entry.path())),
+        );
+    }
+
+    let app = app
         .leptos_routes(&leptos_options, routes, {
             let leptos_options = leptos_options.clone();
             move || shell(leptos_options.clone())

@@ -8,7 +8,7 @@ use leptos_meta::{
     HashedStylesheet, Link, Meta, MetaTags, Stylesheet, Title, provide_meta_context,
 };
 use leptos_router::{
-    ParamSegment, StaticSegment,
+    ParamSegment, SsrMode, StaticSegment,
     components::{A, FlatRoutes, Route, Router},
 };
 
@@ -122,11 +122,18 @@ pub fn LukeWorks() -> impl IntoView {
                 <FlatRoutes transition=true fallback=NotFound>
                     <Route path=StaticSegment("") view=Home />
                     <Route path=StaticSegment("/about") view=About />
-                    <Route path=StaticSegment("/blog") view=Blog />
-                    <Route path=StaticSegment("/projects") view=Projects />
+                    // The three routes below resolve a server function before
+                    // they have anything to show. Under the default out-of-order
+                    // mode their `Suspense` streams into a trailing <template>
+                    // and JS swaps it in, so <main> ships empty and a crawler or
+                    // a reader without JS sees no post at all. Async holds the
+                    // response until the resource resolves, which is
+                    // microseconds against an in-memory table.
+                    <Route path=StaticSegment("/blog") view=Blog ssr=SsrMode::Async />
+                    <Route path=StaticSegment("/projects") view=Projects ssr=SsrMode::Async />
                     // Must stay last: a bare param segment matches any single
                     // path segment, including the static routes above.
-                    <Route path=ParamSegment("post") view=Post />
+                    <Route path=ParamSegment("post") view=Post ssr=SsrMode::Async />
                 </FlatRoutes>
             </main>
         </Router>

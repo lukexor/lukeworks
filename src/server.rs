@@ -43,11 +43,14 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
         // browser's heuristic caching, which will pair stale glue with a fresh
         // module and fail as
         // "wasm.wasm_bindgen__convert__closures_____invoke__... is not a function".
-        .map(|ext| ["css", "ico", "js", "wasm", "webp", "woff2"].contains(&ext))
+        .map(|ext| ["css", "ico", "js", "pdf", "png", "wasm", "webp", "woff2"].contains(&ext))
         .unwrap_or(false);
 
     let mut response = next.run(request).await;
-    if should_cache {
+    // Only a successful body is worth caching. Applying the release header to a
+    // 404 pins the failure in the browser for 30 days, so a missing asset stays
+    // missing for that visitor long after it is put back.
+    if should_cache && response.status().is_success() {
         response.headers_mut().insert(
             header::CACHE_CONTROL,
             // Dev filenames are unhashed and `cargo leptos watch` rewrites them

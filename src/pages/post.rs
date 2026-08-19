@@ -1,7 +1,7 @@
 //! A single blog or project post.
 
 use crate::pages::not_found::NotFound;
-use leptos::{either::Either, prelude::*};
+use leptos::{either::EitherOf3, prelude::*};
 use leptos_meta::Title;
 use leptos_router::{hooks::use_params, params::Params};
 use serde::{Deserialize, Serialize};
@@ -61,7 +61,7 @@ pub fn Post() -> impl IntoView {
             {move || Suspend::new(async move {
                 match post.await {
                     Ok(Some(post)) => {
-                        Either::Left(
+                        EitherOf3::A(
                             view! {
                                 <Title text=post.title.clone() />
                                 <article>
@@ -72,11 +72,22 @@ pub fn Post() -> impl IntoView {
                             },
                         )
                     }
-                    Ok(None) | Err(_) => {
-                        Either::Right(
-                            // A lookup failure and a missing slug are the same thing to
-                            // a reader: the URL doesn't name a post.
-                            view! { <NotFound /> },
+                    Ok(None) => EitherOf3::B(view! { <NotFound /> }),
+                    Err(_) => {
+                        EitherOf3::C(
+                            // Kept apart from the `None` arm: the post may well exist and
+                            // the fetch just failed, so telling the reader the URL is
+                            // wrong sends them away from a page that would load on a
+                            // retry.
+                            view! {
+                                <Title text="Couldn't load this post" />
+                                <div class="flex flex-col items-center w-full">
+                                    <h1 class="my-4 text-3xl">"Couldn't load this post."</h1>
+                                    <p>
+                                        "Something went wrong on our end. Try reloading the page."
+                                    </p>
+                                </div>
+                            },
                         )
                     }
                 }

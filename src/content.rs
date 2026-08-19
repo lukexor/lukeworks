@@ -14,10 +14,15 @@
 
 include!(concat!(env!("OUT_DIR"), "/content.rs"));
 
-/// Look up a single post by its slug (the markdown filename without extension).
+/// Look up a published post by its slug (the markdown filename without extension).
+///
+/// Applies the same draft and `published` filter as [`published`]. Slugs are
+/// guessable, so a draft reachable at its own URL is a draft anyone can read.
 #[must_use]
 pub fn find(slug: &str) -> Option<&'static Post> {
-    POSTS.iter().find(|post| post.slug == slug)
+    POSTS
+        .iter()
+        .find(|post| post.slug == slug && !post.draft && post.published.is_some())
 }
 
 /// Published posts of the given kind, newest first.
@@ -40,7 +45,9 @@ mod tests {
     fn every_post_compiled() {
         // Guards against build.rs silently emitting nothing, which would
         // otherwise look like a site with no content rather than a build error.
-        assert_eq!(POSTS.len(), 26, "expected every content/posts/*.md");
+        // A lower bound rather than an exact count, so authoring a post is not
+        // also a test failure.
+        assert!(!POSTS.is_empty(), "expected every content/posts/*.md");
     }
 
     #[test]
@@ -94,6 +101,21 @@ mod tests {
                 published(kind).all(|post| !post.draft && post.published.is_some()),
                 "{kind:?} listing includes a draft"
             );
+        }
+    }
+
+    #[test]
+    fn find_applies_the_same_draft_rule_as_listings() {
+        // A slug is guessable, so a draft hidden from `/blog` but readable at
+        // `/its-slug` is not hidden at all.
+        for post in POSTS {
+            if post.draft || post.published.is_none() {
+                assert!(
+                    find(post.slug).is_none(),
+                    "{} is unpublished but reachable by slug",
+                    post.slug
+                );
+            }
         }
     }
 

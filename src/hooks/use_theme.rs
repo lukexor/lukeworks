@@ -32,8 +32,14 @@ pub const PREFERS_DARK_COOKIE: &str = "prefers-dark";
 /// Only ever *removes* `dark`: the server already renders the dark class, and
 /// dark is the default, so light is the only case needing correction. Keeping
 /// it to one branch means no flash in the common path.
+///
+/// The cookie test is anchored to a name boundary to match what
+/// [`prefers_dark_from_cookie_header`] does on the server. A substring test
+/// would also see `prefers-dark-mode`, or any cookie whose *value* happens to
+/// contain the name, and skip the correction for a visitor who has no
+/// preference set at all.
 pub const NO_FLASH_SCRIPT: &str = "\
-if(!document.cookie.includes('prefers-dark')\
+if(!/(^|;\\s*)prefers-dark=/.test(document.cookie)\
 &&window.matchMedia('(prefers-color-scheme: light)').matches){\
 document.documentElement.classList.remove('dark');\
 document.documentElement.style.colorScheme='light';}";

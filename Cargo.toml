@@ -40,8 +40,6 @@ ssr = [
   "leptos/ssr",
   "leptos_meta/ssr",
   "leptos_router/ssr",
-  "leptos-use/axum",
-  "leptos-use/ssr",
 ]
 
 # Markdown is rendered to HTML at build time, so comrak and the frontmatter
@@ -70,25 +68,19 @@ chrono = { version = "0.4", default-features = false, features = [
   "std",
   "wasmbind",
 ] }
-icondata = { version = "0.7", default-features = false, features = [
-  "bootstrap-icons",
-] }
 leptos = { version = "0.8", features = ["rustls"] }
 leptos_router = { version = "0.8" }
 leptos_meta = { version = "0.8" }
-# Island props are passed to the browser as JSON in a `data-props` attribute,
-# so every island prop type must be Serialize + Deserialize.
+# Server function arguments and return types cross the network boundary as JSON.
 serde = { version = "1", features = ["derive"] }
 web-sys = { version = "0.3", features = [
-  "Clipboard",
   "Document",
   "HtmlDocument",
-  "MediaQueryList",
   "Window",
 ] }
-# Not optional: island bodies compile for both targets, and they need `JsCast`
-# even in the `ssr` build where the browser code is never reached. web-sys
-# already pulls this in regardless, so it costs nothing.
+# Not optional: `hydrate()` is the wasm_bindgen entrypoint, and `ThemeToggle`
+# needs `JsCast` in both builds, including `ssr` where the browser code is
+# never reached. web-sys pulls it in regardless.
 # Pinned exactly — the wasm-bindgen CLI cargo-leptos runs must match the crate
 # version. Bump both together.
 wasm-bindgen = "=0.2.126"
@@ -118,9 +110,6 @@ tracing = { version = "0.1", features = [
 tracing-subscriber = { version = "0.3", features = [
   "env-filter",
 ], optional = true }
-leptos-use = { version = "0.19", default-features = false, features = [
-  "use_cookie",
-] }
 
 [profile.dev]
 # Disabling debug info greatly speeds up compile times
