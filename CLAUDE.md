@@ -27,7 +27,8 @@ cargo clippy --all-targets --all-features --keep-going
 ```
 
 Single test: `cargo nextest run <substring>` or `cargo nextest run -E 'test(name_of_test)'`.
-There are currently no tests in the tree.
+Most tests only mean something against the generated post table, which is compiled into the `ssr`
+build, so run `cargo nextest run --features ssr` (what `just test` does).
 
 Toolchain is pinned by `rust-toolchain.toml` (1.91.1, edition 2024, `wasm32-unknown-unknown`).
 `.cargo/config.toml` links with `mold` on Linux — it must be installed.
@@ -172,10 +173,10 @@ Not yet built (rest of Phase 4+): `/rss`, `/sketch/:name` — several posts embe
 
 Two things to know before touching the dev loop:
 
-- **Cache-control was inverted** and is now fixed: dev builds serve `.js`/`.wasm` as `no-store`,
-  release serves the hashed filenames as `immutable`. Before the fix, `cargo leptos watch` rebuilt
-  while the browser replayed a 30-day cached bundle, so edits appeared not to take and the glue and
-  module could desync into `wasm.… is not a function`. If you see that error, suspect caching first.
+- **Cache-control depends on the profile:** dev builds serve `.js`/`.wasm` as `no-store`, release
+  serves the hashed filenames as `immutable`. Get this backwards and `cargo leptos watch` rebuilds
+  while the browser replays a cached bundle, so edits appear not to take and the glue and module
+  desync into `wasm.… is not a function`. If you see that error, suspect caching first.
 - **`--split` is unverified.** See the open question at the end of `MIGRATION.md`; it may break
   client-side routing.
 

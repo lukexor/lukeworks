@@ -95,7 +95,7 @@ mod tests {
 
     #[test]
     fn specific_article_rules_beat_the_generic_one() {
-        // The whole reason declaration order is load-bearing. If the generic
+        // Why declaration order matters. If the generic
         // `/articles/:year/:month/:title` rule were tried first, these would
         // resolve to `/rustynes_part_1` and `/rustynes_part_2`, which are not
         // posts.
@@ -205,8 +205,8 @@ mod tests {
 
     #[test]
     fn redirects_do_not_point_at_other_redirects() {
-        // A chain costs an extra round trip and search engines stop following
-        // them after a few hops.
+        // A chain adds a round trip, and search engines stop following one
+        // after a few hops.
         for rule in REDIRECTS {
             let sample: Vec<&str> = rule
                 .from

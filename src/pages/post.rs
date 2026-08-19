@@ -26,9 +26,9 @@ pub struct PostView {
 
 /// Look up a post on the server.
 ///
-/// The compiled `POSTS` table exists only in the `ssr` build, deliberately —
-/// keeping ~124KB of rendered HTML out of the WASM bundle. Reaching it through
-/// a server function is what lets the client render posts anyway. On first load
+/// The compiled `POSTS` table exists only in the `ssr` build, which keeps
+/// ~124KB of rendered HTML out of the WASM bundle. A server function reaches it
+/// on the client's behalf, so the client renders posts anyway. On first load
 /// the resolved value is serialized into the page, so hydration does not make a
 /// second request; only a client-side navigation to a different post does.
 #[server]
@@ -60,17 +60,25 @@ pub fn Post() -> impl IntoView {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
                 match post.await {
-                    Ok(Some(post)) => Either::Left(view! {
-                        <Title text=post.title.clone() />
-                        <article>
-                            <h1>{post.title.clone()}</h1>
-                            // Pre-rendered at build time from markdown we control.
-                            <div inner_html=post.body_html.clone()></div>
-                        </article>
-                    }),
-                    // A lookup failure and a missing slug are the same thing to
-                    // a reader: the URL doesn't name a post.
-                    Ok(None) | Err(_) => Either::Right(view! { <NotFound /> }),
+                    Ok(Some(post)) => {
+                        Either::Left(
+                            view! {
+                                <Title text=post.title.clone() />
+                                <article>
+                                    <h1>{post.title.clone()}</h1>
+                                    // Pre-rendered at build time from markdown we control.
+                                    <div inner_html=post.body_html.clone()></div>
+                                </article>
+                            },
+                        )
+                    }
+                    Ok(None) | Err(_) => {
+                        Either::Right(
+                            // A lookup failure and a missing slug are the same thing to
+                            // a reader: the URL doesn't name a post.
+                            view! { <NotFound /> },
+                        )
+                    }
                 }
             })}
         </Suspense>

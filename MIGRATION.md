@@ -1,7 +1,7 @@
 # Next.js → Leptos migration plan
 
-Target architecture: **Leptos 0.8 SSR + islands**, content compiled to HTML at build time,
-single self-contained binary.
+Target architecture: **Leptos 0.8 SSR with full hydration**, content compiled to HTML at build
+time, single self-contained binary. Islands were tried and abandoned (see below).
 
 The authoritative spec for "what the old site did" is git, not the working tree. The Next.js
 source was deleted in `d82ff04` (*refactor: initial leptos version*); read it with:
@@ -22,6 +22,9 @@ git ls-tree -r --name-only d82ff04^ -- web/src
 | 2 — Content pipeline | done (`8fad448`) |
 | 3 — Islands conversion | done — theme reworked, toggle island, nav |
 | 4 — Routes and features | partial — redirects + listings done; RSS, search, `/resume`, `/sketch/:name`, `/tetanes-web` outstanding |
+| 5 — Design | not started |
+| 6 — Sketches | not started |
+| 7 — Deploy | not started |
 
 ### Islands: tried, measured, abandoned
 
@@ -50,7 +53,6 @@ not taken: **SSR with no WASM at all** (0KB on content pages, theme toggle as in
 bundles for the sketches and tetanes-web). That remains the best answer if bundle size ever
 becomes the binding constraint — it would mean leaving cargo-leptos's front-end pipeline for a
 plain `cargo build` plus a direct `tailwindcss` call.
-| 4–7 | not started |
 
 `cargo-leptos` had to move 0.2.47 → 0.3.7 during Phase 3, not as tidying: 0.2.47
 bundles a wasm-bindgen CLI pinned to 0.2.105, and the Phase 1 bump to 0.2.126
@@ -92,7 +94,9 @@ Nothing else can be verified visually until this is done.
   actually live (`public/icons/`); and `shell()` links `/favicon.ico`, which existed only at
   `public/icons/favicon.ico`. The favicon moved to `public/` root (also where browsers implicitly
   request it).
-- **`first-post.md` was dropped** (26 of 27 posts came across). Recover or intentionally retire it.
+- **26 of the old site's 27 posts are in the tree.** The missing one is at
+  `git show d82ff04^:web/src/data/posts/mindyou.md`. It had a body but no metadata entry in the
+  old JSON, so it was never reachable. Recover it with frontmatter or leave it retired.
 - **Extract the 11 redirects** from `git show d82ff04^:web/next.config.js` (transcribed to
   `content/redirects.toml`). These are permanent redirects carrying existing SEO —
   `/articles/:year/:month/:title → /:title`, `/projects/2019/08/rustynes → /tetanes`,

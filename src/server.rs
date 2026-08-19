@@ -37,11 +37,12 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
     let should_cache = Path::new(request.uri().path())
         .extension()
         .and_then(|ext| ext.to_str())
-        // `js` belongs here with `wasm`: wasm-bindgen emits the glue and the
-        // module as a matched pair keyed on mangled export names. Leaving `js`
-        // off the list gave it no cache-control at all, so the browser applied
-        // heuristic caching and paired a stale glue file with a fresh module —
-        // "wasm.wasm_bindgen__convert__closures_____invoke__… is not a function".
+        // `js` has to stay alongside `wasm`: wasm-bindgen emits the glue and the
+        // module as a matched pair keyed on mangled export names. An extension
+        // missing from this list gets no cache-control at all and falls to the
+        // browser's heuristic caching, which will pair stale glue with a fresh
+        // module and fail as
+        // "wasm.wasm_bindgen__convert__closures_____invoke__... is not a function".
         .map(|ext| ["css", "ico", "js", "wasm", "webp", "woff2"].contains(&ext))
         .unwrap_or(false);
 
@@ -49,15 +50,13 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
     if should_cache {
         response.headers_mut().insert(
             header::CACHE_CONTROL,
-            // The sense of this test was inverted: dev builds were handing out
-            // `immutable, max-age=30d` for `.wasm`, so `cargo leptos watch`
-            // rebuilt while the browser kept replaying the cached bundle — edits
-            // appeared not to take until a manual cache-bypassing reload.
+            // Dev filenames are unhashed and `cargo leptos watch` rewrites them
+            // in place, so anything cachable here is served stale to a browser
+            // that already has it, and edits appear not to take.
             if cfg!(debug_assertions) {
-                // Don't cache in development.
                 HeaderValue::from_static("no-store")
             } else {
-                // Release serves hashed filenames - 30 days.
+                // Release serves hashed filenames, so 30 days is safe.
                 HeaderValue::from_static("public, max-age=2592000, immutable")
             },
         );

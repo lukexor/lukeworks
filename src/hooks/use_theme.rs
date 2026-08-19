@@ -40,12 +40,12 @@ document.documentElement.style.colorScheme='light';}";
 
 /// Resolve the visitor's preference during server rendering.
 ///
-/// Reads the `prefers-dark` cookie, defaulting to dark. Nothing else is
-/// consulted: the previous implementation also read a `sec-ch-prefers-color-scheme`
-/// request header, but that is a client hint the browser only sends once the
-/// server has advertised `Accept-CH`, which this server never did. That branch
-/// could therefore never fire, and its absence was masked by falling through to
-/// the same dark default. The inline script above covers the case properly.
+/// Reads the `prefers-dark` cookie, defaulting to dark. The cookie is the only
+/// input. `sec-ch-prefers-color-scheme` would be the obvious second one, but a
+/// browser sends that client hint only once the server has answered with
+/// `Accept-CH: Sec-CH-Prefers-Color-Scheme`, so reading it without also sending
+/// that header gets nothing. [`NO_FLASH_SCRIPT`] covers the no-cookie case
+/// instead.
 #[cfg(feature = "ssr")]
 #[must_use]
 pub fn prefers_dark_from_request() -> bool {

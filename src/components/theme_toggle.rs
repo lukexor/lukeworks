@@ -6,7 +6,7 @@ use wasm_bindgen::JsCast;
 
 /// Toggles the colour scheme and persists it for a year.
 ///
-/// Deliberately holds no theme state of its own: the authority is the `dark`
+/// Keeps no theme state of its own: the authority is the `dark`
 /// class the server rendered onto `<html>`, which this reads on click. `<html>`
 /// lives outside the reactive tree (it is written by `shell`), so driving it
 /// from a signal would mean an effect syncing the two anyway — reading the DOM
@@ -53,8 +53,9 @@ pub fn ThemeToggle() -> impl IntoView {
             aria-label="Toggle dark mode"
             title="Toggle dark mode"
         >
-            // Which glyph shows is driven by CSS, not state: the island holds no
-            // copy of the theme to fall out of sync with the class on <body>.
+            // Which glyph shows is driven by CSS, not state, so there is no
+            // second copy of the theme to fall out of sync with the class
+            // on <html>.
             <span class="hidden dark:inline">"☀"</span>
             <span class="inline dark:hidden">"☾"</span>
         </button>

@@ -95,8 +95,8 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 // the OS prefers light. Inline and in <head> so it lands ahead
                 // of first paint without displacing anything inside <body>.
                 <script>{use_theme::NO_FLASH_SCRIPT}</script>
-            // The rel="alternate" feed link belongs here, but goes in with the
-            // /rss route in Phase 4 rather than advertising a 404 until then.
+            // The rel="alternate" feed link belongs here. It waits on the /rss
+            // route, since advertising a feed that 404s is worse than none.
             </head>
             <body>
                 <LukeWorks />
@@ -141,11 +141,11 @@ pub fn Header() -> impl IntoView {
             <a href=format!("mailto:{SUPPORT_EMAIL}")>"bug report"</a>
             "."
         </p>
-        <header class="flex items-center justify-between gap-4 p-4">
+        <header class="flex gap-4 justify-between items-center p-4">
             <A href=ROUTES.home attr:class="font-bold">
                 "LukeWorks"
             </A>
-            <nav class="flex items-center gap-4">
+            <nav class="flex gap-4 items-center">
                 <A href=ROUTES.blog>"Blog"</A>
                 <A href=ROUTES.projects>"Projects"</A>
                 <A href=ROUTES.about>"About"</A>

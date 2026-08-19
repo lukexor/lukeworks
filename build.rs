@@ -92,8 +92,7 @@ fn main() {
         }
 
         let body_html = markdown_to_html_with_plugins(&parsed.content, &options, &plugins);
-        // ~200 wpm, the usual reading-speed approximation. Replaces the
-        // hand-maintained `minutesToRead` field from the old JSON.
+        // ~200 wpm, the usual reading-speed approximation.
         let words = parsed.content.split_whitespace().count();
         let reading_minutes = words.div_ceil(200).max(1);
 
@@ -149,8 +148,9 @@ pub struct Post {
     // Only the `ssr` build gets the post bodies. Under `hydrate` this is an
     // empty slice, which keeps ~26 posts of rendered HTML out of the WASM
     // bundle while letting server-only components still typecheck for wasm32.
-    // Nothing observes the empty table: in islands mode `#[component]` bodies
-    // never run in the browser.
+    // Component bodies re-run in the browser during hydration, so a component
+    // reading this directly finds it empty there. Reach it through a server
+    // function instead.
     out.push_str("#[cfg(not(feature = \"ssr\"))]\npub static POSTS: &[Post] = &[];\n\n");
     out.push_str("#[cfg(feature = \"ssr\")]\npub static POSTS: &[Post] = &[\n");
     for (slug, fm, body_html, reading_minutes) in &posts {
@@ -279,7 +279,7 @@ fn read_rules(path: &Path, raw: &str) -> Vec<Rule> {
 ///
 /// `from` is pre-split into segments here so the runtime matcher only compares
 /// already-parsed literals against the request path. The declaration order in
-/// the file is preserved and load-bearing: the matcher takes the first hit, and
+/// the file is preserved and significant: the matcher takes the first hit, and
 /// the specific `/articles/<date>/<slug>` rules have to beat the generic one.
 fn write_redirects(out_dir: &Path) {
     let path = Path::new("content/redirects.toml");

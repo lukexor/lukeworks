@@ -62,9 +62,9 @@ pub async fn list_posts(kind: PostKind) -> Result<Vec<PostSummary>, ServerFnErro
 
 /// The date portion of an RFC 3339 timestamp.
 ///
-/// Frontmatter dates are whole days with a meaningless time component carried
-/// over from the old JSON, so the string is truncated rather than parsed —
-/// no timezone handling, and nothing to go wrong at runtime.
+/// Frontmatter dates are whole days whose time component means nothing, so the
+/// string is truncated rather than parsed. No timezone handling, and nothing to
+/// go wrong at runtime.
 fn published_date(published: Option<&str>) -> Option<&str> {
     published.map(|value| value.split('T').next().unwrap_or(value))
 }
@@ -75,14 +75,17 @@ pub fn PostList(kind: PostKind) -> impl IntoView {
     let posts = Resource::new(move || kind, list_posts);
 
     view! {
-        <Suspense fallback=|| view! { <p>"Loading…"</p> }>
+        <Suspense fallback=|| {
+            view! { <p>"Loading…"</p> }
+        }>
             {move || Suspend::new(async move {
                 let posts = posts.await.unwrap_or_default();
                 if posts.is_empty() {
-                    // Reached when a listing genuinely has no published posts,
+                    return // Reached when a listing genuinely has no published posts,
                     // and when the server function errors — the reader needs
                     // the same thing either way.
-                    return view! { <p>"Nothing published here yet."</p> }.into_any();
+                    view! { <p>"Nothing published here yet."</p> }
+                        .into_any();
                 }
                 view! {
                     <ul class="flex flex-col gap-4">
@@ -126,7 +129,7 @@ mod tests {
             published_date(Some("2020-01-31T21:19:14Z")),
             Some("2020-01-31")
         );
-        // Already a bare date, as newer frontmatter may be written.
+        // A frontmatter date may be written without a time component.
         assert_eq!(published_date(Some("2020-01-31")), Some("2020-01-31"));
         assert_eq!(published_date(None), None);
     }
