@@ -93,6 +93,52 @@ technologies = [
 ]
 
 [[resume.employment]]
+entity = "Peerless Technologies Corporation"
+icon = "/images/resume/peerless_technologies.jpeg"
+location = "Dayton, OH"
+
+[[resume.employment.positions]]
+title = "Chief Software Engineer"
+start = "2025-02-01"
+bullets = []
+
+[[resume.employment]]
+entity = "Statherós"
+icon = "/images/resume/statheros.webp"
+location = "Crossville, TN"
+
+[[resume.employment.positions]]
+title = "Principal Software Engineer"
+start = "2024-08-15"
+end = "2025-02-01"
+bullets = [
+  """Developed software framework for orchestrating containerized \
+  Electromagnetic Spectrum Operations (EMSO) applications for the \
+  US Air Force using Rust, NATS/ZeroMQ, RKE2.""",
+  """Extended an interoperability & portability specification for \
+  heterogeneous EMSO containerized applications using YAML & Google \
+  Protocol Buffers.""",
+  """Developed a containerized terminal UI (TUI) for processing and \
+  displaying IQ streams from Software Defined Radios""",
+]
+
+[[resume.employment]]
+entity = "LAIKA, Inc"
+icon = "/images/resume/laika.webp"
+location = "Hillsboro, OR"
+
+[[resume.employment.positions]]
+title = "Senior Software Engineer"
+start = "2024-10-01"
+end = "2024-08-15"
+bullets = [
+  """Developed full-stack web applications to manage and accelerate studio \
+  pipeline tasks and assets using React/Typescfript, Python, and Rust.""",
+  """Built generative form building and grid-view protoypes for integration \
+  with business intelligence systems using SolidJS and Python""",
+]
+
+[[resume.employment]]
 entity = "Statherós"
 icon = "/images/resume/statheros.webp"
 location = "Crossville, TN"
@@ -100,6 +146,7 @@ location = "Crossville, TN"
 [[resume.employment.positions]]
 title = "Principal Software Engineer"
 start = "2022-10-17"
+end = "2022-10-01"
 bullets = [
   """Developed software platform for Electromagnetic Spectrum Operations \
   (EMSO) applications using Rust, RabbitMQ/ZeroMQ and Docker.""",
