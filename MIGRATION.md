@@ -21,6 +21,7 @@ git ls-tree -r --name-only d82ff04^ -- web/src
 | 1 — Deps + islands | done (`ddb95f1`) |
 | 2 — Content pipeline | done (`8fad448`) |
 | 3 — Islands conversion | done — theme reworked, toggle island, nav |
+| 4 — Routes and features | partial — redirects + listings done; RSS, search, `/resume`, `/sketch/:name`, `/tetanes-web` outstanding |
 
 ### Islands: tried, measured, abandoned
 
@@ -228,8 +229,26 @@ Register in `FlatRoutes` (currently only `/`, `/about`, `/:post` exist; the page
 | `/rss` | **not** a Leptos route — a plain Axum handler returning `application/rss+xml` |
 | 404 | `NotFound` is written and wired |
 
-**Redirects** — an `axum::middleware` layer translating the 12 rules from `next.config.js`.
-Worth a table-driven test; these are the one thing that breaks silently and costs real traffic.
+**Redirects** — *done*. `content/redirects.toml` is compiled to a static table by `build.rs` and
+served by `redirect_middleware` (`src/server.rs`) ahead of routing; the matcher and its tests live
+in `src/redirects.rs`.
+
+Five of the twelve inherited rules were dropped, because the old site was a single page with
+`#about`/`#blog`/`#projects`/`#contact` anchors and this one has real pages:
+
+- `/about → /#about` and `/projects → /#projects` would have 301'd the new pages away and made
+  them unreachable. Dropped.
+- `/articles → /#blog` retargeted to `/blog`.
+- `/contact → /#contact` dropped; there is no contact page to point at, so `/contact` now 404s.
+  One line in `redirects.toml` retargets it if that turns out to matter.
+- `/articles/category/:category` and `/:section/tag/:tag` dropped — their `/category/*` and
+  `/tag/*` destinations never existed on the Next.js site either, so they 404'd then too.
+
+`/feed → /rss` is kept and currently redirects to a 404; it starts working when RSS lands.
+
+**Listings** — *done*. `/blog` and `/projects` render from the compiled table through the
+`list_posts` server function (`src/components/post_list.rs`), the same pattern as `fetch_post`.
+Markup is deliberately plain pending Phase 5.
 
 **Search** — the upstream islands_router example does exactly this shape: a `<form method="GET">`
 whose input is an island, results fetched by `#[server]` fn over the build-time index and
@@ -280,5 +299,22 @@ and `[package.metadata.leptos]` has no `site-addr`/`env` configured. Release bui
 Phases 0–2 are the critical path and unblock everything else; 3–4 turn it into a working site;
 5 is gated on your review of the mockups; 6 is the long tail and independent of the rest.
 
-There are no tests in the tree. Two places deserve them as they're built: the redirect table
-(silent SEO regressions) and frontmatter parsing (`build.rs` failures are confusing).
+The redirect table now has the table-driven tests it deserved (`src/redirects.rs`). Frontmatter
+parsing still has none — `build.rs` failures there remain confusing.
+
+## Open: is `--split` safe?
+
+`just dev`, `just run` and `just build` all pass `--split`. During Phase 4 a split build threw
+`RuntimeError: function signature mismatch` out of a wasm-bindgen closure shim on every nav click
+and client-side routing failed outright; the same page worked with a plain `cargo leptos watch`.
+
+That test was **confounded** — dev builds were serving `.wasm` with `max-age=30d, immutable` at the
+time (see the cache-control note in `CLAUDE.md`), so the browser may simply have been pairing a
+stale module with fresh glue. The caching bug is fixed; the split retest was never redone because
+browser automation dropped out mid-session. Redo it before trusting `--split`:
+
+1. `cargo leptos watch --split`, load a post, click a nav link.
+2. Client-side nav should change the URL without a full page load, and the console should be clean.
+
+If it still fails, drop `--split` from the `justfile` until Phase 6 actually needs lazy chunks —
+[leptos#4322](https://github.com/leptos-rs/leptos/issues/4322) is the known rough edge.

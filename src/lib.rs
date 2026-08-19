@@ -1,8 +1,10 @@
 pub mod content;
 pub mod lukeworks;
+pub mod redirects;
 pub mod components {
     pub mod button;
     pub mod image;
+    pub mod post_list;
     pub mod theme_toggle;
 }
 pub mod hooks {

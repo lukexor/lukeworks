@@ -1,10 +1,10 @@
 //! Dark/light theme.
 //!
-//! `<body>` is rendered by `shell` and lives outside the reactive tree, so the
+//! `<html>` is rendered by `shell` and lives outside the reactive tree, so the
 //! theme is not driven by a signal. Responsibility is split three ways:
 //!
 //! 1. The **server** resolves the theme from the `prefers-dark` cookie and
-//!    renders it straight into the `<body>` class. No flash, no JS, and it is
+//!    renders it straight into the `<html>` class. No flash, no JS, and it is
 //!    correct on the very first paint for anyone who has toggled before.
 //! 2. A tiny **inline script** covers the one case the server cannot know: a
 //!    visitor with no cookie whose OS prefers light. It runs before first paint.
@@ -12,11 +12,22 @@
 //!    and persists the choice.
 //!
 //! Default is dark, which is why the no-cookie no-JS path needs no fallback.
+//!
+//! The class hangs off `<html>` rather than `<body>` because of hydration:
+//! `hydrate_body` starts its cursor at `<body>`'s first child, so *any* node
+//! rendered ahead of the app root — the no-flash script included — desyncs the
+//! walk and panics with "expected a marker node, but found this instead:
+//! script". Keeping the script in `<head>` means it cannot touch `<body>`,
+//! which does not exist yet when it runs, so the class moved up with it.
 
 /// Cookie used to persist the visitor's colour-scheme preference.
 pub const PREFERS_DARK_COOKIE: &str = "prefers-dark";
 
 /// Runs before first paint to apply the OS preference when no cookie is set.
+///
+/// Lives in `<head>` and therefore targets `document.documentElement` —
+/// `document.body` has not been parsed yet at that point. See the module docs
+/// for why it cannot simply be moved into `<body>`.
 ///
 /// Only ever *removes* `dark`: the server already renders the dark class, and
 /// dark is the default, so light is the only case needing correction. Keeping
@@ -24,8 +35,8 @@ pub const PREFERS_DARK_COOKIE: &str = "prefers-dark";
 pub const NO_FLASH_SCRIPT: &str = "\
 if(!document.cookie.includes('prefers-dark')\
 &&window.matchMedia('(prefers-color-scheme: light)').matches){\
-document.body.classList.remove('dark');\
-document.body.style.colorScheme='light';}";
+document.documentElement.classList.remove('dark');\
+document.documentElement.style.colorScheme='light';}";
 
 /// Resolve the visitor's preference during server rendering.
 ///
@@ -64,11 +75,11 @@ pub fn prefers_dark_from_cookie_header(cookies: &str) -> bool {
         .is_none_or(|(_, value)| value.trim() != "false")
 }
 
-/// Body class carrying the server-resolved theme.
+/// `<html>` class carrying the server-resolved theme.
 ///
 /// Tailwind's dark variant is `&:where(.dark, .dark *)`, driven by this class.
 #[must_use]
-pub const fn body_class(prefers_dark: bool) -> &'static str {
+pub const fn root_class(prefers_dark: bool) -> &'static str {
     if prefers_dark { "dark" } else { "" }
 }
 
@@ -110,8 +121,16 @@ mod tests {
     }
 
     #[test]
-    fn body_class_tracks_preference() {
-        assert_eq!(body_class(true), "dark");
-        assert_eq!(body_class(false), "");
+    fn root_class_tracks_preference() {
+        assert_eq!(root_class(true), "dark");
+        assert_eq!(root_class(false), "");
+    }
+
+    #[test]
+    fn no_flash_script_stays_out_of_the_body() {
+        // The script runs from <head>, where document.body is still null.
+        // Reaching for it there is silently a no-op, so guard the regression.
+        assert!(!NO_FLASH_SCRIPT.contains("document.body"));
+        assert!(NO_FLASH_SCRIPT.contains("document.documentElement"));
     }
 }

@@ -55,6 +55,12 @@ comrak = { version = "0.54", default-features = false, features = [
 ] }
 gray_matter = { version = "0.3", default-features = false, features = ["yaml"] }
 serde = { version = "1", features = ["derive"] }
+# NOTE: `content/redirects.toml` is parsed by hand in build.rs rather than with
+# the `toml` crate. Adding `toml` here pulled `serde_core` into the build-script
+# graph, and cargo reused that host artifact when linking the cdylib, which mold
+# then rejected: "R_X86_64_PC32 relocation ... can not be used; recompile with
+# -fPIC". The redirect file is a fixed shape we own, so a ~30 line reader is
+# cheaper than fighting that.
 
 [dependencies]
 # global dependencies

@@ -1,11 +1,12 @@
-//! Compiles `content/posts/*.md` into a static `POSTS` table.
+//! Compiles `content/posts/*.md` into a static `POSTS` table and
+//! `content/redirects.toml` into a static `REDIRECTS` table.
 //!
 //! Frontmatter is parsed and markdown is rendered to HTML here, at build time,
 //! so the server does no I/O and no markdown parsing at runtime and the binary
 //! is self-contained — there is no `content/` directory to deploy alongside it.
 //!
-//! The generated table is compiled only into the `ssr` build. See the note on
-//! `POSTS` below.
+//! The generated post table is compiled only into the `ssr` build. See the note
+//! on `POSTS` below. `REDIRECTS` is small and is emitted for both targets.
 
 use comrak::{
     Options, markdown_to_html_with_plugins, options::Plugins, plugins::syntect::SyntectAdapter,
@@ -37,7 +38,11 @@ struct Image {
 
 fn main() {
     println!("cargo:rerun-if-changed=content/posts");
+    println!("cargo:rerun-if-changed=content/redirects.toml");
     println!("cargo:rerun-if-changed=build.rs");
+
+    let out_dir = env::var("OUT_DIR").unwrap();
+    write_redirects(Path::new(&out_dir));
 
     let dir = Path::new("content/posts");
     let matter = Matter::<YAML>::new();
@@ -181,7 +186,175 @@ pub struct Post {
     }
     out.push_str("];\n");
 
-    let dest = Path::new(&env::var("OUT_DIR").unwrap()).join("content.rs");
+    let dest = Path::new(&out_dir).join("content.rs");
+    fs::write(&dest, out).unwrap_or_else(|e| panic!("cannot write {}: {e}", dest.display()));
+}
+
+struct Rule {
+    from: String,
+    to: String,
+}
+
+/// Read the `[[redirect]]` tables out of `content/redirects.toml`.
+///
+/// A hand-rolled reader rather than the `toml` crate — see the note in
+/// `[build-dependencies]` for why that dependency had to go. This accepts only
+/// the shape the file actually uses (`[[redirect]]` headers plus `from`/`to`
+/// double-quoted strings) and panics on anything else, so a typo fails the
+/// build instead of silently dropping a rule.
+fn read_rules(path: &Path, raw: &str) -> Vec<Rule> {
+    let mut rules: Vec<Rule> = Vec::new();
+    let mut from: Option<String> = None;
+    let mut to: Option<String> = None;
+
+    // Rules are only pushed when the *next* header (or EOF) is reached, so a
+    // half-written rule is caught rather than silently merged with the next.
+    let mut flush = |from: &mut Option<String>, to: &mut Option<String>, line: usize| match (
+        from.take(),
+        to.take(),
+    ) {
+        (Some(from), Some(to)) => rules.push(Rule { from, to }),
+        (None, None) => {}
+        _ => panic!(
+            "{}:{line}: a [[redirect]] needs both `from` and `to`",
+            path.display()
+        ),
+    };
+
+    for (index, line) in raw.lines().enumerate() {
+        let line_number = index + 1;
+        let line = line.trim();
+        if line.is_empty() || line.starts_with('#') {
+            continue;
+        }
+
+        if line == "[[redirect]]" {
+            flush(&mut from, &mut to, line_number);
+            continue;
+        }
+
+        let Some((key, value)) = line.split_once('=') else {
+            panic!(
+                "{}:{line_number}: expected `key = \"value\"`",
+                path.display()
+            );
+        };
+        let value = value.trim();
+        let value = value
+            .strip_prefix('"')
+            .and_then(|value| value.strip_suffix('"'))
+            .unwrap_or_else(|| {
+                panic!(
+                    "{}:{line_number}: value must be a double-quoted string",
+                    path.display()
+                )
+            });
+
+        let slot = match key.trim() {
+            "from" => &mut from,
+            "to" => &mut to,
+            other => panic!(
+                "{}:{line_number}: unknown key `{other}` (expected `from` or `to`)",
+                path.display()
+            ),
+        };
+        assert!(
+            slot.replace(value.to_owned()).is_none(),
+            "{}:{line_number}: `{}` set twice in one [[redirect]]",
+            path.display(),
+            key.trim()
+        );
+    }
+    flush(&mut from, &mut to, raw.lines().count());
+
+    assert!(
+        !rules.is_empty(),
+        "{}: no [[redirect]] rules found",
+        path.display()
+    );
+    rules
+}
+
+/// Compile `content/redirects.toml` into a `REDIRECTS` table.
+///
+/// `from` is pre-split into segments here so the runtime matcher only compares
+/// already-parsed literals against the request path. The declaration order in
+/// the file is preserved and load-bearing: the matcher takes the first hit, and
+/// the specific `/articles/<date>/<slug>` rules have to beat the generic one.
+fn write_redirects(out_dir: &Path) {
+    let path = Path::new("content/redirects.toml");
+    let raw =
+        fs::read_to_string(path).unwrap_or_else(|e| panic!("cannot read {}: {e}", path.display()));
+    let rules = read_rules(path, &raw);
+
+    let mut out = String::from(
+        r#"// @generated by build.rs from content/redirects.toml — do not edit.
+
+/// One path segment of a `from` pattern.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Segment {
+    /// Matches this exact text.
+    Literal(&'static str),
+    /// Matches any single segment, capturing it under this name.
+    Param(&'static str),
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct Redirect {
+    pub from: &'static [Segment],
+    /// Destination path. A `:name` here is replaced by the captured segment.
+    pub to: &'static str,
+}
+
+pub static REDIRECTS: &[Redirect] = &[
+"#,
+    );
+
+    for rule in &rules {
+        assert!(
+            rule.from.starts_with('/') && rule.to.starts_with('/'),
+            "{}: `{}` -> `{}`: both sides must be absolute paths",
+            path.display(),
+            rule.from,
+            rule.to
+        );
+
+        let segments: Vec<String> = rule
+            .from
+            .trim_matches('/')
+            .split('/')
+            .filter(|s| !s.is_empty())
+            .map(|s| match s.strip_prefix(':') {
+                Some(name) => format!("Segment::Param({})", lit(name)),
+                None => format!("Segment::Literal({})", lit(s)),
+            })
+            .collect();
+
+        // A `:name` in `to` has to have been captured by `from`, or the rule
+        // would emit a Location header with a literal ":name" in it.
+        for want in rule.to.split('/').filter_map(|s| s.strip_prefix(':')) {
+            assert!(
+                rule.from
+                    .split('/')
+                    .any(|s| s.strip_prefix(':') == Some(want)),
+                "{}: `{}` -> `{}`: `:{want}` is not captured by the `from` pattern",
+                path.display(),
+                rule.from,
+                rule.to
+            );
+        }
+
+        writeln!(
+            out,
+            "    Redirect {{ from: &[{}], to: {} }},",
+            segments.join(", "),
+            lit(&rule.to)
+        )
+        .unwrap();
+    }
+    out.push_str("];\n");
+
+    let dest = out_dir.join("redirects.rs");
     fs::write(&dest, out).unwrap_or_else(|e| panic!("cannot write {}: {e}", dest.display()));
 }
 

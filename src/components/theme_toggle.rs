@@ -7,7 +7,7 @@ use wasm_bindgen::JsCast;
 /// Toggles the colour scheme and persists it for a year.
 ///
 /// Deliberately holds no theme state of its own: the authority is the `dark`
-/// class the server rendered onto `<body>`, which this reads on click. `<body>`
+/// class the server rendered onto `<html>`, which this reads on click. `<html>`
 /// lives outside the reactive tree (it is written by `shell`), so driving it
 /// from a signal would mean an effect syncing the two anyway — reading the DOM
 /// keeps it correct regardless of how the initial value was arrived at: cookie,
@@ -15,17 +15,22 @@ use wasm_bindgen::JsCast;
 #[component]
 pub fn ThemeToggle() -> impl IntoView {
     let toggle = move |_| {
-        let Some(body) = document().body() else {
+        // `<html>` rather than `<body>` — see `use_theme`'s module docs.
+        let Some(root) = document().document_element() else {
             return;
         };
-        let prefers_dark = !body.class_list().contains("dark");
+        let prefers_dark = !root.class_list().contains("dark");
 
         let _ = if prefers_dark {
-            body.class_list().add_1("dark")
+            root.class_list().add_1("dark")
         } else {
-            body.class_list().remove_1("dark")
+            root.class_list().remove_1("dark")
         };
-        let _ = body
+        // `document_element` is an `Element`, which has no `style()`; the cast
+        // is infallible for <html> and keeps `color-scheme` on the same node as
+        // the class so the two can never disagree.
+        let root: web_sys::HtmlElement = root.unchecked_into();
+        let _ = root
             .style()
             .set_property("color-scheme", if prefers_dark { "dark" } else { "light" });
 

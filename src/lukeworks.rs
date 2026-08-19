@@ -61,7 +61,13 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
     view! {
         <!DOCTYPE html>
-        <html lang="en">
+        // Theme rides on <html>, not <body>: hydration walks <body>'s children
+        // from the first one, so the app root has to be the only thing in there.
+        <html
+            lang="en"
+            class=use_theme::root_class(prefers_dark)
+            style=format!("color-scheme:{color_scheme}")
+        >
             <head>
                 <meta charset="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -84,14 +90,15 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
                 <Link rel="icon" href="/favicon.ico" />
                 <Link rel="manifest" href="/site.webmanifest" />
+
+                // Corrects the one case the server cannot know: no cookie, and
+                // the OS prefers light. Inline and in <head> so it lands ahead
+                // of first paint without displacing anything inside <body>.
+                <script>{use_theme::NO_FLASH_SCRIPT}</script>
             // The rel="alternate" feed link belongs here, but goes in with the
             // /rss route in Phase 4 rather than advertising a 404 until then.
             </head>
-            <body class=use_theme::body_class(prefers_dark) style=format!("color-scheme:{color_scheme}")>
-                // Corrects the one case the server cannot know: no cookie, and
-                // the OS prefers light. Inline and before the body content so it
-                // lands ahead of first paint.
-                <script>{use_theme::NO_FLASH_SCRIPT}</script>
+            <body>
                 <LukeWorks />
             </body>
         </html>

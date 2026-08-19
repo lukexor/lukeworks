@@ -8,7 +8,7 @@ mod server;
 #[cfg(feature = "ssr")]
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    use crate::server::{cache_control_middleware, cors_middleware};
+    use crate::server::{cache_control_middleware, cors_middleware, redirect_middleware};
     use axum::{Router, extract::DefaultBodyLimit, middleware};
     use leptos::prelude::*;
     use leptos_axum::{LeptosRoutes, generate_route_list};
@@ -29,6 +29,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .fallback(leptos_axum::file_and_error_handler(shell))
         .with_state(leptos_options)
         .layer(middleware::from_fn(cache_control_middleware))
+        // Layers wrap outward, so this runs before routing and short-circuits
+        // old URLs without touching `leptos_routes` or the static-file handler.
+        .layer(middleware::from_fn(redirect_middleware))
         .layer(CompressionLayer::new())
         .layer(cors_middleware())
         .layer(DefaultBodyLimit::max(1024 * 1024 * 1024)) // 1GB

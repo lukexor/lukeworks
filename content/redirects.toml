@@ -2,20 +2,32 @@
 #
 # Source: `git show d82ff04^:web/next.config.js`
 #
-# ORDER IS SIGNIFICANT. Next.js matched these top-to-bottom, and two pairs
-# overlap: the three specific `/articles/<date>/<slug>` rules must be tried
-# before the generic `/articles/:year/:month/:title` rule, or the old TetaNES
-# URLs land on the wrong page. Preserve this ordering when implementing.
+# Compiled into a static table by `build.rs` — see `src/redirects.rs`. Editing
+# this file is enough; there is no second list to keep in sync.
 #
-# `:param` segments match exactly one path segment.
-
-[[redirect]]
-from = "/about"
-to = "/#about"
-
-[[redirect]]
-from = "/articles"
-to = "/#blog"
+# ORDER IS SIGNIFICANT. Rules are tried top-to-bottom and the first match wins,
+# so the three specific `/articles/<date>/<slug>` rules must precede the generic
+# `/articles/:year/:month/:title` rule or the old TetaNES URLs land on the wrong
+# page.
+#
+# `:param` segments match exactly one path segment. A `:name` in `to` is
+# substituted with whatever `from` captured under that name.
+#
+# ## Rules dropped during Phase 4
+#
+# The old site was a single page with `#about`/`#blog`/`#projects`/`#contact`
+# anchors, and four rules pointed at those fragments. This site serves /about,
+# /blog and /projects as real pages, so keeping those rules verbatim would have
+# 301'd the new pages away and made them unreachable:
+#
+#   /about    -> /#about      dropped; /about is a page
+#   /projects -> /#projects   dropped; /projects is a page
+#   /articles -> /#blog       retargeted to /blog, below
+#   /contact  -> /#contact    dropped; there is no contact page to point at
+#
+# Two more were inherited dead weight: `/articles/category/:category` and
+# `/:section/tag/:tag` pointed at `/category/*` and `/tag/*`, which were never
+# implemented on the Next.js site either — they 404'd then and would now.
 
 # Specific article rules — must precede the generic /articles rule below.
 [[redirect]]
@@ -34,28 +46,14 @@ to = "/tetanes"
 from = "/articles/:year/:month/:title"
 to = "/:title"
 
-# NOTE: the next two rules are inherited dead weight. Their destinations
-# (/category/* and /tag/*) were never implemented as pages on the Next.js site
-# either — there are no such entries in routes.json and no matching files under
-# src/pages. Following them produced a 404 then and would now.
-# Decide during Phase 4: implement category/tag listing pages, or drop both rules.
+# Was `/#blog` on the old single-page site.
 [[redirect]]
-from = "/articles/category/:category"
-to = "/category/:category"
+from = "/articles"
+to = "/blog"
 
-# Also unusually greedy: matches /<anything>/tag/<anything>.
-[[redirect]]
-from = "/:section/tag/:tag"
-to = "/tag/:tag"
-
-[[redirect]]
-from = "/contact"
-to = "/#contact"
-
+# NOTE: /rss is not built yet (still Phase 4 work), so this currently redirects
+# to a 404. Kept rather than dropped because the destination is decided and the
+# rule carries real subscriber traffic — it starts working the moment /rss lands.
 [[redirect]]
 from = "/feed"
 to = "/rss"
-
-[[redirect]]
-from = "/projects"
-to = "/#projects"
