@@ -1,4 +1,7 @@
 pub mod content;
+/// RSS feed. Server-only: the response is XML served by an Axum handler.
+#[cfg(feature = "ssr")]
+pub mod feed;
 pub mod lukeworks;
 pub mod redirects;
 pub mod components {

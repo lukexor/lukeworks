@@ -105,8 +105,13 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 // the OS prefers light. Inline and in <head> so it lands ahead
                 // of first paint without displacing anything inside <body>.
                 <script>{use_theme::NO_FLASH_SCRIPT}</script>
-            // The rel="alternate" feed link belongs here. It waits on the /rss
-            // route, since advertising a feed that 404s is worse than none.
+
+                <Link
+                    rel="alternate"
+                    type_="application/rss+xml"
+                    title="Lucas Petherbridge"
+                    href="/rss"
+                />
             </head>
             <body>
                 <LukeWorks />

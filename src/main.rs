@@ -45,6 +45,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     let app = app
+        // Not a Leptos route: the response is XML, so there is no shell to
+        // render. Registered before `leptos_routes` for the same reason the
+        // root assets are, since `/{post}` would otherwise claim it.
+        .route("/rss", axum::routing::get(lukeworks::feed::handler))
         .leptos_routes(&leptos_options, routes, {
             let leptos_options = leptos_options.clone();
             move || shell(leptos_options.clone())
