@@ -3,14 +3,18 @@ pub mod lukeworks;
 pub mod redirects;
 pub mod components {
     pub mod button;
+    pub mod footer;
+    pub mod icons;
     pub mod image;
     pub mod post_list;
+    pub mod social_links;
     pub mod theme_toggle;
 }
 pub mod hooks {
     pub mod use_theme;
 }
 pub mod pages {
+    pub mod about;
     pub mod blog;
     pub mod error;
     pub mod home;

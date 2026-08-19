@@ -1,6 +1,9 @@
 //! Dark/light toggle.
 
-use crate::hooks::use_theme::PREFERS_DARK_COOKIE;
+use crate::{
+    components::icons::{MoonIcon, SunIcon},
+    hooks::use_theme::PREFERS_DARK_COOKIE,
+};
 use leptos::prelude::*;
 use wasm_bindgen::JsCast;
 
@@ -49,15 +52,23 @@ pub fn ThemeToggle() -> impl IntoView {
         <button
             type="button"
             on:click=toggle
-            class="p-2 rounded cursor-pointer"
+            // `p-2` keeps the hit target at 32px square. The icon alone is 16px,
+            // under the 24px minimum, and smaller than the search pill beside it.
+            class="p-2 rounded cursor-pointer text-ink-dim hover:text-accent"
             aria-label="Toggle dark mode"
             title="Toggle dark mode"
         >
-            // Which glyph shows is driven by CSS, not state, so there is no
+            // Which icon shows is driven by CSS, not state, so there is no
             // second copy of the theme to fall out of sync with the class
-            // on <html>.
-            <span class="hidden dark:inline">"☀"</span>
-            <span class="inline dark:hidden">"☾"</span>
+            // on <html>. Drawn rather than set as ☀/☾ text, which the latin
+            // font subsets do not cover and which fell back to whatever glyph
+            // the system happened to have.
+            <span class="hidden dark:inline">
+                <SunIcon />
+            </span>
+            <span class="inline dark:hidden">
+                <MoonIcon />
+            </span>
         </button>
     }
 }

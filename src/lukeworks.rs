@@ -1,7 +1,10 @@
 use crate::{
-    components::theme_toggle::ThemeToggle,
+    components::{footer::Footer, icons::SearchIcon, theme_toggle::ThemeToggle},
     hooks::use_theme,
-    pages::{blog::Blog, home::Home, not_found::NotFound, post::Post, projects::Projects},
+    pages::{
+        about::About, blog::Blog, home::Home, not_found::NotFound, post::Post, projects::Projects,
+        search::Search,
+    },
 };
 use leptos::{either::Either, prelude::*};
 use leptos_meta::{
@@ -20,16 +23,23 @@ pub const ROUTES: AppRoutes = AppRoutes {
     about: "/about",
     blog: "/blog",
     projects: "/projects",
+    search: "/search",
 };
 
 /// Type for application routes.
 #[derive(Debug)]
 #[must_use]
 pub struct AppRoutes {
+    /// Landing page.
     pub home: &'static str,
+    /// Bio and contact details.
     pub about: &'static str,
+    /// Blog listing, grouped by year.
     pub blog: &'static str,
+    /// Project listing.
     pub projects: &'static str,
+    /// Search results, driven by the `q` query parameter.
+    pub search: &'static str,
 }
 
 /// Renders either a HashedStylesheet or Stylesheet based on configured option for `hash_files`.
@@ -118,10 +128,15 @@ pub fn LukeWorks() -> impl IntoView {
         // navigations rather than full page loads.
         <Router>
             <Header />
-            <main>
+            // The container lives here rather than per page so every route
+            // shares one measure and one gutter. A page that wants the full
+            // width (the homepage hero) breaks out with its own negative
+            // margin instead of the container being optional.
+            <main class="py-10 px-6 mx-auto max-w-6xl sm:px-14">
                 <FlatRoutes transition=true fallback=NotFound>
                     <Route path=StaticSegment("") view=Home />
                     <Route path=StaticSegment("/about") view=About />
+                    <Route path=StaticSegment("/search") view=Search />
                     // The three routes below resolve a server function before
                     // they have anything to show. Under the default out-of-order
                     // mode their `Suspense` streams into a trailing <template>
@@ -136,6 +151,7 @@ pub fn LukeWorks() -> impl IntoView {
                     <Route path=ParamSegment("post") view=Post ssr=SsrMode::Async />
                 </FlatRoutes>
             </main>
+            <Footer />
         </Router>
     }
 }
@@ -148,31 +164,38 @@ pub fn Header() -> impl IntoView {
             <a href=format!("mailto:{SUPPORT_EMAIL}")>"bug report"</a>
             "."
         </p>
-        <header class="flex gap-4 justify-between items-center p-4">
-            <A href=ROUTES.home attr:class="font-bold">
-                "LukeWorks"
-            </A>
-            <nav class="flex gap-4 items-center">
-                <A href=ROUTES.blog>"Blog"</A>
-                <A href=ROUTES.projects>"Projects"</A>
-                <A href=ROUTES.about>"About"</A>
-                <ThemeToggle />
-            </nav>
+        <header class="border-b border-rule">
+            <div class="flex gap-6 justify-between items-center py-4 px-6 mx-auto max-w-6xl sm:px-14">
+                <A
+                    href=ROUTES.home
+                    attr:class="font-mono text-[17px] font-bold tracking-tight text-ink no-underline hover:no-underline"
+                >
+                    "luke"
+                    <span class="text-primary">"works"</span>
+                    <span class="text-ink-dim">".tech"</span>
+                </A>
+                <nav class="flex gap-5 items-center font-mono sm:gap-7 text-[13px]">
+                    <A href=ROUTES.blog attr:class="text-ink-dim hover:text-accent">
+                        "blog"
+                    </A>
+                    <A href=ROUTES.projects attr:class="text-ink-dim hover:text-accent">
+                        "projects"
+                    </A>
+                    <A href=ROUTES.about attr:class="text-ink-dim hover:text-accent">
+                        "about"
+                    </A>
+                    // Points at the search page rather than being an input, so
+                    // it works before the `/search` route grows a form.
+                    <A
+                        href=ROUTES.search
+                        attr:class="hidden gap-2 items-center px-3 py-1.5 rounded-sm border text-ink-dim border-rule bg-panel hover:text-accent sm:flex"
+                    >
+                        <SearchIcon />
+                        <span class="text-xs">"search"</span>
+                    </A>
+                    <ThemeToggle />
+                </nav>
+            </div>
         </header>
     }
-}
-
-#[component]
-pub fn About() -> impl IntoView {
-    view! { <div>"About"</div> }
-}
-
-#[component]
-pub fn Contact() -> impl IntoView {
-    view! { <div>"Contact"</div> }
-}
-
-#[component]
-pub fn Footer() -> impl IntoView {
-    view! { <div>"Footer"</div> }
 }

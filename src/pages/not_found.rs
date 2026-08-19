@@ -18,12 +18,14 @@ pub fn NotFound() -> impl IntoView {
 
     view! {
         <Title text="Not Found" />
-        <div class="flex flex-col items-center w-full">
-            <h1 class="my-4 text-3xl">"Page not found."</h1>
-            <p>"The page you were looking for is not available"</p>
-            <p>
-                "Check the URL, file a " <a href=format!("mailto:{SUPPORT_EMAIL}")>bug report</a>
-                ", or " <A href=ROUTES.home>"head back home"</A>"."
+        <div class="py-20 text-center">
+            <p class="mb-4 font-mono text-[13px] text-primary">"$ 404 Segmentation Fault"</p>
+            <h1 class="mb-4 font-mono text-4xl font-bold tracking-tighter">
+                "The page you're looking for is out of bounds."
+            </h1>
+            <p class="text-ink-dim">
+                "Check the URL, file a " <a href=format!("mailto:{SUPPORT_EMAIL}")>"bug report"</a>
+                ", or " <A href=ROUTES.home>"head back home"</A> "."
             </p>
         </div>
     }

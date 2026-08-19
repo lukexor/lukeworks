@@ -56,13 +56,14 @@ fn main() {
     let matter = Matter::<YAML>::new();
 
     // `None` emits CSS classes rather than inline styles, so code blocks can
-    // follow the light/dark theme. The matching stylesheet is generated in the
-    // design phase; until then code blocks render structured but unstyled.
+    // follow the light/dark theme. The rules behind those classes live under
+    // `pre.syntax-highlighting` in style/tailwind.css.
     let adapter = SyntectAdapter::new(None);
     let mut plugins = Plugins::default();
     plugins.render.codefence_syntax_highlighter = Some(&adapter);
 
     let mut options = Options::default();
+    options.extension.alerts = true;
     options.extension.strikethrough = true;
     options.extension.table = true;
     options.extension.autolink = true;
@@ -221,10 +222,14 @@ struct Rule {
 
 /// Reject the two ways a series can be miswritten across files.
 ///
-/// Series membership is a plain string repeated in every post, so a typo does
-/// not fail anything by itself: it quietly produces a second series holding one
-/// post. Comparing names case- and space-insensitively catches that, and
-/// catching duplicate parts keeps the reading order total.
+/// Series membership is a plain string repeated in every post, so a divergent
+/// spelling does not fail anything by itself: it quietly produces a second
+/// series with one post in it. Normalising away case, spaces, dashes and
+/// underscores catches the near misses (`TetaNES` against `tetanes`, `Lost and
+/// Found` against `lost-and-found`). A genuine misspelling of the letters
+/// themselves still slips through, since nothing here can tell it apart from a
+/// second series that really does have one post so far. Rejecting duplicate
+/// parts is the other half, and keeps the reading order total.
 fn check_series(posts: &[(String, FrontMatter, String, usize)]) {
     let key = |name: &str| name.to_lowercase().replace([' ', '-', '_'], "");
 

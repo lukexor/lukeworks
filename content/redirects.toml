@@ -23,7 +23,7 @@
 #   /about    -> /#about      dropped; /about is a page
 #   /projects -> /#projects   dropped; /projects is a page
 #   /articles -> /#blog       retargeted to /blog, below
-#   /contact  -> /#contact    dropped; there is no contact page to point at
+#   /contact  -> /#contact    retargeted below at /about#contact
 #
 # Two more were inherited dead weight: `/articles/category/:category` and
 # `/:section/tag/:tag` pointed at `/category/*` and `/tag/*`, which were never
@@ -50,6 +50,12 @@ to = "/:title"
 [[redirect]]
 from = "/articles"
 to = "/blog"
+
+# Was `/#contact`. Contact is a section of the about page rather than a route
+# of its own, so the fragment survives the move.
+[[redirect]]
+from = "/contact"
+to = "/about#contact"
 
 # NOTE: /rss is not built yet (still Phase 4 work), so this currently redirects
 # to a 404. Kept rather than dropped because the destination is decided and the

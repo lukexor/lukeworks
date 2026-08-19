@@ -155,8 +155,17 @@ mod tests {
         // 404 rather than redirect somewhere equally missing.
         assert_eq!(resolve("/articles/category/programming"), None);
         assert_eq!(resolve("/blog/tag/rust"), None);
-        // The anchor rules that would have shadowed live pages.
-        assert_eq!(resolve("/contact"), None);
+        // `/about` and `/projects` are real pages now, so the anchor rules that
+        // pointed at them would have made them unreachable.
+        assert_eq!(resolve("/about"), None);
+        assert_eq!(resolve("/projects"), None);
+    }
+
+    #[test]
+    fn contact_lands_on_the_about_page_section() {
+        // Contact is a section rather than a route, so the fragment carries the
+        // reader the rest of the way.
+        assert_eq!(resolve("/contact").as_deref(), Some("/about#contact"));
     }
 
     #[test]

@@ -1,43 +1,353 @@
 @import "tailwindcss";
 
+/* Driven by a `dark` class on <html>, written by the server from the
+   `prefers-dark` cookie. See src/hooks/use_theme.rs. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* `@theme inline` is required to reference other css variables */
-@theme {
-  --color-primary: oklch(0.15 0.02 220);
-  --color-primary-dark: oklch(0.1 0.02 220);
-  --color-primary-light: oklch(0.2 0.02 220);
-  --color-secondary: oklch(0.96 0.04 220);
-  --color-secondary-muted: oklch(0.76 0.04 220);
-  --color-highlight: oklch(0.5 0.04 220);
-  --color-border: oklch(0.4 0.04 220);
-  --color-border-muted: oklch(0.3 0.04 220);
-  --color-action-1: oklch(0.76 0.1 220);
-  --color-action-2: oklch(0.76 0.1 40);
-  --color-danger: oklch(0.7 0.05 30);
-  --color-warning: oklch(0.7 0.05 100);
-  --color-success: oklch(0.7 0.05 160);
-  --color-info: oklch(0.7 0.05 260);
+/* Both files are variable fonts covering their family's whole weight axis, so
+   the ranges below have to match what each file actually carries. Google Fonts
+   serves an instance clipped to whatever weights the request names, so fetch
+   these with an explicit `wght@100..800` (mono) or `wght@100..700` (sans)
+   rather than a discrete list, or a `font-light` will silently render at 400. */
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/jetbrains-mono.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/ibm-plex-sans.woff2") format("woff2");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Two colour roles. `primary` carries structure and taxonomy: the logo, shell
+   prompts, category tags, code types. `accent` carries interaction: links,
+   buttons, the caret, active rail and TOC entries.
+
+   Amber sits at hue 42 against the primary's 222, a complement, and both hold
+   lightness 0.78 so the accent reads as a peer of the primary rather than the
+   brightest thing on the page. Every pair below clears 4.5:1 for body text and
+   3:1 for large type against its own background. Measure anything added here. */
+:root {
+  --ui-bg: #f4f7f9;
+  --ui-panel: #ffffff;
+  --ui-rule: #dbe3ea;
+  --ui-ink: #16202b;
+  --ui-ink-dim: #566472;
+  --ui-primary: #0e7490;
+  --ui-accent: #a54a24;
+  --ui-accent-hover: #6d2f14;
+  --ui-on-accent: #ffffff;
+  /* Year rules are 30px bold, so 3:1 is the bar they have to clear. */
+  --ui-numeral: #7d8d9e;
+
+  --code-bg: #eef2f5;
+  --code-ink: #26313d;
+  --code-keyword: #566472;
+  --code-fn: #3f6b1e;
+  --code-type: #0e7490;
+  --code-string: #35632a;
+  --code-number: #96500a;
+  --code-comment: #5c6a79;
+}
+
+.dark {
+  --ui-bg: #080b11;
+  --ui-panel: #0f141d;
+  --ui-rule: #1e2836;
+  --ui-ink: #d7e3ec;
+  --ui-ink-dim: #8496a8;
+  --ui-primary: #6fc3df;
+  --ui-accent: #fd9a73;
+  --ui-accent-hover: #ffc4a8;
+  --ui-on-accent: #1a0d06;
+  --ui-numeral: #5b7186;
+
+  --code-bg: #0b1017;
+  --code-ink: #c3d2de;
+  --code-keyword: #8496a8;
+  --code-fn: #b6d97a;
+  --code-type: #6fc3df;
+  --code-string: #a8d98b;
+  --code-number: #e0a672;
+  --code-comment: #8496a8;
+}
+
+/* `inline` so these resolve to the vars above rather than freezing their
+   values. That indirection lets one class set follow the theme. */
+@theme inline {
+  --color-bg: var(--ui-bg);
+  --color-panel: var(--ui-panel);
+  --color-rule: var(--ui-rule);
+  --color-ink: var(--ui-ink);
+  --color-ink-dim: var(--ui-ink-dim);
+  --color-primary: var(--ui-primary);
+  --color-accent: var(--ui-accent);
+  --color-accent-hover: var(--ui-accent-hover);
+  --color-on-accent: var(--ui-on-accent);
+  --color-numeral: var(--ui-numeral);
+
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 @layer base {
-  /* @font-face { */
-  /*   font-family: "DejaVuSansM Nerd Font Mono"; */
-  /*   src: */
-  /*     local("DejaVuSansM Nerd Font Mono"), */
-  /*     url("/DejaVuSansMNerdFontMono-Regular.ttf") format("truetype"); */
-  /*   font-display: swap; */
-  /* } */
+  html {
+    background-color: var(--ui-bg);
+    color: var(--ui-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
 
   a {
-    @apply text-action-1;
+    color: var(--ui-accent);
+    text-decoration: none;
   }
 
   a:hover {
-    @apply text-action-2 underline;
+    color: var(--ui-accent-hover);
+    text-decoration: underline;
   }
 
   a:focus-visible {
-    @apply underline decoration-double decoration-primary outline-none;
+    outline: 2px solid var(--ui-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
   }
+
+  ::selection {
+    background: var(--ui-accent);
+    color: var(--ui-on-accent);
+  }
+}
+
+/* Post bodies arrive as one `inner_html` blob from comrak, so they carry no
+   classes to hang utilities on and are styled by element instead. There is no
+   npm project at the repo root, so `@tailwindcss/typography` is unavailable. */
+@layer components {
+  .prose {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--ui-ink);
+  }
+
+  .prose > * + * {
+    margin-top: 1.5rem;
+  }
+
+  .prose p,
+  .prose ul,
+  .prose ol,
+  .prose blockquote {
+    max-width: 70ch;
+  }
+
+  .prose h2,
+  .prose h3,
+  .prose h4 {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    margin-top: 2.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose h2 {
+    font-size: 1.625rem;
+  }
+
+  .prose h3 {
+    font-size: 1.3125rem;
+  }
+
+  .prose h4 {
+    font-size: 1.125rem;
+  }
+
+  /* build.rs sets comrak's `header_id_prefix`, so every heading carries an id
+     and can be deep-linked. comrak emits the anchor EMPTY, so it needs generated
+     content to have anything to click. Without the `#` the element has zero
+     width, fading it in reveals nothing, and every heading still leaves a
+     focusable stop in the tab order with the focus ring drawn around it. */
+  .prose :is(h2, h3, h4) > a.anchor::after {
+    content: "#";
+  }
+
+  .prose :is(h2, h3, h4) > a.anchor {
+    opacity: 0;
+    margin-left: 0.4rem;
+    color: var(--ui-ink-dim);
+    text-decoration: none;
+  }
+
+  .prose :is(h2, h3, h4):hover > a.anchor,
+  .prose a.anchor:focus-visible {
+    opacity: 1;
+  }
+
+  .prose ul,
+  .prose ol {
+    padding-left: 1.5rem;
+  }
+
+  .prose ul {
+    list-style: disc;
+  }
+
+  .prose ol {
+    list-style: decimal;
+  }
+
+  .prose li + li {
+    margin-top: 0.4rem;
+  }
+
+  .prose li::marker {
+    color: var(--ui-ink-dim);
+  }
+
+  .prose blockquote {
+    padding: 0.25rem 0 0.25rem 1.25rem;
+    border-left: 3px solid var(--ui-accent);
+    color: var(--ui-ink-dim);
+    font-style: italic;
+  }
+
+  .prose img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--ui-rule);
+  }
+
+  .prose hr {
+    border: 0;
+    border-top: 1px solid var(--ui-rule);
+    margin-block: 2.5rem;
+  }
+
+  .prose strong {
+    font-weight: 600;
+    color: var(--ui-ink);
+  }
+
+  /* Wide tables and code scroll inside their own box so the page body never
+     scrolls sideways. */
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .prose :is(th, td) {
+    padding: 0.5rem 0.85rem;
+    border: 1px solid var(--ui-rule);
+    text-align: left;
+  }
+
+  .prose th {
+    background: var(--ui-panel);
+    font-weight: 600;
+  }
+
+  .prose :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    background: var(--code-bg);
+    border: 1px solid var(--ui-rule);
+  }
+
+  .prose iframe {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--ui-rule);
+    border-radius: 4px;
+  }
+
+  .prose .footnotes {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ui-rule);
+    font-size: 0.9375rem;
+    color: var(--ui-ink-dim);
+  }
+}
+
+/* comrak highlights through syntect with `ClassStyle::Spaced`, which emits
+   TextMate scope names as space-separated classes rather than inline styles.
+   Nothing renders these without the rules below.
+
+   UNLAYERED ON PURPOSE. Those scope names share a namespace with Tailwind's
+   utilities, and several collide outright: `block`, `table`, `inline`,
+   `border`, `static`, `fixed`, `contents`. Rust alone emits `block` 44 times
+   across the current posts, and `.block` sets `display: block`, which breaks
+   every brace onto its own line. Tailwind orders `utilities` after
+   `components`, so a rule inside a layer loses to `.block` no matter how
+   specific it is. Unlayered CSS outranks every layer, which is the only place
+   these rules win from. */
+.prose pre.syntax-highlighting span {
+  /* Neutralises the whole collision class rather than the names that happen to
+     appear today, since a post in another language will emit different scopes.
+     Colour is the only thing a scope span should carry, and the rules below
+     re-apply it. */
+  display: inline;
+  position: static;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-style: inherit;
+  font-weight: inherit;
+  text-decoration: inherit;
+  text-transform: none;
+}
+
+.prose pre.syntax-highlighting {
+  overflow-x: auto;
+  padding: 1.15rem 1.25rem;
+  border-radius: 4px;
+  border: 1px solid var(--ui-rule);
+  background: var(--code-bg);
+  color: var(--code-ink);
+  font-family: var(--font-mono);
+  font-size: 0.84375rem;
+  line-height: 1.72;
+}
+
+.prose pre.syntax-highlighting .comment {
+  color: var(--code-comment);
+  font-style: italic;
+}
+
+.prose pre.syntax-highlighting :is(.keyword, .storage) {
+  color: var(--code-keyword);
+}
+
+.prose pre.syntax-highlighting :is(.string, .char) {
+  color: var(--code-string);
+}
+
+.prose pre.syntax-highlighting .constant {
+  color: var(--code-number);
+}
+
+.prose pre.syntax-highlighting .entity.name.function,
+.prose pre.syntax-highlighting .support.function {
+  color: var(--code-fn);
+}
+
+.prose pre.syntax-highlighting :is(.entity.name.type, .entity.name.trait, .entity.name.struct, .support.type) {
+  color: var(--code-type);
+}
+
+.prose pre.syntax-highlighting .punctuation {
+  color: var(--ui-ink-dim);
 }
