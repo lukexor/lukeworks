@@ -7,7 +7,8 @@ use axum::{
 use std::path::Path;
 use tower_http::cors::{AllowOrigin, CorsLayer};
 
-/// Serve the permanent redirects inherited from the Next.js site.
+/// Send `www` to the apex, then serve the permanent redirects inherited from
+/// the Next.js site.
 ///
 /// Runs ahead of routing so an old URL never reaches `FlatRoutes` — several of
 /// them would otherwise be caught by the bare `/:post` param segment and render
@@ -16,6 +17,33 @@ use tower_http::cors::{AllowOrigin, CorsLayer};
 /// The query string is carried across: these are indexed URLs and campaign or
 /// referral parameters hang off them.
 pub async fn redirect_middleware(request: Request, next: Next) -> Response {
+    // One canonical host, or the site answers on two names and a crawler
+    // indexes it twice. The target is `SITE_HOST`, never the header echoed
+    // back: a client writes its own `Host`, and following it would make every
+    // path here an open redirect.
+    //
+    // HTTP/2 carries `:authority` instead, which hyper puts in the URI.
+    let host = request
+        .headers()
+        .get(header::HOST)
+        .and_then(|host| host.to_str().ok())
+        .or_else(|| request.uri().host());
+    if let Some(host) = host
+        && let Some(apex) = host.split(':').next().unwrap_or(host).strip_prefix("www.")
+        && apex == lukeworks::lukeworks::SITE_HOST
+    {
+        // Always https: `force_https` in fly.toml means a plain http request
+        // never reaches the process.
+        let target = format!(
+            "https://{apex}{}",
+            request
+                .uri()
+                .path_and_query()
+                .map_or("/", |path| path.as_str())
+        );
+        return Redirect::permanent(&target).into_response();
+    }
+
     // `server` is a module of the binary crate; the redirect table lives in the
     // library, hence the crate name rather than `crate::`.
     if let Some(path) = lukeworks::redirects::resolve(request.uri().path()) {
@@ -78,6 +106,7 @@ pub async fn cache_control_middleware(hash_files: bool, request: Request, next: 
             .is_some_and(|name| name.ends_with(".js") && !name.starts_with("__wasm_split"));
 
     let regenerated = request.uri().path().starts_with("/sketch/");
+    let unhashed_bundle = !hash_files && request.uri().path().starts_with("/pkg/");
 
     let mut response = next.run(request).await;
     // Only a successful body is worth caching. Applying the release header to a
@@ -97,6 +126,13 @@ pub async fn cache_control_middleware(hash_files: bool, request: Request, next: 
                 // A hashed name is a new URL for every new body, so nothing
                 // behind this one ever changes.
                 HeaderValue::from_static("public, max-age=2592000, immutable")
+            } else if unhashed_bundle {
+                // A release build without `LEPTOS_HASH_FILES` keeps one name
+                // per build for the bundle, the glue and every chunk, so this
+                // is the branch `just run` lands in. Pinning it pairs a cached
+                // module with fresh glue, which fails to instantiate rather
+                // than merely looking stale.
+                HeaderValue::from_static("public, no-cache")
             } else if regenerated {
                 // The one unhashed thing that is regenerated in place: the
                 // esbuild bundles behind the nine sketches. A day, and
