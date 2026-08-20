@@ -21,12 +21,17 @@ pub fn About() -> impl IntoView {
 
         // The same rail geometry as a post, so the two pages line up.
         <div class="grid gap-12 lg:gap-x-8 lg:grid-cols-[236px_minmax(0,1fr)]">
-            <aside class="lg:block">
-                <div class="flex sticky top-8 flex-col gap-6">
+            <aside>
+                // Below `lg` the rail stops being a rail and the column runs
+                // the full page width. A fixed height there stretched the photo
+                // to a thousand pixels wide and cropped it to a nose. The cap
+                // holds it near its rail size, and the ratio crops the same way
+                // at every width.
+                <div class="flex sticky top-8 flex-col gap-6 lg:max-w-none max-w-64">
                     <img
                         src="/images/about_me.webp"
                         alt="Luke Petherbridge"
-                        class="object-cover w-full h-48 rounded border border-rule"
+                        class="object-cover w-full rounded border aspect-[4/3] border-rule"
                     />
                     // Same-origin but not a Leptos route, so the router has to
                     // be told to let the browser have the click.

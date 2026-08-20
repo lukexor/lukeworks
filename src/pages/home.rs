@@ -25,7 +25,7 @@ pub struct FeaturedProject {
     slug: String,
     title: String,
     description: String,
-    category: Option<String>,
+    technologies: Vec<String>,
     image_src: Option<String>,
     image_alt: Option<String>,
 }
@@ -79,7 +79,7 @@ pub async fn fetch_home() -> Result<HomeView, ServerFnError> {
             slug: post.slug.to_owned(),
             title: post.title.to_owned(),
             description: post.description.to_owned(),
-            category: post.category.map(ToOwned::to_owned),
+            technologies: post.technologies.iter().map(|&it| it.to_owned()).collect(),
             image_src: post.image.map(|image| image.src.to_owned()),
             image_alt: post.image.map(|image| image.alt.to_owned()),
         })
@@ -216,7 +216,9 @@ fn RecentRow(post: RecentPost) -> impl IntoView {
             <span class="font-mono text-xs text-ink-dim">
                 {dotted_date(post.published.as_deref())}
             </span>
-            <span class="text-lg font-medium tracking-tight group-hover:text-accent">
+            // Amber on a touch screen, where there is no hover state to carry
+            // the fact that the whole row is a link.
+            <span class="text-lg font-medium tracking-tight pointer-coarse:text-accent group-hover:text-accent">
                 {post.title}
             </span>
             <span class="font-mono tracking-widest uppercase text-primary text-[11px]">
@@ -288,18 +290,17 @@ fn ProjectCard(project: FeaturedProject) -> impl IntoView {
                 }}
 
                 <div class="flex flex-col flex-grow gap-1.5 py-4 px-5">
-                    {project
-                        .category
-                        .map(|category| {
+                    {(!project.technologies.is_empty())
+                        .then(|| {
                             view! {
                                 <span class="font-mono tracking-widest uppercase text-primary text-[11px]">
-                                    {category}
+                                    {project.technologies.join(" · ")}
                                 </span>
                             }
                         })} // A card holds a third of the grid, and nothing bounds
                     // either field at the source. Clamping both keeps three
                     // cards the same shape whatever lands in them.
-                    <span class="font-medium line-clamp-2 group-hover:text-accent">
+                    <span class="font-medium line-clamp-2 pointer-coarse:text-accent group-hover:text-accent">
                         {project.title}
                     </span>
                     <span class="leading-relaxed line-clamp-3 text-[13px] text-ink-dim">

@@ -67,8 +67,12 @@ pub struct PostSummary {
     pub slug: String,
     /// Post title.
     pub title: String,
+    /// One-line blurb, from the frontmatter or derived from the body.
+    pub description: String,
     /// Lowercase category from the frontmatter.
     pub category: Option<String>,
+    /// What a project was built with. Empty on a blog post.
+    pub technologies: Vec<String>,
     /// RFC 3339 publication timestamp.
     pub published: Option<String>,
     /// Derived at build time from the word count.
@@ -123,7 +127,9 @@ pub async fn list_posts(
         .map(|post| PostSummary {
             slug: post.slug.to_owned(),
             title: post.title.to_owned(),
+            description: post.description.to_owned(),
             category: post.category.map(ToOwned::to_owned),
+            technologies: post.technologies.iter().map(|&it| it.to_owned()).collect(),
             published: post.published.map(ToOwned::to_owned),
             reading_minutes: post.reading_minutes,
             series: post.series.map(ToOwned::to_owned),
@@ -273,7 +279,7 @@ fn ListingBody(listing: Listing, kind: PostKind) -> impl IntoView {
                                 <ul>
                                     {rows
                                         .into_iter()
-                                        .map(|post| view! { <ListingRow post /> })
+                                        .map(|post| view! { <ListingRow post kind /> })
                                         .collect_view()}
                                 </ul>
                             </section>
@@ -285,28 +291,43 @@ fn ListingBody(listing: Listing, kind: PostKind) -> impl IntoView {
     }
 }
 
+/// One row of a listing.
+///
+/// `kind` decides whether the reading time shows. Every project sits at one or
+/// two minutes, so the column says nothing there. A blog post ranges from four
+/// to eighteen, which is worth knowing before clicking.
 #[component]
-fn ListingRow(post: PostSummary) -> impl IntoView {
+fn ListingRow(post: PostSummary, kind: PostKind) -> impl IntoView {
+    let eyebrow = post
+        .category
+        .clone()
+        .unwrap_or_else(|| post.technologies.join(" · "));
+
     view! {
         <li class="border-t border-rule">
             <A
                 href=format!("/{}", post.slug)
-                attr:class="grid gap-x-6 gap-y-1.5 items-baseline py-5 no-underline text-ink sm:grid-cols-[76px_minmax(0,1fr)_auto] hover:no-underline group"
+                attr:class="grid gap-x-6 gap-y-1.5 py-5 no-underline text-ink sm:grid-cols-[76px_minmax(0,1fr)_auto] hover:no-underline group"
             >
-                <span class="font-mono text-xs text-ink-dim">
+                <span class="font-mono text-xs sm:mt-1.5 text-ink-dim">
                     {published_day(post.published.as_deref())}
                 </span>
-                <span>
-                    <span class="block text-lg font-medium tracking-tight group-hover:text-accent">
+                <span class="min-w-0">
+                    // Amber on a touch screen. There is no hover state to lean
+                    // on there, and a title in body colour reads as prose rather
+                    // than as the link the whole row is.
+                    <span class="block text-lg font-medium tracking-tight pointer-coarse:text-accent group-hover:text-accent">
                         {post.title}
                     </span>
-                    <span class="flex flex-wrap gap-3 items-center mt-1.5 font-mono text-[11px]">
-                        {post
-                            .category
-                            .map(|category| {
+                    <span class="block mt-1 max-w-prose text-sm leading-relaxed text-ink-dim">
+                        {post.description}
+                    </span>
+                    <span class="flex flex-wrap gap-3 items-center mt-2 font-mono text-[11px]">
+                        {(!eyebrow.is_empty())
+                            .then(|| {
                                 view! {
                                     <span class="tracking-widest uppercase text-primary">
-                                        {category}
+                                        {eyebrow}
                                     </span>
                                 }
                             })}
@@ -321,9 +342,14 @@ fn ListingRow(post: PostSummary) -> impl IntoView {
                             })}
                     </span>
                 </span>
-                <span class="font-mono text-xs sm:text-right text-ink-dim">
-                    {post.reading_minutes} " min"
-                </span>
+                {(kind == PostKind::Blog)
+                    .then(|| {
+                        view! {
+                            <span class="font-mono text-xs sm:mt-1.5 sm:text-right text-ink-dim">
+                                {post.reading_minutes} " min"
+                            </span>
+                        }
+                    })}
             </A>
         </li>
     }

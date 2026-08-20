@@ -3,6 +3,7 @@ title: "The Matrix Has You"
 kind: project
 description: Falling glyph streams, rendered live.
 featured: true
+technologies: [JavaScript, p5.js, Canvas]
 image:
   src: /images/projects/matrix.webp
   alt: "The Matrix"

@@ -30,6 +30,9 @@ struct FrontMatter {
     /// Lifts a project onto the homepage.
     #[serde(default)]
     featured: bool,
+    /// What a project was built with, for the card eyebrow.
+    #[serde(default)]
+    technologies: Vec<String>,
     category: Option<String>,
     series: Option<String>,
     part: Option<usize>,
@@ -173,6 +176,8 @@ pub struct Post {
     pub description: &'static str,
     /// Set on the projects the homepage leads with.
     pub featured: bool,
+    /// What a project was built with, in the order it should read.
+    pub technologies: &'static [&'static str],
     pub category: Option<&'static str>,
     /// Display name of the series this post belongs to.
     pub series: Option<&'static str>,
@@ -221,6 +226,8 @@ pub struct Post {
         writeln!(out, "        kind: {kind},").unwrap();
         writeln!(out, "        description: {},", lit(description)).unwrap();
         writeln!(out, "        featured: {},", fm.featured).unwrap();
+        let technologies: Vec<_> = fm.technologies.iter().map(|it| lit(it)).collect();
+        writeln!(out, "        technologies: &[{}],", technologies.join(", ")).unwrap();
         writeln!(out, "        category: {},", opt(fm.category.as_deref())).unwrap();
         writeln!(out, "        series: {},", opt(fm.series.as_deref())).unwrap();
         match fm.part {
@@ -293,16 +300,23 @@ fn excerpt(body: &str) -> String {
         let spaced = matches!(second, None | Some(' ' | '\t'));
         let bullet = matches!(first, Some('-' | '*' | '+')) && spaced;
         let heading = first == Some('#') && (spaced || second == Some('#'));
-        let ordered = line
-            .split_once(['.', ')'])
-            .is_some_and(|(n, _)| !n.is_empty() && n.chars().all(|c| c.is_ascii_digit()));
+        // `1. ` opens an ordered list. The marker is the leading run of digits
+        // and nothing else, so a paragraph opening `3.14 is the ratio…` stays
+        // prose rather than being read as list markup and skipped.
+        let digits = line.len() - line.trim_start_matches(|c: char| c.is_ascii_digit()).len();
+        let ordered = digits > 0
+            && matches!(line[digits..].chars().next(), Some('.' | ')'))
+            && matches!(line[digits..].chars().nth(1), None | Some(' ' | '\t'));
 
         // A markdown block element ends at the first blank line, and so does an
         // HTML block. Both are skipped whole.
+        // `[` opens a link-reference definition, `![` a standalone image. Alt
+        // text is a caption, not a blurb, so the image block goes whole.
         let skipped = line.is_empty()
             || bullet
             || heading
             || ordered
+            || line.starts_with("![")
             || line.starts_with(['>', '|', '<', '[']);
         if skipped {
             if !line.is_empty() {
@@ -344,6 +358,9 @@ fn flatten_markdown(text: &str) -> String {
         match c {
             '*' | '_' | '`' => {}
             '\\' => out.extend(chars.next()),
+            // The `!` of an inline image. Dropping it leaves the `[` arm below
+            // to keep the alt text, which is the only prose in an image.
+            '!' if chars.peek() == Some(&'[') => {}
             '[' => {
                 for c in chars.by_ref() {
                     if c == ']' {

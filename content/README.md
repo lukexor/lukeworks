@@ -15,6 +15,7 @@ title: "NES Emulation in Rust: Designs and Frustrations"   # required
 kind: blog                                                 # required: blog | project
 description: A cycle-accurate NES emulator.                # optional, derived if absent
 featured: true                                             # optional, projects, default false
+technologies: [Rust, SDL2, WASM]                           # optional, projects
 category: programming                                      # optional, lowercase
 series: TetaNES                                            # optional, groups posts
 part: 2                                                    # optional, omit on an intro
@@ -50,6 +51,9 @@ Notes:
 - **`featured` lifts a project onto the homepage.** Three are marked. With none
   marked the homepage falls back to the three most recent, so the section is
   never empty. It does nothing on a blog post.
+- **`technologies` is display text**, joined with `·` and shown where a blog
+  post shows its category. It is not a filter and nothing indexes it, so write
+  the names the way they should read: `SDL2`, not `sdl2`.
 - **Series.** `series` is the display name and repeats verbatim in every post
   that belongs to it. `part` orders them. A post carrying a `series` but no
   `part` is the introduction and sorts ahead of part 1. `build.rs` rejects a
@@ -67,8 +71,9 @@ at build time, never from user input.
 
 ## `portfolio.toml`
 
-Site copy: homepage headings, about and contact text, error-page strings.
-Nothing reads it yet.
+Copy for `/tetanes-web` and `/resume`, the two pages still unwritten. Nothing
+reads it: it is source material to transcribe from, and it goes away once both
+pages exist. The rest of the site's copy lives in the Rust that renders it.
 
 ## `redirects.toml`
 

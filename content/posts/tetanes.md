@@ -3,6 +3,7 @@ title: TetaNES
 kind: project
 description: A cycle-accurate NES emulator, playable in the browser.
 featured: true
+technologies: [Rust, SDL2, WASM]
 image:
   src: /images/blog/tetanes.webp
   alt: "TetaNES Logo"

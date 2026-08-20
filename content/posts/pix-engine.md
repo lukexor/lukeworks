@@ -3,6 +3,7 @@ title: PixEngine
 kind: project
 description: A cross-platform graphics and game library.
 featured: true
+technologies: [Rust, SDL2]
 website: https://github.com/lukexor/pix-engine
 published: 2022-05-02T00:00:00Z
 started: 2019-09-29T23:14:15Z
