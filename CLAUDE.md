@@ -74,7 +74,7 @@ Consequences when adding code:
   `src/hooks/use_theme.rs` is the canonical example of branching on both sides.
 - A bare `cargo check` compiles with neither feature and proves very little. Use
   `cargo clippy --all-features` (what CI runs) or check one target explicitly.
-- Release WASM uses the separate `wasm-release` profile (`opt-level = 'z'`, `strip = false`).
+- Release WASM uses the separate `wasm-release` profile (`opt-level = 's'`, `strip = false`).
 
 ## Layout
 
