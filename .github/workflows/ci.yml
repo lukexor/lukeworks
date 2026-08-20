@@ -9,49 +9,59 @@ on:
     branches: [main]
 
 jobs:
-  build-and-test:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
+      # No toolchain is named here: rust-toolchain.toml pins 1.91.1 and the
+      # wasm32 target, and rustup installs both on the first cargo call. Doing
+      # it up front keeps that download out of the middle of a build step.
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
+        run: rustup show
+
+      # .cargo/config.toml links with mold on Linux, so every cargo build fails
+      # without it on PATH.
+      - name: Install mold
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends mold
+
       - name: Set up cache
-        uses: actions/cache@v3
-        continue-on-error: false
-        with:
-          path: |
-            .cargo/bin/
-            .cargo/registry/index/
-            .cargo/registry/cache/
-            .cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install cargo tools
+        run: |
+          curl -fsSLO https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz
+          tar -xf cargo-binstall-x86_64-unknown-linux-musl.tgz -C "$HOME/.cargo/bin"
+          cargo binstall --locked -y just cargo-deny cargo-leptos cargo-nextest
+
       - name: Lint
         run: |
           cargo fmt --all --check
           cargo clippy --all-targets --all-features --keep-going
-      - name: Install cargo tools
-        run: |
-          curl -LO https://github.com/cargo-bins/cargo-binstall/releases/latest/download/cargo-binstall-x86_64-unknown-linux-musl.tgz
-          tar -xvf cargo-binstall-x86_64-unknown-linux-musl.tgz
-          mv cargo-binstall /usr/local/cargo/bin
-          cargo bininstall --locked -y \
-            just \
-            cargo-deny \
-            cargo-leptos \
-            cargo-nextest
+
       - name: Audit
         run: just audit
+
       - name: Test
         run: just test
+
       - name: Build
         run: just build
-      - name: Deploy
-        run: |
-          # TODO
+
+  # Deploys the Dockerfile, which builds the release itself. `check` gates it,
+  # so a red lint or a failing test never reaches the machine.
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      # --remote-only builds on Fly's builder rather than shipping an image
+      # from here, so the runner needs no docker layer cache to be quick.
+      - run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

@@ -301,10 +301,30 @@ correctly before depending on it, and be ready to drop the flag until sketches a
 
 ## Phase 7 — Deploy
 
-`.github/workflows/ci.yml` runs lint → audit → test → build, and its deploy step is a bare
-`# TODO`. Needs deciding: the repo still has a `.dockerignore` from an earlier container setup,
-and `[package.metadata.leptos]` has no `site-addr`/`env` configured. Release builds must set
-`LEPTOS_HASH_FILES=true` — `RootStylesheet` switches on it.
+Target is Fly.io: one `shared-cpu-1x` machine at 512MB, ~$3.30/mo, suspended while idle. The
+alternative considered was a €4 VPS, which is cheaper and hands you TLS renewal and OS patching.
+
+In the tree: `Dockerfile` builds the release and ships the binary, `hash.txt` and `target/site`
+on a slim Debian. `fly.toml` sets the runtime configuration. `ci.yml`'s `deploy` job runs
+`flyctl deploy --remote-only` on a green push to `main`.
+
+Configuration is all environment, because `[package.metadata.leptos]` is a build-time table the
+binary never reads. The four that matter: `LEPTOS_SITE_ROOT=site`, `LEPTOS_SITE_ADDR=0.0.0.0:8080`
+(the default binds 127.0.0.1, which answers nothing from outside a container), `LEPTOS_ENV=PROD`,
+and `LEPTOS_HASH_FILES=true`, which `RootStylesheet` and the hashed-asset cache headers both
+switch on. `hash.txt` sits beside the binary, and the binary resolves both it and the site root
+against the working directory.
+
+Left to do, none of which can be done from here:
+
+1. `fly auth login`, then `fly apps create lukeworks` (or `fly launch --no-deploy`, which will
+   want to overwrite `fly.toml`). Check that `primary_region` names the region you want, since
+   it is set to `sea`.
+2. `fly tokens create deploy -a lukeworks`, saved as the `FLY_API_TOKEN` repository secret.
+3. `fly certs add lukeworks.tech` and the `www` variant, then point DNS. The domain is
+   registered with Vercel, and registration does not have to move: the Domains panel takes
+   custom nameservers, or the A/AAAA records can point at Fly directly. Transferring out needs an
+   auth code from that same panel, and ICANN blocks a transfer within 60 days of registration.
 
 ---
 

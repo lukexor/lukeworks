@@ -1,0 +1,45 @@
+# Fly.io deployment. `flyctl deploy` reads this, builds the Dockerfile beside
+# it, and rolls the machines.
+#
+# The env block is the whole runtime configuration: leptos reads every
+# `LEPTOS_*` variable at startup through `get_configuration(None)`, since
+# `[package.metadata.leptos]` is a build-time table the binary never sees. The
+# Dockerfile sets the same values, so a plain `docker run` behaves the same way;
+# these are here to be visible and overridable without a rebuild.
+
+app = "lukeworks"
+primary_region = "sea"
+
+[build]
+
+[env]
+  LEPTOS_SITE_ROOT = "site"
+  LEPTOS_SITE_ADDR = "0.0.0.0:8080"
+  LEPTOS_ENV = "PROD"
+  LEPTOS_HASH_FILES = "true"
+  RUST_LOG = "info"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # The site is static content out of memory, so a cold machine is back in
+  # milliseconds and an idle one should not be running. `suspend` keeps the
+  # machine's memory image, which starts faster than a stopped one boots.
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    # `main.rs` caps the app at 100 concurrent requests with a
+    # ConcurrencyLimitLayer. Staying under that means Fly queues at the edge,
+    # where a wait is visible, rather than inside tower's semaphore.
+    soft_limit = 50
+    hard_limit = 90
+
+# One shared CPU at 512MB. The server holds every post body in the binary, so
+# memory is roughly the binary plus tokio's stacks and does not grow with
+# traffic.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

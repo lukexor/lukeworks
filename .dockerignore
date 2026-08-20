@@ -1,7 +1,13 @@
-README.md
+# Everything the image build does not read. `target/` matters most: the build
+# happens inside the image, and sending a local one wastes the whole context.
+**/target
+**/dist
+.git
+.github
+.env*
+_*
 deny.toml
 justfile
-**/dist
-**/target
-_*
-.env*
+MIGRATION.md
+
+# README.md stays: `src/main.rs` includes it as the crate's module docs.
