@@ -130,6 +130,19 @@
    classes to hang utilities on and are styled by element instead. There is no
    npm project at the repo root, so `@tailwindcss/typography` is unavailable. */
 @layer components {
+  /* Scrim over the homepage hero image, angled so the type sits on solid
+     background at the left and the picture surfaces at the right. Written here
+     rather than as an arbitrary Tailwind value because the stops reference
+     --ui-bg and have to follow the theme. */
+  .hero-scrim {
+    background-image: linear-gradient(
+      100deg,
+      var(--ui-bg) 22%,
+      color-mix(in srgb, var(--ui-bg) 90%, transparent) 52%,
+      color-mix(in srgb, var(--ui-bg) 62%, transparent) 100%
+    );
+  }
+
   .prose {
     font-size: 1.0625rem;
     line-height: 1.75;

@@ -1,6 +1,8 @@
 ---
 title: "PixEngine - A Cross-Platform Graphics Library"
 kind: project
+description: A cross-platform graphics and game library.
+featured: true
 website: https://github.com/lukexor/pix-engine
 published: 2022-05-02T00:00:00Z
 started: 2019-09-29T23:14:15Z

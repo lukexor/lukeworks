@@ -13,6 +13,8 @@ Adding a post means adding one file — there is no index to update.
 ---
 title: "NES Emulation in Rust: Designs and Frustrations"   # required
 kind: blog                                                 # required: blog | project
+description: A cycle-accurate NES emulator.                # optional, derived if absent
+featured: true                                             # optional, projects, default false
 category: programming                                      # optional, lowercase
 series: TetaNES                                            # optional, groups posts
 part: 2                                                    # optional, omit on an intro
@@ -37,6 +39,17 @@ Notes:
   Full timestamps rather than dates because four pairs of posts share a
   publication date and the time-of-day is what orders them.
 - **Reading time is derived** (~200 wpm) rather than stored.
+- **`description` is the card blurb**, and falls back to the first paragraph of
+  the body, flattened and cut to 165 characters. The fallback skips the block
+  elements a post may open with (a heading, a fenced block, a blockquote, a
+  link-reference definition, raw HTML), so `matrix.md` does not lead with the
+  `<iframe>` that embeds its sketch. Write one by hand where the first paragraph
+  reads badly out of context, or where flattening loses something: an `A*` comes
+  out as `A`, since nothing distinguishes that asterisk from a closing emphasis
+  marker.
+- **`featured` lifts a project onto the homepage.** Three are marked. With none
+  marked the homepage falls back to the three most recent, so the section is
+  never empty. It does nothing on a blog post.
 - **Series.** `series` is the display name and repeats verbatim in every post
   that belongs to it. `part` orders them. A post carrying a `series` but no
   `part` is the introduction and sorts ahead of part 1. `build.rs` rejects a

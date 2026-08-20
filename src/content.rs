@@ -172,6 +172,35 @@ mod tests {
     }
 
     #[test]
+    fn every_post_has_a_blurb_free_of_markup() {
+        // Every post carries an explicit `description:`. The bar here is for
+        // the next one, whether its blurb is written by hand or falls back to
+        // the excerpt build.rs derives from the body.
+        for post in POSTS {
+            assert!(
+                post.description.len() > 20,
+                "{} has no usable description: {:?}",
+                post.slug,
+                post.description
+            );
+            assert!(
+                !post.description.contains(['<', '>', '`', '|', '#']),
+                "{} has markup in its description: {:?}",
+                post.slug,
+                post.description
+            );
+        }
+    }
+
+    #[test]
+    fn the_homepage_has_projects_to_feature() {
+        let featured = published(Kind::Project)
+            .filter(|post| post.featured)
+            .count();
+        assert!(featured >= 3, "only {featured} projects are featured");
+    }
+
+    #[test]
     fn no_post_hotlinks_production() {
         // These images and sketch routes are served locally; absolute URLs to
         // the live site would bypass them and break offline/dev rendering.

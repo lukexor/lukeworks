@@ -1,6 +1,8 @@
 ---
 title: "The Matrix Has You"
 kind: project
+description: Falling glyph streams, rendered live.
+featured: true
 image:
   src: /images/projects/matrix.webp
   alt: "The Matrix"

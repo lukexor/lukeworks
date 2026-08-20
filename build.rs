@@ -25,6 +25,11 @@ use std::{
 struct FrontMatter {
     title: String,
     kind: String,
+    /// One-line blurb for a card. Falls back to [`excerpt`] over the body.
+    description: Option<String>,
+    /// Lifts a project onto the homepage.
+    #[serde(default)]
+    featured: bool,
     category: Option<String>,
     series: Option<String>,
     part: Option<usize>,
@@ -42,6 +47,15 @@ struct FrontMatter {
 struct Image {
     src: String,
     alt: Option<String>,
+}
+
+/// One parsed post, between reading the file and generating the table.
+struct Parsed {
+    slug: String,
+    front: FrontMatter,
+    body_html: String,
+    description: String,
+    reading_minutes: usize,
 }
 
 fn main() {
@@ -108,8 +122,18 @@ fn main() {
         // ~200 wpm, the usual reading-speed approximation.
         let words = parsed.content.split_whitespace().count();
         let reading_minutes = words.div_ceil(200).max(1);
+        let description = fm
+            .description
+            .clone()
+            .unwrap_or_else(|| excerpt(&parsed.content));
 
-        posts.push((slug, fm, body_html, reading_minutes));
+        posts.push(Parsed {
+            slug,
+            front: fm,
+            body_html,
+            description,
+            reading_minutes,
+        });
     }
 
     check_series(&posts);
@@ -117,10 +141,11 @@ fn main() {
     // Newest first. Sorting here means the runtime never parses a date to order
     // a listing. Undated drafts sort last.
     posts.sort_by(|a, b| {
-        b.1.published
+        b.front
+            .published
             .as_deref()
             .unwrap_or("")
-            .cmp(a.1.published.as_deref().unwrap_or(""))
+            .cmp(a.front.published.as_deref().unwrap_or(""))
     });
 
     let mut out = String::new();
@@ -144,6 +169,10 @@ pub struct Post {
     pub slug: &'static str,
     pub title: &'static str,
     pub kind: Kind,
+    /// One-line blurb, from the frontmatter or derived from the body.
+    pub description: &'static str,
+    /// Set on the projects the homepage leads with.
+    pub featured: bool,
     pub category: Option<&'static str>,
     /// Display name of the series this post belongs to.
     pub series: Option<&'static str>,
@@ -173,7 +202,14 @@ pub struct Post {
     // function instead.
     out.push_str("#[cfg(not(feature = \"ssr\"))]\npub static POSTS: &[Post] = &[];\n\n");
     out.push_str("#[cfg(feature = \"ssr\")]\npub static POSTS: &[Post] = &[\n");
-    for (slug, fm, body_html, reading_minutes) in &posts {
+    for Parsed {
+        slug,
+        front: fm,
+        body_html,
+        description,
+        reading_minutes,
+    } in &posts
+    {
         let kind = if fm.kind == "blog" {
             "Kind::Blog"
         } else {
@@ -183,6 +219,8 @@ pub struct Post {
         writeln!(out, "        slug: {},", lit(slug)).unwrap();
         writeln!(out, "        title: {},", lit(&fm.title)).unwrap();
         writeln!(out, "        kind: {kind},").unwrap();
+        writeln!(out, "        description: {},", lit(description)).unwrap();
+        writeln!(out, "        featured: {},", fm.featured).unwrap();
         writeln!(out, "        category: {},", opt(fm.category.as_deref())).unwrap();
         writeln!(out, "        series: {},", opt(fm.series.as_deref())).unwrap();
         match fm.part {
@@ -215,6 +253,137 @@ pub struct Post {
     fs::write(&dest, out).unwrap_or_else(|e| panic!("cannot write {}: {e}", dest.display()));
 }
 
+/// Longest excerpt [`excerpt`] will return, in characters.
+const EXCERPT_CHARS: usize = 165;
+
+/// Derive a one-line blurb from the body of a post.
+///
+/// The fallback for a post with no `description:` in its frontmatter, so all 26
+/// existing posts get a card blurb without being edited. Takes the first
+/// paragraph of prose and flattens the inline markdown in it.
+///
+/// Skipping matters more than the flattening does. A body may open with a
+/// heading, a fenced code block, a blockquote, a link-reference definition, or
+/// raw HTML: `matrix.md` starts with the `<iframe>` that embeds its sketch, and
+/// lifting that as the blurb would put markup on the homepage.
+fn excerpt(body: &str) -> String {
+    let mut paragraph = String::new();
+    let mut lines = body.lines();
+
+    while let Some(line) = lines.next() {
+        let line = line.trim();
+
+        if line.starts_with("```") || line.starts_with("~~~") {
+            let fence = &line[..3];
+            for line in lines.by_ref() {
+                if line.trim_start().starts_with(fence) {
+                    break;
+                }
+            }
+            continue;
+        }
+
+        // A bullet or heading marker only counts as one when whitespace follows
+        // it. `**Haskelltaire** is a…` opens a paragraph, not a list, and
+        // treating that lone `*` as a bullet skipped every body that leads with
+        // a bold word.
+        let mut chars = line.chars();
+        let first = chars.next();
+        let second = chars.next();
+        let spaced = matches!(second, None | Some(' ' | '\t'));
+        let bullet = matches!(first, Some('-' | '*' | '+')) && spaced;
+        let heading = first == Some('#') && (spaced || second == Some('#'));
+        let ordered = line
+            .split_once(['.', ')'])
+            .is_some_and(|(n, _)| !n.is_empty() && n.chars().all(|c| c.is_ascii_digit()));
+
+        // A markdown block element ends at the first blank line, and so does an
+        // HTML block. Both are skipped whole.
+        let skipped = line.is_empty()
+            || bullet
+            || heading
+            || ordered
+            || line.starts_with(['>', '|', '<', '[']);
+        if skipped {
+            if !line.is_empty() {
+                for line in lines.by_ref() {
+                    if line.trim().is_empty() {
+                        break;
+                    }
+                }
+            }
+            continue;
+        }
+
+        // The first line of real prose. A paragraph runs to the next blank.
+        paragraph.push_str(line);
+        for line in lines.by_ref() {
+            let line = line.trim();
+            if line.is_empty() {
+                break;
+            }
+            paragraph.push(' ');
+            paragraph.push_str(line);
+        }
+        break;
+    }
+
+    truncate(&flatten_markdown(&paragraph), EXCERPT_CHARS)
+}
+
+/// Reduce the inline markdown in one paragraph to its text.
+///
+/// Handles what post bodies actually use: emphasis, inline code, and both link
+/// forms, including the `[text][ref]` shortcut whose target sits at the bottom
+/// of the file. Anything else is left as written rather than guessed at.
+fn flatten_markdown(text: &str) -> String {
+    let mut out = String::with_capacity(text.len());
+    let mut chars = text.chars().peekable();
+
+    while let Some(c) = chars.next() {
+        match c {
+            '*' | '_' | '`' => {}
+            '\\' => out.extend(chars.next()),
+            '[' => {
+                for c in chars.by_ref() {
+                    if c == ']' {
+                        break;
+                    }
+                    out.push(c);
+                }
+                // The target that follows, in either bracket style.
+                let closer = match chars.peek() {
+                    Some('(') => Some(')'),
+                    Some('[') => Some(']'),
+                    _ => None,
+                };
+                if let Some(closer) = closer {
+                    chars.next();
+                    for c in chars.by_ref() {
+                        if c == closer {
+                            break;
+                        }
+                    }
+                }
+            }
+            _ => out.push(c),
+        }
+    }
+
+    out.split_whitespace().collect::<Vec<_>>().join(" ")
+}
+
+/// Cut to `limit` characters on a word boundary, adding an ellipsis.
+fn truncate(text: &str, limit: usize) -> String {
+    if text.chars().count() <= limit {
+        return text.to_owned();
+    }
+
+    let head: String = text.chars().take(limit).collect();
+    let cut = head.rfind(' ').unwrap_or(head.len());
+    format!("{}…", head[..cut].trim_end_matches([',', ';', ':', '.']))
+}
+
 struct Rule {
     from: String,
     to: String,
@@ -230,13 +399,16 @@ struct Rule {
 /// themselves still slips through, since nothing here can tell it apart from a
 /// second series that really does have one post so far. Rejecting duplicate
 /// parts is the other half, and keeps the reading order total.
-fn check_series(posts: &[(String, FrontMatter, String, usize)]) {
+fn check_series(posts: &[Parsed]) {
     let key = |name: &str| name.to_lowercase().replace([' ', '-', '_'], "");
 
     let mut canonical: BTreeMap<String, (&str, &str)> = BTreeMap::new();
     let mut parts: BTreeMap<(String, usize), &str> = BTreeMap::new();
 
-    for (slug, fm, _, _) in posts {
+    for Parsed {
+        slug, front: fm, ..
+    } in posts
+    {
         let Some(series) = fm.series.as_deref() else {
             continue;
         };

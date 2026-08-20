@@ -1,6 +1,8 @@
 ---
 title: "TetaNES - An NES Emulator written in Rust"
 kind: project
+description: A cycle-accurate NES emulator, playable in the browser.
+featured: true
 image:
   src: /images/blog/tetanes.webp
   alt: "TetaNES Logo"

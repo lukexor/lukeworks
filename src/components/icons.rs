@@ -175,3 +175,20 @@ pub fn BackArrowIcon(#[prop(into, default = "size-[15px]".into())] class: String
         </svg>
     }
 }
+
+/// Arrow into a tray, for the resume download.
+#[component]
+pub fn DownloadIcon(#[prop(into, default = "size-[13px]".into())] class: String) -> impl IntoView {
+    view! {
+        <svg
+            class=class
+            viewBox="0 0 24 24"
+            fill=FILL
+            stroke="currentColor"
+            stroke-width="1.9"
+            aria-hidden="true"
+        >
+            <path d="M12 3v12M7 11l5 5 5-5M4 20h16" />
+        </svg>
+    }
+}
