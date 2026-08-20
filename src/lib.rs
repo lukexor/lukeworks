@@ -1,3 +1,4 @@
+pub mod backdrop;
 pub mod content;
 /// RSS feed. Server-only: the response is XML served by an Axum handler.
 #[cfg(feature = "ssr")]

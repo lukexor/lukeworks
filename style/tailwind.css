@@ -130,17 +130,58 @@
    classes to hang utilities on and are styled by element instead. There is no
    npm project at the repo root, so `@tailwindcss/typography` is unavailable. */
 @layer components {
-  /* Scrim over the homepage hero image, angled so the type sits on solid
-     background at the left and the picture surfaces at the right. Written here
-     rather than as an arbitrary Tailwind value because the stops reference
-     --ui-bg and have to follow the theme. */
+  /* Scrim over the homepage hero's code backdrop. Written here rather than as
+     an arbitrary Tailwind value because the stops reference --ui-bg and have to
+     follow the theme.
+
+     A phone hero has no right-hand margin to give the backdrop: the type spans
+     the whole band, so an angled scrim leaves code running through the words.
+     The veil is vertical instead, and thin — the type holds up over bare code,
+     so this only has to take the edge off the middle band it sits in. It fades
+     out top and bottom, where the backdrop is the only thing to look at. */
   .hero-scrim {
     background-image: linear-gradient(
-      100deg,
-      var(--ui-bg) 22%,
-      color-mix(in srgb, var(--ui-bg) 90%, transparent) 52%,
-      color-mix(in srgb, var(--ui-bg) 62%, transparent) 100%
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--ui-bg) 85%, transparent) 15%,
+      color-mix(in srgb, var(--ui-bg) 85%, transparent) 85%,
+      transparent 100%
     );
+  }
+
+  /* Light code sits at lower contrast against its page than dark code does, so
+     it needs a thinner veil to stay visible under the same type. */
+  :root:not(.dark) .hero-scrim {
+    background-image: linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--ui-bg) 60%, transparent) 15%,
+      color-mix(in srgb, var(--ui-bg) 60%, transparent) 85%,
+      transparent 100%
+    );
+  }
+
+  /* From `sm` the band is wide enough to split: type on solid background at the
+     left, code surfacing to the right. */
+  @media (width >= 40rem) {
+    .hero-scrim {
+      background-image: linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--ui-bg) 90%, transparent) 52%,
+        color-mix(in srgb, var(--ui-bg) 62%, transparent) 100%
+      );
+    }
+
+    /* Dark code glows against its background; light code only darkens one, so
+       the veil that flatters the dark hero washes the light one out. Light gets
+       a shorter, thinner one. */
+    :root:not(.dark) .hero-scrim {
+      background-image: linear-gradient(
+        100deg,
+        color-mix(in srgb, var(--ui-bg) 62%, transparent) 46%,
+        color-mix(in srgb, var(--ui-bg) 30%, transparent) 100%
+      );
+    }
   }
 
   .prose {
@@ -306,8 +347,11 @@
    every brace onto its own line. Tailwind orders `utilities` after
    `components`, so a rule inside a layer loses to `.block` no matter how
    specific it is. Unlayered CSS outranks every layer, which is the only place
-   these rules win from. */
-.prose pre.syntax-highlighting span {
+   these rules win from.
+
+   Unscoped rather than sitting under `.prose`, because the homepage hero
+   backdrop is the same highlighted markup outside a post body. */
+pre.syntax-highlighting span {
   /* Neutralises the whole collision class rather than the names that happen to
      appear today, since a post in another language will emit different scopes.
      Colour is the only thing a scope span should carry, and the rules below
@@ -323,7 +367,7 @@
   text-transform: none;
 }
 
-.prose pre.syntax-highlighting {
+pre.syntax-highlighting {
   overflow-x: auto;
   padding: 1.15rem 1.25rem;
   border-radius: 4px;
@@ -335,32 +379,76 @@
   line-height: 1.72;
 }
 
-.prose pre.syntax-highlighting .comment {
+pre.syntax-highlighting .comment {
   color: var(--code-comment);
   font-style: italic;
 }
 
-.prose pre.syntax-highlighting :is(.keyword, .storage) {
+pre.syntax-highlighting :is(.keyword, .storage) {
   color: var(--code-keyword);
 }
 
-.prose pre.syntax-highlighting :is(.string, .char) {
+pre.syntax-highlighting :is(.string, .char) {
   color: var(--code-string);
 }
 
-.prose pre.syntax-highlighting .constant {
+pre.syntax-highlighting .constant {
   color: var(--code-number);
 }
 
-.prose pre.syntax-highlighting .entity.name.function,
-.prose pre.syntax-highlighting .support.function {
+pre.syntax-highlighting .entity.name.function,
+pre.syntax-highlighting .support.function {
   color: var(--code-fn);
 }
 
-.prose pre.syntax-highlighting :is(.entity.name.type, .entity.name.trait, .entity.name.struct, .support.type) {
+pre.syntax-highlighting :is(.entity.name.type, .entity.name.trait, .entity.name.struct, .support.type) {
   color: var(--code-type);
 }
 
-.prose pre.syntax-highlighting .punctuation {
+pre.syntax-highlighting .punctuation {
   color: var(--ui-ink-dim);
+}
+
+/* The homepage hero's backdrop: the same highlighted markup, stripped of the
+   frame a code block wears and clipped to the band. Unlayered for the same
+   reason as the rules above: it has to outrank the utilities on the element. */
+.code-backdrop {
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* The light code palette leans on greys that were picked to sit on the code
+   block's own panel. Blurred across the page background they turn to a brown
+   smudge, so the backdrop carries its own cooler, lighter set: enough contrast
+   to read as code, cool enough to read as clean. Dark needs none of this — that
+   palette already glows against near-black. */
+:root:not(.dark) .code-backdrop {
+  --ui-ink-dim: #9db0c0;
+  --code-ink: #7d93a8;
+  --code-keyword: #93a7ba;
+  --code-comment: #a3b3c2;
+  --code-fn: #6f9f45;
+  --code-type: #4b9cb6;
+  --code-string: #5f9755;
+  --code-number: #c08744;
+}
+
+/* Source lines run out around 80 characters, so one column leaves the right
+   half of a wide hero empty. Columns flow the same lines back across the full
+   width. `auto` fills each to the band's height in turn rather than balancing
+   them, so the last column ends flush instead of ragged. */
+.code-backdrop pre.syntax-highlighting {
+  overflow: hidden;
+  height: 100%;
+  columns: 24rem;
+  column-gap: 2.5rem;
+  column-fill: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 0.6875rem;
+  line-height: 1.55;
 }

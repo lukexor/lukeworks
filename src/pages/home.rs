@@ -135,16 +135,16 @@ fn Hero() -> impl IntoView {
         // container edges to read as a band, so it cancels that padding and puts
         // its own back on the inside.
         <section class="overflow-hidden relative -mx-6 mb-16 -mt-10 border-b sm:-mx-14 border-rule">
-            // Decorative, and low priority so it does not compete with the
-            // fonts and the stylesheet. It carries a 7px blur at a quarter
-            // opacity, which is why a 1200px source is enough.
-            <img
-                src="/images/code-bg.webp"
-                alt=""
+            // The site's own source, highlighted at build time by `build.rs`.
+            // Decorative: a 2px blur, which softens the glyphs without turning
+            // them to smear, and the scrim below does the dimming. Markup
+            // rather than an image, so it arrives with the document, scales at
+            // any width, and follows the theme through the syntect classes.
+            <div
                 aria-hidden="true"
-                fetchpriority="low"
-                class="object-cover absolute inset-0 w-full h-full opacity-25 scale-110 dark:opacity-40 blur-[7px] saturate-50"
-            />
+                class="absolute inset-0 blur-[2px] code-backdrop"
+                inner_html=crate::backdrop::CODE_BACKDROP
+            ></div>
             <div class="absolute inset-0 hero-scrim"></div>
 
             <div class="relative py-20 px-6 sm:py-24 sm:px-14">
