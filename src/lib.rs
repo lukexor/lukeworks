@@ -4,6 +4,9 @@ pub mod content;
 pub mod feed;
 pub mod lukeworks;
 pub mod redirects;
+/// The p5.js sketches. Server-only: a bare document served by an Axum handler.
+#[cfg(feature = "ssr")]
+pub mod sketch;
 pub mod components {
     pub mod button;
     pub mod footer;

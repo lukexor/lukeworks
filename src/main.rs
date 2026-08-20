@@ -49,6 +49,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         // render. Registered before `leptos_routes` for the same reason the
         // root assets are, since `/{post}` would otherwise claim it.
         .route("/rss", axum::routing::get(lukeworks::feed::handler))
+        // Likewise not a Leptos route: a bare document for an <iframe>, with no
+        // app around it to hydrate.
+        .route(
+            "/sketch/{name}",
+            axum::routing::get(lukeworks::sketch::handler),
+        )
         .leptos_routes(&leptos_options, routes, {
             let leptos_options = leptos_options.clone();
             move || shell(leptos_options.clone())

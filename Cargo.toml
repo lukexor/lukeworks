@@ -152,6 +152,10 @@ site-root = "target/site"
 style-file = "style/main.css"
 tailwind-input-file = "style/tailwind.css"
 assets-dir = "public"
+# `cargo leptos watch` watches src, style and assets-dir, and posts live outside
+# all three. build.rs declares `rerun-if-changed=content/posts`, so a plain
+# `cargo build` picks up an edited post. Only the watcher needs telling.
+watch-additional-files = ["content", "build.rs"]
 bin-features = ["ssr"]
 lib-features = ["hydrate"]
 lib-profile-release = "wasm-release"

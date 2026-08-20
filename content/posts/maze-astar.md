@@ -18,7 +18,7 @@ updated: 2020-02-01T19:57:57Z
   src="/sketch/maze-astar"
   width="100%"
   frameborder="0"
-  height="500px"
+  height="520px"
   scrolling="no"
 ></iframe>
 
