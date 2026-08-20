@@ -222,7 +222,11 @@ pub fn Header() -> impl IntoView {
                         <SearchIcon />
                         <span class="text-xs">"search"</span>
                     </A>
-                    <ThemeToggle />
+                    // Narrow screens get it in the footer instead, where the
+                    // row has space the header's four nav links do not.
+                    <span class="hidden sm:inline">
+                        <ThemeToggle />
+                    </span>
                 </nav>
             </div>
         </header>

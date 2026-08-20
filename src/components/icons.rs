@@ -103,7 +103,7 @@ pub fn SearchIcon(#[prop(into, default = "size-[13px]".into())] class: String) -
 
 /// Sun, shown by the theme toggle while the dark theme is active.
 #[component]
-pub fn SunIcon(#[prop(into, default = "size-4".into())] class: String) -> impl IntoView {
+pub fn SunIcon(#[prop(into, default = "size-[18px]".into())] class: String) -> impl IntoView {
     view! {
         <svg
             class=class
@@ -121,7 +121,7 @@ pub fn SunIcon(#[prop(into, default = "size-4".into())] class: String) -> impl I
 
 /// Moon, shown by the theme toggle while the light theme is active.
 #[component]
-pub fn MoonIcon(#[prop(into, default = "size-4".into())] class: String) -> impl IntoView {
+pub fn MoonIcon(#[prop(into, default = "size-[18px]".into())] class: String) -> impl IntoView {
     view! {
         <svg
             class=class

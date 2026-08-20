@@ -28,8 +28,12 @@ pub const RSS_URL: &str = "/rss";
 pub const EXTERNAL_REL: &str = "external";
 
 /// Icon-only row, for the footer.
+///
+/// Each icon is padded to a 34px hit target, the same box the theme toggle it
+/// sits beside uses. The gap is small to match, since the padding supplies most
+/// of the space between one icon and the next.
 #[component]
-pub fn SocialLinks(#[prop(into, default = "gap-5".into())] class: String) -> impl IntoView {
+pub fn SocialLinks(#[prop(into, default = "gap-1".into())] class: String) -> impl IntoView {
     view! {
         <ul class=format!("flex items-center {class}")>
             <li>
@@ -37,7 +41,7 @@ pub fn SocialLinks(#[prop(into, default = "gap-5".into())] class: String) -> imp
                     href=GITHUB_URL
                     rel="me noopener"
                     title="GitHub"
-                    class="block text-ink-dim hover:text-accent"
+                    class="block p-2 text-ink-dim hover:text-accent"
                 >
                     <GithubIcon />
                     <span class="sr-only">GitHub</span>
@@ -48,7 +52,7 @@ pub fn SocialLinks(#[prop(into, default = "gap-5".into())] class: String) -> imp
                     href=LINKEDIN_URL
                     rel="me noopener"
                     title="LinkedIn"
-                    class="block text-ink-dim hover:text-accent"
+                    class="block p-2 text-ink-dim hover:text-accent"
                 >
                     <LinkedInIcon />
                     <span class="sr-only">LinkedIn</span>
@@ -59,7 +63,7 @@ pub fn SocialLinks(#[prop(into, default = "gap-5".into())] class: String) -> imp
                     href=RSS_URL
                     rel=EXTERNAL_REL
                     title="RSS feed"
-                    class="block text-ink-dim hover:text-accent"
+                    class="block p-2 text-ink-dim hover:text-accent"
                 >
                     <RssIcon />
                     <span class="sr-only">"RSS feed"</span>
@@ -69,7 +73,7 @@ pub fn SocialLinks(#[prop(into, default = "gap-5".into())] class: String) -> imp
                 <a
                     href=format!("mailto:{SUPPORT_EMAIL}")
                     title="Email"
-                    class="block text-ink-dim hover:text-accent"
+                    class="block p-2 text-ink-dim hover:text-accent"
                 >
                     <MailIcon />
                     <span class="sr-only">Email</span>

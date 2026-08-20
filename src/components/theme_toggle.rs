@@ -52,8 +52,8 @@ pub fn ThemeToggle() -> impl IntoView {
         <button
             type="button"
             on:click=toggle
-            // `p-2` keeps the hit target at 32px square. The icon alone is 16px,
-            // under the 24px minimum, and smaller than the search pill beside it.
+            // `p-2` around an 18px icon keeps the hit target at 34px square,
+            // the same box the footer's social icons carry.
             class="p-2 rounded cursor-pointer text-ink-dim hover:text-accent"
             aria-label="Toggle dark mode"
             title="Toggle dark mode"

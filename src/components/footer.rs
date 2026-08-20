@@ -1,6 +1,6 @@
 //! Site footer.
 
-use crate::components::social_links::SocialLinks;
+use crate::components::{social_links::SocialLinks, theme_toggle::ThemeToggle};
 use chrono::{Datelike, Utc};
 use leptos::prelude::*;
 
@@ -18,7 +18,16 @@ pub fn Footer() -> impl IntoView {
                 <span class="font-mono text-xs text-ink-dim">
                     "© " {year} " Luke Petherbridge · All Rights Reserved"
                 </span>
-                <SocialLinks />
+                // `sm:-mr-2` cancels the last icon's padding, so the row ends on
+                // the gutter the rest of the page ends on.
+                <div class="flex gap-1 items-center sm:-mr-2">
+                    <SocialLinks />
+                    // The toggle sits in the header from `sm` up, where there is
+                    // room for it beside the nav links. Below that it lives here.
+                    <span class="sm:hidden">
+                        <ThemeToggle />
+                    </span>
+                </div>
             </div>
         </footer>
     }
