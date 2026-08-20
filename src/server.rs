@@ -33,7 +33,14 @@ pub async fn redirect_middleware(request: Request, next: Next) -> Response {
     next.run(request).await
 }
 
-pub async fn cache_control_middleware(request: Request, next: Next) -> Response {
+/// Sets `cache-control` on the static assets, by how bustable their URL is.
+///
+/// `hash_files` is `LeptosOptions::hash_files`, and it decides whether a
+/// `/pkg/` name is safe to pin. Without it the bundle, the split glue and every
+/// chunk keep one name across builds, so `immutable` pins a browser to the
+/// build it first saw for a month. A main bundle paired with the wrong split
+/// glue then fails to instantiate rather than merely looking stale.
+pub async fn cache_control_middleware(hash_files: bool, request: Request, next: Next) -> Response {
     let should_cache = Path::new(request.uri().path())
         .extension()
         .and_then(|ext| ext.to_str())
@@ -51,11 +58,24 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
         })
         .unwrap_or(false);
 
-    // Only `/pkg/` filenames carry a content hash, written by cargo-leptos under
-    // `LEPTOS_HASH_FILES`. Everything else (the images, the fonts, the sketch
-    // bundles) keeps its name across deploys, so a new build of one is a new
-    // body behind an old URL.
-    let hashed = request.uri().path().starts_with("/pkg/");
+    // Only `/pkg/` filenames carry a content hash, and only when cargo-leptos
+    // was given `LEPTOS_HASH_FILES`. Everything else (the images, the fonts,
+    // the sketch bundles) keeps its name across deploys, so a new build of one
+    // is a new body behind an old URL.
+    let hashed = hash_files && request.uri().path().starts_with("/pkg/");
+
+    // The one hashed name that lies. cargo-leptos names the split glue inside
+    // the main bundle after hashing that bundle, so two builds differing only
+    // in their chunks share a bundle URL over a body naming a glue file that is
+    // no longer on disk. Pinned, a returning browser links its cached bundle
+    // against chunks that are gone and the module fails. A 304 on 23KB rules
+    // that out. `__wasm_split.<hash>.js` is hashed from its final contents, so
+    // it stays immutable.
+    let stale_hash = hashed
+        && Path::new(request.uri().path())
+            .file_name()
+            .and_then(|name| name.to_str())
+            .is_some_and(|name| name.ends_with(".js") && !name.starts_with("__wasm_split"));
 
     let mut response = next.run(request).await;
     // Only a successful body is worth caching. Applying the release header to a
@@ -69,6 +89,8 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
             // that already has it, and edits appear not to take.
             if cfg!(debug_assertions) {
                 HeaderValue::from_static("no-store")
+            } else if stale_hash {
+                HeaderValue::from_static("public, no-cache")
             } else if hashed {
                 // A hashed name is a new URL for every new body, so nothing
                 // behind this one ever changes.

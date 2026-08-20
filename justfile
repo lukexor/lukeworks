@@ -27,12 +27,12 @@ install:
 
 # Run development server
 #
-# No `--split` here. Under the watcher a rebuild fails in cargo-leptos with
-# `Could not rename target/site/pkg/lukeworks_bg.wasm`, taking the server down
-# on the first edit. Nothing is `#[lazy]` yet, so splitting buys nothing until
-# the sketches land (Phase 6) and can be revisited then.
+# `--split` is required, not an optimisation: the routes in `FlatRoutes` marked
+# `#[lazy_route]` compile to a module import of `__wasm_split_placeholder__`,
+# which a build without it never rewrites. Hydration then dies on
+# `Failed to resolve module specifier` and the whole app stays inert.
 dev:
-  @cargo leptos watch
+  @cargo leptos watch --split
 
 # Run release server
 run:

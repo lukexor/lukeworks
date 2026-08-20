@@ -182,10 +182,42 @@ Two things to know before touching the dev loop:
   serves the hashed filenames as `immutable`. Get this backwards and `cargo leptos watch` rebuilds
   while the browser replays a cached bundle, so edits appear not to take and the glue and module
   desync into `wasm.… is not a function`. If you see that error, suspect caching first.
-- **`--split` is unverified.** See the open question at the end of `MIGRATION.md`; it may break
-  client-side routing.
+- **`--split` is mandatory, on every command.** See "Lazy routes" below. A build without it leaves
+  the lazy routes importing `__wasm_split_placeholder__`, and hydration dies on
+  `Failed to resolve module specifier`, leaving the whole app inert.
 
 Styling is deliberately minimal pending the Phase 5 design pass.
+
+## Lazy routes
+
+`/blog`, `/projects` and `/:post` are `#[lazy_route]` impls of `LazyRoute` rather than plain
+components, registered as `view={Lazy::<PostRoute>::new()}`. `data()` runs from the main bundle so
+a resource is already in flight while the chunk downloads, and `--split` moves `view()` out.
+`src/lib.rs` calls `hydrate_lazy` rather than `hydrate_body`, because the synchronous walk cannot
+await a chunk and landing on a lazy route under `hydrate_body` panics.
+
+A route's view tree carries the `tachys` and `reactive_graph` code monomorphised for it, so moving
+one moves far more than the page's own source. Gzipped transfer per first visit:
+
+| page | before | after |
+| --- | --- | --- |
+| home, about, search | 335KB | 287KB |
+| a post | 335KB | 321KB |
+| blog, projects | 335KB | 346KB |
+
+The listings pay separately for `chunk_5`, the 57KB `PostList` they share. That is the trade: the
+landing page and the posts take the win, the two listing pages give up 10KB.
+
+Splitting only `/:post` is worse than not splitting at all. `hydrate_lazy` adds ~33KB of async
+hydration to the main bundle, and one route does not recover it.
+
+**cargo-leptos hashes the main bundle before writing the split glue's filename into it.** Two
+builds that differ only in their chunks therefore share `lukeworks.<hash>.js` while its body names
+a glue file that is gone, and a browser holding the old copy fails to link the module
+(`LinkError: … function import requires a callable`). `cache_control_middleware` serves that one
+file `no-cache` for this reason. `__wasm_split.<hash>.js` is hashed from its final contents and
+stays immutable. The same middleware only treats `/pkg/` as hashed when `hash_files` is set, so a
+release run without `LEPTOS_HASH_FILES` cannot pin a rebuild behind an unchanged name.
 
 ## Lighthouse
 

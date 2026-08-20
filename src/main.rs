@@ -19,6 +19,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let conf = get_configuration(None)?;
     let addr = conf.leptos_options.site_addr;
     let leptos_options = conf.leptos_options;
+    let hash_files = leptos_options.hash_files;
     let routes = generate_route_list(LukeWorks);
 
     // Assets sitting at the root of the site directory need a literal route
@@ -61,7 +62,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         })
         .fallback(leptos_axum::file_and_error_handler(shell))
         .with_state(leptos_options)
-        .layer(middleware::from_fn(cache_control_middleware))
+        .layer(middleware::from_fn(move |request, next| {
+            cache_control_middleware(hash_files, request, next)
+        }))
         // Layers wrap outward, so this runs before routing and short-circuits
         // old URLs without touching `leptos_routes` or the static-file handler.
         .layer(middleware::from_fn(redirect_middleware))

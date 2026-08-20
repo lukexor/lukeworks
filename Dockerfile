@@ -33,10 +33,15 @@ RUN rustup show
 # built without this serves assets that browsers must revalidate.
 ENV LEPTOS_HASH_FILES=true
 
-# No `--split`: nothing is `#[lazy]` yet, so there is nothing to split out, and
-# whether a split bundle routes correctly in the browser is still untested. See
-# the open question at the end of MIGRATION.md.
-RUN cargo leptos build --release
+# `--split` is required, not a size flag. The `#[lazy_route]` pages compile to a
+# module import of `__wasm_split_placeholder__`, which only a split build
+# rewrites; without it hydration dies on `Failed to resolve module specifier`
+# and the app is inert. What it buys is 48KB gzipped off the landing page.
+#
+# `LEPTOS_HASH_FILES` above is load-bearing here: the split glue and every chunk
+# keep one name per build otherwise, and a cached glue paired with a fresh
+# bundle fails to instantiate.
+RUN cargo leptos build --release --split
 
 FROM debian:bookworm-slim AS runtime
 

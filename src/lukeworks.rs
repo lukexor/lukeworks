@@ -2,8 +2,8 @@ use crate::{
     components::{footer::Footer, icons::SearchIcon, theme_toggle::ThemeToggle},
     hooks::use_theme,
     pages::{
-        about::About, blog::Blog, home::Home, not_found::NotFound, post::Post, projects::Projects,
-        search::Search,
+        about::About, blog::BlogRoute, home::Home, not_found::NotFound, post::PostRoute,
+        projects::ProjectsRoute, search::Search,
     },
 };
 use leptos::{either::EitherOf3, prelude::*};
@@ -11,7 +11,7 @@ use leptos_meta::{
     HashedStylesheet, Link, Meta, MetaTags, Stylesheet, Title, provide_meta_context,
 };
 use leptos_router::{
-    ParamSegment, SsrMode, StaticSegment,
+    Lazy, ParamSegment, SsrMode, StaticSegment,
     components::{A, FlatRoutes, Route, Router},
 };
 
@@ -233,11 +233,23 @@ pub fn LukeWorks() -> impl IntoView {
                     <Route path=StaticSegment("") view=Home ssr=SsrMode::Async />
                     <Route path=StaticSegment("/about") view=About />
                     <Route path=StaticSegment("/search") view=Search />
-                    <Route path=StaticSegment("/blog") view=Blog ssr=SsrMode::Async />
-                    <Route path=StaticSegment("/projects") view=Projects ssr=SsrMode::Async />
+                    <Route
+                        path=StaticSegment("/blog")
+                        view={Lazy::<BlogRoute>::new()}
+                        ssr=SsrMode::Async
+                    />
+                    <Route
+                        path=StaticSegment("/projects")
+                        view={Lazy::<ProjectsRoute>::new()}
+                        ssr=SsrMode::Async
+                    />
                     // Must stay last: a bare param segment matches any single
                     // path segment, including the static routes above.
-                    <Route path=ParamSegment("post") view=Post ssr=SsrMode::Async />
+                    <Route
+                        path=ParamSegment("post")
+                        view={Lazy::<PostRoute>::new()}
+                        ssr=SsrMode::Async
+                    />
                 </FlatRoutes>
             </main>
             <Footer />

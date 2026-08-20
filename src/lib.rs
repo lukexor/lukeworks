@@ -50,5 +50,9 @@ pub fn hydrate() {
 
         console_error_panic_hook::hook(info);
     }));
-    leptos::mount::hydrate_body(crate::lukeworks::LukeWorks);
+    // `hydrate_lazy`, not `hydrate_body`: a `Lazy` route resolves its view by
+    // awaiting a chunk, and the synchronous walk cannot wait for one. Landing
+    // straight on such a route panics with "lazy routes should not be used with
+    // hydrate_body()".
+    leptos::mount::hydrate_lazy(crate::lukeworks::LukeWorks);
 }

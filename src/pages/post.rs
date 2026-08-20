@@ -13,7 +13,7 @@ use leptos::{
     prelude::*,
 };
 use leptos_meta::Title;
-use leptos_router::{components::A, hooks::use_params, params::Params};
+use leptos_router::{LazyRoute, components::A, hooks::use_params, lazy_route, params::Params};
 use serde::{Deserialize, Serialize};
 
 #[derive(Params, Debug, Clone, PartialEq)]
@@ -215,20 +215,47 @@ fn published_date(published: Option<&str>) -> Option<&str> {
     published.map(|value| value.split('T').next().unwrap_or(value))
 }
 
-/// Post entry.
-#[component]
-pub fn Post() -> impl IntoView {
-    let params = use_params::<PostParams>();
-    let slug =
-        move || params.with(|params| params.as_ref().ok().and_then(|params| params.post.clone()));
+/// Post entry, loaded from its own WASM chunk.
+///
+/// A route's view tree carries the `tachys` and `reactive_graph` code
+/// monomorphised for it, which is why this one page is 44KB of the gzipped
+/// bundle. Splitting it out leaves that weight off every visit that never
+/// reaches a post.
+///
+/// [`Self::data`] stays in the main bundle, so the fetch is already in flight
+/// while the chunk downloads.
+#[derive(Debug)]
+pub struct PostRoute {
+    post: Resource<Result<Option<PostView>, ServerFnError>>,
+}
 
-    let post = Resource::new(slug, |slug| async move {
-        match slug {
-            Some(slug) => fetch_post(slug).await,
-            None => Ok(None),
+#[lazy_route]
+impl LazyRoute for PostRoute {
+    fn data() -> Self {
+        let params = use_params::<PostParams>();
+        let slug = move || {
+            params.with(|params| params.as_ref().ok().and_then(|params| params.post.clone()))
+        };
+
+        Self {
+            post: Resource::new(slug, |slug| async move {
+                match slug {
+                    Some(slug) => fetch_post(slug).await,
+                    None => Ok(None),
+                }
+            }),
         }
-    });
+    }
 
+    fn view(this: Self) -> AnyView {
+        let post = this.post;
+
+        post_view(post)
+    }
+}
+
+/// Everything the post route renders.
+fn post_view(post: Resource<Result<Option<PostView>, ServerFnError>>) -> AnyView {
     view! {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
@@ -258,6 +285,7 @@ pub fn Post() -> impl IntoView {
             })}
         </Suspense>
     }
+    .into_any()
 }
 
 #[component]
