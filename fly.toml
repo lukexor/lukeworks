@@ -8,7 +8,9 @@
 # these are here to be visible and overridable without a rebuild.
 
 app = "lukeworks"
-primary_region = "sea"
+# `sea` is deprecated and refuses new machines. `sjc` is the nearest region Fly
+# will still provision in.
+primary_region = "sjc"
 
 [build]
 
