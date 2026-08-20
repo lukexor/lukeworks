@@ -52,7 +52,7 @@ pub async fn cache_control_middleware(hash_files: bool, request: Request, next: 
         // "wasm.wasm_bindgen__convert__closures_____invoke__... is not a function".
         .map(|ext| {
             [
-                "css", "ico", "js", "pdf", "png", "ttf", "wasm", "webp", "woff2",
+                "css", "ico", "js", "pdf", "png", "svg", "ttf", "wasm", "webp", "woff2",
             ]
             .contains(&ext)
         })
@@ -77,6 +77,8 @@ pub async fn cache_control_middleware(hash_files: bool, request: Request, next: 
             .and_then(|name| name.to_str())
             .is_some_and(|name| name.ends_with(".js") && !name.starts_with("__wasm_split"));
 
+    let regenerated = request.uri().path().starts_with("/sketch/");
+
     let mut response = next.run(request).await;
     // Only a successful body is worth caching. Applying the release header to a
     // 404 pins the failure in the browser for 30 days, so a missing asset stays
@@ -95,11 +97,17 @@ pub async fn cache_control_middleware(hash_files: bool, request: Request, next: 
                 // A hashed name is a new URL for every new body, so nothing
                 // behind this one ever changes.
                 HeaderValue::from_static("public, max-age=2592000, immutable")
-            } else {
-                // A day, and revalidatable. `immutable` here would pin a
-                // regenerated sketch bundle or a replaced image in the browser
-                // for a month, past a reload, with no URL to change.
+            } else if regenerated {
+                // The one unhashed thing that is regenerated in place: the
+                // esbuild bundles behind the nine sketches. A day, and
+                // revalidatable, so a rebuild reaches a returning visitor.
                 HeaderValue::from_static("public, max-age=86400")
+            } else {
+                // Fonts, images and the PDF. A replacement here is a new file
+                // with a new name, not a new body behind this one, so a month
+                // is safe. No `immutable`, so replacing one in place anyway
+                // takes a reload to pick up rather than a month.
+                HeaderValue::from_static("public, max-age=2592000")
             },
         );
     }
