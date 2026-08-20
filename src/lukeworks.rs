@@ -155,7 +155,13 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 // this tag both live outside the reactive tree.
                 <Meta name="color-scheme" content=color_scheme />
 
-                <Link rel="icon" href="/favicon.ico" />
+                // The `.ico` is the fallback for browsers that will not take an
+                // SVG, and it carries the 16, 32 and 48px rasters they pick
+                // from. Anything current prefers the SVG, which is 400 bytes and
+                // stays sharp at any density.
+                <Link rel="icon" href="/favicon.ico" sizes="32x32" />
+                <Link rel="icon" href="/favicon.svg" type_="image/svg+xml" />
+                <Link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
                 <Link rel="manifest" href="/site.webmanifest" />
 
                 // A font is undiscoverable until the stylesheet naming it has

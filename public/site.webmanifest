@@ -15,6 +15,7 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#131821",
-  "background_color": "#131821"
+  "theme_color": "#080b11",
+  "background_color": "#080b11",
+  "description": "Blog and project portfolio by Lucas Petherbridge."
 }

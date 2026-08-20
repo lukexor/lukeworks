@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>lukeworks.tech</title>
+  <rect width="64" height="64" rx="14" fill="#080b11"/>
+  <path d="M17 20 L28 32 L17 44" fill="none" stroke="#6fc3df" stroke-width="7"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 18 L36 46 L50 46" fill="none" stroke="#fd9a73" stroke-width="7"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
