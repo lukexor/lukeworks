@@ -135,6 +135,16 @@ fn unescape(text: &str) -> String {
         .replace("&amp;", "&")
 }
 
+/// The header image a post page should show, if any.
+///
+/// `None` for a post that embeds one of the sketches: the page already opens
+/// with the live canvas, and the frontmatter image is a still of it.
+#[cfg(feature = "ssr")]
+fn hero(post: &'static crate::content::Post) -> Option<crate::content::Image> {
+    post.image
+        .filter(|_| !post.body_html.contains("src=\"/sketch/"))
+}
+
 /// Look up a post on the server.
 ///
 /// The compiled `POSTS` table exists only in the `ssr` build, which keeps
@@ -186,8 +196,12 @@ pub async fn fetch_post(slug: String) -> Result<Option<PostView>, ServerFnError>
         category: post.category.map(ToOwned::to_owned),
         technologies: post.technologies.iter().map(|&it| it.to_owned()).collect(),
         show_reading_time: post.kind == Kind::Blog,
-        image_src: post.image.map(|image| image.src.to_owned()),
-        image_alt: post.image.map(|image| image.alt.to_owned()),
+        // A post that embeds its own sketch opens with a live canvas. The
+        // header image is a still of that same canvas, so showing both puts two
+        // pictures of one thing above the fold. The listings keep it: there the
+        // card has no canvas to lose out to.
+        image_src: crate::pages::post::hero(post).map(|image| image.src.to_owned()),
+        image_alt: crate::pages::post::hero(post).map(|image| image.alt.to_owned()),
         series: post.series.map(ToOwned::to_owned),
         headings: headings(post.body_html),
         siblings,
