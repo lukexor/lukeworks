@@ -43,8 +43,19 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
         // browser's heuristic caching, which will pair stale glue with a fresh
         // module and fail as
         // "wasm.wasm_bindgen__convert__closures_____invoke__... is not a function".
-        .map(|ext| ["css", "ico", "js", "pdf", "png", "wasm", "webp", "woff2"].contains(&ext))
+        .map(|ext| {
+            [
+                "css", "ico", "js", "pdf", "png", "ttf", "wasm", "webp", "woff2",
+            ]
+            .contains(&ext)
+        })
         .unwrap_or(false);
+
+    // Only `/pkg/` filenames carry a content hash, written by cargo-leptos under
+    // `LEPTOS_HASH_FILES`. Everything else (the images, the fonts, the sketch
+    // bundles) keeps its name across deploys, so a new build of one is a new
+    // body behind an old URL.
+    let hashed = request.uri().path().starts_with("/pkg/");
 
     let mut response = next.run(request).await;
     // Only a successful body is worth caching. Applying the release header to a
@@ -58,9 +69,15 @@ pub async fn cache_control_middleware(request: Request, next: Next) -> Response 
             // that already has it, and edits appear not to take.
             if cfg!(debug_assertions) {
                 HeaderValue::from_static("no-store")
-            } else {
-                // Release serves hashed filenames, so 30 days is safe.
+            } else if hashed {
+                // A hashed name is a new URL for every new body, so nothing
+                // behind this one ever changes.
                 HeaderValue::from_static("public, max-age=2592000, immutable")
+            } else {
+                // A day, and revalidatable. `immutable` here would pin a
+                // regenerated sketch bundle or a replaced image in the browser
+                // for a month, past a reload, with no URL to change.
+                HeaderValue::from_static("public, max-age=86400")
             },
         );
     }
