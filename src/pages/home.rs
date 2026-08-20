@@ -1,7 +1,7 @@
 //! Landing page.
 
 use crate::{
-    components::icons::ArrowIcon,
+    components::icons::{ArrowIcon, DownArrowIcon},
     lukeworks::{ROUTES, SUPPORT_EMAIL},
 };
 use leptos::{either::Either, prelude::*};
@@ -150,13 +150,17 @@ fn Hero() -> impl IntoView {
                     "Software Engineer. Designer. Thinker."
                 </p>
                 <div class="flex flex-wrap gap-4 items-center">
-                    <A
-                        href=ROUTES.blog
-                        attr:class="inline-flex gap-2.5 items-center py-3 px-6 font-mono text-sm font-bold no-underline rounded-sm bg-accent text-on-accent hover:bg-accent-hover hover:no-underline"
+                    // Scrolls to the recent posts rather than leaving for
+                    // `/blog`, which the section's own "all posts" link already
+                    // does. A plain `<a>`, since the browser resolves a
+                    // same-page fragment without the router.
+                    <a
+                        href="#recent"
+                        class="inline-flex gap-2.5 items-center py-3 px-6 font-mono text-sm font-bold no-underline rounded-sm hover:no-underline bg-accent text-on-accent hover:bg-accent-hover"
                     >
                         "Explore"
-                        <ArrowIcon />
-                    </A>
+                        <DownArrowIcon />
+                    </a>
                     <span class="font-mono text-[13px] text-ink-dim">"Have a look around!"</span>
                 </div>
             </div>
@@ -189,7 +193,8 @@ fn RecentWriting(posts: Vec<RecentPost>) -> impl IntoView {
     }
 
     Some(view! {
-        <section class="mb-16">
+        // The hero's Explore button scrolls here.
+        <section id="recent" class="mb-16 scroll-mt-8">
             <SectionHead label="Recent writing" href=ROUTES.blog more="all posts" />
 
             // The last row carries the closing rule, so the block reads as a
@@ -291,10 +296,9 @@ fn ProjectCard(project: FeaturedProject) -> impl IntoView {
                                     {category}
                                 </span>
                             }
-                        })} // Titles here are written `Name - what it is`, so the
-                    // longest run to two lines in a third of the grid. Clamping
-                    // both fields keeps three cards the same shape whatever
-                    // lands in them.
+                        })} // A card holds a third of the grid, and nothing bounds
+                    // either field at the source. Clamping both keeps three
+                    // cards the same shape whatever lands in them.
                     <span class="font-medium line-clamp-2 group-hover:text-accent">
                         {project.title}
                     </span>

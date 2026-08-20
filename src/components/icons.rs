@@ -1,7 +1,7 @@
 //! Inline SVG icons.
 //!
-//! Hand-written rather than pulled from an icon crate: the site needs six
-//! glyphs, and each is a single path that ships as markup with no dependency
+//! Hand-written rather than pulled from an icon crate: the site needs a handful
+//! of glyphs, and each is a single path that ships as markup with no dependency
 //! and no lookup table. Every icon inherits `currentColor` and sizes from the
 //! `class` the caller passes, so one definition serves the header, the footer
 //! and the contact list.
@@ -172,6 +172,25 @@ pub fn BackArrowIcon(#[prop(into, default = "size-[15px]".into())] class: String
             aria-hidden="true"
         >
             <path d="M19 12H5m6-7-7 7 7 7" />
+        </svg>
+    }
+}
+
+/// Downwards arrow, for a link that scrolls further down the same page.
+///
+/// Drawn for the same reason as [`ArrowIcon`].
+#[component]
+pub fn DownArrowIcon(#[prop(into, default = "size-[15px]".into())] class: String) -> impl IntoView {
+    view! {
+        <svg
+            class=class
+            viewBox="0 0 24 24"
+            fill=FILL
+            stroke="currentColor"
+            stroke-width="2.4"
+            aria-hidden="true"
+        >
+            <path d="M12 5v14m-7-6 7 7 7-7" />
         </svg>
     }
 }

@@ -1,5 +1,5 @@
 ---
-title: "PixEngine - A Cross-Platform Graphics Library"
+title: PixEngine
 kind: project
 description: A cross-platform graphics and game library.
 featured: true

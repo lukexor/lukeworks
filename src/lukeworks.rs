@@ -101,6 +101,30 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <Link rel="icon" href="/favicon.ico" />
                 <Link rel="manifest" href="/site.webmanifest" />
 
+                // A font is undiscoverable until the stylesheet naming it has
+                // parsed, so both files sat behind the CSS on the critical
+                // path: 113ms in Lighthouse. Preloading starts them alongside
+                // it.
+                //
+                // Plain `<link>` rather than `<Link>`: leptos_meta's typed
+                // props drop `as` and `crossorigin`, and a preload missing
+                // either is inert. `crossorigin` is required even same-origin,
+                // because a font fetches in CORS mode.
+                <link
+                    rel="preload"
+                    href="/fonts/jetbrains-mono.woff2"
+                    r#as="font"
+                    r#type="font/woff2"
+                    crossorigin="anonymous"
+                />
+                <link
+                    rel="preload"
+                    href="/fonts/ibm-plex-sans.woff2"
+                    r#as="font"
+                    r#type="font/woff2"
+                    crossorigin="anonymous"
+                />
+
                 // Corrects the one case the server cannot know: no cookie, and
                 // the OS prefers light. Inline and in <head> so it lands ahead
                 // of first paint without displacing anything inside <body>.
@@ -139,16 +163,16 @@ pub fn LukeWorks() -> impl IntoView {
             // margin instead of the container being optional.
             <main class="py-10 px-6 mx-auto max-w-6xl sm:px-14">
                 <FlatRoutes transition=true fallback=NotFound>
-                    <Route path=StaticSegment("") view=Home />
+                    // Every route holding a `Suspense` needs `SsrMode::Async`.
+                    // Under the default out-of-order mode the suspended part
+                    // streams into a trailing <template> for JS to swap in, so
+                    // <main> ships without it and a crawler or a reader without
+                    // JS sees an empty page. Async holds the response until the
+                    // resource resolves, which is microseconds against an
+                    // in-memory table.
+                    <Route path=StaticSegment("") view=Home ssr=SsrMode::Async />
                     <Route path=StaticSegment("/about") view=About />
                     <Route path=StaticSegment("/search") view=Search />
-                    // The three routes below resolve a server function before
-                    // they have anything to show. Under the default out-of-order
-                    // mode their `Suspense` streams into a trailing <template>
-                    // and JS swaps it in, so <main> ships empty and a crawler or
-                    // a reader without JS sees no post at all. Async holds the
-                    // response until the resource resolves, which is
-                    // microseconds against an in-memory table.
                     <Route path=StaticSegment("/blog") view=Blog ssr=SsrMode::Async />
                     <Route path=StaticSegment("/projects") view=Projects ssr=SsrMode::Async />
                     // Must stay last: a bare param segment matches any single
