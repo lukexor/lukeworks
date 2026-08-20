@@ -1658,6 +1658,7 @@ dependencies = [
  "leptos_axum",
  "leptos_meta",
  "leptos_router",
+ "percent-encoding",
  "serde",
  "thiserror 2.0.19",
  "tokio",

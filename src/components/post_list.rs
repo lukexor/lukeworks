@@ -6,7 +6,19 @@
 use crate::lukeworks::ROUTES;
 use leptos::prelude::*;
 use leptos_router::{components::A, hooks::use_query_map};
+use percent_encoding::{AsciiSet, NON_ALPHANUMERIC, utf8_percent_encode};
 use serde::{Deserialize, Serialize};
+
+/// Everything outside the RFC 3986 unreserved set, the only characters a query
+/// value may carry unescaped.
+///
+/// Space encodes to `%20` rather than `+`, because leptos_router decodes with
+/// `percent_decode_str` and that does not treat `+` as a space.
+const QUERY_VALUE: &AsciiSet = &NON_ALPHANUMERIC
+    .remove(b'-')
+    .remove(b'.')
+    .remove(b'_')
+    .remove(b'~');
 
 /// Which listing to fetch.
 ///
@@ -17,6 +29,31 @@ use serde::{Deserialize, Serialize};
 pub enum PostKind {
     Blog,
     Project,
+}
+
+impl PostKind {
+    /// The route this kind is listed at.
+    ///
+    /// The rail links back to its own listing. Hardcoding `/blog` there would
+    /// throw a reader off `/projects` the moment a project grows a category.
+    const fn route(self) -> &'static str {
+        match self {
+            Self::Blog => ROUTES.blog,
+            Self::Project => ROUTES.projects,
+        }
+    }
+}
+
+/// A link to `base` narrowed to one category.
+///
+/// The category comes from hand-written frontmatter, so it is encoded rather
+/// than interpolated: a space or an `&` would otherwise split the query and the
+/// filter would silently miss.
+pub fn category_href(base: &str, category: &str) -> String {
+    format!(
+        "{base}?category={}",
+        utf8_percent_encode(category, QUERY_VALUE)
+    )
 }
 
 /// One row of a listing.
@@ -63,9 +100,10 @@ pub struct Listing {
 /// The counts are tallied here rather than in the view so the browser never
 /// walks the whole list to render a sidebar.
 ///
-/// `category` narrows the returned posts. The counts stay whole either way, so
-/// the rail keeps offering every category rather than collapsing to the one
-/// already chosen.
+/// `category` narrows the returned posts. Category counts stay whole, so the
+/// rail keeps offering every category rather than collapsing to the one already
+/// chosen. Year counts are tallied over the narrowed set instead, because each
+/// one links to a `<h2>` anchor that only exists for a year still on the page.
 #[server]
 pub async fn list_posts(
     kind: PostKind,
@@ -92,30 +130,32 @@ pub async fn list_posts(
         })
         .collect();
 
-    let mut years: BTreeMap<String, usize> = BTreeMap::new();
     let mut categories: BTreeMap<String, usize> = BTreeMap::new();
     for post in &all {
-        if let Some(year) = published_year(post.published.as_deref()) {
-            *years.entry(year.to_owned()).or_default() += 1;
-        }
         if let Some(category) = &post.category {
             *categories.entry(category.clone()).or_default() += 1;
         }
     }
-
-    let mut years: Vec<_> = years.into_iter().collect();
-    years.reverse();
     let mut categories: Vec<_> = categories.into_iter().collect();
     categories.sort_by(|a, b| b.1.cmp(&a.1).then_with(|| a.0.cmp(&b.0)));
 
     let selected = category.filter(|name| !name.is_empty());
-    let posts = match &selected {
+    let posts: Vec<_> = match &selected {
         Some(name) => all
             .into_iter()
             .filter(|post| post.category.as_deref() == Some(name.as_str()))
             .collect(),
         None => all,
     };
+
+    let mut years: BTreeMap<String, usize> = BTreeMap::new();
+    for post in &posts {
+        if let Some(year) = published_year(post.published.as_deref()) {
+            *years.entry(year.to_owned()).or_default() += 1;
+        }
+    }
+    let mut years: Vec<_> = years.into_iter().collect();
+    years.reverse();
 
     Ok(Listing {
         posts,
@@ -171,14 +211,14 @@ pub fn PostList(kind: PostKind) -> impl IntoView {
         <Suspense fallback=|| ()>
             {move || Suspend::new(async move {
                 let listing = listing.await.unwrap_or_default();
-                view! { <ListingBody listing /> }
+                view! { <ListingBody listing kind /> }
             })}
         </Suspense>
     }
 }
 
 #[component]
-fn ListingBody(listing: Listing) -> impl IntoView {
+fn ListingBody(listing: Listing, kind: PostKind) -> impl IntoView {
     // Group as we walk, which keeps the newest-first order build.rs already
     // established rather than re-sorting by a parsed date.
     let mut groups: Vec<(String, Vec<PostSummary>)> = Vec::new();
@@ -201,6 +241,7 @@ fn ListingBody(listing: Listing) -> impl IntoView {
                 years=listing.years
                 categories=listing.categories
                 selected=listing.selected
+                base=kind.route()
             />
 
             <div class="min-w-0">
@@ -288,41 +329,55 @@ fn ListingRow(post: PostSummary) -> impl IntoView {
     }
 }
 
+/// Archive and category navigation for one listing.
+///
+/// `base` is the listing's own route, so `/projects` narrows to
+/// `/projects?category=…` rather than sending the reader to `/blog`.
+///
+/// Each nav is suppressed when it has nothing to show. On the error path
+/// `unwrap_or_default` yields empty counts, and a bare "Archive" heading with no
+/// rows under it reads as broken rather than empty. The grid column stays either
+/// way, so the listing does not shift.
 #[component]
 fn ListingRail(
     years: Vec<(String, usize)>,
     categories: Vec<(String, usize)>,
     selected: Option<String>,
+    base: &'static str,
 ) -> impl IntoView {
+    let has_years = !years.is_empty();
     let has_categories = !categories.is_empty();
     let filtering = selected.is_some();
     view! {
         <aside class="hidden lg:block">
             <div class="flex sticky top-8 flex-col gap-8 text-[13px]">
-                <nav>
-                    <p class="mb-3 font-mono tracking-widest uppercase text-ink-dim text-[11px]">
-                        "Archive"
-                    </p>
-                    <ul class="flex flex-col">
-                        {years
-                            .into_iter()
-                            .map(|(year, count)| {
-                                let anchor = format!("#y{year}");
-                                view! {
-                                    <li>
-                                        <a
-                                            href=anchor
-                                            class="flex justify-between py-1.5 px-2.5 font-mono no-underline rounded-sm hover:no-underline text-ink-dim hover:bg-panel hover:text-accent"
-                                        >
-                                            <span>{year}</span>
-                                            <span>{count}</span>
-                                        </a>
-                                    </li>
-                                }
-                            })
-                            .collect_view()}
-                    </ul>
-                </nav>
+                <Show when=move || has_years>
+                    <nav>
+                        <p class="mb-3 font-mono tracking-widest uppercase text-ink-dim text-[11px]">
+                            "Archive"
+                        </p>
+                        <ul class="flex flex-col">
+                            {years
+                                .clone()
+                                .into_iter()
+                                .map(|(year, count)| {
+                                    let anchor = format!("#y{year}");
+                                    view! {
+                                        <li>
+                                            <a
+                                                href=anchor
+                                                class="flex justify-between py-1.5 px-2.5 font-mono no-underline rounded-sm hover:no-underline text-ink-dim hover:bg-panel hover:text-accent"
+                                            >
+                                                <span>{year}</span>
+                                                <span>{count}</span>
+                                            </a>
+                                        </li>
+                                    }
+                                })
+                                .collect_view()}
+                        </ul>
+                    </nav>
+                </Show>
 
                 <Show when=move || has_categories>
                     <nav>
@@ -336,9 +391,9 @@ fn ListingRail(
                                 .map(|(category, count)| {
                                     let active = selected.as_deref() == Some(category.as_str());
                                     let href = if active {
-                                        ROUTES.blog.to_owned()
+                                        base.to_owned()
                                     } else {
-                                        format!("{}?category={category}", ROUTES.blog)
+                                        category_href(base, &category)
                                     };
                                     let class = if active {
                                         "flex justify-between py-1.5 px-2.5 font-mono no-underline rounded-sm hover:no-underline bg-panel text-accent"
@@ -365,7 +420,7 @@ fn ListingRail(
                         </ul>
                         <Show when=move || filtering>
                             <A
-                                href=ROUTES.blog
+                                href=base
                                 attr:class="inline-block mt-2 px-2.5 font-mono text-[11px] tracking-widest uppercase"
                             >
                                 "Clear filter"
@@ -381,6 +436,26 @@ fn ListingRail(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_category_href_encodes_what_would_split_the_query() {
+        assert_eq!(
+            category_href(ROUTES.blog, "video games"),
+            "/blog?category=video%20games"
+        );
+        assert_eq!(category_href(ROUTES.blog, "r&d"), "/blog?category=r%26d");
+        // The unreserved characters stay legible.
+        assert_eq!(
+            category_href(ROUTES.projects, "video-games"),
+            "/projects?category=video-games"
+        );
+    }
+
+    #[test]
+    fn each_kind_links_back_to_its_own_listing() {
+        assert_eq!(PostKind::Blog.route(), ROUTES.blog);
+        assert_eq!(PostKind::Project.route(), ROUTES.projects);
+    }
 
     #[test]
     fn published_date_drops_the_time_component() {

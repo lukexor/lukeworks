@@ -57,9 +57,8 @@ to = "/blog"
 from = "/contact"
 to = "/about#contact"
 
-# NOTE: /rss is not built yet (still Phase 4 work), so this currently redirects
-# to a 404. Kept rather than dropped because the destination is decided and the
-# rule carries real subscriber traffic — it starts working the moment /rss lands.
+# The old FeedBurner path. It carries real subscriber traffic, so it points at
+# the feed served by `src/feed.rs`.
 [[redirect]]
 from = "/feed"
 to = "/rss"

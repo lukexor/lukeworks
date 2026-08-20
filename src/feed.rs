@@ -32,6 +32,41 @@ fn escape(text: &str) -> String {
     out
 }
 
+/// Rewrite the root-relative links in a post body to absolute ones.
+///
+/// `no_post_hotlinks_production` requires post bodies to link with a leading
+/// `/`. RSS gives the HTML inside `content:encoded` no base, so a reader
+/// resolves those against its own origin or not at all, and every image and
+/// internal link in the feed arrives broken.
+fn absolutise(html: &str) -> String {
+    const ATTRIBUTES: [&str; 2] = ["src=\"/", "href=\"/"];
+
+    let mut out = String::with_capacity(html.len());
+    let mut rest = html;
+    loop {
+        // Whichever attribute comes first, so one pass covers both.
+        let found = ATTRIBUTES
+            .iter()
+            .filter_map(|attribute| rest.find(attribute).map(|at| (at, *attribute)))
+            .min();
+        let Some((at, attribute)) = found else {
+            out.push_str(rest);
+            return out;
+        };
+
+        // Everything up to and including the opening quote.
+        let slash = at + attribute.len() - 1;
+        out.push_str(&rest[..slash]);
+        rest = &rest[slash + 1..];
+
+        // A protocol-relative `//host/path` already carries an origin.
+        if !rest.starts_with('/') {
+            out.push_str(SITE_URL);
+        }
+        out.push('/');
+    }
+}
+
 /// Convert an RFC 3339 timestamp to the RFC 822 form RSS wants.
 ///
 /// Returns `None` for anything chrono cannot parse, which drops just that
@@ -83,9 +118,12 @@ pub fn render() -> String {
             ));
         }
         // The whole rendered post, so a reader can show it without a round trip.
+        // A `]]>` in the body closes the section early, so it is split across
+        // two: entity references are not decoded inside CDATA, and `]]&gt;`
+        // would reach the reader as those six literal characters.
         out.push_str(&format!(
             "      <content:encoded><![CDATA[{}]]></content:encoded>\n",
-            post.body_html.replace("]]>", "]]&gt;")
+            absolutise(post.body_html).replace("]]>", "]]]]><![CDATA[>")
         ));
         out.push_str("    </item>\n");
     }
@@ -95,10 +133,18 @@ pub fn render() -> String {
 }
 
 /// `GET /rss`.
+///
+/// Sets its own `Cache-Control`. `cache_control_middleware` keys off the path
+/// extension and `/rss` has none, so without this the response carries no cache
+/// header at all and a reader polling on a timer rebuilds the whole corpus every
+/// hit. The feed only changes on redeploy.
 pub async fn handler() -> Response {
     (
         StatusCode::OK,
-        [(header::CONTENT_TYPE, "application/rss+xml; charset=utf-8")],
+        [
+            (header::CONTENT_TYPE, "application/rss+xml; charset=utf-8"),
+            (header::CACHE_CONTROL, "public, max-age=3600"),
+        ],
         render(),
     )
         .into_response()
@@ -144,6 +190,48 @@ mod tests {
         let feed = render();
         assert!(feed.contains("&quot;Lost and Found&quot;"));
         assert!(!feed.contains("<title>\"Lost"));
+    }
+
+    #[test]
+    fn root_relative_links_gain_an_origin() {
+        assert_eq!(
+            absolutise(r#"<img src="/images/a.webp"> and <a href="/tetanes-part-2">two</a>"#),
+            format!(
+                r#"<img src="{SITE_URL}/images/a.webp"> and <a href="{SITE_URL}/tetanes-part-2">two</a>"#
+            )
+        );
+        // An absolute or protocol-relative link already carries an origin.
+        assert_eq!(
+            absolutise(r#"<a href="https://example.com/x">x</a><a href="//cdn/x">y</a>"#),
+            r#"<a href="https://example.com/x">x</a><a href="//cdn/x">y</a>"#
+        );
+        // An anchor is relative to the reader's rendering of the item, not to a
+        // page, so it is left alone.
+        assert_eq!(
+            absolutise(r##"<a href="#intro">i</a>"##),
+            r##"<a href="#intro">i</a>"##
+        );
+    }
+
+    #[test]
+    fn every_post_body_reaches_the_feed_with_absolute_links() {
+        let feed = render();
+        // The channel links are built from SITE_URL already, so a body is the
+        // only place a root-relative link can survive.
+        assert!(!feed.contains(r#"src="/"#), "a relative src is in the feed");
+        assert!(
+            !feed.contains(r#"href="/"#),
+            "a relative href is in the feed"
+        );
+    }
+
+    #[test]
+    fn a_cdata_terminator_in_a_body_is_split_rather_than_entity_escaped() {
+        // Entity references are not decoded inside CDATA, so `]]&gt;` would
+        // reach the reader as those six characters.
+        let split = "]]]]><![CDATA[>";
+        assert_eq!("a ]]> b".replace("]]>", split), "a ]]]]><![CDATA[> b");
+        assert!(!render().contains("]]&gt;"));
     }
 
     #[test]

@@ -168,8 +168,13 @@ components render placeholders. Routed so far: `/`, `/about`, `/blog`, `/project
 The `/:post` route is a bare param segment and **must stay last** in `FlatRoutes` — it matches
 any single path segment.
 
-Not yet built (rest of Phase 4+): `/rss`, `/sketch/:name` — several posts embed
-`<iframe src="/sketch/...">` that 404 until then — `/resume`, `/tetanes-web`, and search.
+Not yet built (rest of Phase 4+): `/sketch/:name`, `/resume`, `/tetanes-web`, and search. Nine
+posts embed `<iframe src="/sketch/...">` that 404 until the sketch route lands.
+
+`/rss` is served by `src/feed.rs` as a plain Axum handler rather than a Leptos route, because the
+response is XML with no shell to render. Any same-origin link to it needs `rel="external"` or the
+router intercepts the click and resolves it against `FlatRoutes`, which 404s. `/sitemap.xml` and
+`/sketch/:name` will want the same treatment.
 
 Two things to know before touching the dev loop:
 

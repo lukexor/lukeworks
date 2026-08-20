@@ -1,7 +1,10 @@
 //! A single blog or project post.
 
 use crate::{
-    components::icons::{ArrowIcon, BackArrowIcon},
+    components::{
+        icons::{ArrowIcon, BackArrowIcon},
+        post_list::category_href,
+    },
     lukeworks::ROUTES,
     pages::not_found::NotFound,
 };
@@ -245,9 +248,9 @@ fn PostBody(post: PostView) -> impl IntoView {
 
         // The rail is unconditional. Reserving the column only when there is a
         // table of contents or a series would shift the article left and right
-        // as the reader moves between posts, and the metadata below fills it on
-        // every post regardless.
-        <div class="grid gap-12 lg:grid-cols-[236px_minmax(0,1fr)]">
+        // as the reader moves between posts, so the column stays even on a post
+        // that leaves it empty.
+        <div class="grid gap-12 lg:gap-x-8 lg:grid-cols-[236px_minmax(0,1fr)]">
             <aside class="hidden lg:block">
                 <div class="flex sticky top-8 flex-col gap-7 text-[13px]">
                     <A
@@ -258,13 +261,6 @@ fn PostBody(post: PostView) -> impl IntoView {
                         "all posts"
                     </A>
 
-                    <PostMeta
-                        category=post.category.clone()
-                        date=date.clone()
-                        reading_minutes=post.reading_minutes
-                        class="flex flex-col gap-1"
-                    />
-
                     <PostRailToc headings=post.headings.clone() />
                     <PostRailSeries
                         series=post.series.clone()
@@ -274,20 +270,23 @@ fn PostBody(post: PostView) -> impl IntoView {
                 </div>
             </aside>
 
-            <article class="min-w-0">
-                // Below `lg` the rail is hidden, so the same metadata rides
-                // above the title instead. Only one of the two is ever in the
-                // accessibility tree, since the other is `display: none`.
+            // The rule hangs off the article rather than the rail so it runs
+            // the full height of the body. On the rail it would stop with the
+            // sticky block, which is short and leaves the gap looking accidental.
+            <article class="min-w-0 lg:pl-8 lg:border-l lg:border-rule">
+                // Mono at 44px fit about 28 characters across the article
+                // column, and titles here run to 77, so the longest broke over
+                // three ragged lines. 32px fits ~38 and `text-balance` evens
+                // out what still wraps.
+                <h1 class="mb-4 font-mono text-2xl font-bold tracking-tighter leading-tight text-balance sm:text-[2rem]">
+                    {post.title.clone()}
+                </h1>
+
                 <PostMeta
                     category=post.category.clone()
                     date=date
                     reading_minutes=post.reading_minutes
-                    class="flex flex-wrap gap-4 items-center mb-5 lg:hidden"
                 />
-
-                <h1 class="mb-8 font-mono text-3xl font-bold tracking-tighter leading-tight text-balance sm:text-[2.75rem]">
-                    {post.title.clone()}
-                </h1>
 
                 {post
                     .image_src
@@ -311,24 +310,24 @@ fn PostBody(post: PostView) -> impl IntoView {
     }
 }
 
-/// Category, date and reading time.
+/// Category, date and reading time, in one line beneath the title.
 ///
-/// Rendered twice per page, once in the rail and once above the title, with the
-/// caller's `class` deciding which breakpoint each appears at.
+/// A project post carries no category, so this is the only place the three read
+/// as a set. In the rail they would have sat alone under a heading that says
+/// nothing.
 #[component]
 fn PostMeta(
     category: Option<String>,
     date: Option<String>,
     reading_minutes: usize,
-    #[prop(into)] class: String,
 ) -> impl IntoView {
     view! {
-        <div class=format!(
-            "font-mono text-xs text-ink-dim {class}",
-        )>
+        <div class="flex flex-wrap gap-4 items-center mb-8 font-mono text-xs text-ink-dim">
             {category
                 .map(|category| {
-                    let href = format!("{}?category={category}", ROUTES.blog);
+                    let href = category_href(ROUTES.blog, &category);
+                    // Only blog posts carry a category, so the filter always
+                    // lands on the blog listing.
                     view! {
                         <A
                             href=href

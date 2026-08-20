@@ -71,6 +71,10 @@ chrono = { version = "0.4", default-features = false, features = [
 leptos = { version = "0.8", features = ["rustls"] }
 leptos_router = { version = "0.8" }
 leptos_meta = { version = "0.8" }
+# Already in the graph via leptos_router, which percent-decodes query values on
+# the way back in. Encoding a category with the same scheme keeps the round trip
+# honest.
+percent-encoding = "2"
 # Server function arguments and return types cross the network boundary as JSON.
 serde = { version = "1", features = ["derive"] }
 web-sys = { version = "0.3", features = [
