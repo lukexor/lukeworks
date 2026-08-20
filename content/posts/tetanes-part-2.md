@@ -1,6 +1,7 @@
 ---
 title: "NES Emulation in Rust: Designs and Frustrations"
 kind: blog
+description: How the NES clocks its hardware, and how to model that in Rust.
 category: programming
 series: TetaNES
 part: 2

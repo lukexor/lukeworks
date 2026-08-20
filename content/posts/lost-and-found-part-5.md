@@ -1,6 +1,7 @@
 ---
 title: "\"Lost and Found\" : Part 5 - Turbo-charge your career and avoid stagnation"
 kind: blog
+description: Spotting a career plateau, and what it takes to climb off one.
 category: career
 series: Lost and Found
 part: 5

@@ -1,6 +1,8 @@
 ---
 title: "Asteroids!"
 kind: project
+description: The arcade classic, ported from Rust and PixEngine to p5.js.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/asteroids.webp
   alt: "Asteroids"

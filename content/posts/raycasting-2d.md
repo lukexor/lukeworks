@@ -1,6 +1,8 @@
 ---
 title: "2D Raycasting"
 kind: project
+description: 2D raycasting against line segments, driven by the mouse or by noise.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/raycasting-2d.webp
   alt: "2D Raycasting"

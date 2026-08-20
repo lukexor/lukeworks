@@ -1,6 +1,8 @@
 ---
 title: "ChatDot"
 kind: project
+description: A multi-threaded IM client and server, with logins and broadcast.
+technologies: [Java]
 website: https://github.com/lukexor/ChatDot
 published: 2017-06-19T02:45:47Z
 started: 2017-04-24T02:45:29Z

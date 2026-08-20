@@ -1,6 +1,8 @@
 ---
 title: "Personal Portfolio/Blog"
 kind: project
+description: This website, back when it ran on Python and Django.
+technologies: [Python, Django]
 image:
   src: /images/projects/portfolio_blog.webp
   alt: "Portfolio Website"

@@ -1,6 +1,8 @@
 ---
 title: "Pong"
 kind: project
+description: Pong against the computer or a friend, playable on a touch screen.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/pong.webp
   alt: "Pong"

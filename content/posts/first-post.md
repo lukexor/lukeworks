@@ -1,6 +1,7 @@
 ---
 title: "First post"
 kind: blog
+description: The site is up. What works so far, and what is still missing.
 category: programming
 published: 2014-11-18T00:00:00Z
 updated: 2014-12-12T07:46:26Z

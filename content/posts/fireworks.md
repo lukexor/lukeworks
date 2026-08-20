@@ -1,6 +1,8 @@
 ---
 title: "Fireworks!"
 kind: project
+description: Particle fireworks built from velocity vectors and simulated gravity.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/fireworks.webp
   alt: "Fireworks"

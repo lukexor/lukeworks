@@ -1,6 +1,7 @@
 ---
 title: "\"Lost and Found\" : Part 1 - From Dungeons & Dragons to HTML"
 kind: blog
+description: GeoCities, Dungeons and Dragons, and a first encounter with HTML.
 category: career
 series: Lost and Found
 part: 1

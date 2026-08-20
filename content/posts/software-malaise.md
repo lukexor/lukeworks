@@ -1,6 +1,7 @@
 ---
 title: "Software Malaise"
 kind: blog
+description: A rant about where software went wrong, and what keeps it there.
 category: programming
 image:
   src: /images/blog/software_malaise.webp

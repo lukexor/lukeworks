@@ -1,6 +1,7 @@
 ---
 title: "\"Lost and Found\" : Part 4 - Software development in practice"
 kind: blog
+description: Software development in practice, and the cost of untested code.
 category: career
 series: Lost and Found
 part: 4

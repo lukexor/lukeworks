@@ -1,6 +1,8 @@
 ---
 title: "Haskelltaire"
 kind: project
+description: One-card-draw Solitaire for the terminal, in 500 lines of Haskell.
+technologies: [Haskell]
 image:
   src: /images/projects/haskelltaire.webp
   alt: "Haskelltaire"

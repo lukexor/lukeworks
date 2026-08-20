@@ -1,6 +1,8 @@
 ---
 title: "UM-Flint Environmental Science Club Website"
 kind: project
+description: A rebuilt website for the UM-Flint Environmental Science Club.
+technologies: [HTML, CSS]
 image:
   src: /images/projects/umflint_env_club.webp
   alt: "UM-Flint Environmental Science Club Website"

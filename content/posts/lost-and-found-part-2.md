@@ -1,6 +1,7 @@
 ---
 title: "\"Lost and Found\" : Part 2 - PC load letter?!"
 kind: blog
+description: Why school prepared me for almost none of the real work.
 category: career
 series: Lost and Found
 part: 2

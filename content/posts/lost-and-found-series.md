@@ -1,6 +1,7 @@
 ---
 title: "\"Lost and Found\" Series : Lessons Learned"
 kind: blog
+description: A five-part account of wandering away from code, and back to it.
 category: career
 series: Lost and Found
 image:

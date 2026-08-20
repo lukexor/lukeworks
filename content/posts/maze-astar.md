@@ -1,6 +1,8 @@
 ---
 title: "Maze Generation and A* Search"
 kind: project
+description: A maze generator and an A-star solver, drawn as they run.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/maze-astar.webp
   alt: "Maze A* Search"

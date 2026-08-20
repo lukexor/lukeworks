@@ -1,6 +1,8 @@
 ---
 title: "Fluid Simulation"
 kind: project
+description: Drag a fire trail through a real-time fluid field.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/fluid-simulation.webp
   alt: "Fluid Simulation"

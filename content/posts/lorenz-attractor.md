@@ -1,6 +1,8 @@
 ---
 title: "Lorenz Attractor"
 kind: project
+description: The Lorenz attractor, traced one step at a time.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/lorenz-attractor.webp
   alt: "Lorenz Attractor"

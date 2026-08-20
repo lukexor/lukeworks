@@ -1,6 +1,8 @@
 ---
 title: "A Bell 103 Demodulator"
 kind: project
+description: Decodes 300-baud Bell 103 audio out of a WAV file.
+technologies: [Rust]
 website: https://github.com/lukexor/bell103_demodulator
 published: 2019-04-26T02:42:15Z
 started: 2019-04-26T02:42:01Z

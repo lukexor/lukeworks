@@ -68,6 +68,11 @@ pub struct PostView {
     pub published: Option<String>,
     /// Lowercase category from the frontmatter.
     pub category: Option<String>,
+    /// What a project was built with. Empty on a blog post.
+    pub technologies: Vec<String>,
+    /// A project shows no reading time, since every one lands at a minute or
+    /// two and the number says nothing.
+    pub show_reading_time: bool,
     /// Header image path.
     pub image_src: Option<String>,
     /// Alt text for [`PostView::image_src`].
@@ -139,7 +144,7 @@ fn unescape(text: &str) -> String {
 /// second request; only a client-side navigation to a different post does.
 #[server]
 pub async fn fetch_post(slug: String) -> Result<Option<PostView>, ServerFnError> {
-    use crate::content;
+    use crate::content::{self, Kind};
 
     let Some(post) = content::find(&slug) else {
         return Ok(None);
@@ -179,6 +184,8 @@ pub async fn fetch_post(slug: String) -> Result<Option<PostView>, ServerFnError>
         reading_minutes: post.reading_minutes,
         published: post.published.map(ToOwned::to_owned),
         category: post.category.map(ToOwned::to_owned),
+        technologies: post.technologies.iter().map(|&it| it.to_owned()).collect(),
+        show_reading_time: post.kind == Kind::Blog,
         image_src: post.image.map(|image| image.src.to_owned()),
         image_alt: post.image.map(|image| image.alt.to_owned()),
         series: post.series.map(ToOwned::to_owned),
@@ -241,8 +248,6 @@ pub fn Post() -> impl IntoView {
 
 #[component]
 fn PostBody(post: PostView) -> impl IntoView {
-    let date = published_date(post.published.as_deref()).map(ToOwned::to_owned);
-
     view! {
         <Title text=post.title.clone() />
 
@@ -282,10 +287,15 @@ fn PostBody(post: PostView) -> impl IntoView {
                     {post.title.clone()}
                 </h1>
 
+                // Field by field rather than the whole `PostView`: that struct
+                // owns `body_html`, and the largest post is ~100KB to clone for
+                // a one-line strip.
                 <PostMeta
                     category=post.category.clone()
-                    date=date
+                    technologies=post.technologies.clone()
+                    published=post.published.clone()
                     reading_minutes=post.reading_minutes
+                    show_reading_time=post.show_reading_time
                 />
 
                 {post
@@ -310,17 +320,22 @@ fn PostBody(post: PostView) -> impl IntoView {
     }
 }
 
-/// Category, date and reading time, in one line beneath the title.
+/// Taxonomy, date and reading time, in one line beneath the title.
 ///
-/// A project post carries no category, so this is the only place the three read
-/// as a set. In the rail they would have sat alone under a heading that says
-/// nothing.
+/// The first slot says what kind of thing this is: a category on a blog post,
+/// which links to the filtered listing, and the technologies on a project, which
+/// are display text with nothing behind them. No post carries both.
 #[component]
 fn PostMeta(
     category: Option<String>,
-    date: Option<String>,
+    technologies: Vec<String>,
+    published: Option<String>,
     reading_minutes: usize,
+    show_reading_time: bool,
 ) -> impl IntoView {
+    let date = published_date(published.as_deref()).map(ToOwned::to_owned);
+    let technologies = technologies.join(" · ");
+
     view! {
         <div class="flex flex-wrap gap-4 items-center mb-8 font-mono text-xs text-ink-dim">
             {category
@@ -336,8 +351,14 @@ fn PostMeta(
                             {category}
                         </A>
                     }
+                })}
+            {(!technologies.is_empty())
+                .then(|| {
+                    view! {
+                        <span class="tracking-widest uppercase text-primary">{technologies}</span>
+                    }
                 })} {date.map(|date| view! { <span>{date}</span> })}
-            <span>{reading_minutes} " min read"</span>
+            {show_reading_time.then(|| view! { <span>{reading_minutes} " min read"</span> })}
         </div>
     }
 }

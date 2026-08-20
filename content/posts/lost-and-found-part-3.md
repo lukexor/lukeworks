@@ -1,6 +1,7 @@
 ---
 title: "\"Lost and Found\" : Part 3 - I do not think it means what you think it means"
 kind: blog
+description: What software engineering actually looked like from the support desk.
 category: career
 series: Lost and Found
 part: 3

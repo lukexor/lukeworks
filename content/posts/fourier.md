@@ -1,6 +1,8 @@
 ---
 title: "Discrete Fourier Transforms"
 kind: project
+description: Epicycles tracing a shape, driven by a discrete Fourier transform.
+technologies: [JavaScript, p5.js]
 image:
   src: /images/projects/fourier.webp
   alt: "Discrete Fourier Transform"

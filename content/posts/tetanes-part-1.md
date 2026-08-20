@@ -1,6 +1,7 @@
 ---
 title: "Programming an NES Emulator from Scratch in Rust"
 kind: blog
+description: Starting an NES emulator in Rust, and how much harder it got than expected.
 category: programming
 series: TetaNES
 part: 1
