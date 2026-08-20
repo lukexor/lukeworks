@@ -356,11 +356,8 @@
    every brace onto its own line. Tailwind orders `utilities` after
    `components`, so a rule inside a layer loses to `.block` no matter how
    specific it is. Unlayered CSS outranks every layer, which is the only place
-   these rules win from.
-
-   Unscoped rather than sitting under `.prose`, because the homepage hero
-   backdrop is the same highlighted markup outside a post body. */
-pre.syntax-highlighting span {
+   these rules win from. */
+.prose pre.syntax-highlighting span {
   /* Neutralises the whole collision class rather than the names that happen to
      appear today, since a post in another language will emit different scopes.
      Colour is the only thing a scope span should carry, and the rules below
@@ -376,7 +373,7 @@ pre.syntax-highlighting span {
   text-transform: none;
 }
 
-pre.syntax-highlighting {
+.prose pre.syntax-highlighting {
   overflow-x: auto;
   padding: 1.15rem 1.25rem;
   border-radius: 4px;
@@ -388,76 +385,68 @@ pre.syntax-highlighting {
   line-height: 1.72;
 }
 
-pre.syntax-highlighting .comment {
+.prose pre.syntax-highlighting .comment {
   color: var(--code-comment);
   font-style: italic;
 }
 
-pre.syntax-highlighting :is(.keyword, .storage) {
+.prose pre.syntax-highlighting :is(.keyword, .storage) {
   color: var(--code-keyword);
 }
 
-pre.syntax-highlighting :is(.string, .char) {
+.prose pre.syntax-highlighting :is(.string, .char) {
   color: var(--code-string);
 }
 
-pre.syntax-highlighting .constant {
+.prose pre.syntax-highlighting .constant {
   color: var(--code-number);
 }
 
-pre.syntax-highlighting .entity.name.function,
-pre.syntax-highlighting .support.function {
+.prose pre.syntax-highlighting .entity.name.function,
+.prose pre.syntax-highlighting .support.function {
   color: var(--code-fn);
 }
 
-pre.syntax-highlighting :is(.entity.name.type, .entity.name.trait, .entity.name.struct, .support.type) {
+.prose pre.syntax-highlighting :is(.entity.name.type, .entity.name.trait, .entity.name.struct, .support.type) {
   color: var(--code-type);
 }
 
-pre.syntax-highlighting .punctuation {
+.prose pre.syntax-highlighting .punctuation {
   color: var(--ui-ink-dim);
 }
 
-/* The homepage hero's backdrop: the same highlighted markup, stripped of the
-   frame a code block wears and clipped to the band. Unlayered for the same
-   reason as the rules above: it has to outrank the utilities on the element. */
+/* The homepage hero's backdrop: the site's own source as plain text, clipped to
+   the band. Unlayered for the same reason as the rules above: it has to outrank
+   the utilities on the element.
+
+   One colour rather than syntax scopes. A 2px blur removes the difference
+   between them anyway, and the highlighted version was 511 spans, or 78% of
+   every element on the page. Dark leans on the dim ink, light on a cooler grey
+   than any token in the palette, since light code blurs to a brown smudge at
+   the contrast the text tokens carry. */
 .code-backdrop {
   overflow: hidden;
   user-select: none;
   pointer-events: none;
+  color: var(--ui-ink-dim);
+  font-family: var(--font-mono);
 }
 
-/* The light code palette leans on greys that were picked to sit on the code
-   block's own panel. Blurred across the page background they turn to a brown
-   smudge, so the backdrop carries its own cooler, lighter set: enough contrast
-   to read as code, cool enough to read as clean. Dark needs none of this — that
-   palette already glows against near-black. */
 :root:not(.dark) .code-backdrop {
-  --ui-ink-dim: #9db0c0;
-  --code-ink: #7d93a8;
-  --code-keyword: #93a7ba;
-  --code-comment: #a3b3c2;
-  --code-fn: #6f9f45;
-  --code-type: #4b9cb6;
-  --code-string: #5f9755;
-  --code-number: #c08744;
+  color: #93a7ba;
 }
 
 /* Source lines run out around 80 characters, so one column leaves the right
    half of a wide hero empty. Columns flow the same lines back across the full
    width. `auto` fills each to the band's height in turn rather than balancing
    them, so the last column ends flush instead of ragged. */
-.code-backdrop pre.syntax-highlighting {
+.code-backdrop pre {
   overflow: hidden;
   height: 100%;
+  margin: 0;
   columns: 24rem;
   column-gap: 2.5rem;
   column-fill: auto;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
   /* 12px, not the 11px the density wants. The backdrop is two fifths of the
      text on the page, so anything smaller fails Lighthouse's legible-font-size
      audit for the whole document — blur and `aria-hidden` do not exempt it. */

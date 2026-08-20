@@ -135,11 +135,11 @@ fn Hero() -> impl IntoView {
         // container edges to read as a band, so it cancels that padding and puts
         // its own back on the inside.
         <section class="overflow-hidden relative -mx-6 mb-16 -mt-10 border-b sm:-mx-14 border-rule">
-            // The site's own source, highlighted at build time by `build.rs`.
+            // The site's own source, escaped at build time by `build.rs`.
             // Decorative: a 2px blur, which softens the glyphs without turning
-            // them to smear, and the scrim below does the dimming. Markup
-            // rather than an image, so it arrives with the document, scales at
-            // any width, and follows the theme through the syntect classes.
+            // them to smear, and the scrim below does the dimming. Text rather
+            // than an image, so it arrives with the document, scales at any
+            // width, and takes its one colour from `.code-backdrop`.
             <div
                 aria-hidden="true"
                 class="absolute inset-0 blur-[2px] code-backdrop"
@@ -291,9 +291,14 @@ fn ProjectCard(project: FeaturedProject) -> impl IntoView {
                     Some(src) => {
                         Either::Right(
                             view! {
+                                // The cards sit well below the fold, so these
+                                // load only once they are scrolled toward and
+                                // stop competing with the hero for bandwidth.
                                 <img
                                     src=src
                                     alt=project.image_alt.unwrap_or_default()
+                                    loading="lazy"
+                                    decoding="async"
                                     class="object-cover w-full h-32 group-hover:opacity-100 opacity-85"
                                 />
                             },
