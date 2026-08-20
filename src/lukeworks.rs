@@ -1,9 +1,9 @@
 use crate::{
-    components::{footer::Footer, icons::SearchIcon, theme_toggle::ThemeToggle},
+    components::{footer::Footer, theme_toggle::ThemeToggle},
     hooks::use_theme,
     pages::{
         about::About, blog::BlogRoute, home::Home, not_found::NotFound, post::PostRoute,
-        projects::ProjectsRoute, search::Search,
+        projects::ProjectsRoute,
     },
 };
 use leptos::{either::EitherOf3, prelude::*};
@@ -23,7 +23,6 @@ pub const ROUTES: AppRoutes = AppRoutes {
     about: "/about",
     blog: "/blog",
     projects: "/projects",
-    search: "/search",
 };
 
 /// Type for application routes.
@@ -38,8 +37,6 @@ pub struct AppRoutes {
     pub blog: &'static str,
     /// Project listing.
     pub projects: &'static str,
-    /// Search results, driven by the `q` query parameter.
-    pub search: &'static str,
 }
 
 /// The whole compiled stylesheet, read from the site directory on first render.
@@ -232,7 +229,6 @@ pub fn LukeWorks() -> impl IntoView {
                     // in-memory table.
                     <Route path=StaticSegment("") view=Home ssr=SsrMode::Async />
                     <Route path=StaticSegment("/about") view=About />
-                    <Route path=StaticSegment("/search") view=Search />
                     <Route
                         path=StaticSegment("/blog")
                         view={Lazy::<BlogRoute>::new()}
@@ -284,15 +280,6 @@ pub fn Header() -> impl IntoView {
                     </A>
                     <A href=ROUTES.about attr:class="text-ink-dim hover:text-accent">
                         "about"
-                    </A>
-                    // Points at the search page rather than being an input, so
-                    // it works before the `/search` route grows a form.
-                    <A
-                        href=ROUTES.search
-                        attr:class="hidden gap-2 items-center px-3 py-1.5 rounded-sm border text-ink-dim border-rule bg-panel hover:text-accent sm:flex"
-                    >
-                        <SearchIcon />
-                        <span class="text-xs">"search"</span>
                     </A>
                     // Narrow screens get it in the footer instead, where the
                     // row has space the header's four nav links do not.

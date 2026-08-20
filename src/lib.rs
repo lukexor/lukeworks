@@ -29,7 +29,6 @@ pub mod pages {
     pub mod post;
     pub mod projects;
     pub mod resume;
-    pub mod search;
     pub mod tetanes_web;
 }
 

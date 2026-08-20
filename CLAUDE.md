@@ -163,13 +163,14 @@ Phases 0–3 of `MIGRATION.md` are done and Phase 4 is partly done. Content, the
 client-side routing, redirects and the post listings work end to end; both targets build clean
 with no warnings and `cargo nextest run --features ssr` is green.
 
-Still stubs: `Home`, `About`, `Resume`, `Search`, `TetanesWeb`, and the `Button`/`Image`
+Still stubs: `Home`, `About`, `Resume`, `TetanesWeb`, and the `Button`/`Image`
 components render placeholders. Routed so far: `/`, `/about`, `/blog`, `/projects`, `/:post`.
 The `/:post` route is a bare param segment and **must stay last** in `FlatRoutes` — it matches
 any single path segment.
 
-Not yet built (rest of Phase 4+): `/sketch/:name`, `/resume`, `/tetanes-web`, and search. Nine
-posts embed `<iframe src="/sketch/...">` that 404 until the sketch route lands.
+Not yet built (rest of Phase 4+): `/resume`, `/tetanes-web`, and search. There is no `/search`
+route and no header link to one: an empty results page is worse than no entry point, so both go
+back in with the feature.
 
 `/rss` is served by `src/feed.rs` as a plain Axum handler rather than a Leptos route, because the
 response is XML with no shell to render. Any same-origin link to it needs `rel="external"` or the
@@ -201,7 +202,7 @@ one moves far more than the page's own source. Gzipped transfer per first visit:
 
 | page | before | after |
 | --- | --- | --- |
-| home, about, search | 335KB | 287KB |
+| home, about | 335KB | 287KB |
 | a post | 335KB | 321KB |
 | blog, projects | 335KB | 346KB |
 

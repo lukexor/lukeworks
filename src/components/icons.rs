@@ -83,24 +83,6 @@ pub fn MailIcon(#[prop(into, default = "size-[18px]".into())] class: String) -> 
     }
 }
 
-/// Magnifier, for the header search affordance.
-#[component]
-pub fn SearchIcon(#[prop(into, default = "size-[13px]".into())] class: String) -> impl IntoView {
-    view! {
-        <svg
-            class=class
-            viewBox="0 0 24 24"
-            fill=FILL
-            stroke="currentColor"
-            stroke-width="2"
-            aria-hidden="true"
-        >
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-4.2-4.2" />
-        </svg>
-    }
-}
-
 /// Sun, shown by the theme toggle while the dark theme is active.
 #[component]
 pub fn SunIcon(#[prop(into, default = "size-[18px]".into())] class: String) -> impl IntoView {
