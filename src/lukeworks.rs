@@ -6,7 +6,7 @@ use crate::{
         search::Search,
     },
 };
-use leptos::{either::Either, prelude::*};
+use leptos::{either::EitherOf3, prelude::*};
 use leptos_meta::{
     HashedStylesheet, Link, Meta, MetaTags, Stylesheet, Title, provide_meta_context,
 };
@@ -42,19 +42,79 @@ pub struct AppRoutes {
     pub search: &'static str,
 }
 
-/// Renders either a HashedStylesheet or Stylesheet based on configured option for `hash_files`.
-/// Set LEPTOS_HASH_FILES=true for release builds.
+/// The whole compiled stylesheet, read from the site directory on first render.
+///
+/// `None` if the file is not where the options say it is, which leaves
+/// [`RootStylesheet`] on the `<link>` it would otherwise have rendered.
+///
+/// Held in a `OnceLock` because `shell` runs per request and the file does not
+/// change under a running server.
+///
+/// Always `None` outside a release server build: `cargo leptos watch` writes
+/// the file after the server is already up, and the WASM target has no disk.
+#[cfg(all(feature = "ssr", not(debug_assertions)))]
+fn compiled_css(options: &LeptosOptions) -> Option<&'static str> {
+    use std::sync::OnceLock;
+
+    static CSS: OnceLock<Option<String>> = OnceLock::new();
+
+    CSS.get_or_init(|| {
+        // The same two spellings `HashedStylesheet` picks between, and the same
+        // place it looks for the hash: beside the binary, not under the site
+        // root. Deriving the name here rather than reading the directory keeps
+        // a stale `lukeworks.<old-hash>.css` from being served.
+        let mut name = options.output_name.to_string();
+        if options.hash_files {
+            let hash_path = std::env::current_exe()
+                .ok()?
+                .parent()?
+                .join(options.hash_file.as_ref());
+            let hashes = std::fs::read_to_string(hash_path).ok()?;
+            let hash = hashes
+                .lines()
+                .filter_map(|line| line.trim().split_once(':'))
+                .find(|&(file, _)| file == "css")?
+                .1;
+            name.push('.');
+            name.push_str(hash.trim());
+        }
+        let path = std::path::Path::new(options.site_root.as_ref())
+            .join(options.site_pkg_dir.as_ref())
+            .join(format!("{name}.css"));
+        std::fs::read_to_string(path).ok()
+    })
+    .as_deref()
+}
+
+#[cfg(not(all(feature = "ssr", not(debug_assertions))))]
+fn compiled_css(_options: &LeptosOptions) -> Option<&'static str> {
+    None
+}
+
+/// Puts the stylesheet in the document head.
+///
+/// Release builds inline it. A `<link>` is the page's only render-blocking
+/// request, and Lighthouse charges it 150ms on a throttled mobile connection.
+/// The file is ~6KB over the wire, which every page now carries in exchange
+/// for that round trip.
+///
+/// Dev builds keep the `<link>`, so `cargo leptos watch` can still hot-swap the
+/// stylesheet by its href.
 #[component]
 fn RootStylesheet(options: LeptosOptions) -> impl IntoView {
-    if options.hash_files {
-        Either::Left(view! { <HashedStylesheet id="style" options /> })
+    if let Some(css) = compiled_css(&options) {
+        // `inner_html` rather than a text child: a text child is escaped, and
+        // Tailwind's `>` combinators would arrive as `&gt;`.
+        EitherOf3::A(view! { <style id="style" inner_html=css></style> })
+    } else if options.hash_files {
+        EitherOf3::B(view! { <HashedStylesheet id="style" options /> })
     } else {
         let href = format!(
             "{pkg_path}/{css_name}.css",
             pkg_path = &options.site_pkg_dir,
             css_name = &options.output_name
         );
-        Either::Right(view! { <Stylesheet id="style" href /> })
+        EitherOf3::C(view! { <Stylesheet id="style" href /> })
     }
 }
 

@@ -187,8 +187,31 @@ Two things to know before touching the dev loop:
 
 Styling is deliberately minimal pending the Phase 5 design pass.
 
+## Lighthouse
+
+Measure with the Lighthouse the browser ships, not the CLI's default. Chrome bundles 13.x, `npx
+lighthouse` resolves to 12, and the two disagree by ten points on the same page. Pin the version:
+`npx lighthouse@13.3.0 <url> --chrome-flags="--headless=new --no-sandbox" --output=json`. Reading
+the exported JSON beats reading the panel, since it carries every audit. DevTools saves it from the
+report's ⋮ menu.
+
+The landing page's LCP element is the hero code backdrop, and its score sits on the edge: an idle
+machine scores 100 with LCP at 1.8s, a loaded one scores 90 at 3.6s. What puts it there is the
+`<link rel="preload" href="/pkg/lukeworks.wasm" as="fetch">` that `HydrationScripts` writes into
+the head, which spends 337KB of bandwidth at High priority before the page paints. Serving the page
+with that one tag stripped scores 99 on a run that otherwise scores 90, and hydrates about a second
+later. `HydrationScripts` has no prop to suppress it, so taking that trade means rewriting the head
+on the way out.
+
 ## Deployment
 
 `.github/workflows/ci.yml` runs lint → audit → test → build on push/PR to `main`; the deploy step
 is still a TODO. Release builds should set `LEPTOS_HASH_FILES=true` — `RootStylesheet` in
 `src/lukeworks.rs` switches between `HashedStylesheet` and a plain `Stylesheet` on that option.
+
+A release server reads the compiled stylesheet off disk at first render and inlines it in a
+`<style>`, so no `<link>` is emitted. A stylesheet `<link>` is the page's only render-blocking
+request, and Lighthouse charges it 150ms on a throttled mobile connection. The bytes are a wash,
+since the CSS gzips to the same ~6KB either way, and the round trip is gone. Dev builds keep the
+`<link>`, because `cargo leptos watch` hot-swaps the stylesheet by its href and the file is not
+written until after the server is up.

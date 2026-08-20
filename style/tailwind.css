@@ -114,6 +114,15 @@
     text-decoration: underline;
   }
 
+  /* A link inside a run of text has nothing but its colour to mark it, which
+     leaves it invisible to a reader who cannot see the hue. Links that stand on
+     their own — nav, cards, section headings — sit outside a <p> or opt out
+     with `no-underline`. */
+  p a:not(.no-underline) {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
   a:focus-visible {
     outline: 2px solid var(--ui-accent);
     outline-offset: 2px;
@@ -449,6 +458,9 @@ pre.syntax-highlighting .punctuation {
   border: 0;
   border-radius: 0;
   background: transparent;
-  font-size: 0.6875rem;
+  /* 12px, not the 11px the density wants. The backdrop is two fifths of the
+     text on the page, so anything smaller fails Lighthouse's legible-font-size
+     audit for the whole document — blur and `aria-hidden` do not exempt it. */
+  font-size: 0.75rem;
   line-height: 1.55;
 }
