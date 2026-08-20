@@ -228,8 +228,10 @@ lighthouse` resolves to 12, and the two disagree by ten points on the same page.
 the exported JSON beats reading the panel, since it carries every audit. DevTools saves it from the
 report's ⋮ menu.
 
-The landing page's LCP element is the hero code backdrop, and its score sits on the edge: an idle
-machine scores 100 with LCP at 1.8s, a loaded one scores 90 at 3.6s. What puts it there is the
+The landing page's LCP element is the hero code backdrop. Flattening it from 511 highlight spans
+to one block of plain text took the release build from 92 to 100 and LCP from 3.3s to 1.5s, but the
+element is still the one being measured, and the score still moves with machine load. What puts it
+on the edge is the
 `<link rel="preload" href="/pkg/lukeworks.wasm" as="fetch">` that `HydrationScripts` writes into
 the head, which spends 337KB of bandwidth at High priority before the page paints. Serving the page
 with that one tag stripped scores 99 on a run that otherwise scores 90, and hydrates about a second

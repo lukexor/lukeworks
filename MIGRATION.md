@@ -293,13 +293,22 @@ pointer and key input, start/stop on visibility — then port each sketch onto i
 and `fourier` are the substantial ones; `matrix` and `pong` are good first ports to validate the
 runtime.
 
-This is where WASM size becomes real, and where the `--split` flag already in the `justfile`
-earns its place: mark each sketch `#[lazy]` so its chunk is fetched only when that page is
-visited. Note `--split` has had rough edges upstream
-([leptos#4322](https://github.com/leptos-rs/leptos/issues/4322)) — verify a split build serves
-correctly before depending on it, and be ready to drop the flag until sketches actually land.
+This is where WASM size becomes real. Every command already passes `--split`, so marking each
+sketch `#[lazy]` is enough to have its chunk fetched only when that page is visited. Watch for the
+rough edges upstream ([leptos#4322](https://github.com/leptos-rs/leptos/issues/4322)): every
+command depends on the flag now, so a regression there is a broken site rather than a larger
+bundle.
 
 ## Phase 7 — Deploy
+
+Two jobs to do once the tree settles and before the first deploy, both of which move a lot at once
+and want a quiet moment:
+
+- **Dependency refresh.** `cargo update`, then `just audit` and both clippy targets.
+- **Leptos 0.9.0-beta.** It carries performance work and bug fixes over the 0.8 line this is built
+  on. `leptos`, `leptos_router`, `leptos_meta` and `leptos_axum` move together, and cargo-leptos
+  has to be current with them. Worth trying on a branch: the two places most likely to break are
+  the `#[lazy_route]` impls and `hydrate_lazy`, both of which are recent API.
 
 Target is Fly.io: one `shared-cpu-1x` machine at 512MB, ~$3.30/mo, suspended while idle. The
 alternative considered was a €4 VPS, which is cheaper and hands you TLS renewal and OS patching.
@@ -336,26 +345,15 @@ Phases 0–2 are the critical path and unblock everything else; 3–4 turn it in
 The redirect table now has the table-driven tests it deserved (`src/redirects.rs`). Frontmatter
 parsing still has none — `build.rs` failures there remain confusing.
 
-## Open: is `--split` safe?
+## Answered: `--split` is mandatory
 
-`just dev`, `just run` and `just build` all pass `--split`. During Phase 4 a split build threw
-`RuntimeError: function signature mismatch` out of a wasm-bindgen closure shim on every nav click
-and client-side routing failed outright; the same page worked with a plain `cargo leptos watch`.
+The routes marked `#[lazy_route]` compile to a module import of `__wasm_split_placeholder__` that
+only a split build rewrites, so `just dev`, `just run`, `just build` and the `Dockerfile` all pass
+the flag. Dropping it anywhere leaves that page importing a specifier the browser cannot resolve,
+and the whole app stays inert. See the "Lazy routes" section of `CLAUDE.md`.
 
-That test was **confounded** — dev builds were serving `.wasm` with `max-age=30d, immutable` at the
-time (see the cache-control note in `CLAUDE.md`), so the browser may simply have been pairing a
-stale module with fresh glue. The caching bug is fixed; the split retest was never redone because
-browser automation dropped out mid-session. Redo it before trusting `--split`:
-
-1. `cargo leptos watch --split`, load a post, click a nav link.
-2. Client-side nav should change the URL without a full page load, and the console should be clean.
-
-If it still fails, drop `--split` from the `justfile` until Phase 6 actually needs lazy chunks —
-[leptos#4322](https://github.com/leptos-rs/leptos/issues/4322) is the known rough edge.
-
-**Half answered.** The first build of `cargo leptos watch --split` serves fine, but the *rebuild*
-after any edit dies in cargo-leptos with `Could not rename from "target/site/pkg/lukeworks_bg.wasm"
-to "target/site/pkg/lukeworks.wasm" (No such file or directory)`, taking the dev server with it.
-It happens on every rebuild, and the same watch without `--split` rebuilds clean. `just dev`
-therefore drops the flag. `just run` and `just build` keep it, since a one-shot build was never the
-failing case. Whether a split *release* bundle routes correctly in the browser is still untested.
+The `RuntimeError: function signature mismatch` seen during Phase 4 does not reproduce, and neither
+does a `Could not rename target/site/pkg/lukeworks_bg.wasm` failure on rebuild: a watcher under
+`--split` survives repeated edits, including one with a concurrent `cargo nextest` against the same
+target directory. What remains untested is a split *release* bundle driven from a browser, which
+means loading a post and clicking a nav link with the console open.
