@@ -17,6 +17,12 @@ use leptos_router::{
 
 /// Support email.
 pub const SUPPORT_EMAIL: &str = "me@lukeworks.tech";
+/// The one hostname this site answers to.
+///
+/// `redirect_middleware` canonicalises `www.` to it, and will only do so for
+/// this name: the `Host` header is the client's to write, so redirecting to
+/// whatever it says would forward any visitor anywhere.
+pub const SITE_HOST: &str = "lukeworks.tech";
 /// Application routes.
 pub const ROUTES: AppRoutes = AppRoutes {
     home: "/",
@@ -140,10 +146,7 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <meta
                     name="description"
-                    content="
-                    A blog and project portfolio by Lucas Petherbridge on programming,
-                    technology, and video games.
-                    "
+                    content="A blog and project portfolio by Lucas Petherbridge on programming, technology, and video games."
                 />
 
                 <AutoReload options=options.clone() />
@@ -157,8 +160,8 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 
                 // The `.ico` is the fallback for browsers that will not take an
                 // SVG, and it carries the 16, 32 and 48px rasters they pick
-                // from. Anything current prefers the SVG, which is 400 bytes and
-                // stays sharp at any density.
+                // from. Anything current prefers the SVG, which is under
+                // 500 bytes and stays sharp at any density.
                 <Link rel="icon" href="/favicon.ico" sizes="32x32" />
                 <Link rel="icon" href="/favicon.svg" type_="image/svg+xml" />
                 <Link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
