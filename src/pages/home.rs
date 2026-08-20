@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 pub struct RecentPost {
     slug: String,
     title: String,
+    description: String,
     category: Option<String>,
     published: Option<String>,
     reading_minutes: usize,
@@ -57,6 +58,7 @@ pub async fn fetch_home() -> Result<HomeView, ServerFnError> {
         .map(|post| RecentPost {
             slug: post.slug.to_owned(),
             title: post.title.to_owned(),
+            description: post.description.to_owned(),
             category: post.category.map(ToOwned::to_owned),
             published: post.published.map(ToOwned::to_owned),
             reading_minutes: post.reading_minutes,
@@ -133,10 +135,14 @@ fn Hero() -> impl IntoView {
         // container edges to read as a band, so it cancels that padding and puts
         // its own back on the inside.
         <section class="overflow-hidden relative -mx-6 mb-16 -mt-10 border-b sm:-mx-14 border-rule">
+            // Decorative, and low priority so it does not compete with the
+            // fonts and the stylesheet. It carries a 7px blur at a quarter
+            // opacity, which is why a 1200px source is enough.
             <img
                 src="/images/code-bg.webp"
                 alt=""
                 aria-hidden="true"
+                fetchpriority="low"
                 class="object-cover absolute inset-0 w-full h-full opacity-25 scale-110 dark:opacity-40 blur-[7px] saturate-50"
             />
             <div class="absolute inset-0 hero-scrim"></div>
@@ -152,8 +158,9 @@ fn Hero() -> impl IntoView {
                 <div class="flex flex-wrap gap-4 items-center">
                     // Scrolls to the recent posts rather than leaving for
                     // `/blog`, which the section's own "all posts" link already
-                    // does. A plain `<a>`, since the browser resolves a
-                    // same-page fragment without the router.
+                    // does. The router intercepts this like any same-origin
+                    // anchor and re-implements the fragment scroll in
+                    // `scroll_to_el`, so it needs no `rel="external"`.
                     <a
                         href="#recent"
                         class="inline-flex gap-2.5 items-center py-3 px-6 font-mono text-sm font-bold no-underline rounded-sm hover:no-underline bg-accent text-on-accent hover:bg-accent-hover"
@@ -211,20 +218,25 @@ fn RecentRow(post: RecentPost) -> impl IntoView {
     view! {
         <A
             href=format!("/{}", post.slug)
-            attr:class="grid gap-x-6 gap-y-1.5 items-baseline py-5 no-underline border-t text-ink border-rule sm:grid-cols-[104px_minmax(0,1fr)_128px_64px] hover:no-underline group"
+            attr:class="grid gap-x-6 gap-y-1.5 py-5 no-underline border-t text-ink border-rule sm:grid-cols-[104px_minmax(0,1fr)_128px_64px] hover:no-underline group"
         >
-            <span class="font-mono text-xs text-ink-dim">
+            <span class="font-mono text-xs sm:mt-1.5 text-ink-dim">
                 {dotted_date(post.published.as_deref())}
             </span>
-            // Amber on a touch screen, where there is no hover state to carry
-            // the fact that the whole row is a link.
-            <span class="text-lg font-medium tracking-tight pointer-coarse:text-accent group-hover:text-accent">
-                {post.title}
+            <span class="min-w-0">
+                // Amber on a touch screen, where there is no hover state to
+                // carry the fact that the whole row is a link.
+                <span class="block text-lg font-medium tracking-tight pointer-coarse:text-accent group-hover:text-accent">
+                    {post.title}
+                </span>
+                <span class="block mt-1 max-w-prose text-sm leading-relaxed text-ink-dim">
+                    {post.description}
+                </span>
             </span>
-            <span class="font-mono tracking-widest uppercase text-primary text-[11px]">
+            <span class="font-mono tracking-widest uppercase sm:mt-1.5 text-primary text-[11px]">
                 {post.category}
             </span>
-            <span class="font-mono text-xs sm:text-right text-ink-dim">
+            <span class="font-mono text-xs sm:mt-1.5 sm:text-right text-ink-dim">
                 {post.reading_minutes} " min"
             </span>
         </A>
