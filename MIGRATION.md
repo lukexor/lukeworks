@@ -229,7 +229,7 @@ Register in `FlatRoutes` (currently only `/`, `/about`, `/:post` exist; the page
 | `/:slug` | post — flat namespace across blog and project posts, as before |
 | `/resume` | from `resumeInfo.json` (`git show d82ff04^:web/src/data/resumeInfo.json`) |
 | `/sketch/:name` | 9 sketches |
-| `/tetanes-web` | emulator |
+| `/tetanes-web` | emulator — see the note below |
 | `/rss` | **not** a Leptos route — a plain Axum handler returning `application/rss+xml` |
 | 404 | `NotFound` is written and wired |
 
@@ -260,6 +260,12 @@ rendered server-side. Degrades to a working form with WASM disabled.
 
 **RSS** — generate from the same `POSTS` index; add `<link rel="alternate">` in `shell()`.
 
+**tetanes-web** on the live site frames `../tetanes`'s generated `index.html`, so it reads as a
+separate site sitting inside this one: its own chrome, its own theme, none of the page's. The page
+should host the emulator directly and wear the site's styling like any other project page. That
+likely means changing what `../tetanes` exposes, to a mountable canvas and controls rather than a
+whole document.
+
 ## Phase 5 — Design directions
 
 Deliverable before any Leptos layout work: 2–3 static HTML mockups (home, post, listing) to
@@ -271,6 +277,10 @@ compare side by side. Constraints carried in from the current tree:
   settle the palette and then a single pass can fix every stale class.
 - Dark mode is a `.dark` class variant and must stay server-decidable (see Phase 3).
 - `style/main.css` is empty but is the `style-file` cargo-leptos expects — keep it or repoint.
+
+Polish wanted here: type the hero's "Hi, I'm Luke" out like a terminal, with the trailing `_`
+following the cursor as characters land. The subtitle either fades in after or types too, to be
+decided when it can be seen side by side.
 
 ## Phase 6 — Sketches in Rust
 
@@ -322,3 +332,10 @@ browser automation dropped out mid-session. Redo it before trusting `--split`:
 
 If it still fails, drop `--split` from the `justfile` until Phase 6 actually needs lazy chunks —
 [leptos#4322](https://github.com/leptos-rs/leptos/issues/4322) is the known rough edge.
+
+**Half answered.** The first build of `cargo leptos watch --split` serves fine, but the *rebuild*
+after any edit dies in cargo-leptos with `Could not rename from "target/site/pkg/lukeworks_bg.wasm"
+to "target/site/pkg/lukeworks.wasm" (No such file or directory)`, taking the dev server with it.
+It happens on every rebuild, and the same watch without `--split` rebuilds clean. `just dev`
+therefore drops the flag. `just run` and `just build` keep it, since a one-shot build was never the
+failing case. Whether a split *release* bundle routes correctly in the browser is still untested.

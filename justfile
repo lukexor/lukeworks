@@ -26,8 +26,13 @@ install:
     cargo-nextest
 
 # Run development server
+#
+# No `--split` here. Under the watcher a rebuild fails in cargo-leptos with
+# `Could not rename target/site/pkg/lukeworks_bg.wasm`, taking the server down
+# on the first edit. Nothing is `#[lazy]` yet, so splitting buys nothing until
+# the sketches land (Phase 6) and can be revisited then.
 dev:
-  @cargo leptos watch --split
+  @cargo leptos watch
 
 # Run release server
 run:
