@@ -26,7 +26,7 @@ pub fn TetanesWeb() -> impl IntoView {
         // at `max-width: 80%`, so a wider frame spreads an 880px canvas across
         // a page that was laid out for less.
         //
-        // 1200px clears that canvas plus the controls table under it. A shorter
+        // 1400px clears that canvas plus the controls table under it. A shorter
         // frame grows a scrollbar inside the page's own.
         //
         // `gamepad` has to be granted explicitly, since a cross-document frame
@@ -35,7 +35,7 @@ pub fn TetanesWeb() -> impl IntoView {
             src=BUNDLE
             title="TetaNES"
             allow="gamepad *; fullscreen"
-            class="block w-full border-0 h-[1200px]"
+            class="block w-full border-0 h-[1400px] -m-10"
         ></iframe>
     }
 }

@@ -36,7 +36,10 @@
 body {
   --color: #e6b673;
   --heading: #a9491f;
-  --background: #0f1419;
+  /* Patched from the upstream #0f1419 to the site's dark page background, so
+     the frame does not read as a window cut into the page. Regenerating this
+     bundle drops the change: see MIGRATION.md, Phase 4. */
+  --background: #080b11;
   background-color: var(--background);
   max-width: 80%;
   margin: auto;

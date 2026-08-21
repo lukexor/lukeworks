@@ -260,11 +260,16 @@ rendered server-side. Degrades to a working form with WASM disabled.
 
 **RSS** — generate from the same `POSTS` index; add `<link rel="alternate">` in `shell()`.
 
-**tetanes-web** on the live site frames `../tetanes`'s generated `index.html`, so it reads as a
-separate site sitting inside this one: its own chrome, its own theme, none of the page's. The page
-should host the emulator directly and wear the site's styling like any other project page. That
-likely means changing what `../tetanes` exposes, to a mountable canvas and controls rather than a
-whole document.
+**tetanes-web** frames `public/tetanes-web/index.html`, the v0.15.0 bundle carried over from the
+old site, so it reads as a separate site sitting inside this one: its own chrome, its own theme,
+none of the page's. The page should host the emulator directly and wear the site's styling like any
+other project page. That likely means changing what `../tetanes` exposes, to a mountable canvas and
+controls rather than a whole document.
+
+Two things about the checked-in bundle. Its `--background` is patched from the upstream `#0f1419`
+to the site's `#080b11`, which regenerating it will drop. And the frame's 1400px height is measured
+against that document, so a bundle whose controls table grows needs the number in
+`src/pages/tetanes_web.rs` raised with it.
 
 ## Phase 5 — Design directions
 
