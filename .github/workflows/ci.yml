@@ -12,7 +12,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # No toolchain is named here: rust-toolchain.toml pins 1.91.1 and the
       # wasm32 target, and rustup installs both on the first cargo call. Doing
@@ -58,7 +58,7 @@ jobs:
       group: deploy-production
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: superfly/flyctl-actions/setup-flyctl@master
       # --remote-only builds on Fly's builder rather than shipping an image
       # from here, so the runner needs no docker layer cache to be quick.
