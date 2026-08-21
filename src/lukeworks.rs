@@ -3,7 +3,7 @@ use crate::{
     hooks::use_theme,
     pages::{
         about::About, blog::BlogRoute, home::Home, not_found::NotFound, post::PostRoute,
-        projects::ProjectsRoute,
+        projects::ProjectsRoute, tetanes_web::TetanesWeb,
     },
 };
 use leptos::{either::EitherOf3, prelude::*};
@@ -248,6 +248,7 @@ pub fn LukeWorks() -> impl IntoView {
                         view={Lazy::<ProjectsRoute>::new()}
                         ssr=SsrMode::Async
                     />
+                    <Route path=StaticSegment("/tetanes-web") view=TetanesWeb />
                     // Must stay last: a bare param segment matches any single
                     // path segment, including the static routes above.
                     <Route
