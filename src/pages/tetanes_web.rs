@@ -3,6 +3,12 @@
 //! The emulator is a prebuilt bundle under `public/tetanes-web/`, framed rather
 //! than mounted: it ships its own document, styles and fonts. Two posts link
 //! here, and so does the projects listing.
+//!
+//! Deliberately bare until Phase 4 rebuilds this page around the emulator
+//! rather than around its document. Chrome of our own on top of chrome of its
+//! own reads as two pages stacked, so the frame carries none: no heading, no
+//! border, no background, and the page's gutters cancelled so it runs edge to
+//! edge. Its palette is its own and does not match the site yet.
 
 use leptos::prelude::*;
 use leptos_meta::Title;
@@ -16,22 +22,18 @@ pub fn TetanesWeb() -> impl IntoView {
     view! {
         <Title text="TetaNES" />
 
-        <p class="mb-3 font-mono text-[13px] text-primary">"$ tetanes --web"</p>
-        <h1 class="mb-4 font-mono text-4xl font-bold tracking-tighter">"TetaNES"</h1>
-        <p class="mb-8 max-w-2xl leading-relaxed text-ink-dim">
-            "A cycle-accurate NES emulator written in Rust, compiled to WebAssembly. "
-            "Load a ROM to play it here, or read " <a href="/tetanes">"how it was built"</a> "."
-        </p>
-
-        // The bundle sizes its canvas at 880x696 and puts a controls table
-        // under it, so the frame is tall and scrolls internally rather than
-        // being resized from out here. `gamepad` has to be granted explicitly:
-        // a cross-document frame gets no controller access by default.
+        // Tall enough to clear the bundle's whole document, which is an 880x696
+        // canvas over a controls table. A frame shorter than its content grows
+        // a scrollbar inside the page's own, and `scrolling="no"` is not
+        // expressible here: leptos has no typed attribute for it.
+        //
+        // `gamepad` has to be granted explicitly, since a cross-document frame
+        // gets no controller access by default.
         <iframe
             src=BUNDLE
             title="TetaNES"
             allow="gamepad *; fullscreen"
-            class="w-full rounded border h-[80vh] min-h-[600px] border-rule bg-panel"
+            class="block -my-10 -mx-6 w-screen border-0 sm:-mx-14 h-[1500px] max-w-[100vw]"
         ></iframe>
     }
 }
