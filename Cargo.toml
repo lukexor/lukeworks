@@ -30,7 +30,6 @@ unused = "warn"
 hydrate = ["dep:console_error_panic_hook", "leptos/hydrate"]
 ssr = [
   "dep:axum",
-  "dep:axum-extra",
   "dep:leptos_axum",
   "dep:tokio",
   "dep:tower",
@@ -94,9 +93,7 @@ console_error_panic_hook = { version = "0.1", optional = true }
 
 # `ssr` dependencies
 axum = { version = "0.8", optional = true }
-axum-extra = { version = "0.12", features = ["cookie"], optional = true }
 leptos_axum = { version = "0.8", optional = true }
-thiserror = "2"
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 tower = { version = "0.5", features = ["limit"], optional = true }
 # Held at 0.6 deliberately: leptos_axum still depends on tower-http 0.6, and

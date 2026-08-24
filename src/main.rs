@@ -3,6 +3,8 @@
 #![doc = include_str!("../README.md")]
 
 #[cfg(feature = "ssr")]
+mod logging;
+#[cfg(feature = "ssr")]
 mod server;
 
 #[cfg(feature = "ssr")]
@@ -15,6 +17,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     use lukeworks::lukeworks::*;
     use tower::limit::ConcurrencyLimitLayer;
     use tower_http::{compression::CompressionLayer, services::ServeFile, trace::TraceLayer};
+
+    let log = logging::init();
+    if let Err(err) = log {
+        eprintln!("failed to initialize logging: {err:?}");
+    }
 
     let conf = get_configuration(None)?;
     let addr = conf.leptos_options.site_addr;
