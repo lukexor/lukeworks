@@ -1,1 +1,315 @@
-var __sketch=(()=>{var I=Object.defineProperty;var G=Object.getOwnPropertyDescriptor;var J=Object.getOwnPropertyNames;var K=Object.prototype.hasOwnProperty;var Q=(e,d,h)=>d in e?I(e,d,{enumerable:!0,configurable:!0,writable:!0,value:h}):e[d]=h;var Z=(e,d)=>{for(var h in d)I(e,h,{get:d[h],enumerable:!0})},$=(e,d,h,S)=>{if(d&&typeof d=="object"||typeof d=="function")for(let N of J(d))!K.call(e,N)&&N!==h&&I(e,N,{get:()=>d[N],enumerable:!(S=G(d,N))||S.enumerable});return e};var p=e=>$(I({},"__esModule",{value:!0}),e);var b=(e,d,h)=>Q(e,typeof d!="symbol"?d+"":d,h);var te={};Z(te,{default:()=>W});var ee=e=>{e.push(),e.background(0),e.fill(255),e.noStroke(),e.textSize(18),e.textAlign(e.CENTER),e.fill(255),e.text("Click or Tap to load",e.width/2,e.height/2),e.pop()},U=(e,d,h)=>{e.cursor(e.HAND),e.noLoop(),d?d():ee(e);let S=()=>{e.mousePressed=()=>{},e.isLooping()||(e.cursor(e.ARROW),h&&h(),e.loop())};e.mousePressed=S};function W(e){let w,A=!0,x=0,M=0,P=0,X=0;e.disableFriendlyErrors=!0,e.preload=()=>{},e.setup=()=>{let u=e.createCanvas(360,360),t=(e.windowWidth-e.width)/2,o=(e.windowHeight-e.height)/2;u.position(t,o),u.style("border","2px solid #222"),e.rectMode(e.CENTER),e.noStroke(),w=new _(.03,6e-5,15e-10),x=e.width/2,M=e.height-30,e.frameRate(30),U(e,void 0,()=>{e.cursor(e.CROSS),e.mousePressed=()=>{A=!1},e.mouseReleased=()=>{A=!0},e.mouseMoved=()=>{e.mouseIsPressed&&C(e.mouseX,e.mouseY)},e.touchMoved=()=>(C(e.mouseX,e.mouseY),!1),e.touchStarted=()=>(A=!1,!1),e.touchEnded=()=>(A=!0,!1)})},e.draw=()=>{e.isLooping()&&(A?C(x,M):e.mouseIsPressed&&C(e.mouseX,e.mouseY),w.step(),w.draw())};let C=(u,t)=>{let o=u/4,i=t/4,c=u-P,n=t-X;P=u,X=t;let l=e.createVector(c,n);l.setMag(2.8);for(let f=-2;f<=2;++f)for(let m=-2;m<=2;++m)w.addDensity(o+f,i+m,e.random(50,100)),w.addVelocity(o+f,i+m,l.x,l.y);return!1},r=(u,t)=>{let o=u[t];return o===void 0&&(console.log("out of bounds",u.length,t),e.noLoop(),o=0),o};class _{constructor(t,o,i){b(this,"size");b(this,"dt");b(this,"diff");b(this,"visc");b(this,"s");b(this,"density");b(this,"velx");b(this,"vely");b(this,"velx0");b(this,"vely0");this.size=90,this.dt=t,this.diff=o,this.visc=i;let c=8100;this.s=new Array(c).fill(0),this.density=new Array(c).fill(0),this.velx=new Array(c).fill(0),this.vely=new Array(c).fill(0),this.velx0=new Array(c).fill(0),this.vely0=new Array(c).fill(0)}step(){D(1,this.velx0,this.velx,this.visc,this.dt),D(2,this.vely0,this.vely,this.visc,this.dt),z(this.velx0,this.vely0,this.velx,this.vely),k(1,this.velx,this.velx0,this.velx0,this.vely0,this.dt),k(2,this.vely,this.vely0,this.velx0,this.vely0,this.dt),z(this.velx,this.vely,this.velx0,this.vely0),D(0,this.s,this.density,this.diff,this.dt),k(0,this.density,this.s,this.velx,this.vely,this.dt)}addDensity(t,o,i){let c=s(t,o);this.density[c]+=i;let n=e.createVector(e.random(-2*2.8,2*2.8),e.random(-2.8/2));this.addVelocity(t,o,n.x,n.y)}addVelocity(t,o,i,c){let n=s(t,o);this.velx[n]+=i,this.vely[n]+=c}draw(){for(let t=1;t<89;++t)for(let o=1;o<89;++o){let i=t*4,c=o*4,n=s(t,o),l=r(this.density,n),m=l/125*l;e.fill(m,m/3,0,150),e.square(i,c,4)}}}let v=(u,t)=>{for(let i=1;i<89;++i){let c=r(t,s(i,1)),n=r(t,s(i,88));t[s(i,0)]=u==2?-c:c,t[s(i,89)]=u==2?-n:n}for(let i=1;i<89;++i){let c=r(t,s(1,i)),n=r(t,s(88,i));t[s(0,i)]=u==1?-c:c,t[s(89,i)]=u==1?-n:n}t[s(0,0)]=.5*r(t,s(1,0))+r(t,s(0,1)),t[s(0,89)]=.5*r(t,s(1,88))+r(t,s(0,88)),t[s(89,0)]=.5*r(t,s(88,0))+r(t,s(89,1)),t[s(89,89)]=.5*r(t,s(88,88))+r(t,s(88,88))},Y=(u,t,o,i,c)=>{let n=1/c,l=89;for(let f=0;f<3;++f)for(let m=1;m<l;++m)for(let a=1;a<l;++a){let g=s(a,m);t[g]=(r(o,g)+i*(r(t,s(a+1,m))+r(t,s(a-1,m))+r(t,s(a,m+1))+r(t,s(a,m-1))))*n}v(u,t)},D=(u,t,o,i,c)=>{let n=c*i*88*88;Y(u,t,o,n,1+6*n)},z=(u,t,o,i)=>{for(let n=1;n<89;++n)for(let l=1;l<89;++l){let f=s(l,n);i[f]=-.5*(r(u,s(l+1,n))-r(u,s(l-1,n))+r(t,s(l,n+1))-r(t,s(l,n-1)))/90,o[f]=0}v(0,i),v(0,o),Y(0,o,i,1,6);for(let n=1;n<89;++n)for(let l=1;l<89;++l){let f=s(l,n);u[f]-=.5*(r(o,s(l+1,n))-r(o,s(l-1,n)))*90,t[f]-=.5*(r(o,s(l,n+1))-r(o,s(l,n-1)))*90}v(1,u),v(2,t)},k=(u,t,o,i,c,n)=>{let l,f,m,a,g=n*88,q=n*88,H,F,T,V,O=89;for(let j=1;j<O;++j)for(let R=1;R<O;++R){let y=s(R,j),L=R-g*r(i,y),E=j-q*r(c,y);L<.5&&(L=.5),L>90+.5&&(L=90+.5),l=e.floor(L),f=l+1,E<.5&&(E=.5),E>90+.5&&(E=90+.5),m=e.floor(E),a=m+1,F=L-l,H=1-F,V=E-m,T=1-V;let B=r(t,y);t[y]=H*(T*r(o,s(l,m))+V*r(o,s(l,a)))+F*(T*r(o,s(f,m))+V*r(o,s(f,a))),t[y]=e.constrain(r(t,y),B-150,350)}v(u,t)};function s(u,t){return u=e.constrain(u,0,89),t=e.constrain(t,0,89),e.floor(u)+e.floor(t)*90}}return p(te);})();
+import { awaitClickStart } from "./utils.js";
+
+export default function fluidSimSketch(p) {
+  const N = 90;
+  const SCALE = 4;
+  const ITER = 3;
+
+  const DT = 0.03; // Time Step of Fluid
+  const DIFFUSE = 0.00006; // Diffusion of Fluid
+  const VISC = 0.0000000015; // Viscosity of Fluid
+  const VEL = 2.8; // Velocity of fluid from perlin noise
+
+  let fluid;
+  let demo = true;
+  let fx = 0;
+  let fy = 0;
+  let px = 0;
+  let py = 0;
+
+  p.disableFriendlyErrors = true;
+
+  p.preload = () => {};
+  p.setup = () => {
+    const canvas = p.createCanvas(N * SCALE, N * SCALE);
+    const cx = (p.windowWidth - p.width) / 2;
+    const cy = (p.windowHeight - p.height) / 2;
+    canvas.position(cx, cy);
+    canvas.style("border", "2px solid #222");
+
+    p.rectMode(p.CENTER);
+    p.noStroke();
+
+    fluid = new Fluid(DT, DIFFUSE, VISC);
+
+    fx = p.width / 2;
+    fy = p.height - 30;
+
+    p.frameRate(30);
+    awaitClickStart(p, undefined, () => {
+      p.cursor(p.CROSS);
+      p.mousePressed = () => {
+        demo = false;
+      };
+      p.mouseReleased = () => {
+        demo = true;
+      };
+
+      p.mouseMoved = () => {
+        if (p.mouseIsPressed) {
+          drag(p.mouseX, p.mouseY);
+        }
+      };
+
+      p.touchMoved = () => {
+        drag(p.mouseX, p.mouseY);
+        return false;
+      };
+
+      p.touchStarted = () => {
+        demo = false;
+        return false;
+      };
+      p.touchEnded = () => {
+        demo = true;
+        return false;
+      };
+    });
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+    if (demo) {
+      drag(fx, fy);
+    } else if (p.mouseIsPressed) {
+      drag(p.mouseX, p.mouseY);
+    }
+
+    fluid.step();
+    fluid.draw();
+  };
+
+  const drag = (cx, cy) => {
+    const x = cx / SCALE;
+    const y = cy / SCALE;
+    const amtX = cx - px;
+    const amtY = cy - py;
+    px = cx;
+    py = cy;
+    const vel = p.createVector(amtX, amtY);
+    vel.setMag(VEL);
+    for (let i = -2; i <= 2; ++i) {
+      for (let j = -2; j <= 2; ++j) {
+        fluid.addDensity(x + i, y + j, p.random(50, 100));
+        fluid.addVelocity(x + i, y + j, vel.x, vel.y);
+      }
+    }
+    return false;
+  };
+
+  const get = (data, idx) => {
+    let result = data[idx];
+    if (result === undefined) {
+      console.log("out of bounds", data.length, idx);
+      p.noLoop();
+      result = 0;
+    }
+    return result;
+  };
+
+  class Fluid {
+    size;
+    dt;
+    diff;
+    visc;
+    s;
+    density;
+    velx;
+    vely;
+    velx0;
+    vely0;
+
+    constructor(dt, diffusion, viscosity) {
+      this.size = N;
+      this.dt = dt;
+      this.diff = diffusion;
+      this.visc = viscosity;
+
+      const count = N * N;
+      this.s = new Array(count).fill(0);
+      this.density = new Array(count).fill(0);
+
+      this.velx = new Array(count).fill(0);
+      this.vely = new Array(count).fill(0);
+
+      this.velx0 = new Array(count).fill(0);
+      this.vely0 = new Array(count).fill(0);
+    }
+
+    step() {
+      diffuse(1, this.velx0, this.velx, this.visc, this.dt);
+      diffuse(2, this.vely0, this.vely, this.visc, this.dt);
+
+      project(this.velx0, this.vely0, this.velx, this.vely);
+
+      advect(1, this.velx, this.velx0, this.velx0, this.vely0, this.dt);
+      advect(2, this.vely, this.vely0, this.velx0, this.vely0, this.dt);
+
+      project(this.velx, this.vely, this.velx0, this.vely0);
+
+      diffuse(0, this.s, this.density, this.diff, this.dt);
+      advect(0, this.density, this.s, this.velx, this.vely, this.dt);
+    }
+
+    addDensity(x, y, amount) {
+      const idx = IDX(x, y);
+      this.density[idx] += amount;
+      const vel = p.createVector(
+        p.random(-2 * VEL, 2 * VEL),
+        p.random(-VEL / 2),
+      );
+      this.addVelocity(x, y, vel.x, vel.y);
+    }
+
+    addVelocity(x, y, amountX, amountY) {
+      const idx = IDX(x, y);
+      this.velx[idx] += amountX;
+      this.vely[idx] += amountY;
+    }
+
+    draw() {
+      for (let i = 1; i < N - 1; ++i) {
+        for (let j = 1; j < N - 1; ++j) {
+          const x = i * SCALE;
+          const y = j * SCALE;
+          const idx = IDX(i, j);
+
+          // Draw density
+          const d = get(this.density, idx);
+          const m = d / 125;
+          const f = m * d;
+          p.fill(f, f / 3, 0, 150);
+          p.square(x, y, SCALE);
+        }
+      }
+    }
+  }
+
+  const set_bounds = (b, x) => {
+    const nLen = N - 1;
+    // Top and bottom rows
+    for (let i = 1; i < nLen; ++i) {
+      const top = get(x, IDX(i, 1));
+      const bot = get(x, IDX(i, N - 2));
+      x[IDX(i, 0)] = b == 2 ? -top : top;
+      x[IDX(i, N - 1)] = b == 2 ? -bot : bot;
+    }
+    // Left and Right cols
+    for (let j = 1; j < nLen; ++j) {
+      const left = get(x, IDX(1, j));
+      const right = get(x, IDX(N - 2, j));
+      x[IDX(0, j)] = b == 1 ? -left : left;
+      x[IDX(N - 1, j)] = b == 1 ? -right : right;
+    }
+
+    x[IDX(0, 0)] = 0.5 * get(x, IDX(1, 0)) + get(x, IDX(0, 1)); // top left
+    x[IDX(0, N - 1)] = 0.5 * get(x, IDX(1, N - 2)) + get(x, IDX(0, N - 2)); // bottom left
+    x[IDX(N - 1, 0)] = 0.5 * get(x, IDX(N - 2, 0)) + get(x, IDX(N - 1, 1)); // top right
+    x[IDX(N - 1, N - 1)] =
+      0.5 * get(x, IDX(N - 2, N - 2)) + get(x, IDX(N - 2, N - 2)); // bottom right
+  };
+
+  const linear_solve = (b, x, x0, a, c) => {
+    const cRecip = 1.0 / c;
+    const nLen = N - 1;
+    for (let t = 0; t < ITER; ++t) {
+      for (let j = 1; j < nLen; ++j) {
+        for (let i = 1; i < nLen; ++i) {
+          const idx = IDX(i, j);
+          x[idx] =
+            (get(x0, idx) +
+              a *
+                (get(x, IDX(i + 1, j)) +
+                  get(x, IDX(i - 1, j)) +
+                  get(x, IDX(i, j + 1)) +
+                  get(x, IDX(i, j - 1)))) *
+            cRecip;
+        }
+      }
+    }
+    set_bounds(b, x);
+  };
+
+  const diffuse = (b, x, x0, diff, dt) => {
+    const a = dt * diff * (N - 2) * (N - 2);
+    linear_solve(b, x, x0, a, 1 + 6 * a);
+  };
+
+  const project = (velx, vely, p, div) => {
+    const nLen = N - 1;
+
+    for (let j = 1; j < nLen; ++j) {
+      for (let i = 1; i < nLen; ++i) {
+        const idx = IDX(i, j);
+        div[idx] =
+          (-0.5 *
+            (get(velx, IDX(i + 1, j)) -
+              get(velx, IDX(i - 1, j)) +
+              get(vely, IDX(i, j + 1)) -
+              get(vely, IDX(i, j - 1)))) /
+          N;
+        p[idx] = 0;
+      }
+    }
+    set_bounds(0, div);
+    set_bounds(0, p);
+    linear_solve(0, p, div, 1, 6);
+
+    for (let j = 1; j < nLen; ++j) {
+      for (let i = 1; i < nLen; ++i) {
+        const idx = IDX(i, j);
+        velx[idx] -= 0.5 * (get(p, IDX(i + 1, j)) - get(p, IDX(i - 1, j))) * N;
+        vely[idx] -= 0.5 * (get(p, IDX(i, j + 1)) - get(p, IDX(i, j - 1))) * N;
+      }
+    }
+    set_bounds(1, velx);
+    set_bounds(2, vely);
+  };
+
+  const advect = (b, d, d0, velx, vely, dt) => {
+    let i0, i1, j0, j1;
+
+    const dtx = dt * (N - 2);
+    const dty = dt * (N - 2);
+
+    let s0, s1, t0, t1;
+
+    const nLen = N - 1;
+    for (let j = 1; j < nLen; ++j) {
+      for (let i = 1; i < nLen; ++i) {
+        const idx = IDX(i, j);
+        let x = i - dtx * get(velx, idx);
+        let y = j - dty * get(vely, idx);
+
+        if (x < 0.5) x = 0.5;
+        if (x > N + 0.5) x = N + 0.5;
+        i0 = p.floor(x);
+        i1 = i0 + 1.0;
+        if (y < 0.5) y = 0.5;
+        if (y > N + 0.5) y = N + 0.5;
+        j0 = p.floor(y);
+        j1 = j0 + 1.0;
+
+        s1 = x - i0;
+        s0 = 1.0 - s1;
+        t1 = y - j0;
+        t0 = 1.0 - t1;
+
+        const pd = get(d, idx);
+        d[idx] =
+          s0 * (t0 * get(d0, IDX(i0, j0)) + t1 * get(d0, IDX(i0, j1))) +
+          s1 * (t0 * get(d0, IDX(i1, j0)) + t1 * get(d0, IDX(i1, j1)));
+        d[idx] = p.constrain(get(d, idx), pd - 150, 350);
+      }
+    }
+    set_bounds(b, d);
+  };
+
+  function IDX(x, y) {
+    x = p.constrain(x, 0, N - 1);
+    y = p.constrain(y, 0, N - 1);
+    return p.floor(x) + p.floor(y) * N;
+  }
+}

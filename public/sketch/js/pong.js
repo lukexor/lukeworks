@@ -1,10 +1,424 @@
-var __sketch=(()=>{var y=Object.defineProperty;var _=Object.getOwnPropertyDescriptor;var m=Object.getOwnPropertyNames;var g=Object.prototype.hasOwnProperty;var S=(t,s,h)=>s in t?y(t,s,{enumerable:!0,configurable:!0,writable:!0,value:h}):t[s]=h;var T=(t,s)=>{for(var h in s)y(t,h,{get:s[h],enumerable:!0})},v=(t,s,h,d)=>{if(s&&typeof s=="object"||typeof s=="function")for(let n of m(s))!g.call(t,n)&&n!==h&&y(t,n,{get:()=>s[n],enumerable:!(d=_(s,n))||d.enumerable});return t};var I=t=>v(y({},"__esModule",{value:!0}),t);var i=(t,s,h)=>S(t,typeof s!="symbol"?s+"":s,h);var x={};T(x,{default:()=>A});var E=globalThis.p5;function A(t){let P,o;t.disableFriendlyErrors=!0;let f=()=>{o=new w;let a=t.width/2,e=150;t.push(),t.fill(255),t.background(0),t.textAlign(t.CENTER),t.textSize(70),t.text("PONG",a,e),t.textSize(20),t.text("CLICK OR TAP TO PLAY",a,e+40),t.text(`CHOOSE OPPONENT
-1: COMPUTER
-2: PERSON
-`,a,e+80),t.textSize(15),t.text(`INSTRUCTIONS:
+export default function pongSketch(p) {
+  const PADDLE_WIDTH = 15;
+  const PADDLE_HEIGHT = 90;
+  const PADDLE_PADDING = 30;
+  const MAX_BOUNCE_ANGLE = 75;
+  const BALL_SPEED = 8;
+  const PLAYER_SPEED = 6;
+  const CPU_SPEED = 6;
 
-UP / DOWN: PLAYER 1 PADDLE
-W / S: PLAYER 2 PADDLE
-ESCAPE: TOGGLE PAUSE
-R: START NEW GAME
-`,a,e+180),t.pop(),t.cursor(t.HAND),t.noLoop()};t.preload=()=>{},t.setup=()=>{t.createCanvas(t.windowWidth,t.windowHeight),t.noStroke(),t.fill(255),t.textFont("Courier"),t.textSize(80),P=t.height-20-90/2,f()},t.draw=()=>{t.isLooping()&&(o.update(),o.draw())},t.keyPressed=()=>o.keyPressed(t.keyCode),t.keyReleased=()=>o.keyReleased(t.keyCode),t.touchStarted=()=>{t.isLooping()||o.playCpu(),o.touchStarted()},t.touchEnded=()=>{o.touchEnded()};class w{constructor(){i(this,"paused");i(this,"ball");i(this,"player1");i(this,"player2");i(this,"touching");this.paused=!1,this.ball=new L,this.player1=new c("player1"),this.player2=new c("cpu"),this.touching=!1}draw(){t.background(51),t.fill(150);let e=this.ball.size;for(let r=0;r<t.height;r+=2*e)t.square(t.width/2,r,e);this.ball.draw(),this.player1.draw(),this.player2.draw()}update(){this.ball.update(this.player1,this.player2),this.touching&&this.player1.type==="player1"&&(this.player1.pos.y=t.mouseY),this.player1.update(this.ball),this.player2.update(this.ball)}keyPressed(e){switch(e){case t.ESCAPE:return this.togglePause(),!1;case t.UP_ARROW:return this.player1.moveUp(),!1;case t.DOWN_ARROW:return this.player1.moveDown(),!1;case 49:return this.playCpu(),!1;case 50:return this.playPerson(),!1;case 82:return f(),!1;default:}if(this.player2.type==="player2")switch(e){case 87:return this.player2.moveUp(),!1;case 83:return this.player2.moveDown(),!1}return!0}keyReleased(e){switch(e){case t.UP_ARROW:case t.DOWN_ARROW:return this.player1.stopMovement(),!1}if(this.player2.type==="player2")switch(e){case 87:case 83:return this.player2.stopMovement(),!1}return!0}touchStarted(){return this.touching=!0,!1}touchEnded(){return this.touching=!1,!1}start(){t.loop()}togglePause(){this.paused?t.loop():t.noLoop(),this.paused=!this.paused}playCpu(){this.player1=new c("player1"),this.player2=new c("cpu"),this.start()}playPerson(){this.player1=new c("player1"),this.player2=new c("player2"),this.start()}}class c{constructor(e){i(this,"type");i(this,"w");i(this,"h");i(this,"score");i(this,"speed");i(this,"pos");i(this,"vel");this.type=e,this.w=15,this.h=90,this.score=0,this.speed=6;let r=30+this.w/2;this.type!=="player1"&&(r=t.width-30-this.w/2),this.type==="cpu"&&(this.speed=6);let l=t.height/2-this.h/2;this.pos=t.createVector(r,l),this.vel=t.createVector(0,0)}left(){return this.pos.x-this.w/2}right(){return this.pos.x+this.w/2}top(){return this.pos.y-this.h/2}bottom(){return this.pos.y+this.h/2}update(e){this.pos.add(this.vel),this.type==="cpu"&&e&&(e.pos.y>this.pos.y+1&&e.vel.y>0?this.moveDown():e.pos.y<this.pos.y-5&&e.vel.y<0?this.moveUp():this.stopMovement()),this.pos.y<55?this.pos.y=55:this.pos.y>P&&(this.pos.y=P)}draw(){t.fill(255),t.rect(this.left(),this.top(),this.w,this.h),t.fill(150),this.drawScore()}setVelocity(e){this.vel.y=e}stopMovement(){this.vel.y=0}moveUp(){this.vel.y=-this.speed}moveDown(){this.vel.y=this.speed}drawScore(){let e=t.width/2-80+7.5;t.textAlign(t.RIGHT),this.type!=="player1"&&(t.textAlign(t.LEFT),e=t.width/2+15/2+80),t.text(this.score,e,80)}}class L{constructor(){i(this,"size");i(this,"radius");i(this,"speed");i(this,"pos");i(this,"vel");this.size=15,this.radius=this.size/2,this.speed=8,this.pos=t.createVector(0,0),this.vel=t.createVector(0,0),this.resetPos()}resetPos(){this.pos=t.createVector(t.width/2-this.radius,t.height/2-this.radius),this.vel=E.Vector.fromAngle(t.radians(t.random(-45,45))),t.random(1)<.5&&(this.vel.x*=-1),this.vel.setMag(this.speed)}left(){return this.pos.x-this.radius}right(){return this.pos.x+this.radius}top(){return this.pos.y-this.radius}bottom(){return this.pos.y+this.radius}update(e,r){this.pos.add(this.vel);let l=this.hits(e),u=this.hits(r);l&&this.vel.x<0?(this.vel=l,this.pos.x=e.right()+this.radius):u&&this.vel.x>0?(this.vel=u,this.pos.x=r.left()-this.radius):this.top()<=0&&this.vel.y<0||this.bottom()>=t.height&&this.vel.y>0?this.vel.y*=-1:this.right()<=0?(r.score+=1,this.resetPos()):this.left()>=t.width&&(e.score+=1,this.resetPos())}hits(e){let r=this.bottom()>=e.top()&&this.top()<=e.bottom(),l=!1,u=75;if(e.type==="player1"?l=this.left()<e.right()&&this.right()>e.right():l=this.right()>e.left()&&this.left()<e.left(),r&&l){let D=-1*((e.pos.y-this.pos.y)/((e.h+this.size)/2))*u,p=E.Vector.fromAngle(t.radians(D)).setMag(this.speed);return e.type!=="player1"&&(p.x*=-1),p}return null}draw(){t.fill(255),t.rect(this.left(),this.top(),this.size,this.size)}}}return I(x);})();
+  const LIMIT_TOP = 10 + PADDLE_HEIGHT / 2;
+  let LIMIT_BOT;
+
+  const BALL_SIZE = 15;
+  const TEXT_SIZE = 80;
+
+  const W = 87;
+  const R = 82;
+  const S = 83;
+  const PLAY_CPU = 49;
+  const PLAY_PERSON = 50;
+
+  let game;
+
+  p.disableFriendlyErrors = true;
+
+  const intro = () => {
+    game = new Game();
+
+    const textX = p.width / 2;
+    const textY = 150;
+    p.push();
+    p.fill(255);
+    p.background(0);
+    p.textAlign(p.CENTER);
+    p.textSize(70);
+    p.text("PONG", textX, textY);
+    p.textSize(20);
+    p.text("CLICK OR TAP TO PLAY", textX, textY + 40);
+    p.text(
+      "CHOOSE OPPONENT\n" + "1: COMPUTER\n" + "2: PERSON\n",
+      textX,
+      textY + 80,
+    );
+    p.textSize(15);
+    p.text(
+      "INSTRUCTIONS:\n\n" +
+        "UP / DOWN: PLAYER 1 PADDLE\n" +
+        "W / S: PLAYER 2 PADDLE\n" +
+        "ESCAPE: TOGGLE PAUSE\n" +
+        "R: START NEW GAME\n",
+      textX,
+      textY + 180,
+    );
+    p.pop();
+    p.cursor(p.HAND);
+    p.noLoop();
+  };
+
+  p.preload = () => {};
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+
+    p.noStroke();
+    p.fill(255);
+    p.textFont("Courier");
+    p.textSize(TEXT_SIZE);
+    LIMIT_BOT = p.height - 20 - PADDLE_HEIGHT / 2;
+
+    intro();
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+    game.update();
+    game.draw();
+  };
+
+  p.keyPressed = () => {
+    return game.keyPressed(p.keyCode);
+  };
+
+  p.keyReleased = () => {
+    return game.keyReleased(p.keyCode);
+  };
+
+  p.touchStarted = () => {
+    if (!p.isLooping()) {
+      game.playCpu();
+    }
+    game.touchStarted();
+  };
+
+  p.touchEnded = () => {
+    game.touchEnded();
+  };
+
+  class Game {
+    paused;
+    ball;
+    player1;
+    player2;
+    touching;
+
+    constructor() {
+      this.paused = false;
+      this.ball = new Ball();
+      this.player1 = new Player("player1");
+      this.player2 = new Player("cpu");
+      this.touching = false;
+    }
+
+    draw() {
+      p.background(51);
+      // Draw board
+      p.fill(150);
+      // Center p.line
+      const dotted_size = this.ball.size;
+      for (let i = 0; i < p.height; i += 2 * dotted_size) {
+        p.square(p.width / 2, i, dotted_size);
+      }
+
+      this.ball.draw();
+      this.player1.draw();
+      this.player2.draw();
+    }
+
+    update() {
+      this.ball.update(this.player1, this.player2);
+      if (this.touching && this.player1.type === "player1") {
+        this.player1.pos.y = p.mouseY;
+      }
+      this.player1.update(this.ball);
+      this.player2.update(this.ball);
+    }
+
+    keyPressed(keyCode) {
+      switch (keyCode) {
+        case p.ESCAPE:
+          this.togglePause();
+          return false;
+        case p.UP_ARROW:
+          this.player1.moveUp();
+          return false;
+        case p.DOWN_ARROW:
+          this.player1.moveDown();
+          return false;
+        case PLAY_CPU:
+          this.playCpu();
+          return false;
+        case PLAY_PERSON:
+          this.playPerson();
+          return false;
+        case R:
+          intro();
+          return false;
+        default:
+      }
+      if (this.player2.type === "player2") {
+        switch (keyCode) {
+          case W:
+            this.player2.moveUp();
+            return false;
+          case S:
+            this.player2.moveDown();
+            return false;
+        }
+      }
+      return true;
+    }
+
+    keyReleased(keyCode) {
+      switch (keyCode) {
+        case p.UP_ARROW:
+        case p.DOWN_ARROW:
+          this.player1.stopMovement();
+          return false;
+      }
+      if (this.player2.type === "player2") {
+        switch (keyCode) {
+          case W:
+          case S:
+            this.player2.stopMovement();
+            return false;
+        }
+      }
+      return true;
+    }
+
+    touchStarted() {
+      this.touching = true;
+      return false;
+    }
+    touchEnded() {
+      this.touching = false;
+      return false;
+    }
+
+    start() {
+      p.loop();
+    }
+    togglePause() {
+      this.paused ? p.loop() : p.noLoop();
+      this.paused = !this.paused;
+    }
+
+    playCpu() {
+      this.player1 = new Player("player1");
+      this.player2 = new Player("cpu");
+      this.start();
+    }
+    playPerson() {
+      this.player1 = new Player("player1");
+      this.player2 = new Player("player2");
+      this.start();
+    }
+  }
+
+  class Player {
+    type;
+    w;
+    h;
+    score;
+    speed;
+    pos;
+    vel;
+
+    constructor(type) {
+      this.type = type;
+      this.w = PADDLE_WIDTH;
+      this.h = PADDLE_HEIGHT;
+      this.score = 0;
+      this.speed = PLAYER_SPEED;
+
+      let x = PADDLE_PADDING + this.w / 2;
+      if (this.type !== "player1") {
+        x = p.width - PADDLE_PADDING - this.w / 2;
+      }
+      if (this.type === "cpu") {
+        this.speed = CPU_SPEED;
+      }
+      const y = p.height / 2 - this.h / 2;
+      this.pos = p.createVector(x, y);
+      this.vel = p.createVector(0, 0);
+    }
+
+    left() {
+      return this.pos.x - this.w / 2;
+    }
+
+    right() {
+      return this.pos.x + this.w / 2;
+    }
+
+    top() {
+      return this.pos.y - this.h / 2;
+    }
+
+    bottom() {
+      return this.pos.y + this.h / 2;
+    }
+
+    update(ball) {
+      this.pos.add(this.vel);
+
+      if (this.type === "cpu" && ball) {
+        if (ball.pos.y > this.pos.y + 1 && ball.vel.y > 0) {
+          this.moveDown();
+        } else if (ball.pos.y < this.pos.y - 5 && ball.vel.y < 0) {
+          this.moveUp();
+        } else {
+          this.stopMovement();
+        }
+      }
+
+      if (this.pos.y < LIMIT_TOP) {
+        this.pos.y = LIMIT_TOP;
+      } else if (this.pos.y > LIMIT_BOT) {
+        this.pos.y = LIMIT_BOT;
+      }
+    }
+
+    draw() {
+      p.fill(255);
+      p.rect(this.left(), this.top(), this.w, this.h);
+      p.fill(150);
+      this.drawScore();
+    }
+
+    setVelocity(velocity) {
+      this.vel.y = velocity;
+    }
+
+    stopMovement() {
+      this.vel.y = 0;
+    }
+
+    moveUp() {
+      this.vel.y = -this.speed;
+    }
+
+    moveDown() {
+      this.vel.y = this.speed;
+    }
+
+    drawScore() {
+      let x = p.width / 2 - TEXT_SIZE + BALL_SIZE / 2;
+      p.textAlign(p.RIGHT);
+      if (this.type !== "player1") {
+        p.textAlign(p.LEFT);
+        x = p.width / 2 + BALL_SIZE / 2 + TEXT_SIZE;
+      }
+      const y = TEXT_SIZE;
+      p.text(this.score, x, y);
+    }
+  }
+
+  class Ball {
+    size;
+    radius;
+    speed;
+    pos;
+    vel;
+
+    constructor() {
+      this.size = BALL_SIZE;
+      this.radius = this.size / 2;
+      this.speed = BALL_SPEED;
+      this.pos = p.createVector(0, 0);
+      this.vel = p.createVector(0, 0);
+      this.resetPos();
+    }
+
+    resetPos() {
+      this.pos = p.createVector(
+        p.width / 2 - this.radius,
+        p.height / 2 - this.radius,
+      );
+      this.vel = p5.Vector.fromAngle(p.radians(p.random(-45, 45)));
+      if (p.random(1) < 0.5) {
+        this.vel.x *= -1;
+      }
+      this.vel.setMag(this.speed);
+    }
+
+    left() {
+      return this.pos.x - this.radius;
+    }
+
+    right() {
+      return this.pos.x + this.radius;
+    }
+
+    top() {
+      return this.pos.y - this.radius;
+    }
+
+    bottom() {
+      return this.pos.y + this.radius;
+    }
+
+    update(player1, player2) {
+      this.pos.add(this.vel);
+
+      // Bounce off paddle
+      const reflected1 = this.hits(player1);
+      const reflected2 = this.hits(player2);
+      if (reflected1 && this.vel.x < 0) {
+        this.vel = reflected1;
+        this.pos.x = player1.right() + this.radius;
+      } else if (reflected2 && this.vel.x > 0) {
+        this.vel = reflected2;
+        this.pos.x = player2.left() - this.radius;
+      } else if (
+        (this.top() <= 0 && this.vel.y < 0) ||
+        (this.bottom() >= p.height && this.vel.y > 0)
+      ) {
+        // Bounce off ceiling/floor
+        this.vel.y *= -1;
+      } else if (this.right() <= 0) {
+        // Player2 won
+        player2.score += 1;
+        this.resetPos();
+      } else if (this.left() >= p.width) {
+        // Player1 won
+        player1.score += 1;
+        this.resetPos();
+      }
+    }
+
+    hits(player) {
+      const withinRange =
+        this.bottom() >= player.top() && this.top() <= player.bottom();
+      let hitPlayer = false;
+      const max_angle = MAX_BOUNCE_ANGLE;
+      if (player.type === "player1") {
+        hitPlayer =
+          this.left() < player.right() && this.right() > player.right();
+      } else {
+        hitPlayer = this.right() > player.left() && this.left() < player.left();
+        // max_angle = 180 + max_angle;
+      }
+      if (withinRange && hitPlayer) {
+        const yRelativeIntersect = player.pos.y - this.pos.y;
+        const yNormalizedIntersect =
+          yRelativeIntersect / ((player.h + this.size) / 2);
+        const bounceAngle = -1 * yNormalizedIntersect * max_angle;
+        const bounceVel = p5.Vector.fromAngle(p.radians(bounceAngle)).setMag(
+          this.speed,
+        );
+        if (player.type !== "player1") {
+          bounceVel.x *= -1;
+        }
+        return bounceVel;
+      }
+      return null;
+    }
+    draw() {
+      p.fill(255);
+      p.rect(this.left(), this.top(), this.size, this.size);
+    }
+  }
+}

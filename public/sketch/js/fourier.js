@@ -1,1 +1,305 @@
-var __sketch=(()=>{var k=Object.defineProperty;var v=Object.getOwnPropertyDescriptor;var y=Object.getOwnPropertyNames;var D=Object.prototype.hasOwnProperty;var T=(e,i,o)=>i in e?k(e,i,{enumerable:!0,configurable:!0,writable:!0,value:o}):e[i]=o;var F=(e,i)=>{for(var o in i)k(e,o,{get:i[o],enumerable:!0})},L=(e,i,o,l)=>{if(i&&typeof i=="object"||typeof i=="function")for(let h of y(i))!D.call(e,h)&&h!==o&&k(e,h,{get:()=>i[h],enumerable:!(l=v(i,h))||l.enumerable});return e};var P=e=>L(k({},"__esModule",{value:!0}),e);var d=(e,i,o)=>T(e,typeof i!="symbol"?i+"":i,o);var M={};F(M,{default:()=>O});var X=e=>{e.push(),e.background(0),e.fill(255),e.noStroke(),e.textSize(18),e.textAlign(e.CENTER),e.fill(255),e.text("Click or Tap to load",e.width/2,e.height/2),e.pop()},S=(e,i,o)=>{e.cursor(e.HAND),e.noLoop(),i?i():X(e);let l=()=>{e.mousePressed=()=>{},e.isLooping()||(e.cursor(e.ARROW),o&&o(),e.loop())};e.mousePressed=l};function O(e){let i=Object.freeze({COLLECT:"COLLECT",DEMO:"DEMO",DFT:"DFT"}),o=i.DEMO,l,h,c;e.disableFriendlyErrors=!0,e.preload=()=>{},e.setup=()=>{e.createCanvas(e.windowWidth,e.windowHeight-30),S(e,void 0,()=>{l=e.width/2,o=i.DEMO,h=new x;let b=e.createSpan("Iterations: ");c=e.createSlider(1,10,5),b.position(10,e.windowHeight-25),c.position(90,e.windowHeight-25),e.cursor(e.CROSS),setTimeout(()=>{e.mousePressed=()=>h.mousePressed(),e.mouseReleased=()=>h.mouseReleased()},200)})},e.draw=()=>{if(e.isLooping())switch(e.background(0),e.stroke(255),e.line(l,0,l,e.height),e.noStroke(),e.fill(10),e.rect(0,0,l,e.height),o){case i.COLLECT:h.collect();break;case i.DEMO:h.demo();break;case i.DFT:{h.update(),h.draw();break}}},e.keyPressed=()=>{e.keyCode===e.ESCAPE&&(c.show(),o=i.DEMO)};class f{constructor(t,s){d(this,"re");d(this,"im");this.re=t,this.im=s}addEq(t){this.re+=t.re,this.im+=t.im}mult(t){return new f(this.re*t.re-this.im*t.im,this.re*t.im+this.im*t.re)}avg(t){this.re/=t,this.im/=t}get amp(){return e.sqrt(this.re*this.re+this.im*this.im)}get phase(){return e.atan2(this.im,this.re)}}class x{constructor(){d(this,"time");d(this,"data");d(this,"fourier");d(this,"path");this.time=0,this.data=[],this.fourier=[],this.path=[]}clear(){this.data.length=0,this.fourier.length=0}reset(){this.time=0,this.path.length=0}mousePressed(){return e.mouseY<e.height&&e.mouseX<e.width&&e.mouseX>e.width/2?(o=i.COLLECT,c.hide(),h.clear(),h.reset(),!1):!0}mouseReleased(){return e.mouseY<e.height&&e.mouseX<e.width&&e.mouseX>e.width/2&&this.data.length>0?(o=i.DFT,h.dft(),!1):!0}collect(){let t=e.width/2+e.width/4,s=e.height/2;e.mouseX>e.width/2&&this.data.push(new f(e.mouseX-t,e.mouseY-s)),e.stroke(255),e.noFill(),e.beginShape(),this.data.forEach(r=>e.vertex(r.re+t,r.im+s)),e.endShape()}update(){this.time+=e.TWO_PI/this.fourier.length,this.time>e.TWO_PI&&this.reset()}draw(){let t=this.epicycles();this.path.unshift(t),e.translate(e.width/2,0);let s=this.path[0];s&&(e.stroke("yellow"),e.line(t.x-e.width/2,t.y,s.x,s.y)),e.stroke("white"),e.beginShape(),e.noFill(),this.path.forEach(r=>{e.vertex(r.x,r.y)}),e.endShape()}epicycles(){let t=e.width/4,s=e.height/2,r=0;return this.fourier.forEach(a=>{let n=t,m=s;t+=a.amp*e.cos(a.freq*this.time+a.phase+r),s+=a.amp*e.sin(a.freq*this.time+a.phase+r),e.stroke(255,100),e.noFill(),e.circle(n,m,2*a.amp),e.stroke(255),e.line(n,m,t,s),e.circle(t,s,3)}),e.createVector(t,s)}demo(){let t=e.width/4,s=e.height/2;for(let n=0;n<c.value();n++){let m=t,g=s,w=n*2+1,u=60*(4/(w*e.PI));t+=u*e.cos(w*this.time),s+=u*e.sin(w*this.time),e.stroke(255,100),e.noFill(),e.circle(m,g,2*u),e.stroke(255),e.line(m,g,t,s),e.circle(t,s,3)}this.path.unshift(e.createVector(0,s)),e.translate(e.width/2,0);let r=100,a=this.path[0];a&&(e.stroke("yellow"),e.line(t-e.width/2,s,r,a.y)),e.stroke("white"),e.beginShape(),e.noFill(),this.path.forEach((n,m)=>{e.vertex(m+r,n.y)}),e.endShape(),this.time+=.05,this.path.length>500&&this.path.pop()}dft(){if(this.data.length===0)return;let t=this.data.length;this.fourier.length=t;for(let s=0;s<t;++s){let r=new f(0,0);for(let u=0;u<t;++u){let E=e.TWO_PI*s*u/t,C=this.data[u];C&&r.addEq(C.mult(new f(e.cos(E),-e.sin(E))))}r.avg(t);let a=r.re,n=r.im,m=s,g=r.amp,w=r.phase;this.fourier[s]={re:a,im:n,freq:m,amp:g,phase:w}}this.fourier.sort((s,r)=>r.amp-s.amp)}}}return P(M);})();
+import { awaitClickStart } from "./utils.js";
+
+export default function fourierSketch(p) {
+  const MODES = Object.freeze({
+    COLLECT: "COLLECT",
+    DEMO: "DEMO",
+    DFT: "DFT",
+  });
+  let mode = MODES.DEMO;
+  let border;
+  let drawing;
+  let waveSlider;
+
+  p.disableFriendlyErrors = true;
+
+  p.preload = () => {};
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight - 30);
+
+    awaitClickStart(p, undefined, () => {
+      border = p.width / 2;
+      mode = MODES.DEMO;
+      drawing = new Drawing();
+      const label = p.createSpan("Iterations: ");
+      waveSlider = p.createSlider(1, 10, 5);
+      label.position(10, p.windowHeight - 25);
+      waveSlider.position(90, p.windowHeight - 25);
+
+      p.cursor(p.CROSS);
+      setTimeout(() => {
+        p.mousePressed = () => drawing.mousePressed();
+        p.mouseReleased = () => drawing.mouseReleased();
+
+        // p5 falls back to the mouse handlers for touch, but only for press and
+        // release: a drag with no `touchMoved` keeps its default, and the page
+        // under the frame scrolls out from under the finger mid-stroke.
+        // Returning false is how a handler asks p5 to prevent that default, so
+        // a drag only holds the page still while it is drawing a shape.
+        p.touchStarted = () => drawing.mousePressed();
+        p.touchMoved = () => mode !== MODES.COLLECT;
+        p.touchEnded = () => drawing.mouseReleased();
+      }, 200);
+    });
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+
+    p.background(0);
+
+    // Draw border
+    p.stroke(255);
+    p.line(border, 0, border, p.height);
+    p.noStroke();
+    p.fill(10);
+    p.rect(0, 0, border, p.height);
+
+    switch (mode) {
+      case MODES.COLLECT:
+        drawing.collect();
+        break;
+      case MODES.DEMO:
+        drawing.demo();
+        break;
+      case MODES.DFT: {
+        drawing.update();
+        drawing.draw();
+        break;
+      }
+    }
+  };
+
+  p.keyPressed = () => {
+    if (p.keyCode === p.ESCAPE) {
+      waveSlider.show();
+      mode = MODES.DEMO;
+    }
+  };
+
+  class Complex {
+    re;
+    im;
+
+    constructor(a, b) {
+      this.re = a;
+      this.im = b;
+    }
+
+    addEq(c) {
+      this.re += c.re;
+      this.im += c.im;
+    }
+
+    mult(c) {
+      // (a + bi)(c + di)
+      // (ac - bd) + (ad + bc)i
+      return new Complex(
+        this.re * c.re - this.im * c.im,
+        this.re * c.im + this.im * c.re,
+      );
+    }
+
+    avg(N) {
+      this.re /= N;
+      this.im /= N;
+    }
+
+    get amp() {
+      return p.sqrt(this.re * this.re + this.im * this.im);
+    }
+
+    get phase() {
+      return p.atan2(this.im, this.re);
+    }
+  }
+
+  class Drawing {
+    time;
+    data;
+    fourier;
+    path;
+
+    constructor() {
+      this.time = 0;
+      this.data = [];
+      this.fourier = [];
+      this.path = [];
+    }
+
+    clear() {
+      this.data.length = 0;
+      this.fourier.length = 0;
+    }
+
+    reset() {
+      this.time = 0;
+      this.path.length = 0;
+    }
+
+    mousePressed() {
+      if (p.mouseY < p.height && p.mouseX < p.width && p.mouseX > p.width / 2) {
+        mode = MODES.COLLECT;
+        waveSlider.hide();
+        drawing.clear();
+        drawing.reset();
+        return false;
+      }
+      return true;
+    }
+
+    mouseReleased() {
+      if (
+        p.mouseY < p.height &&
+        p.mouseX < p.width &&
+        p.mouseX > p.width / 2 &&
+        this.data.length > 0
+      ) {
+        mode = MODES.DFT;
+        drawing.dft();
+        return false;
+      }
+      return true;
+    }
+
+    collect() {
+      const offsetX = p.width / 2 + p.width / 4;
+      const offsetY = p.height / 2;
+      if (p.mouseX > p.width / 2) {
+        this.data.push(new Complex(p.mouseX - offsetX, p.mouseY - offsetY));
+      }
+      p.stroke(255);
+      p.noFill();
+      p.beginShape();
+      this.data.forEach((c) => p.vertex(c.re + offsetX, c.im + offsetY));
+      p.endShape();
+    }
+
+    update() {
+      this.time += p.TWO_PI / this.fourier.length;
+      if (this.time > p.TWO_PI) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      const v = this.epicycles();
+      this.path.unshift(v);
+
+      p.translate(p.width / 2, 0);
+      const start = this.path[0];
+      if (start) {
+        p.stroke("yellow");
+        p.line(v.x - p.width / 2, v.y, start.x, start.y);
+      }
+      p.stroke("white");
+      p.beginShape();
+      p.noFill();
+      this.path.forEach((c) => {
+        p.vertex(c.x, c.y);
+      });
+      p.endShape();
+    }
+
+    epicycles() {
+      // Position of epicycle p.circle center
+      let x = p.width / 4;
+      let y = p.height / 2;
+      const rot = 0;
+      this.fourier.forEach((f) => {
+        const prevX = x;
+        const prevY = y;
+        x += f.amp * p.cos(f.freq * this.time + f.phase + rot);
+        y += f.amp * p.sin(f.freq * this.time + f.phase + rot);
+
+        p.stroke(255, 100);
+        p.noFill();
+        p.circle(prevX, prevY, 2 * f.amp);
+        p.stroke(255);
+        p.line(prevX, prevY, x, y);
+        p.circle(x, y, 3);
+      });
+      return p.createVector(x, y);
+    }
+
+    demo() {
+      // Every size here is a fraction of the canvas, so the chain and its trail
+      // fit whatever panel they are given. At ten iterations the radii sum to
+      // about 2.7 times the base, which a fourteenth of the width clears.
+      const baseRadius = p.width / 14;
+      const offsetX = p.width / 16;
+      const trailLength = border - offsetX;
+
+      let x = p.width / 4;
+      let y = p.height / 2;
+      for (let i = 0; i < waveSlider.value(); i++) {
+        const prevX = x;
+        const prevY = y;
+
+        const n = i * 2 + 1;
+        const radius = baseRadius * (4 / (n * p.PI));
+        x += radius * p.cos(n * this.time);
+        y += radius * p.sin(n * this.time);
+
+        p.stroke(255, 100);
+        p.noFill();
+        p.circle(prevX, prevY, 2 * radius);
+
+        p.stroke(255);
+        p.line(prevX, prevY, x, y);
+        p.circle(x, y, 3);
+      }
+      this.path.unshift(p.createVector(0, y));
+
+      p.translate(p.width / 2, 0);
+
+      const start = this.path[0];
+      if (start) {
+        p.stroke("yellow");
+        p.line(x - p.width / 2, y, offsetX, start.y);
+      }
+      p.stroke("white");
+      p.beginShape();
+      p.noFill();
+      this.path.forEach((point, i) => {
+        p.vertex(i + offsetX, point.y);
+      });
+      p.endShape();
+
+      this.time += 0.05;
+
+      if (this.path.length > trailLength) {
+        this.path.pop();
+      }
+    }
+
+    dft() {
+      if (this.data.length === 0) {
+        return;
+      }
+      const N = this.data.length;
+      this.fourier.length = N;
+      for (let k = 0; k < N; ++k) {
+        const sum = new Complex(0, 0);
+        for (let n = 0; n < N; ++n) {
+          // X[k] = xys[n] * [cos(2*pi*k*n / N) - i * sin(2*pi*k*n / N)]
+          const phi = (p.TWO_PI * k * n) / N;
+          const data = this.data[n];
+          if (data) {
+            sum.addEq(data.mult(new Complex(p.cos(phi), -p.sin(phi))));
+          }
+        }
+        sum.avg(N);
+        const re = sum.re;
+        const im = sum.im;
+        const freq = k;
+        const amp = sum.amp;
+        const phase = sum.phase;
+        this.fourier[k] = { re, im, freq, amp, phase };
+      }
+      this.fourier.sort((a, b) => b.amp - a.amp);
+    }
+  }
+}

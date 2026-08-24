@@ -5,9 +5,15 @@
 //! `<iframe>`, and it shares nothing with the app. Hydrating the WASM bundle
 //! into it would download 120KB to draw a canvas.
 //!
-//! The sketches themselves are vendored JavaScript under `public/sketch/js/`,
-//! transpiled once from the TypeScript the Next.js site used. See
-//! `public/sketch/README.md` for how to regenerate them.
+//! The sketches themselves live under `public/sketch/js/` as one readable ES
+//! module each, edited in place. They are part of what the project posts show
+//! off, so they stay as source a reader can follow rather than a build output.
+//! `js/utils.js` is the click-to-start helper they share. p5 loads as a global
+//! `<script>` ahead of them, so `p5.Vector` resolves without an import.
+//!
+//! `lib/` contains p5 1.11.13 and its licence. The sketches are written against
+//! p5 1.x and 2.x renamed enough of the API to break them, so the pin is a
+//! major version, not a preference.
 
 use axum::{
     extract::Path,
@@ -15,7 +21,7 @@ use axum::{
     response::{Html, IntoResponse, Response},
 };
 
-/// Every sketch that has a bundle in `public/sketch/js/`.
+/// Every sketch that has a module in `public/sketch/js/`.
 ///
 /// An allowlist rather than a directory read: `name` arrives from the URL and
 /// is interpolated into a `<script src>`, so anything outside this list has to
@@ -63,12 +69,14 @@ fn page(name: &str) -> String {
 </head>
 <body>
 <script src="/sketch/lib/p5.min.js"></script>
-<script src="/sketch/js/{name}.js"></script>
+<script type="module">
+  // Each sketch default-exports its p5 instance-mode function. Modules are
+  // deferred, so the classic script above has already defined the p5 global by
+  // the time this runs. p5 draws into <body> when handed no container.
+  import sketch from "/sketch/js/{name}.js";
+  new p5(sketch);
+</script>
 <script>
-  // The bundles are IIFEs that publish their p5 instance-mode function as
-  // `__sketch.default`. p5 draws into <body> when handed no container.
-  new p5(__sketch.default);
-
   // A sketch owns the arrow keys and the space bar. Left to the browser they
   // scroll the page this iframe sits in, out from under the canvas mid-game.
   //
@@ -112,8 +120,8 @@ pub async fn handler(Path(name): Path<String>) -> Response {
         StatusCode::OK,
         // Same reasoning as the feed: `cache_control_middleware` keys off the
         // path extension and this route has none, so it sets its own. The page
-        // is a constant. The `.js` and `.ttf` it names get their headers from
-        // that middleware, since those paths do have an extension.
+        // is a constant. The `.js` files it names get their headers from that
+        // middleware, since those paths do have an extension.
         [(header::CACHE_CONTROL, "public, max-age=3600")],
         Html(page(&name)),
     )
@@ -147,9 +155,9 @@ mod tests {
     }
 
     #[test]
-    fn the_page_names_its_own_bundle() {
+    fn the_page_names_its_own_sketch() {
         let page = page("matrix");
-        assert!(page.contains(r#"<script src="/sketch/js/matrix.js"></script>"#));
+        assert!(page.contains(r#"import sketch from "/sketch/js/matrix.js";"#));
         assert!(page.contains(r#"<script src="/sketch/lib/p5.min.js"></script>"#));
     }
 }

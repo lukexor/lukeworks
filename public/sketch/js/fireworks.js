@@ -1,1 +1,182 @@
-var __sketch=(()=>{var d=Object.defineProperty;var x=Object.getOwnPropertyDescriptor;var g=Object.getOwnPropertyNames;var k=Object.prototype.hasOwnProperty;var v=(e,o,r)=>o in e?d(e,o,{enumerable:!0,configurable:!0,writable:!0,value:r}):e[o]=r;var b=(e,o)=>{for(var r in o)d(e,r,{get:o[r],enumerable:!0})},C=(e,o,r,n)=>{if(o&&typeof o=="object"||typeof o=="function")for(let c of g(o))!k.call(e,c)&&c!==r&&d(e,c,{get:()=>o[c],enumerable:!(n=x(o,c))||n.enumerable});return e};var V=e=>C(d({},"__esModule",{value:!0}),e);var s=(e,o,r)=>v(e,typeof o!="symbol"?o+"":o,r);var y={};b(y,{default:()=>w});var f=globalThis.p5;var S=e=>{e.push(),e.background(0),e.fill(255),e.noStroke(),e.textSize(18),e.textAlign(e.CENTER),e.fill(255),e.text("Click or Tap to load",e.width/2,e.height/2),e.pop()},m=(e,o,r)=>{e.cursor(e.HAND),e.noLoop(),o?o():S(e);let n=()=>{e.mousePressed=()=>{},e.isLooping()||(e.cursor(e.ARROW),r&&r(),e.loop())};e.mousePressed=n};function w(e){let o=[],r=[],c;e.disableFriendlyErrors=!0,e.preload=()=>{},e.setup=()=>{e.createCanvas(e.windowWidth,e.windowHeight),e.background(0);for(let i=0;i<100;++i)r.push(new p);c=e.createVector(0,.2),m(e,void 0,()=>{e.mousePressed=()=>{e.cursor(e.CROSS),o.push(new h(e.mouseX,e.mouseY))}})},e.draw=()=>{e.isLooping()&&(e.background(0,25),e.random(1)<.05&&o.push(new h),r.forEach(i=>i.draw()),o.reverse().forEach((i,t)=>{i.done()&&o.splice(t,1),i.update(),i.draw()}))};class p{constructor(){s(this,"alpha");s(this,"size");s(this,"pos");this.alpha=e.random(5,30),this.size=e.random(4),this.pos=e.createVector(e.random(e.width),e.random(e.height))}draw(){e.stroke(255,this.alpha),e.strokeWeight(this.size),e.point(this.pos)}}class h{constructor(t,l){s(this,"color");s(this,"particles");s(this,"particleCount");s(this,"explodeDelay");s(this,"exploded");this.color=e.color(e.random(255),e.random(255),e.random(255));let a=new u(e.random(e.width),e.height,this.color);a.vel=e.createVector(0,e.random(-13,-8)),this.particles=[a],this.particleCount=e.random(50,200),this.exploded=!1,this.explodeDelay=e.random(0,6),t&&l&&(a.pos.x=t,a.pos.y=l,this.explode())}update(){this.particles.reverse().forEach((t,l)=>{t.applyForce(c),t.update(),this.exploded?(t.vel.mult(.9),t.lifespan-=3,t.done()&&this.particles.splice(l,1)):t.vel.y>=0&&this.explode()})}done(){return!!(this.exploded&&this.particles.length===0)}explode(){this.exploded=!0;let t=this.particles.pop();if(t)for(let l=0;l<this.particleCount;++l){let a=new u(t.pos.x,t.pos.y,this.color);a.vel=f.Vector.random2D(),a.vel.mult(e.random(2,10)),this.particles.push(a)}}draw(){this.exploded?e.strokeWeight(2):e.strokeWeight(4),this.particles.forEach(t=>t.draw())}}class u{constructor(t,l,a){s(this,"pos");s(this,"vel");s(this,"acc");s(this,"color");s(this,"lifespan");this.pos=e.createVector(t,l),this.vel=e.createVector(0,0),this.acc=e.createVector(0,0),this.color=a,this.lifespan=255}update(){this.vel.add(this.acc),this.pos.add(this.vel),this.acc.mult(0)}done(){return this.lifespan<=0}applyForce(t){this.acc.add(t)}draw(){this.lifespan>0&&(e.stroke(e.red(this.color),e.green(this.color),e.blue(this.color),this.lifespan),e.point(this.pos))}}}return V(y);})();
+import { awaitClickStart } from "./utils.js";
+
+export default function fireworksSketch(p) {
+  const fireworks = [];
+  const stars = [];
+  const starCount = 100;
+  let gravity;
+
+  p.disableFriendlyErrors = true;
+
+  p.preload = () => {};
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.background(0);
+    for (let i = 0; i < starCount; ++i) {
+      stars.push(new Star());
+    }
+    gravity = p.createVector(0, 0.2);
+
+    awaitClickStart(p, undefined, () => {
+      p.mousePressed = () => {
+        p.cursor(p.CROSS);
+        fireworks.push(new Firework(p.mouseX, p.mouseY));
+      };
+    });
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+
+    p.background(0, 25);
+    if (p.random(1) < 0.05) {
+      fireworks.push(new Firework());
+    }
+    stars.forEach((s) => s.draw());
+    fireworks.reverse().forEach((firework, i) => {
+      if (firework.done()) {
+        fireworks.splice(i, 1);
+      }
+      firework.update();
+      firework.draw();
+    });
+  };
+
+  class Star {
+    alpha;
+    size;
+    pos;
+
+    constructor() {
+      this.alpha = p.random(5, 30);
+      this.size = p.random(4);
+      this.pos = p.createVector(p.random(p.width), p.random(p.height));
+    }
+
+    draw() {
+      p.stroke(255, this.alpha);
+      p.strokeWeight(this.size);
+      p.point(this.pos);
+    }
+  }
+
+  class Firework {
+    color;
+    particles;
+    particleCount;
+    explodeDelay;
+    exploded;
+
+    constructor(x, y) {
+      this.color = p.color(p.random(255), p.random(255), p.random(255));
+      const firework = new Particle(p.random(p.width), p.height, this.color);
+      firework.vel = p.createVector(0, p.random(-13, -8));
+      this.particles = [firework];
+      this.particleCount = p.random(50, 200);
+      this.exploded = false;
+      this.explodeDelay = p.random(0, 6);
+
+      if (x && y) {
+        firework.pos.x = x;
+        firework.pos.y = y;
+        this.explode();
+      }
+    }
+
+    update() {
+      this.particles.reverse().forEach((particle, i) => {
+        particle.applyForce(gravity);
+        particle.update();
+        if (this.exploded) {
+          particle.vel.mult(0.9);
+          particle.lifespan -= 3;
+          if (particle.done()) {
+            this.particles.splice(i, 1);
+          }
+        } else if (particle.vel.y >= 0) {
+          this.explode();
+        }
+      });
+    }
+
+    done() {
+      if (this.exploded && this.particles.length === 0) {
+        return true;
+      }
+      return false;
+    }
+
+    explode() {
+      this.exploded = true;
+      const firework = this.particles.pop();
+      if (firework) {
+        for (let i = 0; i < this.particleCount; ++i) {
+          const particle = new Particle(
+            firework.pos.x,
+            firework.pos.y,
+            this.color,
+          );
+          particle.vel = p5.Vector.random2D();
+          particle.vel.mult(p.random(2, 10));
+          this.particles.push(particle);
+        }
+      }
+    }
+
+    draw() {
+      if (this.exploded) {
+        p.strokeWeight(2);
+      } else {
+        p.strokeWeight(4);
+      }
+      this.particles.forEach((p) => p.draw());
+    }
+  }
+
+  class Particle {
+    pos;
+    vel;
+    acc;
+    color;
+    lifespan;
+
+    constructor(x, y, color) {
+      this.pos = p.createVector(x, y);
+      this.vel = p.createVector(0, 0);
+      this.acc = p.createVector(0, 0);
+      this.color = color;
+      this.lifespan = 255;
+    }
+
+    update() {
+      this.vel.add(this.acc);
+      this.pos.add(this.vel);
+      this.acc.mult(0);
+    }
+
+    done() {
+      if (this.lifespan <= 0) {
+        return true;
+      }
+      return false;
+    }
+
+    applyForce(force) {
+      this.acc.add(force);
+    }
+
+    draw() {
+      if (this.lifespan > 0) {
+        p.stroke(
+          p.red(this.color),
+          p.green(this.color),
+          p.blue(this.color),
+          this.lifespan,
+        );
+        p.point(this.pos);
+      }
+    }
+  }
+}

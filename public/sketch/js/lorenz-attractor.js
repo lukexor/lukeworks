@@ -1,1 +1,91 @@
-var __sketch=(()=>{var d=Object.defineProperty;var w=Object.getOwnPropertyDescriptor;var C=Object.getOwnPropertyNames;var E=Object.prototype.hasOwnProperty;var b=(t,e)=>{for(var o in e)d(t,o,{get:e[o],enumerable:!0})},z=(t,e,o,r)=>{if(e&&typeof e=="object"||typeof e=="function")for(let i of C(e))!E.call(t,i)&&i!==o&&d(t,i,{get:()=>e[i],enumerable:!(r=w(e,i))||r.enumerable});return t};var A=t=>z(d({},"__esModule",{value:!0}),t);var v={};b(v,{default:()=>h});var F=t=>{t.push(),t.background(0),t.fill(255),t.noStroke(),t.textSize(18),t.textAlign(t.CENTER),t.fill(255),t.text("Click or Tap to load",t.width/2,t.height/2),t.pop()},u=(t,e,o)=>{t.cursor(t.HAND),t.noLoop(),e?e():F(t);let r=()=>{t.mousePressed=()=>{},t.isLooping()||(t.cursor(t.ARROW),o&&o(),t.loop())};t.mousePressed=r};function h(t){let e=.01,o=0,r=0,i=10,g=28,k=8/3,s=[],f;t.disableFriendlyErrors=!0,t.preload=()=>{f=t.loadFont("/sketch/lib/roboto-regular.ttf")},t.setup=()=>{t.createCanvas(t.windowWidth,t.windowHeight,t.WEBGL),u(t,()=>{t.background(0),t.textFont(f),t.textSize(18),t.textAlign(t.CENTER),t.fill(255),t.text("Click or Tap to load",0,0)},()=>{t.colorMode(t.HSB),t.noFill(),t.strokeWeight(2)})},t.draw=()=>{if(!t.isLooping())return;t.background(0),s.length>=4e3&&s.splice(0);let n=.01,x=i*(o-e)*n,m=(e*(g-r)-o)*n,S=(e*o-k*r)*n;e+=x,o+=m,r+=S,s.push(t.createVector(e,o,r)),t.translate(0,0,-80),t.scale(5),t.stroke(255),t.rotateX(t.millis()/2e3),t.rotateY(t.millis()/4e3);let l=0,a=!0;t.beginShape(),s.forEach(c=>{t.stroke(l,255,255),t.vertex(c.x,c.y,c.z),a?l+=.1:l-=.1,l>255?a=!1:l<0&&(a=!0)}),t.endShape()}}return A(v);})();
+import { awaitClickStart } from "./utils.js";
+
+export default function lorenzAttractorSketch(p) {
+  let x = 0.01;
+  let y = 0;
+  let z = 0;
+
+  const sig = 10; // a
+  const rho = 28; // b
+  const beta = 8 / 3.0; // c
+
+  const points = [];
+
+  p.disableFriendlyErrors = true;
+
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL);
+    awaitClickStart(
+      p,
+      () => {
+        // A WEBGL canvas can only draw text from a font file. The prompt is
+        // drawn into a 2D buffer, which has the default font, and blitted on.
+        // WEBGL puts the origin at the centre, hence the negative corner.
+        const prompt = p.createGraphics(p.width, p.height);
+        prompt.textSize(18);
+        prompt.textAlign(p.CENTER, p.CENTER);
+        prompt.fill(255);
+        prompt.text("Click or Tap to load", p.width / 2, p.height / 2);
+
+        p.background(0);
+        p.image(prompt, -p.width / 2, -p.height / 2);
+      },
+      () => {
+        p.colorMode(p.HSB);
+        p.noFill();
+        p.strokeWeight(2);
+      },
+    );
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+
+    p.background(0);
+
+    if (points.length >= 4000) {
+      points.splice(0);
+    }
+
+    const dt = 0.01;
+    const dx = sig * (y - x) * dt;
+    const dy = (x * (rho - z) - y) * dt;
+    const dz = (x * y - beta * z) * dt;
+    x += dx;
+    y += dy;
+    z += dz;
+
+    points.push(p.createVector(x, y, z));
+
+    p.translate(0, 0, -80);
+    p.scale(5);
+    p.stroke(255);
+
+    p.rotateX(p.millis() / 2000);
+    p.rotateY(p.millis() / 4000);
+
+    let hu = 0;
+    let increase = true;
+    // No shape mode: the attractor is one open polyline. QUAD_STRIP pairs the
+    // vertices up and reads past the end of an odd-length list, which throws
+    // inside p5 on the first frame, when there is a single point.
+    p.beginShape();
+    points.forEach((point) => {
+      p.stroke(hu, 255, 255);
+      p.vertex(point.x, point.y, point.z);
+      if (increase) {
+        hu += 0.1;
+      } else {
+        hu -= 0.1;
+      }
+      if (hu > 255) {
+        increase = false;
+      } else if (hu < 0) {
+        increase = true;
+      }
+    });
+    p.endShape();
+  };
+}

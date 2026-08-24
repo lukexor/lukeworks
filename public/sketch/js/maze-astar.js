@@ -1,1 +1,515 @@
-var __sketch=(()=>{var R=Object.defineProperty;var Y=Object.getOwnPropertyDescriptor;var q=Object.getOwnPropertyNames;var I=Object.prototype.hasOwnProperty;var J=(e,o,a)=>o in e?R(e,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):e[o]=a;var K=(e,o)=>{for(var a in o)R(e,a,{get:o[a],enumerable:!0})},Q=(e,o,a,w)=>{if(o&&typeof o=="object"||typeof o=="function")for(let f of q(o))!I.call(e,f)&&f!==a&&R(e,f,{get:()=>o[f],enumerable:!(w=Y(o,f))||w.enumerable});return e};var Z=e=>Q(R({},"__esModule",{value:!0}),e);var d=(e,o,a)=>J(e,typeof o!="symbol"?o+"":o,a);var ee={};K(ee,{default:()=>B});var j=e=>{e.push(),e.background(0),e.fill(255),e.noStroke(),e.textSize(18),e.textAlign(e.CENTER),e.fill(255),e.text("Click or Tap to load",e.width/2,e.height/2),e.pop()},G=(e,o,a)=>{e.cursor(e.HAND),e.noLoop(),o?o():j(e);let w=()=>{e.mousePressed=()=>{},e.isLooping()||(e.cursor(e.ARROW),a&&a(),e.loop())};e.mousePressed=w};function B(e){let o,a,w,f,N,v,S,y,r=[],g=[],h,C,M=!1,b,k,m,z,A,x,p=!1,L=Date.now();e.disableFriendlyErrors=!0,e.preload=()=>{},e.setup=()=>{o=e.windowWidth/30,a=e.windowWidth,w=o*13,e.createCanvas(a,w),e.textSize(16),e.fill(255),G(e,void 0,()=>{T(),f=e.createButton("Create Maze"),f.style("margin","5px"),f.mousePressed(()=>$()),N=e.createButton("Solve Maze"),N.style("margin","5px"),N.mousePressed(()=>X()),v=e.createP(""),v.style("padding","0 5px"),v.style("margin","0")})};let T=()=>{r=[],g=[],C=0,S=e.floor(e.width/o),y=e.floor(e.height/o);for(let s=0;s<y;++s)for(let t=0;t<S;++t)r.push(new _(t,s));e.background(51),r.forEach(s=>s.draw())},F=()=>{v.elt.innerHTML="Creating a maze using a Recursive Backtracking algorithm...<br /><br />Green: Current Position<br />Gray: Unvisited Cell<br />Blue: Visited Cell",T()},P=()=>{let s=H();v.elt.innerHTML=`Finished in ${s}. Click 'Solve Maze' to generate random start/end points and solve using an A* search algorithm.`,M=!0,h=r[0]},V=()=>{if(e.background(51),r.forEach(t=>t.draw()),!h)return;h.visited||(C+=1),h.visited=!0,h.highlight();let s=h.getRandomNeighbor();s?(g.push(s),h.removeWallTo(s),h=s,p=!1):g.length>0?(p||h.connectRandomNeighbor(),p=!0,h=g.pop()):C===r.length&&(P(),r.forEach(t=>t.draw()),e.noLoop())},$=()=>{F();let s=r[e.floor(e.random()*r.length)];s&&(M=!1,h=s,g.push(h),L=Date.now(),e.draw=V,e.loop())},U=()=>{F();let s=r[e.floor(e.random()*r.length)];if(s){for(h=s,L=Date.now(),g.push(h),M=!1;!M&&h;){h.visited||(C+=1),h.visited=!0;let t=h.getRandomNeighbor();t?(g.push(t),h.removeWallTo(t),h=t,p=!1):g.length>0?(p||h.connectRandomNeighbor(),p=!0,h=g.pop()):C===r.length&&P()}e.draw=()=>{e.background(51),r.forEach(t=>t.draw()),setTimeout(()=>{e.noLoop()},100)},e.loop()}},D=()=>{e.background(51),A=[],x={};let s=h;for(s&&A.push(s);s&&s.previous;)A.push(s.previous),x[s.id]=s,s=s.previous;if(r.forEach(t=>{x[t.id]?t.draw([0,125,125]):k[t.id]?t.draw([125,0,0]):b.contains(t)?t.draw([225,125,0]):t.draw()}),m.highlight(),z.draw([255,255,0]),b.isEmpty())e.noLoop();else{if(h=b.extractMin(),h===z){let t=H();v.elt.innerHTML=`Finished in ${t}. Click 'Solve Maze' to choose different starting/exit points, or 'Create Maze' to generate a new maze.`,b.clear(),D(),e.noLoop();return}h&&(k[h.id]=!0,h.neighbors.forEach(t=>{if(t){let i=r[t];if(i&&h&&!k[i.id]){let n=h.g+1;n<i.g&&(i.previous=h,i.g=n,i.h=i.heuristic(z),i.f=i.g+i.h,b.contains(i)||b.insert(i))}}}))}},X=()=>{M||U(),v.elt.innerHTML="Solving the maze using an A* algorithm...<br /><br />Green: Start -- Yellow: Goal<br />Orange: Possible Paths<br />Red: Explored Paths<br />Cyan: Shortest Path",b=new O,k={},A=[],x={},r.forEach(i=>{i.previous=null,i.f=i.g=i.h=Number.MAX_VALUE});let s=r[e.floor(e.random()*r.length)],t=r[e.floor(e.random()*r.length)];s&&t&&(m=s,z=t,h=m,m.g=0,m.h=m.heuristic(z),m.f=m.h,b.insert(m),L=Date.now(),e.draw=D,e.loop())},u=(s,t)=>s<0||s>S-1||t<0||t>y-1?-1:s+t*S;class _{constructor(t,i){d(this,"id");d(this,"col");d(this,"row");d(this,"visited",!1);d(this,"neighbors");d(this,"previous",null);d(this,"f");d(this,"g");d(this,"h");this.id=r.length,this.col=t,this.row=i,this.neighbors=[null,null,null,null],this.f=Number.MAX_VALUE,this.g=Number.MAX_VALUE,this.h=Number.MAX_VALUE}draw(t=[0,50,75]){let i=this.row*o,n=this.col*o,l=n+o,c=i+o;e.push(),this.visited&&(e.fill(t),e.noStroke(),e.rect(n,i,o+1,o+1)),e.noFill(),e.stroke(255),this.neighbors[0]===null&&e.line(n,i,l,i),this.neighbors[1]===null&&e.line(l,i,l,c),this.neighbors[2]===null&&e.line(l,c,n,c),this.neighbors[3]===null&&e.line(n,c,n,i),e.pop()}getRandomNeighbor(){let t=[],i=r[u(this.col,this.row-1)],n=r[u(this.col+1,this.row)],l=r[u(this.col,this.row+1)],c=r[u(this.col-1,this.row)];if(i&&!i.visited&&t.push(i),n&&!n.visited&&t.push(n),l&&!l.visited&&t.push(l),c&&!c.visited&&t.push(c),t.length>0){let E=e.floor(e.random()*t.length);return t[E]}else return}connectRandomNeighbor(){if(e.floor(e.random()*100)<10){let i=[],n=r[u(this.col,this.row-1)],l=r[u(this.col+1,this.row)],c=r[u(this.col,this.row+1)],E=r[u(this.col-1,this.row)];if(n&&!this.neighbors.includes(n.id)&&i.push(n),l&&!this.neighbors.includes(l.id)&&i.push(l),c&&!this.neighbors.includes(c.id)&&i.push(c),E&&!this.neighbors.includes(E.id)&&i.push(E),i.length>0){let W=i[e.floor(e.random()*i.length)];W&&this.removeWallTo(W)}}}removeWallTo(t){let i=this.col-t.col;i===1?(this.neighbors[3]=r[u(this.col-1,this.row)]?.id??null,t.neighbors[1]=this.id):i===-1&&(this.neighbors[1]=r[u(this.col+1,this.row)]?.id??null,t.neighbors[3]=this.id);let n=this.row-t.row;n===1?(this.neighbors[0]=r[u(this.col,this.row-1)]?.id??null,t.neighbors[2]=this.id):n===-1&&(this.neighbors[2]=r[u(this.col,this.row+1)]?.id??null,t.neighbors[0]=this.id)}heuristic(t){let i=this.col-t.col,n=this.row-t.row;return Math.hypot(i,n)}highlight(){let t=this.col*o,i=this.row*o;e.fill(0,155,0),e.noStroke(),e.rect(t,i,o,o)}}class O{constructor(){d(this,"heap");d(this,"set");this.heap=[],this.set={}}parent(t){return e.floor((t-1)/2)}left(t){return 2*t+1}right(t){return 2*t+2}swap(t,i){let n=this.heap[t],l=this.heap[i];n&&l&&([this.heap[t],this.heap[i]]=[l,n])}isEmpty(){return this.heap.length===0}clear(){this.heap=[],this.set={}}getF(t){return this.heap[t]?.f??0}getMin(){return this.heap[0]}contains(t){return this.set[t.id]}insert(t){this.heap.push(t),this.set[t.id]=!0;let i=this.heap.length-1;for(;i>0&&this.getF(this.parent(i))>this.getF(i);)this.swap(i,this.parent(i)),i=this.parent(i)}heapify(t){let i=this.left(t),n=this.right(t),l=t,c=this.heap.length;i<c&&this.getF(i)<this.getF(l)&&(l=i),n<c&&this.getF(n)<this.getF(l)&&(l=n),l!=t&&(this.swap(t,l),this.heapify(l))}extractMin(){let t=this.heap.length;if(t==0)return;if(t==1)return this.set={},this.heap.pop();let i=this.heap[0];i&&delete this.set[i.id];let n=this.heap.pop();return n&&(this.heap[0]=n,this.heapify(0)),i}}let H=()=>{let s=Date.now()-L,t=("00"+s%1e3).slice(-3),i=("0"+e.round(s/1e3)).slice(-2),n=("0"+e.round(s/(60*1e3))).slice(-2);return`${("0"+e.round(s/(3600*1e3))).slice(-2)}:${n}:${i}:${t}`}}return Z(ee);})();
+import { awaitClickStart } from "./utils.js";
+
+export default function mazeAstarSketch(p) {
+  // Sized in setup, not here: p5 fills in windowWidth as it starts, which is
+  // after it has called this function. Reading it now gives a canvas 13 cells
+  // tall by NaN cells wide, and the grid comes out empty.
+  let cellSize;
+  let canvasWidth;
+  let canvasHeight;
+
+  let createMazeBtn;
+  let solveMazeBtn;
+  let msg;
+
+  const connectChance = 10;
+
+  let cols;
+  let rows;
+  let grid = [];
+
+  let stack = [];
+  let current;
+  let cellsVisited;
+  let mazeGenerated = false;
+
+  // A*
+  let openSet;
+  let closedSet;
+  let start;
+  let end;
+  let path;
+  let pathSet;
+
+  let backtracking = false;
+  let startTime = Date.now();
+
+  p.disableFriendlyErrors = true;
+
+  p.preload = () => {};
+  p.setup = () => {
+    cellSize = p.windowWidth / 30;
+    canvasWidth = p.windowWidth;
+    canvasHeight = cellSize * 13;
+
+    p.createCanvas(canvasWidth, canvasHeight);
+    p.textSize(16);
+    p.fill(255);
+
+    awaitClickStart(p, undefined, () => {
+      createGrid();
+
+      createMazeBtn = p.createButton("Create Maze");
+      createMazeBtn.style("margin", "5px");
+      createMazeBtn.mousePressed(() => createMaze());
+
+      solveMazeBtn = p.createButton("Solve Maze");
+      solveMazeBtn.style("margin", "5px");
+      solveMazeBtn.mousePressed(() => solveAstar());
+
+      msg = p.createP("");
+      msg.style("padding", "0 5px");
+      msg.style("margin", "0");
+    });
+  };
+
+  const createGrid = () => {
+    grid = [];
+    stack = [];
+    cellsVisited = 0;
+    cols = p.floor(p.width / cellSize);
+    rows = p.floor(p.height / cellSize);
+    for (let row = 0; row < rows; ++row) {
+      for (let col = 0; col < cols; ++col) {
+        grid.push(new Cell(col, row));
+      }
+    }
+    p.background(51);
+    grid.forEach((cell) => cell.draw());
+  };
+
+  const startCreateMaze = () => {
+    msg.elt.innerHTML =
+      "Creating a maze using a Recursive Backtracking algorithm...<br /><br />" +
+      "Green: Current Position<br />" +
+      "Gray: Unvisited Cell<br />" +
+      "Blue: Visited Cell";
+    createGrid();
+  };
+
+  const finishCreateMaze = () => {
+    const elapsedStr = elapsed();
+    msg.elt.innerHTML =
+      `Finished in ${elapsedStr}. Click 'Solve Maze' to generate random ` +
+      "start/end points and solve using an A* search algorithm.";
+    mazeGenerated = true;
+    current = grid[0];
+  };
+
+  const createMazeDraw = () => {
+    p.background(51);
+    grid.forEach((cell) => cell.draw());
+
+    if (!current) {
+      return;
+    }
+
+    if (!current.visited) {
+      cellsVisited += 1;
+    }
+    current.visited = true;
+    current.highlight();
+    const next = current.getRandomNeighbor();
+    if (next) {
+      stack.push(next);
+      current.removeWallTo(next);
+      current = next;
+      backtracking = false;
+    } else if (stack.length > 0) {
+      if (!backtracking) current.connectRandomNeighbor();
+      backtracking = true;
+      current = stack.pop();
+    } else if (cellsVisited === grid.length) {
+      finishCreateMaze();
+      grid.forEach((cell) => cell.draw());
+      p.noLoop();
+    }
+  };
+
+  const createMaze = () => {
+    startCreateMaze();
+    const cell = grid[p.floor(p.random() * grid.length)];
+    if (cell) {
+      mazeGenerated = false;
+      current = cell;
+      stack.push(current);
+      startTime = Date.now();
+      p.draw = createMazeDraw;
+      p.loop();
+    }
+  };
+
+  const createInstantMaze = () => {
+    startCreateMaze();
+    const cell = grid[p.floor(p.random() * grid.length)];
+    if (cell) {
+      current = cell;
+      startTime = Date.now();
+      stack.push(current);
+      mazeGenerated = false;
+
+      while (!mazeGenerated && current) {
+        if (!current.visited) cellsVisited += 1;
+        current.visited = true;
+        const next = current.getRandomNeighbor();
+        if (next) {
+          stack.push(next);
+          current.removeWallTo(next);
+          current = next;
+          backtracking = false;
+        } else if (stack.length > 0) {
+          if (!backtracking) current.connectRandomNeighbor();
+          backtracking = true;
+          current = stack.pop();
+        } else if (cellsVisited === grid.length) {
+          finishCreateMaze();
+        }
+      }
+
+      p.draw = () => {
+        p.background(51);
+        grid.forEach((cell) => cell.draw());
+        setTimeout(() => {
+          p.noLoop();
+        }, 100);
+      };
+
+      p.loop();
+    }
+  };
+
+  const solveAstarDraw = () => {
+    p.background(51);
+
+    path = [];
+    pathSet = {};
+    let temp = current;
+    if (temp) {
+      path.push(temp);
+    }
+    while (temp && temp.previous) {
+      path.push(temp.previous);
+      pathSet[temp.id] = temp;
+      temp = temp.previous;
+    }
+
+    grid.forEach((cell) => {
+      if (pathSet[cell.id]) {
+        cell.draw([0, 125, 125]);
+      } else if (closedSet[cell.id]) {
+        cell.draw([125, 0, 0]);
+      } else if (openSet.contains(cell)) {
+        cell.draw([225, 125, 0]);
+      } else {
+        cell.draw();
+      }
+    });
+
+    start.highlight();
+    end.draw([255, 255, 0]);
+
+    if (!openSet.isEmpty()) {
+      current = openSet.extractMin();
+
+      if (current === end) {
+        const elapsedStr = elapsed();
+        msg.elt.innerHTML =
+          `Finished in ${elapsedStr}. Click 'Solve Maze' to choose different ` +
+          "starting/exit points, or 'Create Maze' to generate a new maze.";
+        openSet.clear();
+        solveAstarDraw();
+        p.noLoop();
+        return;
+      }
+
+      if (current) {
+        closedSet[current.id] = true;
+
+        current.neighbors.forEach((neighborId) => {
+          if (neighborId) {
+            const neighbor = grid[neighborId];
+            if (neighbor && current && !closedSet[neighbor.id]) {
+              const tempG = current.g + 1;
+              if (tempG < neighbor.g) {
+                neighbor.previous = current;
+                neighbor.g = tempG;
+                neighbor.h = neighbor.heuristic(end);
+                neighbor.f = neighbor.g + neighbor.h;
+                if (!openSet.contains(neighbor)) {
+                  openSet.insert(neighbor);
+                }
+              }
+            }
+          }
+        });
+      }
+    } else {
+      p.noLoop();
+    }
+  };
+
+  const solveAstar = () => {
+    if (!mazeGenerated) {
+      createInstantMaze();
+    }
+    msg.elt.innerHTML =
+      "Solving the maze using an A* algorithm...<br /><br />" +
+      "Green: Start -- Yellow: Goal<br />" +
+      "Orange: Possible Paths<br />" +
+      "Red: Explored Paths<br />" +
+      "Cyan: Shortest Path";
+    openSet = new MinHeap();
+    closedSet = {};
+    path = [];
+    pathSet = {};
+    grid.forEach((cell) => {
+      cell.previous = null;
+      cell.f = cell.g = cell.h = Number.MAX_VALUE;
+    });
+    const randomStart = grid[p.floor(p.random() * grid.length)];
+    const randomEnd = grid[p.floor(p.random() * grid.length)];
+    if (randomStart && randomEnd) {
+      start = randomStart;
+      end = randomEnd;
+      current = start;
+      start.g = 0;
+      start.h = start.heuristic(end);
+      start.f = start.h;
+      openSet.insert(start);
+      startTime = Date.now();
+      p.draw = solveAstarDraw;
+      p.loop();
+    }
+  };
+
+  const index = (x, y) => {
+    if (x < 0 || x > cols - 1 || y < 0 || y > rows - 1) return -1;
+    return x + y * cols;
+  };
+
+  class Cell {
+    id;
+    col;
+    row;
+    visited = false;
+    neighbors;
+    previous = null;
+    f;
+    g;
+    h;
+
+    constructor(col, row) {
+      this.id = grid.length;
+      this.col = col;
+      this.row = row;
+      this.neighbors = [null, null, null, null];
+
+      // A*
+      this.f = Number.MAX_VALUE;
+      this.g = Number.MAX_VALUE;
+      this.h = Number.MAX_VALUE;
+    }
+
+    draw(color = [0, 50, 75]) {
+      const top = this.row * cellSize;
+      const left = this.col * cellSize;
+      const right = left + cellSize;
+      const bottom = top + cellSize;
+
+      p.push();
+      if (this.visited) {
+        p.fill(color);
+        p.noStroke();
+        p.rect(left, top, cellSize + 1, cellSize + 1);
+      }
+      p.noFill();
+      p.stroke(255);
+      if (this.neighbors[0] === null) p.line(left, top, right, top); // Top
+      if (this.neighbors[1] === null) p.line(right, top, right, bottom); // Right
+      if (this.neighbors[2] === null) p.line(right, bottom, left, bottom); // Bottom
+      if (this.neighbors[3] === null) p.line(left, bottom, left, top); // Left
+      p.pop();
+    }
+
+    getRandomNeighbor() {
+      const neighbors = [];
+      const top = grid[index(this.col, this.row - 1)];
+      const right = grid[index(this.col + 1, this.row)];
+      const bottom = grid[index(this.col, this.row + 1)];
+      const left = grid[index(this.col - 1, this.row)];
+      if (top && !top.visited) neighbors.push(top);
+      if (right && !right.visited) neighbors.push(right);
+      if (bottom && !bottom.visited) neighbors.push(bottom);
+      if (left && !left.visited) neighbors.push(left);
+
+      if (neighbors.length > 0) {
+        const r = p.floor(p.random() * neighbors.length);
+        return neighbors[r];
+      } else {
+        return undefined;
+      }
+    }
+
+    connectRandomNeighbor() {
+      const chance = p.floor(p.random() * 100);
+      if (chance < connectChance) {
+        const newNeighbors = [];
+        const top = grid[index(this.col, this.row - 1)];
+        const right = grid[index(this.col + 1, this.row)];
+        const bottom = grid[index(this.col, this.row + 1)];
+        const left = grid[index(this.col - 1, this.row)];
+        if (top && !this.neighbors.includes(top.id)) newNeighbors.push(top);
+        if (right && !this.neighbors.includes(right.id))
+          newNeighbors.push(right);
+        if (bottom && !this.neighbors.includes(bottom.id))
+          newNeighbors.push(bottom);
+        if (left && !this.neighbors.includes(left.id)) newNeighbors.push(left);
+
+        if (newNeighbors.length > 0) {
+          const remove =
+            newNeighbors[p.floor(p.random() * newNeighbors.length)];
+          if (remove) {
+            this.removeWallTo(remove);
+          }
+        }
+      }
+    }
+
+    removeWallTo(cell) {
+      const x = this.col - cell.col;
+      if (x === 1) {
+        this.neighbors[3] = grid[index(this.col - 1, this.row)]?.id ?? null; // Left
+        cell.neighbors[1] = this.id;
+      } else if (x === -1) {
+        this.neighbors[1] = grid[index(this.col + 1, this.row)]?.id ?? null; // Right
+        cell.neighbors[3] = this.id;
+      }
+
+      const y = this.row - cell.row;
+      if (y === 1) {
+        this.neighbors[0] = grid[index(this.col, this.row - 1)]?.id ?? null; // Top
+        cell.neighbors[2] = this.id;
+      } else if (y === -1) {
+        this.neighbors[2] = grid[index(this.col, this.row + 1)]?.id ?? null; // Bottom
+        cell.neighbors[0] = this.id;
+      }
+    }
+
+    heuristic(cell) {
+      const a = this.col - cell.col;
+      const b = this.row - cell.row;
+      return Math.hypot(a, b);
+    }
+
+    highlight() {
+      const left = this.col * cellSize;
+      const top = this.row * cellSize;
+      p.fill(0, 155, 0);
+      p.noStroke();
+      p.rect(left, top, cellSize, cellSize);
+    }
+  }
+
+  class MinHeap {
+    heap;
+    set;
+
+    constructor() {
+      this.heap = [];
+      this.set = {};
+    }
+
+    parent(i) {
+      return p.floor((i - 1) / 2);
+    }
+
+    left(i) {
+      return 2 * i + 1;
+    }
+
+    right(i) {
+      return 2 * i + 2;
+    }
+
+    swap(i, j) {
+      const a = this.heap[i];
+      const b = this.heap[j];
+      if (a && b) {
+        [this.heap[i], this.heap[j]] = [b, a];
+      }
+    }
+
+    isEmpty() {
+      return this.heap.length === 0;
+    }
+
+    clear() {
+      this.heap = [];
+      this.set = {};
+    }
+
+    getF(i) {
+      return this.heap[i]?.f ?? 0;
+    }
+
+    getMin() {
+      return this.heap[0];
+    }
+
+    contains(cell) {
+      return this.set[cell.id];
+    }
+
+    insert(cell) {
+      this.heap.push(cell);
+      this.set[cell.id] = true;
+      let i = this.heap.length - 1;
+      while (i > 0 && this.getF(this.parent(i)) > this.getF(i)) {
+        this.swap(i, this.parent(i));
+        i = this.parent(i);
+      }
+    }
+
+    heapify(i) {
+      const l = this.left(i);
+      const r = this.right(i);
+      let min = i;
+      const size = this.heap.length;
+      if (l < size && this.getF(l) < this.getF(min)) min = l;
+      if (r < size && this.getF(r) < this.getF(min)) min = r;
+      if (min != i) {
+        this.swap(i, min);
+        this.heapify(min);
+      }
+    }
+
+    extractMin() {
+      const size = this.heap.length;
+      if (size == 0) {
+        return undefined;
+      } else if (size == 1) {
+        this.set = {};
+        return this.heap.pop();
+      }
+      const root = this.heap[0];
+      if (root) {
+        delete this.set[root.id];
+      }
+      const last = this.heap.pop();
+      if (last) {
+        this.heap[0] = last;
+        this.heapify(0);
+      }
+      return root;
+    }
+  }
+
+  const elapsed = () => {
+    const time = Date.now() - startTime;
+    const ms = ("00" + (time % 1000)).slice(-3);
+    const sec = ("0" + p.round(time / 1000)).slice(-2);
+    const min = ("0" + p.round(time / (60 * 1000))).slice(-2);
+    const hours = ("0" + p.round(time / (60 * 60 * 1000))).slice(-2);
+    return `${hours}:${min}:${sec}:${ms}`;
+  };
+}

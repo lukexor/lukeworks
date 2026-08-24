@@ -1,1 +1,157 @@
-var __sketch=(()=>{var w=Object.defineProperty;var v=Object.getOwnPropertyDescriptor;var B=Object.getOwnPropertyNames;var W=Object.prototype.hasOwnProperty;var D=(t,o,r)=>o in t?w(t,o,{enumerable:!0,configurable:!0,writable:!0,value:r}):t[o]=r;var O=(t,o)=>{for(var r in o)w(t,r,{get:o[r],enumerable:!0})},P=(t,o,r,n)=>{if(o&&typeof o=="object"||typeof o=="function")for(let a of B(o))!W.call(t,a)&&a!==r&&w(t,a,{get:()=>o[a],enumerable:!(n=v(o,a))||n.enumerable});return t};var T=t=>P(w({},"__esModule",{value:!0}),t);var u=(t,o,r)=>D(t,typeof o!="symbol"?o+"":o,r);var M={};O(M,{default:()=>A});var m=globalThis.p5;var H=t=>{t.push(),t.background(0),t.fill(255),t.noStroke(),t.textSize(18),t.textAlign(t.CENTER),t.fill(255),t.text("Click or Tap to load",t.width/2,t.height/2),t.pop()},E=(t,o,r)=>{t.cursor(t.HAND),t.noLoop(),o?o():H(t);let n=()=>{t.mousePressed=()=>{},t.isLooping()||(t.cursor(t.ARROW),r&&r(),t.loop())};t.mousePressed=n};async function A(t){let o=[],n,a=!1,k=0,V=1e4;t.disableFriendlyErrors=!0,t.preload=()=>{},t.setup=()=>{t.createCanvas(t.windowWidth,t.windowHeight),o.push(new y(0,0,t.width,0)),o.push(new y(t.width,0,t.width,t.height)),o.push(new y(0,t.height,t.width,t.height)),o.push(new y(0,0,0,t.height));for(let d=0;d<5;++d){let s=t.random(t.width),e=t.random(t.height),i=t.random(t.width),h=t.random(t.height);o.push(new y(s,e,i,h))}n=new L,E(t,void 0,()=>{t.mousePressed=()=>{a=!a}})},t.draw=()=>{t.isLooping()&&(t.background(51),n.update(o),o.forEach(d=>d.draw()),n.draw())};class L{constructor(){u(this,"pos");u(this,"rays");this.pos=t.createVector(t.width/2,t.height/2),this.rays=[];for(let s=0;s<360;s+=1)this.rays.push(new R(this.pos,t.radians(s)))}draw(){t.fill(255),this.rays.forEach(s=>s.draw())}update(s){a?(n.pos.x=t.mouseX,n.pos.y=t.mouseY):(n.pos.x=t.noise(k)*t.width,n.pos.y=t.noise(V)*t.height,k+=.01,V+=.01),this.rays.forEach(e=>{let i,h=1/0;s.forEach(f=>{let c=e.cast(f);if(c){let l=m.Vector.dist(this.pos,c);l<h&&(h=l,i=c)}}),i&&e.lookAt(i)})}}class R{constructor(s,e){u(this,"pos");u(this,"looking");this.pos=s,this.looking=m.Vector.fromAngle(e)}draw(){t.stroke(255,100),t.strokeWeight(1),t.push(),t.translate(this.pos.x,this.pos.y),t.line(0,0,this.looking.x,this.looking.y),t.pop()}lookAt(s){this.looking.x=s.x-this.pos.x,this.looking.y=s.y-this.pos.y}cast(s){let e=s.start.x,i=s.start.y,h=s.end.x,f=s.end.y,c=this.pos.x,l=this.pos.y,b=this.pos.x+this.looking.x,C=this.pos.y+this.looking.y,x=(e-h)*(l-C)-(i-f)*(c-b);if(x==0)return;let g=((e-c)*(l-C)-(i-l)*(c-b))/x,S=-((e-h)*(i-l)-(i-f)*(e-c))/x;if(g>0&&g<1&&S>0)return t.createVector(e+g*(h-e),i+g*(f-i))}}class y{constructor(s,e,i,h){u(this,"start");u(this,"end");this.start=t.createVector(s,e),this.end=t.createVector(i,h)}draw(){t.stroke(255),t.strokeWeight(2),t.line(this.start.x,this.start.y,this.end.x,this.end.y)}}}return T(M);})();
+import { awaitClickStart } from "./utils.js";
+
+export default async function raycasting2DSketch(p) {
+  const boundaries = [];
+  const boundaryCount = 5;
+  let light;
+  let mouseMove = false;
+  let xOffset = 0;
+  let yOffset = 10000;
+
+  p.disableFriendlyErrors = true;
+
+  p.preload = () => {};
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+    boundaries.push(new Boundary(0, 0, p.width, 0)); // Top
+    boundaries.push(new Boundary(p.width, 0, p.width, p.height)); // Right
+    boundaries.push(new Boundary(0, p.height, p.width, p.height)); // Bottom
+    boundaries.push(new Boundary(0, 0, 0, p.height)); // Left
+    for (let i = 0; i < boundaryCount; ++i) {
+      const x1 = p.random(p.width);
+      const y1 = p.random(p.height);
+      const x2 = p.random(p.width);
+      const y2 = p.random(p.height);
+      boundaries.push(new Boundary(x1, y1, x2, y2));
+    }
+    light = new Light();
+
+    awaitClickStart(p, undefined, () => {
+      p.mousePressed = () => {
+        mouseMove = !mouseMove;
+      };
+    });
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+    p.background(51);
+    light.update(boundaries);
+    boundaries.forEach((b) => b.draw());
+    light.draw();
+  };
+
+  class Light {
+    pos;
+    rays;
+
+    constructor() {
+      this.pos = p.createVector(p.width / 2, p.height / 2);
+      this.rays = [];
+      for (let angle = 0; angle < 360; angle += 1) {
+        this.rays.push(new Ray(this.pos, p.radians(angle)));
+      }
+    }
+
+    draw() {
+      p.fill(255);
+      this.rays.forEach((r) => r.draw());
+    }
+
+    update(boundaries) {
+      if (mouseMove) {
+        light.pos.x = p.mouseX;
+        light.pos.y = p.mouseY;
+      } else {
+        light.pos.x = p.noise(xOffset) * p.width;
+        light.pos.y = p.noise(yOffset) * p.height;
+        xOffset += 0.01;
+        yOffset += 0.01;
+      }
+      this.rays.forEach((r) => {
+        let closest;
+        let closestDist = Infinity;
+        boundaries.forEach((b) => {
+          const pt = r.cast(b);
+          if (pt) {
+            const dist = p5.Vector.dist(this.pos, pt);
+            if (dist < closestDist) {
+              closestDist = dist;
+              closest = pt;
+            }
+          }
+        });
+        if (closest) {
+          r.lookAt(closest);
+        }
+      });
+    }
+  }
+
+  class Ray {
+    pos;
+    looking;
+
+    constructor(pos, angle) {
+      this.pos = pos;
+      this.looking = p5.Vector.fromAngle(angle);
+    }
+
+    draw() {
+      p.stroke(255, 100);
+      p.strokeWeight(1);
+      p.push();
+      p.translate(this.pos.x, this.pos.y);
+      p.line(0, 0, this.looking.x, this.looking.y);
+      p.pop();
+    }
+
+    lookAt(pt) {
+      this.looking.x = pt.x - this.pos.x;
+      this.looking.y = pt.y - this.pos.y;
+    }
+
+    cast(boundary) {
+      // Formula: https://en.wikipedia.org/wiki/Line%E2%80%93p.line_intersection
+      const x1 = boundary.start.x;
+      const y1 = boundary.start.y;
+      const x2 = boundary.end.x;
+      const y2 = boundary.end.y;
+
+      const x3 = this.pos.x;
+      const y3 = this.pos.y;
+      const x4 = this.pos.x + this.looking.x;
+      const y4 = this.pos.y + this.looking.y;
+
+      const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+      if (denominator == 0) {
+        return;
+      }
+      const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;
+      const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denominator;
+
+      if (t > 0 && t < 1 && u > 0) {
+        return p.createVector(x1 + t * (x2 - x1), y1 + t * (y2 - y1));
+      }
+      return;
+    }
+  }
+
+  class Boundary {
+    start;
+    end;
+
+    constructor(x1, y1, x2, y2) {
+      this.start = p.createVector(x1, y1);
+      this.end = p.createVector(x2, y2);
+    }
+
+    draw() {
+      p.stroke(255);
+      p.strokeWeight(2);
+      p.line(this.start.x, this.start.y, this.end.x, this.end.y);
+    }
+  }
+}

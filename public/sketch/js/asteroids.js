@@ -1,8 +1,460 @@
-var __sketch=(()=>{var x=Object.defineProperty;var k=Object.getOwnPropertyDescriptor;var T=Object.getOwnPropertyNames;var z=Object.prototype.hasOwnProperty;var C=(s,i,a)=>i in s?x(s,i,{enumerable:!0,configurable:!0,writable:!0,value:a}):s[i]=a;var P=(s,i)=>{for(var a in i)x(s,a,{get:i[a],enumerable:!0})},I=(s,i,a,r)=>{if(i&&typeof i=="object"||typeof i=="function")for(let d of T(i))!z.call(s,d)&&d!==a&&x(s,d,{get:()=>i[d],enumerable:!(r=k(i,d))||r.enumerable});return s};var V=s=>I(x({},"__esModule",{value:!0}),s);var o=(s,i,a)=>C(s,typeof i!="symbol"?i+"":i,a);var L={};P(L,{default:()=>R});var m=globalThis.p5;var O=s=>{s.push(),s.background(0),s.fill(255),s.noStroke(),s.textSize(18),s.textAlign(s.CENTER),s.fill(255),s.text("Click or Tap to load",s.width/2,s.height/2),s.pop()},p=(s,i,a)=>{s.cursor(s.HAND),s.noLoop(),i?i():O(s);let r=()=>{s.mousePressed=()=>{},s.isLooping()||(s.cursor(s.ARROW),a&&a(),s.loop())};s.mousePressed=r};function R(s){let r,d=!1,y=0,c=0,u=150;s.disableFriendlyErrors=!0,s.preload=()=>{},s.setup=()=>{s.createCanvas(s.windowWidth,s.windowHeight),c=s.width/2,r=new b,s.textFont("Courier"),s.fill(255),p(s,()=>{s.textAlign(s.CENTER),s.textSize(50),s.text("ASTEROIDS",c,u),s.textSize(20),s.text("CLICK OR TAP TO PLAY",c,u+40),s.textSize(15),s.text(`INSTRUCTIONS:
+import { awaitClickStart } from "./utils.js";
 
-LEFT / RIGHT: STEER SHIP
-UP: ACCELERATE
-SPACE: FIRE
-ESCAPE: TOGGLE PAUSE
-R: START NEW GAME
-`,c,u+80)},()=>{s.touchStarted=()=>(d=!0,y=Date.now(),!1),s.touchEnded=()=>(d=!1,Date.now()-y<200&&r.fire(),!1)})},s.draw=()=>{s.isLooping()&&(r.gameover?(s.background(0),s.textAlign(s.CENTER),s.textSize(50),s.text("GAME OVER",c,u),s.textSize(20),s.text("CLICK OR TAP TO RESTART",c,u+40),s.mousePressed=()=>r.start(),s.noLoop()):r.started?(s.background(0),r.update(),r.draw()):r.started||r.start())},s.keyPressed=()=>(r.keyPressed(s.keyCode),!1),s.keyTyped=()=>!1,s.keyReleased=()=>(r.keyReleased(s.keyCode),!1);class b{constructor(){o(this,"ship");o(this,"asteroids");o(this,"bullets");o(this,"level");o(this,"lives");o(this,"score");o(this,"paused");o(this,"started");o(this,"gameover");this.ship=new E,this.asteroids=[],this.bullets=[],this.level=1,this.lives=4,this.score=0,this.paused=!1,this.started=!1,this.gameover=!1,this.spawnShip()}update(){if(this.ship.update(),this.updateBullets(),this.updateAsteroids(),this.handleInputs(),this.asteroids.length===0){this.level+=1,this.score+=1e3,this.bullets.length=0;for(let e=0;e<this.level+2;++e)this.asteroids.push(new g(this.ship))}}handleInputs(){if(s.keyIsDown(s.LEFT_ARROW)?this.ship.angle=(this.ship.angle-.1)%360:s.keyIsDown(s.RIGHT_ARROW)&&(this.ship.angle=(this.ship.angle+.1)%360),s.keyIsDown(s.UP_ARROW)&&(this.ship.vel.x+=s.sin(this.ship.angle)*this.ship.speed,this.ship.vel.y+=-s.cos(this.ship.angle)*this.ship.speed),d){let t=s.createVector(s.mouseX,s.mouseY).sub(this.ship.pos);this.ship.angle=t.heading()+s.PI/2,Date.now()-y>=100&&(this.ship.vel.x+=s.sin(this.ship.angle)*this.ship.speed,this.ship.vel.y+=-s.cos(this.ship.angle)*this.ship.speed)}}updateBullets(){this.bullets.reverse().forEach((e,t)=>{e.update(),this.asteroids.forEach(h=>{if(e.hits(h)){if(e.destroyed=!0,h.size>12){let l=new g;l.size=h.size>>1,l.pos=h.pos.copy(),l.vel=m.Vector.random2D(),l.angle=s.random(360);let n=new g;n.size=h.size>>1,n.pos=h.pos.copy(),n.vel=m.Vector.random2D(),n.angle=s.random(360),this.asteroids.push(l),this.asteroids.push(n)}h.destroyed=!0,this.score+=100}}),e.destroyed&&this.bullets.splice(t,1)})}updateAsteroids(){this.asteroids.reverse().forEach((e,t)=>{e.update(),e.destroyed?this.asteroids.splice(t,1):this.ship.hits(e)&&this.shipExploded()})}draw(){this.ship.draw(),this.bullets.forEach(e=>e.draw()),this.asteroids.forEach(e=>e.draw()),s.textAlign(s.RIGHT),s.textSize(40),s.text(`${this.score}`,195,s.textSize());for(let e=0;e<this.lives;++e){let t=new E;t.pos.y=60,t.pos.x=120+e*20,t.vel=s.createVector(0,0),t.angle=0,t.size=3,t.draw()}}spawnShip(){this.ship.pos=s.createVector(s.width/2,s.height/2),this.ship.vel=s.createVector(0,0),this.asteroids.forEach(e=>{this.ship.hits(e)&&(e.pos.x+=e.vel.x*140,e.pos.y+=e.vel.y*140)})}shipExploded(){this.lives-=1,this.score-=500,this.lives<=0?this.gameover=!0:this.spawnShip()}start(){this.started=!0,this.paused=!1,this.gameover=!1,this.level=1,this.lives=4,this.score=0,this.spawnShip();let e=this.asteroids.length>0?s.min(this.level+2,this.asteroids.length):this.level+2;this.asteroids.length=0,this.bullets.length=0;for(let t=0;t<e;++t)this.asteroids.push(new g(this.ship));s.loop()}stop(){this.started=!1,s.noLoop()}togglePause(){this.paused?s.loop():s.noLoop(),this.paused=!this.paused}fire(){this.bullets.push(new A(this.ship))}keyPressed(e){switch(e){case s.ENTER:{(!this.started||this.gameover)&&this.start();break}case s.ESCAPE:this.togglePause();break;case 82:this.start();break}}keyReleased(e){if(this.started)switch(e){case 32:this.fire();break}}}class S{constructor(){o(this,"pos");o(this,"vel");o(this,"angle");o(this,"size");o(this,"speed");o(this,"color");o(this,"destroyed");o(this,"wraps");o(this,"model");this.pos=s.createVector(s.random(s.width),s.random(s.height)),this.vel=s.createVector(0,0),this.angle=0,this.size=1,this.speed=0,this.color="white",this.destroyed=!1,this.wraps=!0,this.model=[]}update(){this.pos.add(this.vel),this.wraps?(this.pos.x<0?this.pos.x=s.width:this.pos.x>s.width&&(this.pos.x=0),this.pos.y<0?this.pos.y=s.height:this.pos.y>s.height&&(this.pos.y=0)):(this.pos.x<0||this.pos.x>s.width||this.pos.y<0||this.pos.y>s.height)&&(this.destroyed=!0)}draw(){s.push(),s.translate(this.pos),s.rotate(this.angle),s.scale(this.size),s.strokeWeight(1/this.size),s.stroke(this.color),s.fill(0),s.beginShape(),this.model.forEach(([e=0,t=0])=>s.vertex(e,t)),s.endShape(s.CLOSE),s.pop()}hits(e){let t=this.pos.x,h=this.pos.y,l=e.pos.x,n=e.pos.y,f=e.size;return s.pow(t-l,2)+s.pow(h-n,2)<s.pow(f,2)}}class E extends S{constructor(){super(),this.size=5,this.speed=.15,this.model=[[0,-5],[-2.5,2.5],[2.5,2.5]],this.pos=s.createVector(s.width/2,s.height/2)}}class A extends S{constructor(e){super();let t=s.sin(e.angle),h=-s.cos(e.angle);this.pos=s.createVector(e.pos.x+e.size*5*t,e.pos.y+e.size*5*h),this.speed=6,this.vel=s.createVector(this.speed*t,this.speed*h).add(e.vel),this.angle=100,this.size=2,this.wraps=!1,this.model=[[0,0],[0,1],[1,1],[1,0]]}}class g extends S{constructor(t){super();o(this,"rotation");this.size=48,this.pos=s.createVector(s.random(s.width),s.random(s.height)),this.vel=m.Vector.random2D(),this.angle=s.random(360),this.color="yellow",this.rotation=s.random(-.02,.02);for(let h=0;h<20;++h){let l=s.random(1)*.4+.8,n=h/20*2*s.PI,f=l*s.sin(n),v=l*s.cos(n);this.model.push([f,v])}t&&this.inSafeZone(t)&&(this.pos.x+=this.vel.x*140,this.pos.y+=this.vel.y*140)}update(){super.update(),this.angle+=this.rotation}inSafeZone(t){let h=this.pos.x,l=this.pos.y,n=t.pos.x,f=t.pos.y,v=t.size+20;return s.sqrt(s.pow(h-n,2)+s.pow(l-f,2))<v}}}return V(L);})();
+export default function asteroidSketch(p) {
+  const SPACE = 32;
+  const R = 82;
+
+  let game;
+  let touching = false;
+  let touchStart = 0;
+  let textX = 0;
+  const textY = 150;
+
+  p.disableFriendlyErrors = true;
+
+  p.preload = () => {};
+  p.setup = () => {
+    p.createCanvas(p.windowWidth, p.windowHeight);
+
+    textX = p.width / 2;
+    game = new Game();
+    p.textFont("Courier");
+    p.fill(255);
+
+    awaitClickStart(
+      p,
+      () => {
+        p.textAlign(p.CENTER);
+        p.textSize(50);
+        p.text("ASTEROIDS", textX, textY);
+        p.textSize(20);
+        p.text("CLICK OR TAP TO PLAY", textX, textY + 40);
+        p.textSize(15);
+        p.text(
+          "INSTRUCTIONS:\n\n" +
+            "LEFT / RIGHT: STEER SHIP\n" +
+            "UP: ACCELERATE\n" +
+            "SPACE: FIRE\n" +
+            "ESCAPE: TOGGLE PAUSE\n" +
+            "R: START NEW GAME\n",
+          textX,
+          textY + 80,
+        );
+      },
+      () => {
+        p.touchStarted = () => {
+          touching = true;
+          touchStart = Date.now();
+          return false;
+        };
+        p.touchEnded = () => {
+          touching = false;
+          if (Date.now() - touchStart < 200) {
+            game.fire();
+          }
+          return false;
+        };
+      },
+    );
+  };
+
+  p.draw = () => {
+    if (!p.isLooping()) {
+      return;
+    }
+    if (game.gameover) {
+      p.background(0);
+      p.textAlign(p.CENTER);
+      p.textSize(50);
+      p.text("GAME OVER", textX, textY);
+      p.textSize(20);
+      p.text("CLICK OR TAP TO RESTART", textX, textY + 40);
+      p.mousePressed = () => game.start();
+      p.noLoop();
+    } else if (game.started) {
+      p.background(0);
+      game.update();
+      game.draw();
+    } else if (!game.started) {
+      game.start();
+    }
+  };
+
+  p.keyPressed = () => {
+    game.keyPressed(p.keyCode);
+    return false;
+  };
+  p.keyTyped = () => {
+    return false;
+  };
+  p.keyReleased = () => {
+    game.keyReleased(p.keyCode);
+    return false;
+  };
+
+  class Game {
+    ship;
+    asteroids;
+    bullets;
+    level;
+    lives;
+    score;
+    paused;
+    started;
+    gameover;
+
+    constructor() {
+      this.ship = new Ship();
+      this.asteroids = [];
+      this.bullets = [];
+      this.level = 1;
+      this.lives = 4;
+      this.score = 0;
+      this.paused = false;
+      this.started = false;
+      this.gameover = false;
+      this.spawnShip();
+    }
+
+    update() {
+      this.ship.update();
+      this.updateBullets();
+      this.updateAsteroids();
+      this.handleInputs();
+
+      if (this.asteroids.length === 0) {
+        this.level += 1;
+        this.score += 1000;
+        this.bullets.length = 0;
+        for (let i = 0; i < this.level + 2; ++i) {
+          this.asteroids.push(new Asteroid(this.ship));
+        }
+      }
+    }
+
+    handleInputs() {
+      if (p.keyIsDown(p.LEFT_ARROW)) {
+        this.ship.angle = (this.ship.angle - 0.1) % 360;
+      } else if (p.keyIsDown(p.RIGHT_ARROW)) {
+        this.ship.angle = (this.ship.angle + 0.1) % 360;
+      }
+      if (p.keyIsDown(p.UP_ARROW)) {
+        this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
+        this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
+      }
+      if (touching) {
+        const mouse = p.createVector(p.mouseX, p.mouseY);
+        const looking = mouse.sub(this.ship.pos);
+        this.ship.angle = looking.heading() + p.PI / 2;
+        if (Date.now() - touchStart >= 100) {
+          this.ship.vel.x += p.sin(this.ship.angle) * this.ship.speed;
+          this.ship.vel.y += -p.cos(this.ship.angle) * this.ship.speed;
+        }
+      }
+    }
+
+    updateBullets() {
+      this.bullets.reverse().forEach((bullet, i) => {
+        bullet.update();
+        // Check for bullet hits
+        this.asteroids.forEach((asteroid) => {
+          if (bullet.hits(asteroid)) {
+            bullet.destroyed = true;
+            if (asteroid.size > 12) {
+              const ast1 = new Asteroid();
+              ast1.size = asteroid.size >> 1;
+              ast1.pos = asteroid.pos.copy();
+              ast1.vel = p5.Vector.random2D();
+              ast1.angle = p.random(360);
+
+              const ast2 = new Asteroid();
+              ast2.size = asteroid.size >> 1;
+              ast2.pos = asteroid.pos.copy();
+              ast2.vel = p5.Vector.random2D();
+              ast2.angle = p.random(360);
+
+              this.asteroids.push(ast1);
+              this.asteroids.push(ast2);
+            }
+            asteroid.destroyed = true;
+            this.score += 100;
+          }
+        });
+        if (bullet.destroyed) {
+          this.bullets.splice(i, 1);
+        }
+      });
+    }
+
+    updateAsteroids() {
+      // Update asteroids
+      this.asteroids.reverse().forEach((asteroid, i) => {
+        asteroid.update();
+        if (asteroid.destroyed) {
+          this.asteroids.splice(i, 1);
+        } else if (this.ship.hits(asteroid)) {
+          this.shipExploded();
+        }
+      });
+    }
+
+    draw() {
+      this.ship.draw();
+      this.bullets.forEach((bullet) => bullet.draw());
+      this.asteroids.forEach((asteroid) => asteroid.draw());
+
+      // Draw board
+      p.textAlign(p.RIGHT);
+      p.textSize(40);
+      p.text(`${this.score}`, 195, p.textSize());
+      for (let i = 0; i < this.lives; ++i) {
+        const shape = new Ship();
+        shape.pos.y = 60;
+        shape.pos.x = 120 + i * 20;
+        shape.vel = p.createVector(0, 0);
+        shape.angle = 0;
+        shape.size = 3;
+        shape.draw();
+      }
+    }
+
+    spawnShip() {
+      this.ship.pos = p.createVector(p.width / 2, p.height / 2);
+      this.ship.vel = p.createVector(0, 0);
+      this.asteroids.forEach((asteroid) => {
+        if (this.ship.hits(asteroid)) {
+          asteroid.pos.x += asteroid.vel.x * 140;
+          asteroid.pos.y += asteroid.vel.y * 140;
+        }
+      });
+    }
+
+    shipExploded() {
+      this.lives -= 1;
+      this.score -= 500;
+      if (this.lives <= 0) {
+        this.gameover = true;
+      } else {
+        this.spawnShip();
+      }
+    }
+
+    start() {
+      this.started = true;
+      this.paused = false;
+      this.gameover = false;
+      this.level = 1;
+      this.lives = 4;
+      this.score = 0;
+
+      this.spawnShip();
+
+      // Spawn initial asteroids
+      const asteroidCount =
+        this.asteroids.length > 0
+          ? p.min(this.level + 2, this.asteroids.length)
+          : this.level + 2;
+      this.asteroids.length = 0;
+      this.bullets.length = 0;
+      for (let i = 0; i < asteroidCount; ++i) {
+        this.asteroids.push(new Asteroid(this.ship));
+      }
+
+      p.loop();
+    }
+
+    stop() {
+      this.started = false;
+      p.noLoop();
+    }
+
+    togglePause() {
+      this.paused ? p.loop() : p.noLoop();
+      this.paused = !this.paused;
+    }
+
+    fire() {
+      this.bullets.push(new Bullet(this.ship));
+    }
+
+    keyPressed(keyCode) {
+      switch (keyCode) {
+        case p.ENTER: {
+          if (!this.started || this.gameover) {
+            this.start();
+          }
+          break;
+        }
+        case p.ESCAPE:
+          this.togglePause();
+          break;
+        case R:
+          this.start();
+          break;
+      }
+    }
+
+    keyReleased(keyCode) {
+      if (!this.started) return;
+
+      switch (keyCode) {
+        case SPACE:
+          this.fire();
+          break;
+      }
+    }
+  }
+
+  class SpaceObj {
+    pos;
+    vel;
+    angle;
+    size;
+    speed;
+    color;
+    destroyed;
+    wraps;
+    model;
+
+    constructor() {
+      this.pos = p.createVector(p.random(p.width), p.random(p.height));
+      this.vel = p.createVector(0, 0);
+      this.angle = 0;
+      this.size = 1;
+      this.speed = 0;
+      this.color = "white";
+      this.destroyed = false;
+      this.wraps = true;
+      this.model = [];
+    }
+
+    update() {
+      this.pos.add(this.vel);
+      if (this.wraps) {
+        if (this.pos.x < 0) {
+          this.pos.x = p.width;
+        } else if (this.pos.x > p.width) {
+          this.pos.x = 0;
+        }
+        if (this.pos.y < 0) {
+          this.pos.y = p.height;
+        } else if (this.pos.y > p.height) {
+          this.pos.y = 0;
+        }
+      } else if (
+        this.pos.x < 0 ||
+        this.pos.x > p.width ||
+        this.pos.y < 0 ||
+        this.pos.y > p.height
+      ) {
+        this.destroyed = true;
+      }
+    }
+
+    draw() {
+      p.push();
+      p.translate(this.pos);
+      p.rotate(this.angle);
+      p.scale(this.size);
+      p.strokeWeight(1 / this.size);
+      p.stroke(this.color);
+      p.fill(0);
+      p.beginShape();
+      this.model.forEach(([x = 0, y = 0]) => p.vertex(x, y));
+      p.endShape(p.CLOSE);
+      p.pop();
+    }
+
+    hits(obj) {
+      const x = this.pos.x;
+      const y = this.pos.y;
+      const cx = obj.pos.x;
+      const cy = obj.pos.y;
+      const r = obj.size;
+      return p.pow(x - cx, 2) + p.pow(y - cy, 2) < p.pow(r, 2);
+    }
+  }
+
+  class Ship extends SpaceObj {
+    constructor() {
+      super();
+      this.size = 5;
+      this.speed = 0.15;
+      this.model = [
+        [0.0, -5.0],
+        [-2.5, 2.5],
+        [2.5, 2.5],
+      ];
+      this.pos = p.createVector(p.width / 2, p.height / 2);
+    }
+  }
+
+  class Bullet extends SpaceObj {
+    constructor(ship) {
+      super();
+      // TODO - see if we can move this to the tip of the ship
+      const shipSin = p.sin(ship.angle);
+      const shipCos = -p.cos(ship.angle);
+      this.pos = p.createVector(
+        ship.pos.x + ship.size * 5 * shipSin,
+        ship.pos.y + ship.size * 5 * shipCos,
+      );
+      this.speed = 6;
+      this.vel = p
+        .createVector(this.speed * shipSin, this.speed * shipCos)
+        .add(ship.vel);
+      this.angle = 100;
+      this.size = 2;
+      this.wraps = false;
+      this.model = [
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [1, 0],
+      ];
+    }
+  }
+
+  class Asteroid extends SpaceObj {
+    rotation;
+
+    constructor(ship) {
+      super();
+      this.size = 48;
+      this.pos = p.createVector(p.random(p.width), p.random(p.height));
+      this.vel = p5.Vector.random2D();
+      this.angle = p.random(360);
+      this.color = "yellow";
+      this.rotation = p.random(-0.02, 0.02);
+
+      // Create model
+      for (let i = 0; i < 20; ++i) {
+        const noise = p.random(1) * 0.4 + 0.8;
+        const angle = (i / 20.0) * 2.0 * p.PI;
+        const x = noise * p.sin(angle);
+        const y = noise * p.cos(angle);
+        this.model.push([x, y]);
+      }
+
+      // Ensure spawn is far enough from ship
+      if (ship && this.inSafeZone(ship)) {
+        this.pos.x += this.vel.x * 140;
+        this.pos.y += this.vel.y * 140;
+      }
+    }
+
+    update() {
+      super.update();
+      this.angle += this.rotation;
+    }
+
+    inSafeZone(ship) {
+      const x = this.pos.x;
+      const y = this.pos.y;
+      const cx = ship.pos.x;
+      const cy = ship.pos.y;
+      const r = ship.size + 20;
+      return p.sqrt(p.pow(x - cx, 2) + p.pow(y - cy, 2)) < r;
+    }
+  }
+}
