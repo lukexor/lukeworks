@@ -189,7 +189,67 @@ canvas {
     transform: rotate(360deg);
   }
 }
+
+/* Light palette, patched in. The bundle ships one scheme; this document is
+   framed by a site whose scheme the visitor toggles, so it follows along. The
+   script below sets the class on first paint and the site's theme toggle flips
+   it live. Values are the site's own light tokens, so the frame and the page
+   around it resolve to the same colours.
+
+   Regenerating this bundle drops all of it: see MIGRATION.md, Phase 4. */
+html.light body {
+  --color: #16202b;
+  --heading: #a54a24;
+  --background: #f4f7f9;
+}
+
+html.light a {
+  color: #0e7490;
+}
+
+/* Only the borders: `table` redefines `--color` for those, while its text
+   still inherits the colour `body` resolved. */
+html.light table {
+  --color: #dbe3ea;
+}
+
+html.light #loading-status {
+  border-color: #566472;
+}
+
+html.light .loader {
+  border-color: #566472;
+  border-top-color: #a54a24;
+}
+
+html.light .version-download a {
+  background: #ffffff;
+  color: #a54a24;
+}
+
+html.light .version-download a:hover {
+  background: #dbe3ea;
+}
 </style>
+<script>
+  /* Patched in: adopt the framing site's scheme before first paint. Same
+     origin, so the `prefers-dark` cookie is readable from here, and this
+     mirrors what the site does with it — dark unless the cookie says false,
+     or unless there is no cookie and the OS asks for light.
+
+     Only ever adds `light`, because dark is what the rules above already
+     paint. Regenerating this bundle drops it. */
+  (function () {
+    var cookie = /(^|;\s*)prefers-dark=([^;]*)/.exec(document.cookie);
+    var light = cookie
+      ? cookie[2].trim() === "false"
+      : window.matchMedia("(prefers-color-scheme: light)").matches;
+    if (light) {
+      document.documentElement.classList.add("light");
+      document.documentElement.style.colorScheme = "light";
+    }
+  })();
+</script>
     <link rel="icon" href="./tetanes_icon-f3edf6b008731de2.png" integrity="sha384-cXmDqLynydwEyI2pqEoydxzlp8cg5ADJCbTgvGOHx8iFLrpHGSHq8JpYTyouuN3m"/>
     
     

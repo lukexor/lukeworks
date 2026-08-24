@@ -7,8 +7,12 @@
 //! Deliberately bare until Phase 4 rebuilds this page around the emulator
 //! rather than around its document. Chrome of our own on top of chrome of its
 //! own reads as two pages stacked, so the frame carries none: no heading, no
-//! blurb, no border, no background. Its palette is its own and does not match
-//! the site yet.
+//! blurb, no border, no background.
+//!
+//! The bundle's palette is its own, patched to follow the site's light and dark
+//! schemes: it reads the `prefers-dark` cookie before its first paint, and
+//! [`crate::components::theme_toggle::ThemeToggle`] reaches into the frame to
+//! keep the two in step on a click.
 
 use leptos::prelude::*;
 use leptos_meta::Title;
@@ -35,7 +39,7 @@ pub fn TetanesWeb() -> impl IntoView {
             src=BUNDLE
             title="TetaNES"
             allow="gamepad *; fullscreen"
-            class="block w-full border-0 h-[1400px] -m-10"
+            class="block -m-10 w-full border-0 h-[1500px]"
         ></iframe>
     }
 }

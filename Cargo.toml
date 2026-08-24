@@ -79,6 +79,8 @@ serde = { version = "1", features = ["derive"] }
 web-sys = { version = "0.3", features = [
   "Document",
   "HtmlDocument",
+  "HtmlIFrameElement",
+  "NodeList",
   "Window",
 ] }
 # Not optional: `hydrate()` is the wasm_bindgen entrypoint, and `ThemeToggle`
