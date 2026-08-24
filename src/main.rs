@@ -78,7 +78,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .layer(TraceLayer::new_for_http())
         .layer(ConcurrencyLimitLayer::new(100));
 
-    tracing::info!("lukeworks.tech listening on {addr}");
+    tracing::info!("lukeworks.tech listening on http://{addr}");
 
     let listener = tokio::net::TcpListener::bind(&addr).await?;
     axum::serve(listener, app.into_make_service()).await?;
