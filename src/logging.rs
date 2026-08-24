@@ -1,8 +1,8 @@
-use crate::sys::logging;
 use std::env;
 use tracing_subscriber::{
     Registry,
     filter::Targets,
+    fmt,
     layer::{Layered, SubscriberExt},
     util::SubscriberInitExt,
 };
@@ -24,11 +24,18 @@ fn create_registry() -> Layered<Targets, Registry> {
 }
 
 /// Initialize logging.
-pub fn init() -> anyhow::Result<logging::Log> {
-    let (registry, log) = logging::init_impl(create_registry())?;
-    if let Err(err) = registry.try_init() {
-        anyhow::bail!("setting tracing default failed: {err:?}");
-    }
+pub fn init() {
+    let registry = create_registry();
+    let registry = registry.with(
+        fmt::layer()
+            .compact()
+            .with_line_number(true)
+            .with_thread_ids(true)
+            .with_thread_names(true)
+            .with_writer(std::io::stderr),
+    );
 
-    Ok(log)
+    if let Err(err) = registry.try_init() {
+        tracing::warn!(?err, "tracing init failed");
+    }
 }

@@ -18,10 +18,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     use tower::limit::ConcurrencyLimitLayer;
     use tower_http::{compression::CompressionLayer, services::ServeFile, trace::TraceLayer};
 
-    let log = logging::init();
-    if let Err(err) = log {
-        eprintln!("failed to initialize logging: {err:?}");
-    }
+    logging::init();
 
     let conf = get_configuration(None)?;
     let addr = conf.leptos_options.site_addr;
