@@ -26,8 +26,12 @@ rise in popularity and compete with the more popular C and C++ versions.
 low-level Rust programs can be in addition to them having the type and
 memory-safety guarantees that Rust is known for.
 
-<img src="/images/projects/tetanes/donkey_kong.webp" width="300" style="padding: 5px"><img src="/images/projects/tetanes/super_mario_bros.webp" width="300" style="padding: 5px">
-<img src="/images/projects/tetanes/legend_of_zelda.webp" width="300" style="padding: 5px"><img src="/images/projects/tetanes/metroid.webp" width="300" style="padding: 5px">
+<div class="image-grid">
+  <img src="/images/projects/tetanes/donkey_kong.webp" width="256" height="224">
+  <img src="/images/projects/tetanes/super_mario_bros.webp" width="256" height="224">
+  <img src="/images/projects/tetanes/legend_of_zelda.webp" width="256" height="224">
+  <img src="/images/projects/tetanes/metroid.webp" width="256" height="224">
+</div>
 
 You can check out the code on [github][] and play it on the [web][]!
 

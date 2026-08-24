@@ -341,6 +341,19 @@
     border: 1px solid var(--ui-rule);
   }
 
+  /* Screenshot galleries in posts. The 620px cap keeps the column count at two,
+     so wide viewports get a 2x2 block rather than a single row of four. */
+  .prose .image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.5rem;
+    max-width: 620px;
+  }
+
+  .prose .image-grid img {
+    width: 100%;
+  }
+
   .prose hr {
     border: 0;
     border-top: 1px solid var(--ui-rule);
