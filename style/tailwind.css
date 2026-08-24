@@ -193,6 +193,58 @@
     }
   }
 
+  /* The hero headline types itself in, finishing the terminal that the
+     `$ whoami` line and the accent underscore already set up. `steps()` rather
+     than a smooth width, so characters arrive whole instead of sliding out of
+     a clip.
+
+     The caret is the underscore's own element, a sibling of this one rather
+     than a child: it sits in inline flow immediately after the box, so a
+     growing box carries it right. A child would be clipped along with the text
+     and only appear at the end. */
+  @keyframes hero-type {
+    from {
+      width: 0;
+    }
+  }
+
+  /* A caret is on or off, never halfway, so `step-end` rather than a fade. */
+  @keyframes hero-caret {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .hero-type {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    /* `overflow: hidden` moves an inline-block's baseline to its bottom edge,
+       which drops the caret half a line without this. */
+    vertical-align: bottom;
+    /* Twelve characters. `ch` is the advance of the mono zero, and the
+       headline's `tracking-tighter` takes 0.05em back off each one. */
+    width: calc(12ch - 0.6em);
+    animation: hero-type 1s steps(12) both;
+  }
+
+  /* Held still for as long as the typing runs, so the caret only starts
+     blinking once the prompt is idle. */
+  .hero-caret {
+    animation: hero-caret 1.06s step-end 1s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-type {
+      width: auto;
+      animation: none;
+    }
+
+    .hero-caret {
+      animation: none;
+    }
+  }
+
   .prose {
     font-size: 1.0625rem;
     line-height: 1.75;

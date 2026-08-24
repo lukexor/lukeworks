@@ -150,7 +150,8 @@ fn Hero() -> impl IntoView {
             <div class="relative py-20 px-6 sm:py-24 sm:px-14">
                 <p class="mb-5 font-mono text-[13px] text-primary">"$ whoami"</p>
                 <h1 class="mb-5 font-mono text-4xl font-bold tracking-tighter leading-none sm:text-6xl text-balance">
-                    "Hi, I'm Luke" <span class="text-accent">"_"</span>
+                    <span class="hero-type">"Hi, I'm Luke"</span>
+                    <span class="text-accent hero-caret">"_"</span>
                 </h1>
                 <p class="mb-10 font-mono text-lg tracking-tight sm:text-xl text-ink">
                     "Software Engineer. Designer. Thinker."
