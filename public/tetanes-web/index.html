@@ -190,13 +190,15 @@ canvas {
   }
 }
 
-/* Light palette, patched in. The bundle ships one scheme; this document is
-   framed by a site whose scheme the visitor toggles, so it follows along. The
-   script below sets the class on first paint and the site's theme toggle flips
-   it live. Values are the site's own light tokens, so the frame and the page
-   around it resolve to the same colours.
+/* Light palette, painted only when the document carries `light`. The rules
+   above are the dark scheme and stay the default, so a document that never runs
+   the scheme script in index.html looks the way it always has.
 
-   Regenerating this bundle drops all of it: see MIGRATION.md, Phase 4. */
+   lukeworks.tech frames this page in an iframe and sets the class from its own
+   theme, which is where these values come from: the frame and the page around
+   it have to resolve to the same colours. Amber body text on that background
+   measures 1.9:1, so the light side is a whole palette rather than a swapped
+   background. */
 html.light body {
   --color: #16202b;
   --heading: #a54a24;
@@ -207,8 +209,8 @@ html.light a {
   color: #0e7490;
 }
 
-/* Only the borders: `table` redefines `--color` for those, while its text
-   still inherits the colour `body` resolved. */
+/* Only the borders: `table` redefines `--color` for those, while its text still
+   inherits the colour `body` resolved. */
 html.light table {
   --color: #dbe3ea;
 }
@@ -231,26 +233,28 @@ html.light .version-download a:hover {
   background: #dbe3ea;
 }
 </style>
-<script>
-  /* Patched in: adopt the framing site's scheme before first paint. Same
-     origin, so the `prefers-dark` cookie is readable from here, and this
-     mirrors what the site does with it — dark unless the cookie says false,
-     or unless there is no cookie and the OS asks for light.
-
-     Only ever adds `light`, because dark is what the rules above already
-     paint. Regenerating this bundle drops it. */
-  (function () {
-    var cookie = /(^|;\s*)prefers-dark=([^;]*)/.exec(document.cookie);
-    var light = cookie
-      ? cookie[2].trim() === "false"
-      : window.matchMedia("(prefers-color-scheme: light)").matches;
-    if (light) {
-      document.documentElement.classList.add("light");
-      document.documentElement.style.colorScheme = "light";
-    }
-  })();
-</script>
     <link rel="icon" href="./tetanes_icon-f3edf6b008731de2.png" integrity="sha384-cXmDqLynydwEyI2pqEoydxzlp8cg5ADJCbTgvGOHx8iFLrpHGSHq8JpYTyouuN3m"/>
+
+    <script>
+      /* Pick the colour scheme before first paint. Dark is what `main.css`
+         paints on its own, so this only ever adds `light`, and a document that
+         never gets here stays dark rather than flashing.
+
+         The `prefers-dark` cookie is what lukeworks.tech stores its theme in.
+         This page is served from that origin when framed there, so the cookie
+         is readable and the frame can follow the site on load. Served anywhere
+         else the cookie is absent and the OS setting decides. */
+      (function () {
+        var cookie = /(^|;\s*)prefers-dark=([^;]*)/.exec(document.cookie);
+        var light = cookie
+          ? cookie[2].trim() === "false"
+          : window.matchMedia("(prefers-color-scheme: light)").matches;
+        if (light) {
+          document.documentElement.classList.add("light");
+          document.documentElement.style.colorScheme = "light";
+        }
+      })();
+    </script>
     
     
     
@@ -320,10 +324,10 @@ async function __trunkInitializer(init, source, sourceSize, initializer, initWit
 }
 
 
-import init, * as bindings from './tetanes-d41ed4c4d56220bc.js';
+import init, * as bindings from './tetanes-c4d78c612d2d0d0d.js';
 import initializer from './804ea45b79221f1b-initializer.js';
 
-const wasm = await __trunkInitializer(init, './tetanes-d41ed4c4d56220bc_bg.wasm', 14799014, initializer(), true);
+const wasm = await __trunkInitializer(init, './tetanes-c4d78c612d2d0d0d_bg.wasm', 15899569, initializer(), true);
 
 
 window.wasmBindings = bindings;
@@ -332,7 +336,7 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
-  <link rel="modulepreload" href="./tetanes-d41ed4c4d56220bc.js" crossorigin="anonymous" integrity="sha384-bldhxQjJWRuZAjInF0lmA1mTo1UolZbMkyqmTd1jFTT/AJZecf1u96XLG2Uk7U0T"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-d41ed4c4d56220bc_bg.wasm" crossorigin="anonymous" integrity="sha384-wB69GPXsnxgOuqSQnN29o3TuZQccqlVcYiCWl3Pwbpde6w1i/QoYEPGAQ4yOmIpx" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./tetanes-c4d78c612d2d0d0d.js" crossorigin="anonymous" integrity="sha384-0TGd5/LYTeKkYj8XuMujkzRlf4QMjGWa0oTqngbYE5x7Ax4/bHeeSJW2zCEIn+45"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-c4d78c612d2d0d0d_bg.wasm" crossorigin="anonymous" integrity="sha384-jecLjz4KW9mXNhgMaOV++ZpyXhCQwmiFxjWxnIOoEQWd61Lj5DT/IoQTgD63+4Um" as="fetch" type="application/wasm"></head>
   <body>
     <noscript>
       This page contains WebAssembly and Javascript content, please enable
