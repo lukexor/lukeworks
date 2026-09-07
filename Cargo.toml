@@ -81,6 +81,7 @@ web-sys = { version = "0.3", features = [
   "HtmlDocument",
   "HtmlIFrameElement",
   "NodeList",
+  "ResizeObserver",
   "Window",
 ] }
 # Not optional: `hydrate()` is the wasm_bindgen entrypoint, and `ThemeToggle`

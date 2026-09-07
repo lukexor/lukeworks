@@ -518,3 +518,13 @@
   font-size: 0.75rem;
   line-height: 1.55;
 }
+
+/* A page whose content sets its own width, which `/tetanes-web` does: the
+   framed emulator is only as wide as the scale the visitor picked, and the
+   measure that suits prose would cap it below the larger ones. `100%` of the
+   body rather than `100vw`, which counts the scrollbar and overflows by its
+   width. */
+body.frame-page main {
+  max-width: none;
+  padding-inline: 0;
+}
