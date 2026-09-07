@@ -36,7 +36,9 @@
 body {
   --color: #e6b673;
   --heading: #a9491f;
-  --background: #0f1419;
+  /* The dark page background lukeworks.tech uses, so the iframe that site puts
+     this page in does not read as a window cut into it. */
+  --background: #080b11;
   background-color: var(--background);
   max-width: 80%;
   margin: auto;
@@ -321,10 +323,10 @@ async function __trunkInitializer(init, source, sourceSize, initializer, initWit
 }
 
 
-import init, * as bindings from './tetanes-669ba9ec77a521cf.js';
+import init, * as bindings from './tetanes-3d523574be34a2f7.js';
 import initializer from './804ea45b79221f1b-initializer.js';
 
-const wasm = await __trunkInitializer(init, './tetanes-669ba9ec77a521cf_bg.wasm', 15897906, initializer(), true);
+const wasm = await __trunkInitializer(init, './tetanes-3d523574be34a2f7_bg.wasm', 15899028, initializer(), true);
 
 
 window.wasmBindings = bindings;
@@ -333,7 +335,7 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
-  <link rel="modulepreload" href="./tetanes-669ba9ec77a521cf.js" crossorigin="anonymous" integrity="sha384-0TGd5/LYTeKkYj8XuMujkzRlf4QMjGWa0oTqngbYE5x7Ax4/bHeeSJW2zCEIn+45"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-669ba9ec77a521cf_bg.wasm" crossorigin="anonymous" integrity="sha384-g0b84tSfJDetdlAqwp739LWSZB1jjyeOhxf4QzC1wjP763oEFDIlSK5zGsGfrUGw" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./tetanes-3d523574be34a2f7.js" crossorigin="anonymous" integrity="sha384-yKb8zJj2HBZc7d/llIuoE83WeSOLOZrKKfdk/E1UaRrDlMVKZIqxqjjQn9rR9qWj"><link rel="modulepreload" href="./804ea45b79221f1b-initializer.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-3d523574be34a2f7_bg.wasm" crossorigin="anonymous" integrity="sha384-Il37MVgfNIDG32Bf4/wkKlBxFVbiDzdTKyE/NV+t57c1zK7vYiRMtDdipjL6JTSh" as="fetch" type="application/wasm"></head>
   <body>
     <noscript>
       This page contains WebAssembly and Javascript content, please enable
