@@ -195,7 +195,7 @@ canvas {
 
    lukeworks.tech frames this page in an iframe and sets the class from its own
    theme, which is where these values come from: the frame and the page around
-   it have to resolve to the same colours. Amber body text on that background
+   it have to resolve to the same colors. Amber body text on that background
    measures 1.9:1, so the light side is a whole palette rather than a swapped
    background. */
 html.light body {
@@ -209,7 +209,7 @@ html.light a {
 }
 
 /* Only the borders: `table` redefines `--color` for those, while its text still
-   inherits the colour `body` resolved. */
+   inherits the color `body` resolved. */
 html.light table {
   --color: #dbe3ea;
 }
@@ -235,7 +235,7 @@ html.light .version-download a:hover {
     <link rel="icon" href="./tetanes_icon-f3edf6b008731de2.png" integrity="sha384-cXmDqLynydwEyI2pqEoydxzlp8cg5ADJCbTgvGOHx8iFLrpHGSHq8JpYTyouuN3m"/>
 
     <script>
-      /* Pick the colour scheme before first paint. Dark is what `main.css`
+      /* Pick the color scheme before first paint. Dark is what `main.css`
          paints on its own, so this only ever adds `light`, and a document that
          never gets here stays dark rather than flashing.
 
@@ -258,7 +258,7 @@ html.light .version-download a:hover {
     
     
 <script type="module">
-async function __trunkInitializer(init, source, sourceSize, initializer, initWithObject) {
+async function __trunkInitializer(init, source, sourceSize, initializer, initWithObject, compressAlgorithm) {
   if (initializer === undefined) {
     return await init(initWithObject ? { module_or_path: source } : source);
   }
@@ -271,13 +271,19 @@ async function __trunkInitializer(init, source, sourceSize, initializer, initWit
 
   const response = fetch(source)
       .then((response) => {
-        const reader = response.body.getReader();
         const headers = response.headers;
         const status = response.status;
         const statusText = response.statusText;
 
         const total = sourceSize;
         let current = 0;
+
+        let reader = undefined;
+        if (compressAlgorithm) {
+          reader = response.body.pipeThrough(new DecompressionStream(compressAlgorithm)).getReader();
+        } else {
+          reader = response.body.getReader();
+        }
 
         const stream = new ReadableStream({
           start(controller) {
@@ -323,10 +329,10 @@ async function __trunkInitializer(init, source, sourceSize, initializer, initWit
 }
 
 
-import init, * as bindings from './tetanes-e94032937da17297.js';
+import init, * as bindings from './tetanes-ee24a6b7e5bd5551.js';
 import initializer from './initializer-804ea45b79221f1b.js';
 
-const wasm = await __trunkInitializer(init, './tetanes-e3ac7b84c65a20b2_bg.wasm', 16329929, initializer(), true);
+const wasm = await __trunkInitializer(init, './tetanes-319d1d05c253080d_bg.wasm', 20856377, initializer(), true);
 
 
 window.wasmBindings = bindings;
@@ -335,7 +341,7 @@ window.wasmBindings = bindings;
 dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
-  <link rel="modulepreload" href="./tetanes-e94032937da17297.js" crossorigin="anonymous" integrity="sha384-ep5IdvFN4Oi4sUArK6R+L/BYpwh5DBuIjeBD8+J/TDTJbV0Kwi7PSGpCH+2OwANy"><link rel="modulepreload" href="./initializer-804ea45b79221f1b.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-e3ac7b84c65a20b2_bg.wasm" crossorigin="anonymous" integrity="sha384-JuGdATTtBjKIbHGIUaOQGbZe6gz652QpgzGKBBgHt9LUmgIZzDLb764qxrI7g7o4" as="fetch" type="application/wasm"></head>
+  <link rel="modulepreload" href="./tetanes-ee24a6b7e5bd5551.js" crossorigin="anonymous" integrity="sha384-HndXFNQxR/pr7WPOomnCxplHKbIgZkQmNtoK+pRblWaBmPIQu+bju01PbFuIsCOh"><link rel="modulepreload" href="./initializer-804ea45b79221f1b.js" crossorigin="anonymous" integrity="sha384-TuyQGUQmZhgL5sM46eLG3xUJDF87F+xb9Jib6UmahoLNebXfhdZ+fEOAsJVGi64v"><link rel="preload" href="./tetanes-319d1d05c253080d_bg.wasm" crossorigin="anonymous" integrity="sha384-Wl/RpvuAnDi3Jl+dMOPqNXvGfr/1egQZL07bRXf5qi0TDcmj6AVeoqc4zRz04VYm" as="fetch" type="application/wasm"></head>
   <body>
     <noscript>
       This page contains WebAssembly and Javascript content, please enable
